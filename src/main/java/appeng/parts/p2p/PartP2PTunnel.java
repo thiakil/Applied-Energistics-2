@@ -171,7 +171,7 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 			final IMemoryCard mc = (IMemoryCard) is.getItem();
 			final NBTTagCompound data = mc.getData( is );
 
-			final ItemStack newType = ItemStack.loadItemStackFromNBT( data );
+			final ItemStack newType = new ItemStack( data );
 			final long freq = data.getLong( "freq" );
 
 			if( newType != null )

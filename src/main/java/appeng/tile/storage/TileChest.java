@@ -96,7 +96,6 @@ import appeng.tile.inventory.InvOperation;
 import appeng.util.ConfigManager;
 import appeng.util.IConfigManagerHost;
 import appeng.util.Platform;
-import appeng.util.item.AEFluidStack;
 
 
 public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminalHost, IPriorityHost, IConfigManagerHost, IColorableTile, ITickable
@@ -352,7 +351,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 	@Override
 	public boolean isCellBlinking( final int slot )
 	{
-		final long now = this.worldObj.getTotalWorldTime();
+		final long now = this.world.getTotalWorldTime();
 		if( now - this.lastStateChange > 8 )
 		{
 			return false;
@@ -387,7 +386,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 	@Override
 	public void update()
 	{
-		if( this.worldObj.isRemote )
+		if( this.world.isRemote )
 		{
 			return;
 		}
@@ -423,7 +422,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 	@TileEvent( TileEventType.NETWORK_WRITE )
 	public void writeToStream_TileChest( final ByteBuf data )
 	{
-		if( this.worldObj.getTotalWorldTime() - this.lastStateChange > 8 )
+		if( this.world.getTotalWorldTime() - this.lastStateChange > 8 )
 		{
 			this.state = 0;
 		}
@@ -482,7 +481,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 			this.storageType = new ItemStack( Item.getItemById( item & 0xffff ), 1, item >> Platform.DEF_OFFSET );
 		}
 
-		this.lastStateChange = this.worldObj.getTotalWorldTime();
+		this.lastStateChange = this.world.getTotalWorldTime();
 
 		return oldPaintedColor != this.paintedColor || ( this.state & 0xDB6DB6DB ) != ( oldState & 0xDB6DB6DB ) || !Platform.itemComparisons()
 				.isSameItem( oldType, this.storageType );
@@ -566,9 +565,9 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 			}
 
 			// update the neighbors
-			if( this.worldObj != null )
+			if( this.world != null )
 			{
-				Platform.notifyBlocksOfNeighbors( this.worldObj, this.pos );
+				Platform.notifyBlocksOfNeighbors( this.world, this.pos );
 				this.markForUpdate();
 			}
 		}
@@ -595,7 +594,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 				final IMEInventory<IAEItemStack> cell = this.getHandler( StorageChannel.ITEMS );
 				final IAEItemStack returns = cell.injectItems( AEApi.instance().storage().createItemStack( this.inv.getStackInSlot( 0 ) ), Actionable.SIMULATE,
 						this.mySrc );
-				return returns == null || returns.getStackSize() != insertingItem.stackSize;
+				return returns == null || returns.getStackSize() != insertingItem.getCount();
 			}
 			catch( final ChestNoHandler ignored )
 			{
@@ -706,7 +705,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 	@Override
 	public void blinkCell( final int slot )
 	{
-		final long now = this.worldObj.getTotalWorldTime();
+		final long now = this.world.getTotalWorldTime();
 		if( now - this.lastStateChange > 8 )
 		{
 			this.state = 0;
@@ -795,7 +794,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 	@Override
 	public void saveChanges( final IMEInventory cellInventory )
 	{
-		this.worldObj.markChunkDirty( this.pos, this );
+		this.world.markChunkDirty( this.pos, this );
 	}
 
 	private static class ChestNoHandler extends Exception
@@ -1034,6 +1033,13 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 
 			return null;
 		}
+	}
+
+	@Override
+	public boolean isEmpty()
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
