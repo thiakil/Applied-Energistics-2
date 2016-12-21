@@ -723,7 +723,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 		{
 			return this.storageType;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
