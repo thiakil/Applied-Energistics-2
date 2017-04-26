@@ -42,6 +42,11 @@ task javadocJar(type: Jar, dependsOn: javadocs) {
     classifier = 'javadoc'
 }
 
+sourceJar {
+    //include api in the source jar
+    from sourceSets.api.java.srcDirs
+}
+
 task apiJar(type: Jar) {
     from sourceSets.api.java
     include "appeng/api/**"
@@ -52,8 +57,22 @@ task apiJar(type: Jar) {
     classifier = 'api'
 }
 
+task deobfJar(type: Jar, dependsOn: 'jar') {
+        from sourceSets.main.output
+        from sourceSets.api.output
+
+        manifest {
+                attributes 'FMLCorePluginContainsFMLMod': 'true'
+                attributes 'FMLAT': 'appeng_at.cfg'
+        }
+
+        classifier "deobf"
+        group "build"
+}
+
 artifacts {
     archives apiJar
     archives javadocJar
     archives sourceJar
+    archives deobfJar
 }
