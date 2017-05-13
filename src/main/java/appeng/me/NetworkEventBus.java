@@ -113,7 +113,10 @@ public class NetworkEventBus
 						target.invoke( cache.getCache(), e );
 					}
 
-					for( final IGridNode obj : g.getMachines( subscriber.getKey() ) )
+					MachineSet machineSet = (MachineSet)g.getMachines( subscriber.getKey() );
+					IGridNode[] machines = machineSet.toArray(new IGridNode[machineSet.size()]);
+
+					for( final IGridNode obj : machines )
 					{
 						x++;
 						target.invoke( obj.getMachine(), e );
