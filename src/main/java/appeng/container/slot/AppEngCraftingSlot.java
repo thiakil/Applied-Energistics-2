@@ -167,20 +167,15 @@ public class AppEngCraftingSlot extends AppEngSlot
 			final ItemStack itemstack1 = this.craftMatrix.getStackInSlot( i );
 			final ItemStack itemstack2 = aitemstack.get( i );
 
-			if( itemstack1 != null )
-			{
-				this.craftMatrix.decrStackSize( i, 1 );
+			if (!itemstack1.isEmpty()) {
+				this.craftMatrix.decrStackSize(i, 1);
 			}
 
-			if( itemstack2 != null )
-			{
-				if( this.craftMatrix.getStackInSlot( i ) == null )
-				{
-					this.craftMatrix.setInventorySlotContents( i, itemstack2 );
-				}
-				else if( !this.thePlayer.inventory.addItemStackToInventory( itemstack2 ) )
-				{
-					this.thePlayer.dropItem( itemstack2, false );
+			if (!itemstack2.isEmpty()) {
+				if (this.craftMatrix.getStackInSlot(i).isEmpty()) {
+					this.craftMatrix.setInventorySlotContents(i, itemstack2);
+				} else if (!this.thePlayer.inventory.addItemStackToInventory(itemstack2)) {
+					this.thePlayer.dropItem(itemstack2, false);
 				}
 			}
 		}

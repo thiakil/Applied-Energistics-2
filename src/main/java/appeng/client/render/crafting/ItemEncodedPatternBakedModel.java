@@ -219,12 +219,11 @@ class ItemEncodedPatternBakedModel implements IPerspectiveAwareModel
 			{
 				ItemEncodedPattern iep = (ItemEncodedPattern) stack.getItem();
 				ItemStack output = iep.getOutput( stack );
-				if( output != null )
-				{
-					IBakedModel realModel = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel( output );
+				if (!output.isEmpty()) {
+					IBakedModel realModel = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(output);
 					// Give the item model a chance to handle the overrides as well
-					realModel = realModel.getOverrides().handleItemState( realModel, output, world, entity );
-					return new ShiftHoldingModelWrapper( realModel );
+					realModel = realModel.getOverrides().handleItemState(realModel, output, world, entity);
+					return new ShiftHoldingModelWrapper(realModel);
 				}
 			}
 

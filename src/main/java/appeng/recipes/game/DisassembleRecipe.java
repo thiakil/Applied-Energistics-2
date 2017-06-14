@@ -48,7 +48,7 @@ import appeng.api.storage.data.IItemList;
 
 public final class DisassembleRecipe implements IRecipe
 {
-	private static final ItemStack MISMATCHED_STACK = null;
+	private static final ItemStack MISMATCHED_STACK = ItemStack.EMPTY;
 
 	private final Map<IItemDefinition, IItemDefinition> cellMappings;
 	private final Map<IItemDefinition, IItemDefinition> nonCellMappings;
@@ -78,7 +78,7 @@ public final class DisassembleRecipe implements IRecipe
 	@Override
 	public boolean matches( final InventoryCrafting inv, final World w )
 	{
-		return this.getOutput( inv ) != null;
+		return !this.getOutput(inv).isEmpty();
 	}
 
 	@Nullable
@@ -90,28 +90,23 @@ public final class DisassembleRecipe implements IRecipe
 		for( int slotIndex = 0; slotIndex < inventory.getSizeInventory(); slotIndex++ )
 		{
 			final ItemStack stackInSlot = inventory.getStackInSlot( slotIndex );
-			if( stackInSlot != null )
-			{
+			if (!stackInSlot.isEmpty()) {
 				// needs a single input in the recipe
 				itemCount++;
-				if( itemCount > 1 )
-				{
+				if (itemCount > 1) {
 					return MISMATCHED_STACK;
 				}
 
 				// handle storage cells
-				Optional<ItemStack> maybeCellOutput = this.getCellOutput( stackInSlot );
-				if( maybeCellOutput.isPresent() )
-				{
+				Optional<ItemStack> maybeCellOutput = this.getCellOutput(stackInSlot);
+				if (maybeCellOutput.isPresent()) {
 					ItemStack storageCellStack = maybeCellOutput.get();
 					// make sure the storage cell stackInSlot empty...
-					final IMEInventory<IAEItemStack> cellInv = AEApi.instance().registries().cell().getCellInventory( stackInSlot, null, StorageChannel.ITEMS );
-					if( cellInv != null )
-					{
-						final IItemList<IAEItemStack> list = cellInv.getAvailableItems( StorageChannel.ITEMS.createList() );
-						if( !list.isEmpty() )
-						{
-							return null;
+					final IMEInventory<IAEItemStack> cellInv = AEApi.instance().registries().cell().getCellInventory(stackInSlot, null, StorageChannel.ITEMS);
+					if (cellInv != null) {
+						final IItemList<IAEItemStack> list = cellInv.getAvailableItems(StorageChannel.ITEMS.createList());
+						if (!list.isEmpty()) {
+							return ItemStack.EMPTY;
 						}
 					}
 
@@ -119,7 +114,7 @@ public final class DisassembleRecipe implements IRecipe
 				}
 
 				// handle crafting storage blocks
-				output = getNonCellOutput( stackInSlot ).orElse( output );
+				output = getNonCellOutput(stackInSlot).orElse(output);
 			}
 		}
 

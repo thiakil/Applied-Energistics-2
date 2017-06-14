@@ -90,9 +90,8 @@ public class CellInventory implements ICellInventory
 			}
 		}
 
-		if( o == null )
-		{
-			throw new AppEngException( "ItemStack was used as a cell, but was not a cell!" );
+		if (o.isEmpty()) {
+			throw new AppEngException("ItemStack was used as a cell, but was not a cell!");
 		}
 
 		this.cellType = null;
@@ -145,8 +144,7 @@ public class CellInventory implements ICellInventory
 
 	private static boolean isStorageCell( final ItemStack i )
 	{
-		if( i == null )
-		{
+		if (i.isEmpty()) {
 			return false;
 		}
 
@@ -168,8 +166,7 @@ public class CellInventory implements ICellInventory
 
 	public static boolean isCell( final ItemStack i )
 	{
-		if( i == null )
-		{
+		if (i.isEmpty()) {
 			return false;
 		}
 
@@ -462,9 +459,8 @@ public class CellInventory implements ICellInventory
 		try
 		{
 			t = new ItemStack( compoundTag );
-			if( t == null )
-			{
-				AELog.warn( "Removing item " + compoundTag + " from storage cell because the associated item type couldn't be found." );
+			if (t.isEmpty()) {
+				AELog.warn("Removing item " + compoundTag + " from storage cell because the associated item type couldn't be found.");
 				return;
 			}
 		}

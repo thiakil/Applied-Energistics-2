@@ -66,7 +66,7 @@ public class BlockTinyTNT extends AEBaseBlock implements ICustomCollision
 	@Override
 	public boolean onActivated( final World w, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final @Nullable ItemStack heldItem, final EnumFacing side, final float hitX, final float hitY, final float hitZ )
 	{
-		if( heldItem != null && heldItem.getItem() == Items.FLINT_AND_STEEL )
+		if(!heldItem.isEmpty() && heldItem.getItem() == Items.FLINT_AND_STEEL )
 		{
 			this.startFuse( w, pos, player );
 			w.setBlockToAir( pos );

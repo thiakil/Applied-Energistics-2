@@ -68,7 +68,7 @@ public final class IMEAdaptorIterator implements Iterator<ItemSlot>
 			return this.slot;
 		}
 
-		this.slot.setItemStack( null );
+		this.slot.setItemStack(ItemStack.EMPTY);
 		return this.slot;
 	}
 

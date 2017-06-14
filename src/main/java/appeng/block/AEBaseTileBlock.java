@@ -272,7 +272,7 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 	public boolean onBlockActivated( World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ )
 	{
 		ItemStack heldItem;
-		if( player != null && player.getHeldItemMainhand() != null )
+		if(player != null && !player.getHeldItemMainhand().isEmpty() )
 		{
 			heldItem = player.getHeldItemMainhand();
 			

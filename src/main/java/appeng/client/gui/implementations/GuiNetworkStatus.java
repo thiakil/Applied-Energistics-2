@@ -238,7 +238,7 @@ public class GuiNetworkStatus extends AEBaseGui implements ISortSource
 	protected void drawItemStackTooltip( final ItemStack stack, final int x, final int y )
 	{
 		final Slot s = this.getSlot( x, y );
-		if( s instanceof SlotME && stack != null )
+		if(s instanceof SlotME && !stack.isEmpty() )
 		{
 			IAEItemStack myStack = null;
 

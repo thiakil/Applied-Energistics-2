@@ -113,7 +113,7 @@ public class PartCable extends AEBasePart implements IPartCable
 	{
 		if( this.getCableColor() != newColor )
 		{
-			ItemStack newPart = null;
+			ItemStack newPart = ItemStack.EMPTY;
 
 			final IParts parts = AEApi.instance().definitions().parts();
 
@@ -145,7 +145,7 @@ public class PartCable extends AEBasePart implements IPartCable
 				// :P
 			}
 
-			if( newPart != null && hasPermission )
+			if(!newPart.isEmpty() && hasPermission )
 			{
 				if( Platform.isClient() )
 				{

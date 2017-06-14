@@ -37,14 +37,14 @@ public class TileCubeGenerator extends AEBaseTile implements ITickable
 {
 
 	private int size = 3;
-	private ItemStack is = null;
+	private ItemStack is = ItemStack.EMPTY;
 	private int countdown = 20 * 10;
 	private EntityPlayer who = null;
 
 	@Override
 	public void update()
 	{
-		if( this.is != null && Platform.isServer() )
+		if(!this.is.isEmpty() && Platform.isServer() )
 		{
 			this.countdown--;
 
@@ -92,32 +92,24 @@ public class TileCubeGenerator extends AEBaseTile implements ITickable
 			final ItemStack hand = player.inventory.getCurrentItem();
 			this.who = player;
 
-			if( hand == null )
-			{
-				this.is = null;
+			if (hand.isEmpty()) {
+				this.is = ItemStack.EMPTY;
 
-				if( player.isSneaking() )
-				{
+				if (player.isSneaking()) {
 					this.size--;
-				}
-				else
-				{
+				} else {
 					this.size++;
 				}
 
-				if( this.size < 3 )
-				{
+				if (this.size < 3) {
 					this.size = 3;
 				}
-				if( this.size > 64 )
-				{
+				if (this.size > 64) {
 					this.size = 64;
 				}
 
-				player.sendMessage( new TextComponentString( "Size: " + this.size ) );
-			}
-			else
-			{
+				player.sendMessage(new TextComponentString("Size: " + this.size));
+			} else {
 				this.countdown = 20 * 10;
 				this.is = hand;
 			}

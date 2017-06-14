@@ -35,7 +35,7 @@ public class InWorldToolOperationResult
 
 	public InWorldToolOperationResult()
 	{
-		this.BlockItem = null;
+		this.BlockItem = ItemStack.EMPTY;
 		this.Drops = null;
 	}
 
@@ -54,16 +54,14 @@ public class InWorldToolOperationResult
 	public static InWorldToolOperationResult getBlockOperationResult( final ItemStack[] items )
 	{
 		final List<ItemStack> temp = new ArrayList<ItemStack>();
-		ItemStack b = null;
+		ItemStack b = ItemStack.EMPTY;
 
 		for( final ItemStack l : items )
 		{
-			if( b == null )
-			{
-				final Block bl = Block.getBlockFromItem( l.getItem() );
+			if (b.isEmpty()) {
+				final Block bl = Block.getBlockFromItem(l.getItem());
 
-				if( bl != null && !( bl instanceof BlockAir ) )
-				{
+				if (bl != null && !(bl instanceof BlockAir)) {
 					b = l;
 					continue;
 				}

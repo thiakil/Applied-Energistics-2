@@ -157,11 +157,9 @@ public class TileVibrationChamber extends AENetworkInvTile implements IGridTicka
 	private boolean canEatFuel()
 	{
 		final ItemStack is = this.getStackInSlot( FUEL_SLOT_INDEX );
-		if( is != null )
-		{
-			final int newBurnTime = TileEntityFurnace.getItemBurnTime( is );
-			if( newBurnTime > 0 && is.getCount() > 0 )
-			{
+		if (!is.isEmpty()) {
+			final int newBurnTime = TileEntityFurnace.getItemBurnTime(is);
+			if (newBurnTime > 0 && is.getCount() > 0) {
 				return true;
 			}
 		}
@@ -244,28 +242,22 @@ public class TileVibrationChamber extends AENetworkInvTile implements IGridTicka
 	private void eatFuel()
 	{
 		final ItemStack is = this.getStackInSlot( FUEL_SLOT_INDEX );
-		if( is != null )
-		{
-			final int newBurnTime = TileEntityFurnace.getItemBurnTime( is );
-			if( newBurnTime > 0 && is.getCount() > 0 )
-			{
-				this.setBurnTime( this.getBurnTime() + newBurnTime );
-				this.setMaxBurnTime( this.getBurnTime() );
-				is.grow( -1 );
-				if( is.getCount() <= 0 )
-				{
-					ItemStack container = null;
+		if (!is.isEmpty()) {
+			final int newBurnTime = TileEntityFurnace.getItemBurnTime(is);
+			if (newBurnTime > 0 && is.getCount() > 0) {
+				this.setBurnTime(this.getBurnTime() + newBurnTime);
+				this.setMaxBurnTime(this.getBurnTime());
+				is.grow(-1);
+				if (is.getCount() <= 0) {
+					ItemStack container = ItemStack.EMPTY;
 
-					if( is.getItem() != null && is.getItem().hasContainerItem( is ) )
-					{
-						container = is.getItem().getContainerItem( is );
+					if (is.getItem() != null && is.getItem().hasContainerItem(is)) {
+						container = is.getItem().getContainerItem(is);
 					}
 
-					this.setInventorySlotContents( 0, container );
-				}
-				else
-				{
-					this.setInventorySlotContents( 0, is );
+					this.setInventorySlotContents(0, container);
+				} else {
+					this.setInventorySlotContents(0, is);
 				}
 
 				this.markDirty();

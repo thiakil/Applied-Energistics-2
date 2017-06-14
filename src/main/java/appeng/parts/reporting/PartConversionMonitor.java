@@ -91,47 +91,37 @@ public class PartConversionMonitor extends AbstractPartMonitor
 		boolean ModeB = false;
 
 		ItemStack item = player.getHeldItem( hand );
-		if( item == null && this.getDisplayed() != null )
+		if(item.isEmpty() && this.getDisplayed() != null )
 		{
 			ModeB = true;
 			item = ( (IAEItemStack) this.getDisplayed() ).getItemStack();
 		}
 
-		if( item != null )
-		{
-			try
-			{
-				if( !this.getProxy().isActive() )
-				{
+		if (!item.isEmpty()) {
+			try {
+				if (!this.getProxy().isActive()) {
 					return false;
 				}
 
 				final IEnergySource energy = this.getProxy().getEnergy();
 				final IMEMonitor<IAEItemStack> cell = this.getProxy().getStorage().getItemInventory();
-				final IAEItemStack input = AEItemStack.create( item );
+				final IAEItemStack input = AEItemStack.create(item);
 
-				if( ModeB )
-				{
-					for( int x = 0; x < player.inventory.getSizeInventory(); x++ )
-					{
-						final ItemStack targetStack = player.inventory.getStackInSlot( x );
-						if( input.equals( targetStack ) )
-						{
+				if (ModeB) {
+					for (int x = 0; x < player.inventory.getSizeInventory(); x++) {
+						final ItemStack targetStack = player.inventory.getStackInSlot(x);
+						if (input.equals(targetStack)) {
 							final IAEItemStack insertItem = input.copy();
-							insertItem.setStackSize( targetStack.getCount() );
-							final IAEItemStack failedToInsert = Platform.poweredInsert( energy, cell, insertItem, new PlayerSource( player, this ) );
-							player.inventory.setInventorySlotContents( x, failedToInsert == null ? null : failedToInsert.getItemStack() );
+							insertItem.setStackSize(targetStack.getCount());
+							final IAEItemStack failedToInsert = Platform.poweredInsert(energy, cell, insertItem, new PlayerSource(player, this));
+							player.inventory.setInventorySlotContents(x, failedToInsert == null ? ItemStack.EMPTY : failedToInsert.getItemStack());
 						}
 					}
+				} else {
+					final IAEItemStack failedToInsert = Platform.poweredInsert(energy, cell, input, new PlayerSource(player, this));
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, failedToInsert == null ? ItemStack.EMPTY : failedToInsert.getItemStack());
 				}
-				else
-				{
-					final IAEItemStack failedToInsert = Platform.poweredInsert( energy, cell, input, new PlayerSource( player, this ) );
-					player.inventory.setInventorySlotContents( player.inventory.currentItem, failedToInsert == null ? null : failedToInsert.getItemStack() );
-				}
-			}
-			catch( final GridAccessException e )
-			{
+			} catch (final GridAccessException e) {
 				// :P
 			}
 		}
@@ -163,11 +153,10 @@ public class PartConversionMonitor extends AbstractPartMonitor
 					ItemStack newItems = retrieved.getItemStack();
 					final InventoryAdaptor adaptor = InventoryAdaptor.getAdaptor( player, EnumFacing.UP );
 					newItems = adaptor.addItems( newItems );
-					if( newItems != null )
-					{
+					if (!newItems.isEmpty()) {
 						final TileEntity te = this.getTile();
-						final List<ItemStack> list = Collections.singletonList( newItems );
-						Platform.spawnDrops( player.world, te.getPos().offset( this.getSide().getFacing() ), list );
+						final List<ItemStack> list = Collections.singletonList(newItems);
+						Platform.spawnDrops(player.world, te.getPos().offset(this.getSide().getFacing()), list);
 					}
 
 					if( player.openContainer != null )

@@ -81,9 +81,9 @@ class CondenserOutputHandler implements IRecipeHandler<CondenserOutput>
 		switch( recipe )
 		{
 			case MATTER_BALLS:
-				return matterBall != null;
+				return !matterBall.isEmpty();
 			case SINGULARITY:
-				return singularity != null;
+				return !singularity.isEmpty();
 			default:
 				return false;
 		}

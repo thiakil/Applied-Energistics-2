@@ -93,55 +93,46 @@ public final class EntitySingularity extends AEBaseEntityItem
 				if( e instanceof EntityItem )
 				{
 					final ItemStack other = ( (EntityItem) e ).getEntityItem();
-					if( other != null )
-					{
+					if (!other.isEmpty()) {
 						boolean matches = false;
-						for( final ItemStack is : OreDictionary.getOres( "dustEnder" ) )
-						{
-							if( OreDictionary.itemMatches( other, is, false ) )
-							{
+						for (final ItemStack is : OreDictionary.getOres("dustEnder")) {
+							if (OreDictionary.itemMatches(other, is, false)) {
 								matches = true;
 								break;
 							}
 						}
 
 						// check... other name.
-						if( !matches )
-						{
-							for( final ItemStack is : OreDictionary.getOres( "dustEnderPearl" ) )
-							{
-								if( OreDictionary.itemMatches( other, is, false ) )
-								{
+						if (!matches) {
+							for (final ItemStack is : OreDictionary.getOres("dustEnderPearl")) {
+								if (OreDictionary.itemMatches(other, is, false)) {
 									matches = true;
 									break;
 								}
 							}
 						}
 
-						if( matches )
-						{
-							while( item.getCount() > 0 && other.getCount() > 0 )
-							{
-								other.grow( -1 );;
-								if( other.getCount() == 0 )
-								{
+						if (matches) {
+							while (item.getCount() > 0 && other.getCount() > 0) {
+								other.grow(-1);
+								;
+								if (other.getCount() == 0) {
 									e.setDead();
 								}
 
-								materials.qESingularity().maybeStack( 2 ).ifPresent( singularityStack ->
+								materials.qESingularity().maybeStack(2).ifPresent(singularityStack ->
 								{
-									final NBTTagCompound cmp = Platform.openNbtData( singularityStack );
-									cmp.setLong( "freq", ( new Date() ).getTime() * 100 + ( randTickSeed ) % 100 );
+									final NBTTagCompound cmp = Platform.openNbtData(singularityStack);
+									cmp.setLong("freq", (new Date()).getTime() * 100 + (randTickSeed) % 100);
 									randTickSeed++;
-									item.grow( -1 );
+									item.grow(-1);
 
-									final EntitySingularity entity = new EntitySingularity( this.world, this.posX, this.posY, this.posZ, singularityStack );
-									this.world.spawnEntity( entity );
-								} );
+									final EntitySingularity entity = new EntitySingularity(this.world, this.posX, this.posY, this.posZ, singularityStack);
+									this.world.spawnEntity(entity);
+								});
 							}
 
-							if( item.getCount() <= 0 )
-							{
+							if (item.getCount() <= 0) {
 								this.setDead();
 							}
 						}

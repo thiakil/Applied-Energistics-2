@@ -141,9 +141,8 @@ public abstract class PartUpgradeable extends PartBasicState implements IAEAppEn
 	{
 		for( final ItemStack is : this.upgrades )
 		{
-			if( is != null )
-			{
-				drops.add( is );
+			if (!is.isEmpty()) {
+				drops.add(is);
 			}
 		}
 	}

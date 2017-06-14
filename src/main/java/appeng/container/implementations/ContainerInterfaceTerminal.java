@@ -204,7 +204,7 @@ public final class ContainerInterfaceTerminal extends AEBaseContainer
 		if( inv != null )
 		{
 			final ItemStack is = inv.server.getStackInSlot( slot );
-			final boolean hasItemInHand = player.inventory.getItemStack() != null;
+			final boolean hasItemInHand = !player.inventory.getItemStack().isEmpty();
 
 			final InventoryAdaptor playerHand = new AdaptorPlayerHand( player );
 
@@ -220,28 +220,22 @@ public final class ContainerInterfaceTerminal extends AEBaseContainer
 					if( hasItemInHand )
 					{
 						ItemStack inSlot = theSlot.getStackInSlot( 0 );
-						if( inSlot == null )
-						{
-							player.inventory.setItemStack( interfaceSlot.addItems( player.inventory.getItemStack() ) );
-						}
-						else
-						{
+						if (inSlot.isEmpty()) {
+							player.inventory.setItemStack(interfaceSlot.addItems(player.inventory.getItemStack()));
+						} else {
 							inSlot = inSlot.copy();
 							final ItemStack inHand = player.inventory.getItemStack().copy();
 
-							theSlot.setInventorySlotContents( 0, null );
-							player.inventory.setItemStack( null );
+							theSlot.setInventorySlotContents(0, ItemStack.EMPTY);
+							player.inventory.setItemStack(ItemStack.EMPTY);
 
-							player.inventory.setItemStack( interfaceSlot.addItems( inHand.copy() ) );
+							player.inventory.setItemStack(interfaceSlot.addItems(inHand.copy()));
 
-							if( player.inventory.getItemStack() == null )
-							{
-								player.inventory.setItemStack( inSlot );
-							}
-							else
-							{
-								player.inventory.setItemStack( inHand );
-								theSlot.setInventorySlotContents( 0, inSlot );
+							if (player.inventory.getItemStack().isEmpty()) {
+								player.inventory.setItemStack(inSlot);
+							} else {
+								player.inventory.setItemStack(inHand);
+								theSlot.setInventorySlotContents(0, inSlot);
 							}
 						}
 					}
@@ -256,26 +250,21 @@ public final class ContainerInterfaceTerminal extends AEBaseContainer
 
 					if( hasItemInHand )
 					{
-						ItemStack extra = playerHand.removeItems( 1, null, null );
-						if( extra != null )
-						{
-							extra = interfaceSlot.addItems( extra );
+						ItemStack extra = playerHand.removeItems(1, ItemStack.EMPTY, null);
+						if (!extra.isEmpty()) {
+							extra = interfaceSlot.addItems(extra);
 						}
-						if( extra != null )
-						{
-							playerHand.addItems( extra );
+						if (!extra.isEmpty()) {
+							playerHand.addItems(extra);
 						}
 					}
-					else if( is != null )
-					{
-						ItemStack extra = interfaceSlot.removeItems( ( is.getCount() + 1 ) / 2, null, null );
-						if( extra != null )
-						{
-							extra = playerHand.addItems( extra );
+					else if (!is.isEmpty()) {
+						ItemStack extra = interfaceSlot.removeItems((is.getCount() + 1) / 2, ItemStack.EMPTY, null);
+						if (!extra.isEmpty()) {
+							extra = playerHand.addItems(extra);
 						}
-						if( extra != null )
-						{
-							interfaceSlot.addItems( extra );
+						if (!extra.isEmpty()) {
+							interfaceSlot.addItems(extra);
 						}
 					}
 
@@ -300,7 +289,7 @@ public final class ContainerInterfaceTerminal extends AEBaseContainer
 
 					if( player.capabilities.isCreativeMode && !hasItemInHand )
 					{
-						player.inventory.setItemStack( is == null ? null : is.copy() );
+						player.inventory.setItemStack(is.isEmpty() ? ItemStack.EMPTY : is.copy() );
 					}
 
 					break;
@@ -357,12 +346,12 @@ public final class ContainerInterfaceTerminal extends AEBaseContainer
 
 	private boolean isDifferent( final ItemStack a, final ItemStack b )
 	{
-		if( a == null && b == null )
+		if(a.isEmpty() && b.isEmpty() )
 		{
 			return false;
 		}
 
-		if( a == null || b == null )
+		if(a.isEmpty() || b.isEmpty() )
 		{
 			return true;
 		}
@@ -388,11 +377,10 @@ public final class ContainerInterfaceTerminal extends AEBaseContainer
 			final ItemStack is = inv.server.getStackInSlot( x + offset );
 
 			// "update" client side.
-			inv.client.setInventorySlotContents( x + offset, is == null ? null : is.copy() );
+			inv.client.setInventorySlotContents( x + offset, is.isEmpty() ? ItemStack.EMPTY : is.copy() );
 
-			if( is != null )
-			{
-				is.writeToNBT( itemNBT );
+			if (!is.isEmpty()) {
+				is.writeToNBT(itemNBT);
 			}
 
 			tag.setTag( Integer.toString( x + offset ), itemNBT );
@@ -430,7 +418,7 @@ public final class ContainerInterfaceTerminal extends AEBaseContainer
 		@Override
 		public boolean isItemValid( final ItemStack itemstack )
 		{
-			return itemstack != null && itemstack.getItem() instanceof ItemEncodedPattern;
+			return !itemstack.isEmpty() && itemstack.getItem() instanceof ItemEncodedPattern;
 		}
 	}
 }

@@ -66,9 +66,8 @@ class FacadeRegistryPlugin implements IRecipeRegistryPlugin
 			// Looking up if a certain block can be used to make a facade
 			ItemStack itemStack = (ItemStack) focus.getValue();
 
-			if( itemFacade.createFacadeForItem( itemStack, true ) != null )
-			{
-				return Collections.singletonList( VanillaRecipeCategoryUid.CRAFTING );
+			if (!itemFacade.createFacadeForItem(itemStack, true).isEmpty()) {
+				return Collections.singletonList(VanillaRecipeCategoryUid.CRAFTING);
 			}
 		}
 
@@ -102,9 +101,8 @@ class FacadeRegistryPlugin implements IRecipeRegistryPlugin
 			ItemStack itemStack = (ItemStack) focus.getValue();
 			ItemStack facade = itemFacade.createFacadeForItem( itemStack, false );
 
-			if( facade != null )
-			{
-				return Collections.singletonList( (T) new FacadeRecipeWrapper( itemStack, cableAnchor, facade ) );
+			if (!facade.isEmpty()) {
+				return Collections.singletonList((T) new FacadeRecipeWrapper(itemStack, cableAnchor, facade));
 			}
 		}
 

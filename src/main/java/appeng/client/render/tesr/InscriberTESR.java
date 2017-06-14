@@ -132,16 +132,13 @@ public class InscriberTESR extends TileEntitySpecialRenderer<TileInscriber>
 		GlStateManager.color( 1.0F, 1.0F, 1.0F, 1.0F );
 
 		int items = 0;
-		if( tile.getStackInSlot( 0 ) != null )
-		{
+		if (!tile.getStackInSlot(0).isEmpty()) {
 			items++;
 		}
-		if( tile.getStackInSlot( 1 ) != null )
-		{
+		if (!tile.getStackInSlot(1).isEmpty()) {
 			items++;
 		}
-		if( tile.getStackInSlot( 2 ) != null )
-		{
+		if (!tile.getStackInSlot(2).isEmpty()) {
 			items++;
 		}
 
@@ -151,11 +148,9 @@ public class InscriberTESR extends TileEntitySpecialRenderer<TileInscriber>
 		{
 			ItemStack is = tile.getStackInSlot( 3 );
 
-			if( is == null )
-			{
+			if (is.isEmpty()) {
 				final IInscriberRecipe ir = tile.getTask();
-				if( ir != null )
-				{
+				if (ir != null) {
 					is = ir.getOutput().copy();
 				}
 			}
@@ -177,46 +172,41 @@ public class InscriberTESR extends TileEntitySpecialRenderer<TileInscriber>
 
 	private void renderItem( ItemStack sis, final float o, final AEBaseTile tile, final VertexBuffer tess, final double x, final double y, final double z )
 	{
-		if( sis != null )
-		{
+		if (!sis.isEmpty()) {
 			sis = sis.copy();
 
 			GlStateManager.pushMatrix();
 
-			GlStateManager.translate( x, y, z );
-			GlStateManager.translate( 0.5F, 0.5F, 0.5F );
-			FacingToRotation.get( tile.getForward(), tile.getUp() ).glRotateCurrentMat();
-			GlStateManager.translate( -0.5F, -0.5F, -0.5F );
+			GlStateManager.translate(x, y, z);
+			GlStateManager.translate(0.5F, 0.5F, 0.5F);
+			FacingToRotation.get(tile.getForward(), tile.getUp()).glRotateCurrentMat();
+			GlStateManager.translate(-0.5F, -0.5F, -0.5F);
 
-			try
-			{
+			try {
 				// move to center
-				GlStateManager.translate( 0.5f, 0.5f + o, 0.5f );
+				GlStateManager.translate(0.5f, 0.5f + o, 0.5f);
 
-				GlStateManager.rotate( 90, 1, 0, 0 );
+				GlStateManager.rotate(90, 1, 0, 0);
 
 				// set scale
-				GlStateManager.scale( ITEM_RENDER_SCALE, ITEM_RENDER_SCALE, ITEM_RENDER_SCALE );
+				GlStateManager.scale(ITEM_RENDER_SCALE, ITEM_RENDER_SCALE, ITEM_RENDER_SCALE);
 
 				// heuristic to scale items down much further than blocks
-				final Block blk = Block.getBlockFromItem( sis.getItem() );
-				if( blk == null )
-				{
-					GlStateManager.scale( 0.5, 0.5, 0.5 );
+				final Block blk = Block.getBlockFromItem(sis.getItem());
+				if (blk == null) {
+					GlStateManager.scale(0.5, 0.5, 0.5);
 				}
 
 				// << 20 | light << 4;
-				final int br = tile.getWorld().getCombinedLight( tile.getPos(), 0 );
+				final int br = tile.getWorld().getCombinedLight(tile.getPos(), 0);
 				final int var11 = br % 65536;
 				final int var12 = br / 65536;
 
-				OpenGlHelper.setLightmapTextureCoords( OpenGlHelper.lightmapTexUnit, var11, var12 );
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var11, var12);
 
-				Minecraft.getMinecraft().getRenderItem().renderItem( sis, ItemCameraTransforms.TransformType.FIXED );
-			}
-			catch( final Exception err )
-			{
-				AELog.debug( err );
+				Minecraft.getMinecraft().getRenderItem().renderItem(sis, ItemCameraTransforms.TransformType.FIXED);
+			} catch (final Exception err) {
+				AELog.debug(err);
 			}
 
 			GlStateManager.popMatrix();

@@ -63,7 +63,7 @@ public class ItemComparisonHelper
 	 */
 	public boolean isEqualItemType( final ItemStack that, final ItemStack other )
 	{
-		if( that != null && other != null && that.getItem() == other.getItem() )
+		if(!that.isEmpty() && !other.isEmpty() && that.getItem() == other.getItem() )
 		{
 			if( that.isItemStackDamageable() )
 			{
@@ -85,7 +85,7 @@ public class ItemComparisonHelper
 	 */
 	public boolean isEqualItem( @Nullable final ItemStack left, @Nullable final ItemStack right )
 	{
-		return left != null && right != null && left.isItemEqual( right );
+		return !left.isEmpty() && !right.isEmpty() && left.isItemEqual(right);
 	}
 
 	/**
@@ -111,12 +111,12 @@ public class ItemComparisonHelper
 	 */
 	public boolean isFuzzyEqualItem( final ItemStack a, final ItemStack b, final FuzzyMode mode )
 	{
-		if( a == null && b == null )
+		if(a.isEmpty() && b.isEmpty() )
 		{
 			return true;
 		}
 
-		if( a == null || b == null )
+		if(a.isEmpty() || b.isEmpty() )
 		{
 			return false;
 		}
@@ -366,11 +366,11 @@ public class ItemComparisonHelper
 	 */
 	private boolean hasSameNbtTag( final ItemStack a, final ItemStack b )
 	{
-		if( a == null && b == null )
+		if(a.isEmpty() && b.isEmpty() )
 		{
 			return true;
 		}
-		if( a == null || b == null )
+		if(a.isEmpty() || b.isEmpty() )
 		{
 			return false;
 		}

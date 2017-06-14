@@ -166,7 +166,7 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 		// AELog.info( "ID:" + id.toString() + " : " + is.getItemDamage() );
 
 		final TunnelType tt = AEApi.instance().registries().p2pTunnel().getTunnelTypeByItem( is );
-		if( is != null && is.getItem() instanceof IMemoryCard )
+		if(!is.isEmpty() && is.getItem() instanceof IMemoryCard )
 		{
 			final IMemoryCard mc = (IMemoryCard) is.getItem();
 			final NBTTagCompound data = mc.getData( is );
@@ -174,36 +174,29 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 			final ItemStack newType = new ItemStack( data );
 			final long freq = data.getLong( "freq" );
 
-			if( newType != null )
-			{
-				if( newType.getItem() instanceof IPartItem )
-				{
-					final IPart testPart = ( (IPartItem) newType.getItem() ).createPartFromItemStack( newType );
-					if( testPart instanceof PartP2PTunnel )
-					{
-						this.getHost().removePart( this.getSide(), true );
-						final AEPartLocation dir = this.getHost().addPart( newType, this.getSide(), player, hand );
-						final IPart newBus = this.getHost().getPart( dir );
+			if (!newType.isEmpty()) {
+				if (newType.getItem() instanceof IPartItem) {
+					final IPart testPart = ((IPartItem) newType.getItem()).createPartFromItemStack(newType);
+					if (testPart instanceof PartP2PTunnel) {
+						this.getHost().removePart(this.getSide(), true);
+						final AEPartLocation dir = this.getHost().addPart(newType, this.getSide(), player, hand);
+						final IPart newBus = this.getHost().getPart(dir);
 
-						if( newBus instanceof PartP2PTunnel )
-						{
+						if (newBus instanceof PartP2PTunnel) {
 							final PartP2PTunnel newTunnel = (PartP2PTunnel) newBus;
-							newTunnel.setOutput( true );
+							newTunnel.setOutput(true);
 
-							try
-							{
+							try {
 								final P2PCache p2p = newTunnel.getProxy().getP2P();
-								p2p.updateFreq( newTunnel, freq );
-							}
-							catch( final GridAccessException e )
-							{
+								p2p.updateFreq(newTunnel, freq);
+							} catch (final GridAccessException e) {
 								// :P
 							}
 
 							newTunnel.onTunnelNetworkChange();
 						}
 
-						mc.notifyUser( player, MemoryCardMessages.SETTINGS_LOADED );
+						mc.notifyUser(player, MemoryCardMessages.SETTINGS_LOADED);
 						return true;
 					}
 				}
@@ -219,7 +212,7 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 			switch( tt )
 			{
 				case LIGHT:
-					newType = parts.p2PTunnelLight().maybeStack( 1 ).orElse( null );
+					newType = parts.p2PTunnelLight().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 					break;
 
 				/*
@@ -240,15 +233,15 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 					break;
 
 				case ITEM:
-					newType = parts.p2PTunnelItems().maybeStack( 1 ).orElse( null );
+					newType = parts.p2PTunnelItems().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 					break;
 
 				case ME:
-					newType = parts.p2PTunnelME().maybeStack( 1 ).orElse( null );
+					newType = parts.p2PTunnelME().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 					break;
 
 				case REDSTONE:
-					newType = parts.p2PTunnelRedstone().maybeStack( 1 ).orElse( null );
+					newType = parts.p2PTunnelRedstone().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 					break;
 
 				/*
@@ -261,11 +254,11 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 				 */
 
 				default:
-					newType = null;
+					newType = ItemStack.EMPTY;
 					break;
 			}
 
-			if( newType != null && !Platform.itemComparisons().isEqualItem( newType, this.getItemStack() ) )
+			if(!newType.isEmpty() && !Platform.itemComparisons().isEqualItem(newType, this.getItemStack()) )
 			{
 				final boolean oldOutput = this.isOutput();
 				final long myFreq = this.getFrequency();
@@ -303,7 +296,7 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 	public boolean onPartShiftActivate( final EntityPlayer player, final EnumHand hand, final Vec3d pos )
 	{
 		final ItemStack is = player.inventory.getCurrentItem();
-		if( is != null && is.getItem() instanceof IMemoryCard )
+		if(!is.isEmpty() && is.getItem() instanceof IMemoryCard )
 		{
 			final IMemoryCard mc = (IMemoryCard) is.getItem();
 			final NBTTagCompound data = new NBTTagCompound();

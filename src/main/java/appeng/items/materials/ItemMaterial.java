@@ -204,14 +204,13 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 		{
 			if( mt.getOreName() != null )
 			{
-				ItemStack replacement = null;
+				ItemStack replacement = ItemStack.EMPTY;
 
 				final String[] names = mt.getOreName().split( "," );
 
 				for( final String name : names )
 				{
-					if( replacement != null )
-					{
+					if (!replacement.isEmpty()) {
 						break;
 					}
 
@@ -220,7 +219,7 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 					{
 						for( final ItemStack is : options )
 						{
-							if( is != null && is.getItem() != null )
+							if(!is.isEmpty() && is.getItem() != null )
 							{
 								replacement = is.copy();
 								break;
@@ -229,7 +228,7 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 					}
 				}
 
-				if( replacement == null || AEConfig.instance().useAEVersion( mt ) )
+				if(replacement.isEmpty() || AEConfig.instance().useAEVersion(mt) )
 				{
 					// continue using the AE2 item.
 					for( final String name : names )
@@ -301,7 +300,7 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 				upgrades = ( (ISegmentedInventory) te ).getInventoryByName( "upgrades" );
 			}
 
-			if( upgrades != null && player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof IUpgradeModule )
+			if(upgrades != null && !player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof IUpgradeModule )
 			{
 				final IUpgradeModule um = (IUpgradeModule) player.getHeldItemMainhand().getItem();
 				final Upgrades u = um.getType( player.getHeldItemMainhand() );
@@ -362,8 +361,7 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 
 	private String nameOf( final ItemStack is )
 	{
-		if( is == null )
-		{
+		if (is.isEmpty()) {
 			return "null";
 		}
 

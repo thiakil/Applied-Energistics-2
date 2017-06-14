@@ -89,7 +89,7 @@ public class PatternHelper implements ICraftingPatternDetails, Comparable<Patter
 
 			this.crafting.setInventorySlotContents( x, gs );
 
-			if( gs != null && ( !this.isCrafting || !gs.hasTagCompound() ) )
+			if(!gs.isEmpty() && (!this.isCrafting || !gs.hasTagCompound()) )
 			{
 				this.markItemAs( x, gs, TestStatus.ACCEPT );
 			}
@@ -115,15 +115,14 @@ public class PatternHelper implements ICraftingPatternDetails, Comparable<Patter
 		else
 		{
 			this.standardRecipe = null;
-			this.correctOutput = null;
+			this.correctOutput = ItemStack.EMPTY;
 
 			for( int x = 0; x < outTag.tagCount(); x++ )
 			{
 				final ItemStack gs = new ItemStack( outTag.getCompoundTagAt( x ) );
 
-				if( gs != null )
-				{
-					out.add( AEApi.instance().storage().createItemStack( gs ) );
+				if (!gs.isEmpty()) {
+					out.add(AEApi.instance().storage().createItemStack(gs));
 				}
 			}
 		}
@@ -330,13 +329,11 @@ public class PatternHelper implements ICraftingPatternDetails, Comparable<Patter
 
 	private TestStatus getStatus( final int slotIndex, final ItemStack i )
 	{
-		if( this.crafting.getStackInSlot( slotIndex ) == null )
-		{
-			return i == null ? TestStatus.ACCEPT : TestStatus.DECLINE;
+		if (this.crafting.getStackInSlot(slotIndex).isEmpty()) {
+			return i.isEmpty() ? TestStatus.ACCEPT : TestStatus.DECLINE;
 		}
 
-		if( i == null )
-		{
+		if (i.isEmpty()) {
 			return TestStatus.DECLINE;
 		}
 

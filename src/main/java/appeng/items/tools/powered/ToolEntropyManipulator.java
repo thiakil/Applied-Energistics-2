@@ -74,7 +74,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 
 		final List<ItemStack> snowBalls = new ArrayList<ItemStack>();
 		snowBalls.add( new ItemStack( Items.SNOWBALL ) );
-		this.coolDown.put( new InWorldToolOperationIngredient( Blocks.FLOWING_WATER, true ), new InWorldToolOperationResult( null, snowBalls ) );
+		this.coolDown.put( new InWorldToolOperationIngredient( Blocks.FLOWING_WATER, true ), new InWorldToolOperationResult(ItemStack.EMPTY, snowBalls) );
 		this.coolDown.put( new InWorldToolOperationIngredient( Blocks.WATER, true ), new InWorldToolOperationResult( new ItemStack( Blocks.ICE ) ) );
 
 		this.heatUp.put( new InWorldToolOperationIngredient( Blocks.ICE.getDefaultState() ), new InWorldToolOperationResult( new ItemStack( Blocks.WATER ) ) );
@@ -131,14 +131,11 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 			r = this.heatUp.get( new InWorldToolOperationIngredient( state.getBlock(), true ) );
 		}
 
-		if( r.getBlockItem() != null )
-		{
-			final Block blk = Block.getBlockFromItem( r.getBlockItem().getItem() );
-			w.setBlockState( pos, blk.getStateFromMeta( r.getBlockItem().getItemDamage() ), 3 );
-		}
-		else
-		{
-			w.setBlockToAir( pos );
+		if (!r.getBlockItem().isEmpty()) {
+			final Block blk = Block.getBlockFromItem(r.getBlockItem().getItem());
+			w.setBlockState(pos, blk.getStateFromMeta(r.getBlockItem().getItemDamage()), 3);
+		} else {
+			w.setBlockToAir(pos);
 		}
 
 		if( r.getDrops() != null )
@@ -168,14 +165,11 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 			r = this.coolDown.get( new InWorldToolOperationIngredient( state.getBlock(), true ) );
 		}
 
-		if( r.getBlockItem() != null )
-		{
-			final Block blk = Block.getBlockFromItem( r.getBlockItem().getItem() );
-			w.setBlockState( pos, blk.getStateFromMeta( r.getBlockItem().getItemDamage() ), 3 );
-		}
-		else
-		{
-			w.setBlockToAir( pos );
+		if (!r.getBlockItem().isEmpty()) {
+			final Block blk = Block.getBlockFromItem(r.getBlockItem().getItem());
+			w.setBlockState(pos, blk.getStateFromMeta(r.getBlockItem().getItemDamage()), 3);
+		} else {
+			w.setBlockToAir(pos);
 		}
 
 		if( r.getDrops() != null )
@@ -289,22 +283,17 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 				{
 					final ItemStack result = FurnaceRecipes.instance().getSmeltingResult( i );
 
-					if( result != null )
-					{
-						if( result.getItem() instanceof ItemBlock )
-						{
-							if( Block.getBlockFromItem( result.getItem() ) == blockID && result.getItem().getDamage( result ) == blockID.getMetaFromState( state ) )
-							{
+					if (!result.isEmpty()) {
+						if (result.getItem() instanceof ItemBlock) {
+							if (Block.getBlockFromItem(result.getItem()) == blockID && result.getItem().getDamage(result) == blockID.getMetaFromState(state)) {
 								canFurnaceable = false;
 							}
 						}
 						hasFurnaceable = true;
-						out.add( result );
-					}
-					else
-					{
+						out.add(result);
+					} else {
 						canFurnaceable = false;
-						out.add( i );
+						out.add(i);
 					}
 				}
 
@@ -314,14 +303,11 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 					final InWorldToolOperationResult or = InWorldToolOperationResult.getBlockOperationResult( out.toArray( new ItemStack[out.size()] ) );
 					w.playSound( p, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F );
 
-					if( or.getBlockItem() == null )
-					{
-						w.setBlockState( pos, Platform.AIR_BLOCK.getDefaultState(), 3 );
-					}
-					else
-					{
-						final Block blk = Block.getBlockFromItem( or.getBlockItem().getItem() );
-						w.setBlockState( pos, blk.getStateFromMeta( or.getBlockItem().getItemDamage() ), 3 );
+					if (or.getBlockItem().isEmpty()) {
+						w.setBlockState(pos, Platform.AIR_BLOCK.getDefaultState(), 3);
+					} else {
+						final Block blk = Block.getBlockFromItem(or.getBlockItem().getItem());
+						w.setBlockState(pos, blk.getStateFromMeta(or.getBlockItem().getItemDamage()), 3);
 					}
 
 					if( or.getDrops() != null )

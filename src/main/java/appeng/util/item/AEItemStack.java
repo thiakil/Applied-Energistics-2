@@ -61,9 +61,8 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 
 	private AEItemStack( final ItemStack is )
 	{
-		if( is == null )
-		{
-			throw new InvalidParameterException( "null is not a valid ItemStack for AEItemStack." );
+		if (is.isEmpty()) {
+			throw new InvalidParameterException("null is not a valid ItemStack for AEItemStack.");
 		}
 
 		final Item item = is.getItem();
@@ -124,8 +123,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		}
 
 		final ItemStack itemstack = new ItemStack( i );
-		if( itemstack == null )
-		{
+		if (itemstack.isEmpty()) {
 			return null;
 		}
 
@@ -140,8 +138,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Nullable
 	public static AEItemStack create( final ItemStack stack )
 	{
-		if( stack == null )
-		{
+		if (stack.isEmpty()) {
 			return null;
 		}
 
@@ -182,8 +179,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		final long countRequestable = getPacketValue( countReqType, data );
 
 		final ItemStack itemstack = new ItemStack( d );
-		if( itemstack == null )
-		{
+		if (itemstack.isEmpty()) {
 			return null;
 		}
 
@@ -479,8 +475,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Override
 	public boolean isSameType( final ItemStack otherStack )
 	{
-		if( otherStack == null )
-		{
+		if (otherStack.isEmpty()) {
 			return false;
 		}
 

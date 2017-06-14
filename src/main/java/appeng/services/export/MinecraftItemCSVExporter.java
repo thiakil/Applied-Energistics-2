@@ -148,15 +148,12 @@ final class MinecraftItemCSVExporter implements Exporter
 		@Override
 		public String apply( @Nullable final ItemStack input )
 		{
-			if( input == null )
-			{
-				AELog.debug( EXTRACTING_NULL_MESSAGE );
+			if (input.isEmpty()) {
+				AELog.debug(EXTRACTING_NULL_MESSAGE);
 
 				return null;
-			}
-			else
-			{
-				AELog.debug( EXTRACTING_ITEM_MESSAGE, input.getDisplayName(), input.getItemDamage() );
+			} else {
+				AELog.debug(EXTRACTING_ITEM_MESSAGE, input.getDisplayName(), input.getItemDamage());
 			}
 
 			final List<String> joinedBlockAttributes = Lists.newArrayListWithCapacity( 5 );

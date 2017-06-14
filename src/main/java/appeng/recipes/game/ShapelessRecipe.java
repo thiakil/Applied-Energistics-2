@@ -38,7 +38,7 @@ public class ShapelessRecipe implements IRecipe, IRecipeBakeable
 {
 
 	private final ArrayList<Object> input = new ArrayList<Object>();
-	private ItemStack output = null;
+	private ItemStack output = ItemStack.EMPTY;
 	private boolean disable = false;
 
 	public ShapelessRecipe( final ItemStack result, final Object... recipe )
@@ -83,43 +83,32 @@ public class ShapelessRecipe implements IRecipe, IRecipeBakeable
 		{
 			final ItemStack slot = var1.getStackInSlot( x );
 
-			if( slot != null )
-			{
+			if (!slot.isEmpty()) {
 				boolean inRecipe = false;
 
-				for( final Object next : required )
-				{
+				for (final Object next : required) {
 					boolean match = false;
 
-					if( next instanceof IIngredient )
-					{
-						try
-						{
-							for( final ItemStack item : ( (IIngredient) next ).getItemStackSet() )
-							{
-								match = match || this.checkItemEquals( item, slot );
+					if (next instanceof IIngredient) {
+						try {
+							for (final ItemStack item : ((IIngredient) next).getItemStackSet()) {
+								match = match || this.checkItemEquals(item, slot);
 							}
-						}
-						catch( final RegistrationError e )
-						{
+						} catch (final RegistrationError e) {
 							// :P
-						}
-						catch( final MissingIngredientError e )
-						{
+						} catch (final MissingIngredientError e) {
 							// :P
 						}
 					}
 
-					if( match )
-					{
+					if (match) {
 						inRecipe = true;
-						required.remove( next );
+						required.remove(next);
 						break;
 					}
 				}
 
-				if( !inRecipe )
-				{
+				if (!inRecipe) {
 					return false;
 				}
 			}

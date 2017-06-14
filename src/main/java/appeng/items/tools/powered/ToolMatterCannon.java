@@ -137,9 +137,8 @@ public class ToolMatterCannon extends AEBasePoweredItem implements IStorageCell
 
 						aeAmmo.setStackSize( 1 );
 						final ItemStack ammo = ( (IAEItemStack) aeAmmo ).getItemStack();
-						if( ammo == null )
-						{
-							return new ActionResult<ItemStack>( EnumActionResult.SUCCESS, p.getHeldItemMainhand() );
+						if (ammo.isEmpty()) {
+							return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, p.getHeldItemMainhand());
 						}
 
 						ammo.setCount( 1 );
@@ -251,7 +250,7 @@ public class ToolMatterCannon extends AEBasePoweredItem implements IStorageCell
 			AELog.debug( err );
 		}
 
-		if( pos != null && type != null && type.getItem() instanceof ItemPaintBall )
+		if(pos != null && !type.isEmpty() && type.getItem() instanceof ItemPaintBall )
 		{
 			final ItemPaintBall ipb = (ItemPaintBall) type.getItem();
 

@@ -44,51 +44,41 @@ public abstract class AEBaseMEGui extends AEBaseGui
 
 	public List<String> handleItemTooltip( final ItemStack stack, final int mouseX, final int mouseY, final List<String> currentToolTip )
 	{
-		if( stack != null )
-		{
-			final Slot s = this.getSlot( mouseX, mouseY );
-			if( s instanceof SlotME )
-			{
+		if (!stack.isEmpty()) {
+			final Slot s = this.getSlot(mouseX, mouseY);
+			if (s instanceof SlotME) {
 				final int BigNumber = AEConfig.instance().useTerminalUseLargeFont() ? 999 : 9999;
 
 				IAEItemStack myStack = null;
 
-				try
-				{
+				try {
 					final SlotME theSlotField = (SlotME) s;
 					myStack = theSlotField.getAEStack();
-				}
-				catch( final Throwable ignore )
-				{
+				} catch (final Throwable ignore) {
 				}
 
-				if( myStack != null )
-				{
-					if( myStack.getStackSize() > BigNumber || ( myStack.getStackSize() > 1 && stack.isItemDamaged() ) )
-					{
+				if (myStack != null) {
+					if (myStack.getStackSize() > BigNumber || (myStack.getStackSize() > 1 && stack.isItemDamaged())) {
 						final String local = ButtonToolTips.ItemsStored.getLocal();
-						final String formattedAmount = NumberFormat.getNumberInstance( Locale.US ).format( myStack.getStackSize() );
-						final String format = String.format( local, formattedAmount );
+						final String formattedAmount = NumberFormat.getNumberInstance(Locale.US).format(myStack.getStackSize());
+						final String format = String.format(local, formattedAmount);
 
-						currentToolTip.add( TextFormatting.GRAY + format );
+						currentToolTip.add(TextFormatting.GRAY + format);
 					}
 
-					if( myStack.getCountRequestable() > 0 )
-					{
+					if (myStack.getCountRequestable() > 0) {
 						final String local = ButtonToolTips.ItemsRequestable.getLocal();
-						final String formattedAmount = NumberFormat.getNumberInstance( Locale.US ).format( myStack.getCountRequestable() );
-						final String format = String.format( local, formattedAmount );
+						final String formattedAmount = NumberFormat.getNumberInstance(Locale.US).format(myStack.getCountRequestable());
+						final String format = String.format(local, formattedAmount);
 
-						currentToolTip.add( TextFormatting.GRAY + format );
+						currentToolTip.add(TextFormatting.GRAY + format);
 					}
-				}
-				else if( stack.getCount() > BigNumber || ( stack.getCount() > 1 && stack.isItemDamaged() ) )
-				{
+				} else if (stack.getCount() > BigNumber || (stack.getCount() > 1 && stack.isItemDamaged())) {
 					final String local = ButtonToolTips.ItemsStored.getLocal();
-					final String formattedAmount = NumberFormat.getNumberInstance( Locale.US ).format( stack.getCount() );
-					final String format = String.format( local, formattedAmount );
+					final String formattedAmount = NumberFormat.getNumberInstance(Locale.US).format(stack.getCount());
+					final String format = String.format(local, formattedAmount);
 
-					currentToolTip.add( TextFormatting.GRAY + format );
+					currentToolTip.add(TextFormatting.GRAY + format);
 				}
 			}
 		}
@@ -101,7 +91,7 @@ public abstract class AEBaseMEGui extends AEBaseGui
 	protected void renderToolTip( final ItemStack stack, final int x, final int y )
 	{
 		final Slot s = this.getSlot( x, y );
-		if( s instanceof SlotME && stack != null )
+		if(s instanceof SlotME && !stack.isEmpty() )
 		{
 			final int BigNumber = AEConfig.instance().useTerminalUseLargeFont() ? 999 : 9999;
 

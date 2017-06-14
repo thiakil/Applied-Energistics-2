@@ -43,11 +43,10 @@ public class CreativeCellInventory implements IMEInventoryHandler<IAEItemStack>
 		final CellConfig cc = new CellConfig( o );
 		for( final ItemStack is : cc )
 		{
-			if( is != null )
-			{
-				final IAEItemStack i = AEItemStack.create( is );
-				i.setStackSize( Integer.MAX_VALUE );
-				this.itemListCache.add( i );
+			if (!is.isEmpty()) {
+				final IAEItemStack i = AEItemStack.create(is);
+				i.setStackSize(Integer.MAX_VALUE);
+				this.itemListCache.add(i);
 			}
 		}
 	}

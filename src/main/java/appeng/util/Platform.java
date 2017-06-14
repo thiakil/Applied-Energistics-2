@@ -535,16 +535,14 @@ public class Platform
 		{
 			for( final ItemStack i : drops )
 			{
-				if( i != null )
-				{
-					if( i.getCount() > 0 )
-					{
-						final double offset_x = ( getRandomInt() % 32 - 16 ) / 82;
-						final double offset_y = ( getRandomInt() % 32 - 16 ) / 82;
-						final double offset_z = ( getRandomInt() % 32 - 16 ) / 82;
-						final EntityItem ei = new EntityItem( w, 0.5 + offset_x + pos.getX(), 0.5 + offset_y + pos.getY(), 0.2 + offset_z + pos.getZ(), i
-								.copy() );
-						w.spawnEntity( ei );
+				if (!i.isEmpty()) {
+					if (i.getCount() > 0) {
+						final double offset_x = (getRandomInt() % 32 - 16) / 82;
+						final double offset_y = (getRandomInt() % 32 - 16) / 82;
+						final double offset_z = (getRandomInt() % 32 - 16) / 82;
+						final EntityItem ei = new EntityItem(w, 0.5 + offset_x + pos.getX(), 0.5 + offset_y + pos.getY(), 0.2 + offset_z + pos.getZ(), i
+								.copy());
+						w.spawnEntity(ei);
 					}
 				}
 			}
@@ -678,7 +676,7 @@ public class Platform
 			return new ArrayList();
 		}
 
-		ItemStack itemStack = null;
+		ItemStack itemStack = ItemStack.EMPTY;
 		if( o instanceof AEItemStack )
 		{
 			final AEItemStack ais = (AEItemStack) o;
@@ -721,7 +719,7 @@ public class Platform
 			return "** Null";
 		}
 
-		ItemStack itemStack = null;
+		ItemStack itemStack = ItemStack.EMPTY;
 		if( o instanceof AEItemStack )
 		{
 			final String n = ( (AEItemStack) o ).getDisplayName();
@@ -787,10 +785,8 @@ public class Platform
 
 	public static boolean isWrench( final EntityPlayer player, final ItemStack eq, final BlockPos pos )
 	{
-		if( eq != null )
-		{
-			try
-			{
+		if (!eq.isEmpty()) {
+			try {
 				// TODO: Build Craft Wrench?
 				/*
 				 * if( eq.getItem() instanceof IToolWrench )
@@ -799,16 +795,13 @@ public class Platform
 				 * return wrench.canWrench( player, x, y, z );
 				 * }
 				 */
-			}
-			catch( final Throwable ignore )
-			{ // explodes without BC
+			} catch (final Throwable ignore) { // explodes without BC
 
 			}
 
-			if( eq.getItem() instanceof IAEWrench )
-			{
+			if (eq.getItem() instanceof IAEWrench) {
 				final IAEWrench wrench = (IAEWrench) eq.getItem();
-				return wrench.canWrench( eq, player, pos );
+				return wrench.canWrench(eq, player, pos);
 			}
 		}
 		return false;
@@ -816,8 +809,7 @@ public class Platform
 
 	public static boolean isChargeable( final ItemStack i )
 	{
-		if( i == null )
-		{
+		if (i.isEmpty()) {
 			return false;
 		}
 		final Item it = i.getItem();
@@ -1342,43 +1334,35 @@ public class Platform
 		final IItemList<IAEItemStack> itemChanges = AEApi.instance().storage().createItemList();
 		final IItemList<IAEFluidStack> fluidChanges = AEApi.instance().storage().createFluidList();
 
-		if( removed != null )
-		{
-			final IMEInventory<IAEItemStack> myItems = AEApi.instance().registries().cell().getCellInventory( removed, null, StorageChannel.ITEMS );
+		if (!removed.isEmpty()) {
+			final IMEInventory<IAEItemStack> myItems = AEApi.instance().registries().cell().getCellInventory(removed, null, StorageChannel.ITEMS);
 
-			if( myItems != null )
-			{
-				for( final IAEItemStack is : myItems.getAvailableItems( itemChanges ) )
-				{
-					is.setStackSize( -is.getStackSize() );
+			if (myItems != null) {
+				for (final IAEItemStack is : myItems.getAvailableItems(itemChanges)) {
+					is.setStackSize(-is.getStackSize());
 				}
 			}
 
-			final IMEInventory<IAEFluidStack> myFluids = AEApi.instance().registries().cell().getCellInventory( removed, null, StorageChannel.FLUIDS );
+			final IMEInventory<IAEFluidStack> myFluids = AEApi.instance().registries().cell().getCellInventory(removed, null, StorageChannel.FLUIDS);
 
-			if( myFluids != null )
-			{
-				for( final IAEFluidStack is : myFluids.getAvailableItems( fluidChanges ) )
-				{
-					is.setStackSize( -is.getStackSize() );
+			if (myFluids != null) {
+				for (final IAEFluidStack is : myFluids.getAvailableItems(fluidChanges)) {
+					is.setStackSize(-is.getStackSize());
 				}
 			}
 		}
 
-		if( added != null )
-		{
-			final IMEInventory<IAEItemStack> myItems = AEApi.instance().registries().cell().getCellInventory( added, null, StorageChannel.ITEMS );
+		if (!added.isEmpty()) {
+			final IMEInventory<IAEItemStack> myItems = AEApi.instance().registries().cell().getCellInventory(added, null, StorageChannel.ITEMS);
 
-			if( myItems != null )
-			{
-				myItems.getAvailableItems( itemChanges );
+			if (myItems != null) {
+				myItems.getAvailableItems(itemChanges);
 			}
 
-			final IMEInventory<IAEFluidStack> myFluids = AEApi.instance().registries().cell().getCellInventory( added, null, StorageChannel.FLUIDS );
+			final IMEInventory<IAEFluidStack> myFluids = AEApi.instance().registries().cell().getCellInventory(added, null, StorageChannel.FLUIDS);
 
-			if( myFluids != null )
-			{
-				myFluids.getAvailableItems( fluidChanges );
+			if (myFluids != null) {
+				myFluids.getAvailableItems(fluidChanges);
 			}
 		}
 
@@ -1624,8 +1608,7 @@ public class Platform
 	{
 		if( energySrc.extractAEPower( 1, Actionable.SIMULATE, PowerMultiplier.CONFIG ) > 0.9 )
 		{
-			if( providedTemplate == null )
-			{
+			if (providedTemplate.isEmpty()) {
 				return ItemStack.EMPTY;
 			}
 
@@ -1638,9 +1621,8 @@ public class Platform
 				if( ae_ext != null )
 				{
 					final ItemStack extracted = ae_ext.getItemStack();
-					if( extracted != null )
-					{
-						energySrc.extractAEPower( 1, realForFake, PowerMultiplier.CONFIG );
+					if (!extracted.isEmpty()) {
+						energySrc.extractAEPower(1, realForFake, PowerMultiplier.CONFIG);
 						return extracted;
 					}
 				}
@@ -1689,8 +1671,7 @@ public class Platform
 
 	public static ItemStack getContainerItem( final ItemStack stackInSlot )
 	{
-		if( stackInSlot == null )
-		{
+		if (stackInSlot.isEmpty()) {
 			return ItemStack.EMPTY;
 		}
 
@@ -1706,7 +1687,7 @@ public class Platform
 		}
 
 		ItemStack ci = i.getContainerItem( stackInSlot.copy() );
-		if( ci != null && ci.isItemStackDamageable() && ci.getItemDamage() == ci.getMaxDamage() )
+		if(!ci.isEmpty() && ci.isItemStackDamageable() && ci.getItemDamage() == ci.getMaxDamage() )
 		{
 			ci = ItemStack.EMPTY;
 		}
@@ -1724,7 +1705,7 @@ public class Platform
 
 	public static boolean canRepair( final AEFeature type, final ItemStack a, final ItemStack b )
 	{
-		if( b == null || a == null )
+		if(b.isEmpty() || a.isEmpty() )
 		{
 			return false;
 		}

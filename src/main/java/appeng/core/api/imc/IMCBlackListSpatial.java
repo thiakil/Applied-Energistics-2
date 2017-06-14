@@ -36,12 +36,10 @@ public class IMCBlackListSpatial implements IIMCProcessor
 	{
 
 		final ItemStack is = m.getItemStackValue();
-		if( is != null )
-		{
-			final Block blk = Block.getBlockFromItem( is.getItem() );
-			if( blk != null )
-			{
-				AEApi.instance().registries().movable().blacklistBlock( blk );
+		if (!is.isEmpty()) {
+			final Block blk = Block.getBlockFromItem(is.getItem());
+			if (blk != null) {
+				AEApi.instance().registries().movable().blacklistBlock(blk);
 				return;
 			}
 		}

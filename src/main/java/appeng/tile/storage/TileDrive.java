@@ -265,7 +265,7 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
 	@Override
 	public boolean isItemValidForSlot( final int i, final ItemStack itemstack )
 	{
-		return itemstack != null && AEApi.instance().registries().cell().isCellHandled( itemstack );
+		return !itemstack.isEmpty() && AEApi.instance().registries().cell().isCellHandled(itemstack);
 	}
 
 	@Override
@@ -312,35 +312,29 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
 				this.invBySlot[x] = null;
 				this.handlersBySlot[x] = null;
 
-				if( is != null )
-				{
-					this.handlersBySlot[x] = AEApi.instance().registries().cell().getHandler( is );
+				if (!is.isEmpty()) {
+					this.handlersBySlot[x] = AEApi.instance().registries().cell().getHandler(is);
 
-					if( this.handlersBySlot[x] != null )
-					{
-						IMEInventoryHandler cell = this.handlersBySlot[x].getCellInventory( is, this, StorageChannel.ITEMS );
+					if (this.handlersBySlot[x] != null) {
+						IMEInventoryHandler cell = this.handlersBySlot[x].getCellInventory(is, this, StorageChannel.ITEMS);
 
-						if( cell != null )
-						{
-							power += this.handlersBySlot[x].cellIdleDrain( is, cell );
+						if (cell != null) {
+							power += this.handlersBySlot[x].cellIdleDrain(is, cell);
 
-							final DriveWatcher<IAEItemStack> ih = new DriveWatcher( cell, is, this.handlersBySlot[x], this );
-							ih.setPriority( this.priority );
+							final DriveWatcher<IAEItemStack> ih = new DriveWatcher(cell, is, this.handlersBySlot[x], this);
+							ih.setPriority(this.priority);
 							this.invBySlot[x] = ih;
-							this.items.add( ih );
-						}
-						else
-						{
-							cell = this.handlersBySlot[x].getCellInventory( is, this, StorageChannel.FLUIDS );
+							this.items.add(ih);
+						} else {
+							cell = this.handlersBySlot[x].getCellInventory(is, this, StorageChannel.FLUIDS);
 
-							if( cell != null )
-							{
-								power += this.handlersBySlot[x].cellIdleDrain( is, cell );
+							if (cell != null) {
+								power += this.handlersBySlot[x].cellIdleDrain(is, cell);
 
-								final DriveWatcher<IAEItemStack> ih = new DriveWatcher( cell, is, this.handlersBySlot[x], this );
-								ih.setPriority( this.priority );
+								final DriveWatcher<IAEItemStack> ih = new DriveWatcher(cell, is, this.handlersBySlot[x], this);
+								ih.setPriority(this.priority);
 								this.invBySlot[x] = ih;
-								this.fluids.add( ih );
+								this.fluids.add(ih);
 							}
 						}
 					}

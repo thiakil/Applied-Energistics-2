@@ -103,8 +103,7 @@ public class TileGrinder extends AEBaseInvTile implements ICrankable
 			for( int x = 0; x < src.getSizeInventory(); x++ )
 			{
 				ItemStack item = src.getStackInSlot( x );
-				if( item == null )
-				{
+				if (item.isEmpty()) {
 					continue;
 				}
 
@@ -119,7 +118,7 @@ public class TileGrinder extends AEBaseInvTile implements ICrankable
 
 						if( item.getCount() <= 0 )
 						{
-							item = null;
+							item = ItemStack.EMPTY;
 						}
 
 						src.setInventorySlotContents( x, item );
@@ -177,24 +176,22 @@ public class TileGrinder extends AEBaseInvTile implements ICrankable
 				}
 			} );
 
-			this.setInventorySlotContents( 6, null );
+			this.setInventorySlotContents(6, ItemStack.EMPTY);
 		}
 	}
 
 	private void addItem( final InventoryAdaptor sia, final ItemStack output )
 	{
-		if( output == null )
-		{
+		if (output.isEmpty()) {
 			return;
 		}
 
 		final ItemStack notAdded = sia.addItems( output );
-		if( notAdded != null )
-		{
+		if (!notAdded.isEmpty()) {
 			final List<ItemStack> out = new ArrayList<ItemStack>();
-			out.add( notAdded );
+			out.add(notAdded);
 
-			Platform.spawnDrops( this.world, this.pos.offset( this.getForward() ), out );
+			Platform.spawnDrops(this.world, this.pos.offset(this.getForward()), out);
 		}
 	}
 

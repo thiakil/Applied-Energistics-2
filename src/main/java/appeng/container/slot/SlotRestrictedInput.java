@@ -101,8 +101,7 @@ public class SlotRestrictedInput extends AppEngSlot
 			return false;
 		}
 
-		if( i == null )
-		{
+		if (i.isEmpty()) {
 			return false;
 		}
 		if( i.getItem() == null )
@@ -243,12 +242,11 @@ public class SlotRestrictedInput extends AppEngSlot
 		if( Platform.isClient() && ( this.which == PlacableItemType.ENCODED_PATTERN ) )
 		{
 			final ItemStack is = super.getStack();
-			if( is != null && is.getItem() instanceof ItemEncodedPattern )
+			if(!is.isEmpty() && is.getItem() instanceof ItemEncodedPattern )
 			{
 				final ItemEncodedPattern iep = (ItemEncodedPattern) is.getItem();
 				final ItemStack out = iep.getOutput( is );
-				if( out != null )
-				{
+				if (!out.isEmpty()) {
 					return out;
 				}
 			}

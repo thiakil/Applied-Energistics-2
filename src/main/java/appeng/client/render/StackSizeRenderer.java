@@ -44,26 +44,24 @@ public class StackSizeRenderer
 
 	public void renderStackSize( FontRenderer fontRenderer, IAEItemStack aeStack, ItemStack is, int xPos, int yPos )
 	{
-		if( is != null )
-		{
+		if (!is.isEmpty()) {
 			final float scaleFactor = AEConfig.instance().useTerminalUseLargeFont() ? 0.85f : 0.5f;
 			final float inverseScaleFactor = 1.0f / scaleFactor;
 			final int offset = AEConfig.instance().useTerminalUseLargeFont() ? 0 : -1;
 
 			final boolean unicodeFlag = fontRenderer.getUnicodeFlag();
-			fontRenderer.setUnicodeFlag( false );
+			fontRenderer.setUnicodeFlag(false);
 
-			if( is.getCount() == 0 )
-			{
+			if (is.getCount() == 0) {
 				final String craftLabelText = AEConfig.instance().useTerminalUseLargeFont() ? GuiText.LargeFontCraft.getLocal() : GuiText.SmallFontCraft.getLocal();
 				GlStateManager.disableLighting();
 				GlStateManager.disableDepth();
 				GlStateManager.disableBlend();
 				GlStateManager.pushMatrix();
-				GlStateManager.scale( scaleFactor, scaleFactor, scaleFactor );
-				final int X = (int) ( ( (float) xPos + offset + 16.0f - fontRenderer.getStringWidth( craftLabelText ) * scaleFactor ) * inverseScaleFactor );
-				final int Y = (int) ( ( (float) yPos + offset + 16.0f - 7.0f * scaleFactor ) * inverseScaleFactor );
-				fontRenderer.drawStringWithShadow( craftLabelText, X, Y, 16777215 );
+				GlStateManager.scale(scaleFactor, scaleFactor, scaleFactor);
+				final int X = (int) (((float) xPos + offset + 16.0f - fontRenderer.getStringWidth(craftLabelText) * scaleFactor) * inverseScaleFactor);
+				final int Y = (int) (((float) yPos + offset + 16.0f - 7.0f * scaleFactor) * inverseScaleFactor);
+				fontRenderer.drawStringWithShadow(craftLabelText, X, Y, 16777215);
 				GlStateManager.popMatrix();
 				GlStateManager.enableLighting();
 				GlStateManager.enableDepth();
@@ -71,25 +69,24 @@ public class StackSizeRenderer
 			}
 
 			final long amount = aeStack != null ? aeStack.getStackSize() : is.getCount();
-			if( amount != 0 )
-			{
-				final String stackSize = this.getToBeRenderedStackSize( amount );
+			if (amount != 0) {
+				final String stackSize = this.getToBeRenderedStackSize(amount);
 
 				GlStateManager.disableLighting();
 				GlStateManager.disableDepth();
 				GlStateManager.disableBlend();
 				GlStateManager.pushMatrix();
-				GlStateManager.scale( scaleFactor, scaleFactor, scaleFactor );
-				final int X = (int) ( ( (float) xPos + offset + 16.0f - fontRenderer.getStringWidth( stackSize ) * scaleFactor ) * inverseScaleFactor );
-				final int Y = (int) ( ( (float) yPos + offset + 16.0f - 7.0f * scaleFactor ) * inverseScaleFactor );
-				fontRenderer.drawStringWithShadow( stackSize, X, Y, 16777215 );
+				GlStateManager.scale(scaleFactor, scaleFactor, scaleFactor);
+				final int X = (int) (((float) xPos + offset + 16.0f - fontRenderer.getStringWidth(stackSize) * scaleFactor) * inverseScaleFactor);
+				final int Y = (int) (((float) yPos + offset + 16.0f - 7.0f * scaleFactor) * inverseScaleFactor);
+				fontRenderer.drawStringWithShadow(stackSize, X, Y, 16777215);
 				GlStateManager.popMatrix();
 				GlStateManager.enableLighting();
 				GlStateManager.enableDepth();
 				GlStateManager.enableBlend();
 			}
 
-			fontRenderer.setUnicodeFlag( unicodeFlag );
+			fontRenderer.setUnicodeFlag(unicodeFlag);
 		}
 	}
 

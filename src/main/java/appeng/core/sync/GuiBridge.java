@@ -255,7 +255,7 @@ public enum GuiBridge implements IGuiHandler
 		final boolean stem = ( ( ordinal >> 3 ) & 1 ) == 1;
 		if( ID.type.isItem() )
 		{
-			ItemStack it = null;
+			ItemStack it = ItemStack.EMPTY;
 			if( stem )
 			{
 				it = player.inventory.getCurrentItem();
@@ -295,17 +295,14 @@ public enum GuiBridge implements IGuiHandler
 
 	private Object getGuiObject( final ItemStack it, final EntityPlayer player, final World w, final int x, final int y, final int z )
 	{
-		if( it != null )
-		{
-			if( it.getItem() instanceof IGuiItem )
-			{
-				return ( (IGuiItem) it.getItem() ).getGuiObject( it, w, new BlockPos( x, y, z ) );
+		if (!it.isEmpty()) {
+			if (it.getItem() instanceof IGuiItem) {
+				return ((IGuiItem) it.getItem()).getGuiObject(it, w, new BlockPos(x, y, z));
 			}
 
-			final IWirelessTermHandler wh = AEApi.instance().registries().wireless().getWirelessTerminalHandler( it );
-			if( wh != null )
-			{
-				return new WirelessTerminalGuiObject( wh, it, player, w, x, y, z );
+			final IWirelessTermHandler wh = AEApi.instance().registries().wireless().getWirelessTerminalHandler(it);
+			if (wh != null) {
+				return new WirelessTerminalGuiObject(wh, it, player, w, x, y, z);
 			}
 		}
 
@@ -437,7 +434,7 @@ public enum GuiBridge implements IGuiHandler
 		final boolean stem = ( ( ordinal >> 3 ) & 1 ) == 1;
 		if( ID.type.isItem() )
 		{
-			ItemStack it = null;
+			ItemStack it = ItemStack.EMPTY;
 			if( stem )
 			{
 				it = player.inventory.getCurrentItem();
@@ -510,7 +507,7 @@ public enum GuiBridge implements IGuiHandler
 			if( this.type.isItem() )
 			{
 				final ItemStack it = player.inventory.getCurrentItem();
-				if( it != null && it.getItem() instanceof IGuiItem )
+				if(!it.isEmpty() && it.getItem() instanceof IGuiItem )
 				{
 					final Object myItem = ( (IGuiItem) it.getItem() ).getGuiObject( it, w, pos );
 					if( this.CorrectTileOrPart( myItem ) )

@@ -88,7 +88,7 @@ public class PartImportBus extends PartSharedItemBus implements IInventoryDestin
 	@Override
 	public boolean canInsert( final ItemStack stack )
 	{
-		if( stack == null || stack.getItem() == null )
+		if(stack.isEmpty() || stack.getItem() == null )
 		{
 			return false;
 		}
@@ -217,42 +217,33 @@ public class PartImportBus extends PartSharedItemBus implements IInventoryDestin
 
 		if( this.getInstalledUpgrades( Upgrades.FUZZY ) > 0 )
 		{
-			newItems = myAdaptor.removeSimilarItems( toSend, whatToImport == null ? null : whatToImport.getItemStack(), fzMode, this.configDestination( inv ) );
+			newItems = myAdaptor.removeSimilarItems( toSend, whatToImport == null ? ItemStack.EMPTY : whatToImport.getItemStack(), fzMode, this.configDestination( inv ) );
 		}
 		else
 		{
-			newItems = myAdaptor.removeItems( toSend, whatToImport == null ? null : whatToImport.getItemStack(), this.configDestination( inv ) );
+			newItems = myAdaptor.removeItems( toSend, whatToImport == null ? ItemStack.EMPTY : whatToImport.getItemStack(), this.configDestination( inv ) );
 		}
 
-		if( newItems != null )
-		{
-			newItems.setCount( (int) ( Math.min( newItems.getCount(),
-					energy.extractAEPower( newItems.getCount(), Actionable.SIMULATE, PowerMultiplier.CONFIG ) ) + 0.01 ) );
+		if (!newItems.isEmpty()) {
+			newItems.setCount((int) (Math.min(newItems.getCount(),
+					energy.extractAEPower(newItems.getCount(), Actionable.SIMULATE, PowerMultiplier.CONFIG)) + 0.01));
 			this.itemToSend -= newItems.getCount();
 
-			if( this.lastItemChecked == null || !this.lastItemChecked.isSameType( newItems ) )
-			{
-				this.lastItemChecked = AEApi.instance().storage().createItemStack( newItems );
-			}
-			else
-			{
-				this.lastItemChecked.setStackSize( newItems.getCount() );
+			if (this.lastItemChecked == null || !this.lastItemChecked.isSameType(newItems)) {
+				this.lastItemChecked = AEApi.instance().storage().createItemStack(newItems);
+			} else {
+				this.lastItemChecked.setStackSize(newItems.getCount());
 			}
 
-			final IAEItemStack failed = Platform.poweredInsert( energy, this.destination, this.lastItemChecked, this.source );
+			final IAEItemStack failed = Platform.poweredInsert(energy, this.destination, this.lastItemChecked, this.source);
 
-			if( failed != null )
-			{
-				myAdaptor.addItems( failed.getItemStack() );
+			if (failed != null) {
+				myAdaptor.addItems(failed.getItemStack());
 				return true;
-			}
-			else
-			{
+			} else {
 				this.worked = true;
 			}
-		}
-		else
-		{
+		} else {
 			return true;
 		}
 
@@ -266,7 +257,7 @@ public class PartImportBus extends PartSharedItemBus implements IInventoryDestin
 
 		if( whatToImport == null )
 		{
-			itemStackToImport = null;
+			itemStackToImport = ItemStack.EMPTY;
 		}
 		else
 		{

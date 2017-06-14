@@ -237,13 +237,12 @@ public final class ItemBasicStorageCell extends AEBaseItem implements IStorageCe
 				final IItemList<IAEItemStack> list = inv.getAvailableItems( StorageChannel.ITEMS.createList() );
 				if( list.isEmpty() && ia != null )
 				{
-					playerInventory.setInventorySlotContents( playerInventory.currentItem, null );
+					playerInventory.setInventorySlotContents(playerInventory.currentItem, ItemStack.EMPTY);
 
 					// drop core
 					final ItemStack extraB = ia.addItems( this.component.stack( 1 ) );
-					if( extraB != null )
-					{
-						player.dropItem( extraB, false );
+					if (!extraB.isEmpty()) {
+						player.dropItem(extraB, false);
 					}
 
 					// drop upgrades
@@ -252,7 +251,7 @@ public final class ItemBasicStorageCell extends AEBaseItem implements IStorageCe
 					{
 						final ItemStack upgradeStack = upgradesInventory.getStackInSlot( upgradeIndex );
 						final ItemStack leftStack = ia.addItems( upgradeStack );
-						if( leftStack != null && upgradeStack.getItem() instanceof IUpgradeModule )
+						if(!leftStack.isEmpty() && upgradeStack.getItem() instanceof IUpgradeModule )
 						{
 							player.dropItem( upgradeStack, false );
 						}
@@ -262,9 +261,8 @@ public final class ItemBasicStorageCell extends AEBaseItem implements IStorageCe
 					AEApi.instance().definitions().materials().emptyStorageCell().maybeStack( 1 ).ifPresent( is ->
 					{
 						final ItemStack extraA = ia.addItems( is );
-						if( extraA != null )
-						{
-							player.dropItem( extraA, false );
+						if (!extraA.isEmpty()) {
+							player.dropItem(extraA, false);
 						}
 					} );
 

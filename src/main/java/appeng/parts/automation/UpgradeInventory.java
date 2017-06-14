@@ -66,8 +66,7 @@ public abstract class UpgradeInventory extends AppEngInternalInventory implement
 	@Override
 	public boolean isItemValidForSlot( final int i, final ItemStack itemstack )
 	{
-		if( itemstack == null )
-		{
+		if (itemstack.isEmpty()) {
 			return false;
 		}
 		final Item it = itemstack.getItem();
@@ -117,7 +116,7 @@ public abstract class UpgradeInventory extends AppEngInternalInventory implement
 
 		for( final ItemStack is : this )
 		{
-			if( is == null || is.getItem() == null || !( is.getItem() instanceof IUpgradeModule ) )
+			if(is.isEmpty() || is.getItem() == null || !(is.getItem() instanceof IUpgradeModule) )
 			{
 				continue;
 			}

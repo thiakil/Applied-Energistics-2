@@ -72,8 +72,7 @@ public class TileCellWorkbench extends AEBaseTile implements IUpgradeableHost, I
 			}
 
 			final ItemStack is = this.cell.getStackInSlot( 0 );
-			if( is == null )
-			{
+			if (is.isEmpty()) {
 				return null;
 			}
 
@@ -90,8 +89,7 @@ public class TileCellWorkbench extends AEBaseTile implements IUpgradeableHost, I
 
 	public ICellWorkbenchItem getCell()
 	{
-		if( this.cell.getStackInSlot( 0 ) == null )
-		{
+		if (this.cell.getStackInSlot(0).isEmpty()) {
 			return null;
 		}
 
@@ -157,8 +155,7 @@ public class TileCellWorkbench extends AEBaseTile implements IUpgradeableHost, I
 				boolean cellHasConfig = false;
 				for( int x = 0; x < configInventory.getSizeInventory(); x++ )
 				{
-					if( configInventory.getStackInSlot( x ) != null )
-					{
+					if (!configInventory.getStackInSlot(x).isEmpty()) {
 						cellHasConfig = true;
 						break;
 					}
@@ -185,7 +182,7 @@ public class TileCellWorkbench extends AEBaseTile implements IUpgradeableHost, I
 			{
 				for( int x = 0; x < this.config.getSizeInventory(); x++ )
 				{
-					this.config.setInventorySlotContents( x, null );
+					this.config.setInventorySlotContents(x, ItemStack.EMPTY);
 				}
 
 				this.markDirty();
@@ -219,8 +216,7 @@ public class TileCellWorkbench extends AEBaseTile implements IUpgradeableHost, I
 			}
 
 			final ItemStack is = this.cell.getStackInSlot( 0 );
-			if( is == null )
-			{
+			if (is.isEmpty()) {
 				return null;
 			}
 
@@ -240,9 +236,8 @@ public class TileCellWorkbench extends AEBaseTile implements IUpgradeableHost, I
 	{
 		super.getDrops( w, pos, drops );
 
-		if( this.cell.getStackInSlot( 0 ) != null )
-		{
-			drops.add( this.cell.getStackInSlot( 0 ) );
+		if (!this.cell.getStackInSlot(0).isEmpty()) {
+			drops.add(this.cell.getStackInSlot(0));
 		}
 	}
 

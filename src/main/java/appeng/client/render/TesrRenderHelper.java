@@ -99,21 +99,20 @@ public class TesrRenderHelper
 	 */
 	public static void renderItem2d( ItemStack itemStack, float scale )
 	{
-		if( itemStack != null )
-		{
-			OpenGlHelper.setLightmapTextureCoords( OpenGlHelper.lightmapTexUnit, 240.f, 240.0f );
+		if (!itemStack.isEmpty()) {
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.f, 240.0f);
 
 			GlStateManager.pushMatrix();
 
 			// The Z-scaling by 0.0001 causes the model to be visually "flattened"
 			// This cannot replace a proper projection, but it's cheap and gives the desired
 			// effect at least from head-on
-			GlStateManager.scale( scale / 32.0f, scale / 32.0f, 0.0001f );
+			GlStateManager.scale(scale / 32.0f, scale / 32.0f, 0.0001f);
 			// Position the item icon at the top middle of the panel
-			GlStateManager.translate( -8, -11, 0 );
+			GlStateManager.translate(-8, -11, 0);
 
 			RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-			renderItem.renderItemAndEffectIntoGUI( itemStack, 0, 0 );
+			renderItem.renderItemAndEffectIntoGUI(itemStack, 0, 0);
 
 			GlStateManager.popMatrix();
 		}

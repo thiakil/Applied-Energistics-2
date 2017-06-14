@@ -80,14 +80,11 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 
 			final InventoryPlayer inv = player.inventory;
 
-			ItemStack is = AEApi.instance().definitions().materials().blankPattern().maybeStack( stack.getCount() ).orElse( null );
-			if( is != null )
-			{
-				for( int s = 0; s < player.inventory.getSizeInventory(); s++ )
-				{
-					if( inv.getStackInSlot( s ) == stack )
-					{
-						inv.setInventorySlotContents( s, is );
+			ItemStack is = AEApi.instance().definitions().materials().blankPattern().maybeStack( stack.getCount() ).orElse(ItemStack.EMPTY);
+			if (!is.isEmpty()) {
+				for (int s = 0; s < player.inventory.getSizeInventory(); s++) {
+					if (inv.getStackInSlot(s) == stack) {
+						inv.setInventorySlotContents(s, is);
 						return true;
 					}
 				}
@@ -167,8 +164,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 	public ItemStack getOutput( final ItemStack item )
 	{
 		ItemStack out = SIMPLE_CACHE.get( item );
-		if( out != null )
-		{
+		if (!out.isEmpty()) {
 			return out;
 		}
 

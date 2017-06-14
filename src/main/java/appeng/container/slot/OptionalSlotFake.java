@@ -46,8 +46,7 @@ public class OptionalSlotFake extends SlotFake
 	{
 		if( !this.isEnabled() )
 		{
-			if( this.getDisplayStack() != null )
-			{
+			if (!this.getDisplayStack().isEmpty()) {
 				this.clearStack();
 			}
 		}

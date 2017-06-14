@@ -118,7 +118,7 @@ public final class P2PTunnelRegistry implements IP2PTunnelRegistry
 	@Override
 	public void addNewAttunement( @Nullable final ItemStack trigger, @Nullable final TunnelType type )
 	{
-		if( type == null || trigger == null )
+		if(type == null || trigger.isEmpty() )
 		{
 			return;
 		}
@@ -130,23 +130,19 @@ public final class P2PTunnelRegistry implements IP2PTunnelRegistry
 	@Override
 	public TunnelType getTunnelTypeByItem( final ItemStack trigger )
 	{
-		if( trigger != null )
-		{
+		if (!trigger.isEmpty()) {
 			// if( FluidRegistry.isContainer( trigger ) )
 			// {
 			// return TunnelType.FLUID;
 			// }
 
-			for( final ItemStack is : this.tunnels.keySet() )
-			{
-				if( is.getItem() == trigger.getItem() && is.getItemDamage() == OreDictionary.WILDCARD_VALUE )
-				{
-					return this.tunnels.get( is );
+			for (final ItemStack is : this.tunnels.keySet()) {
+				if (is.getItem() == trigger.getItem() && is.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+					return this.tunnels.get(is);
 				}
 
-				if( Platform.itemComparisons().isEqualItem( is, trigger ) )
-				{
-					return this.tunnels.get( is );
+				if (Platform.itemComparisons().isEqualItem(is, trigger)) {
+					return this.tunnels.get(is);
 				}
 			}
 		}

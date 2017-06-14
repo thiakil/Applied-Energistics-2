@@ -77,20 +77,14 @@ public class ContainerQuartzKnife extends AEBaseContainer implements IAEAppEngIn
 
 		if( currentItem != this.toolInv.getItemStack() )
 		{
-			if( currentItem != null )
-			{
-				if( Platform.itemComparisons().isEqualItem( this.toolInv.getItemStack(), currentItem ) )
-				{
-					this.getPlayerInv().setInventorySlotContents( this.getPlayerInv().currentItem, this.toolInv.getItemStack() );
+			if (!currentItem.isEmpty()) {
+				if (Platform.itemComparisons().isEqualItem(this.toolInv.getItemStack(), currentItem)) {
+					this.getPlayerInv().setInventorySlotContents(this.getPlayerInv().currentItem, this.toolInv.getItemStack());
+				} else {
+					this.setValidContainer(false);
 				}
-				else
-				{
-					this.setValidContainer( false );
-				}
-			}
-			else
-			{
-				this.setValidContainer( false );
+			} else {
+				this.setValidContainer(false);
 			}
 		}
 
@@ -100,9 +94,8 @@ public class ContainerQuartzKnife extends AEBaseContainer implements IAEAppEngIn
 	@Override
 	public void onContainerClosed( final EntityPlayer par1EntityPlayer )
 	{
-		if( this.inSlot.getStackInSlot( 0 ) != null )
-		{
-			par1EntityPlayer.dropItem( this.inSlot.getStackInSlot( 0 ), false );
+		if (!this.inSlot.getStackInSlot(0).isEmpty()) {
+			par1EntityPlayer.dropItem(this.inSlot.getStackInSlot(0), false);
 		}
 	}
 
@@ -143,7 +136,7 @@ public class ContainerQuartzKnife extends AEBaseContainer implements IAEAppEngIn
 					compound.setString( "InscribeName", this.myName );
 
 					return namePressStack;
-				} ).orElse( null );
+				} ).orElse(ItemStack.EMPTY);
 			}
 		}
 
@@ -154,10 +147,8 @@ public class ContainerQuartzKnife extends AEBaseContainer implements IAEAppEngIn
 	public ItemStack decrStackSize( final int var1, final int var2 )
 	{
 		final ItemStack is = this.getStackInSlot( 0 );
-		if( is != null )
-		{
-			if( this.makePlate() )
-			{
+		if (!is.isEmpty()) {
+			if (this.makePlate()) {
 				return is;
 			}
 		}
@@ -166,15 +157,13 @@ public class ContainerQuartzKnife extends AEBaseContainer implements IAEAppEngIn
 
 	private boolean makePlate()
 	{
-		if( this.inSlot.decrStackSize( 0, 1 ) != null )
-		{
+		if (!this.inSlot.decrStackSize(0, 1).isEmpty()) {
 			final ItemStack item = this.toolInv.getItemStack();
-			item.damageItem( 1, this.getPlayerInv().player );
+			item.damageItem(1, this.getPlayerInv().player);
 
-			if( item.getCount() == 0 )
-			{
-				this.getPlayerInv().mainInventory.add( this.getPlayerInv().currentItem, null );
-				MinecraftForge.EVENT_BUS.post( new PlayerDestroyItemEvent( this.getPlayerInv().player, item, null ) );
+			if (item.getCount() == 0) {
+				this.getPlayerInv().mainInventory.add(this.getPlayerInv().currentItem, ItemStack.EMPTY);
+				MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(this.getPlayerInv().player, item, null));
 			}
 
 			return true;
@@ -191,7 +180,7 @@ public class ContainerQuartzKnife extends AEBaseContainer implements IAEAppEngIn
 	@Override
 	public void setInventorySlotContents( final int var1, final ItemStack var2 )
 	{
-		if( var2 == null && Platform.isServer() )
+		if(var2.isEmpty() && Platform.isServer() )
 		{
 			this.makePlate();
 		}
@@ -272,7 +261,7 @@ public class ContainerQuartzKnife extends AEBaseContainer implements IAEAppEngIn
 	@Override
 	public void clear()
 	{
-		this.inSlot.setInventorySlotContents( 0, null );
+		this.inSlot.setInventorySlotContents(0, ItemStack.EMPTY);
 	}
 
 	@Override

@@ -70,20 +70,14 @@ public class ContainerNetworkTool extends AEBaseContainer
 
 		if( currentItem != this.toolInv.getItemStack() )
 		{
-			if( currentItem != null )
-			{
-				if( Platform.itemComparisons().isEqualItem( this.toolInv.getItemStack(), currentItem ) )
-				{
-					this.getPlayerInv().setInventorySlotContents( this.getPlayerInv().currentItem, this.toolInv.getItemStack() );
+			if (!currentItem.isEmpty()) {
+				if (Platform.itemComparisons().isEqualItem(this.toolInv.getItemStack(), currentItem)) {
+					this.getPlayerInv().setInventorySlotContents(this.getPlayerInv().currentItem, this.toolInv.getItemStack());
+				} else {
+					this.setValidContainer(false);
 				}
-				else
-				{
-					this.setValidContainer( false );
-				}
-			}
-			else
-			{
-				this.setValidContainer( false );
+			} else {
+				this.setValidContainer(false);
 			}
 		}
 

@@ -92,7 +92,7 @@ public class GuiPriority extends AEBaseGui
 		this.buttonList.add( this.minus100 = new GuiButton( 0, this.guiLeft + 82, this.guiTop + 69, 32, 20, "-" + c ) );
 		this.buttonList.add( this.minus1000 = new GuiButton( 0, this.guiLeft + 120, this.guiTop + 69, 38, 20, "-" + d ) );
 
-		ItemStack myIcon = null;
+		ItemStack myIcon = ItemStack.EMPTY;
 		final Object target = ( (AEBaseContainer) this.inventorySlots ).getTarget();
 		final IDefinitions definitions = AEApi.instance().definitions();
 		final IParts parts = definitions.parts();
@@ -134,7 +134,7 @@ public class GuiPriority extends AEBaseGui
 			this.OriginalGui = GuiBridge.GUI_INTERFACE;
 		}
 
-		if( this.OriginalGui != null && myIcon != null )
+		if(this.OriginalGui != null && !myIcon.isEmpty() )
 		{
 			this.buttonList.add( this.originalGuiBtn = new GuiTabButton( this.guiLeft + 154, this.guiTop, myIcon, myIcon.getDisplayName(), this.itemRender ) );
 		}

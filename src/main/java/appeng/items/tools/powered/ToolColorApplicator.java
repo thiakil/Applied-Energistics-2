@@ -122,7 +122,7 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 			}
 			else
 			{
-				paintBall = null;
+				paintBall = ItemStack.EMPTY;
 			}
 
 			if( !Platform.hasPermissions( new DimensionalCoord( w, pos ), p ) )
@@ -131,7 +131,7 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 			}
 
 			final double powerPerUse = 100;
-			if( paintBall != null && paintBall.getItem() instanceof ItemSnowball )
+			if(!paintBall.isEmpty() && paintBall.getItem() instanceof ItemSnowball )
 			{
 				final TileEntity te = w.getTileEntity( pos );
 				// clean cables.
@@ -159,16 +159,13 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 					return EnumActionResult.SUCCESS;
 				}
 			}
-			else if( paintBall != null )
-			{
-				final AEColor color = this.getColorFromItem( paintBall );
+			else if (!paintBall.isEmpty()) {
+				final AEColor color = this.getColorFromItem(paintBall);
 
-				if( color != null && this.getAECurrentPower( is ) > powerPerUse )
-				{
-					if( color != AEColor.TRANSPARENT && this.recolourBlock( blk, side, w, pos, side, color, p ) )
-					{
-						inv.extractItems( AEItemStack.create( paintBall ), Actionable.MODULATE, new BaseActionSource() );
-						this.extractAEPower( is, powerPerUse );
+				if (color != null && this.getAECurrentPower(is) > powerPerUse) {
+					if (color != AEColor.TRANSPARENT && this.recolourBlock(blk, side, w, pos, side, color, p)) {
+						inv.extractItems(AEItemStack.create(paintBall), Actionable.MODULATE, new BaseActionSource());
+						this.extractAEPower(is, powerPerUse);
 						return EnumActionResult.SUCCESS;
 					}
 				}
@@ -205,8 +202,7 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 
 	private AEColor getColorFromItem( final ItemStack paintBall )
 	{
-		if( paintBall == null )
-		{
+		if (paintBall.isEmpty()) {
 			return null;
 		}
 
@@ -243,82 +239,70 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 		{
 			final NBTTagCompound color = c.getCompoundTag( "color" );
 			final ItemStack oldColor = new ItemStack( color );
-			if( oldColor != null )
-			{
+			if (!oldColor.isEmpty()) {
 				return oldColor;
 			}
 		}
 
-		return this.findNextColor( is, null, 0 );
+		return this.findNextColor(is, ItemStack.EMPTY, 0);
 	}
 
 	private ItemStack findNextColor( final ItemStack is, final ItemStack anchor, final int scrollOffset )
 	{
-		ItemStack newColor = null;
+		ItemStack newColor = ItemStack.EMPTY;
 
 		final IMEInventory<IAEItemStack> inv = AEApi.instance().registries().cell().getCellInventory( is, null, StorageChannel.ITEMS );
 		if( inv != null )
 		{
 			final IItemList<IAEItemStack> itemList = inv.getAvailableItems( AEApi.instance().storage().createItemList() );
-			if( anchor == null )
-			{
+			if (anchor.isEmpty()) {
 				final IAEItemStack firstItem = itemList.getFirstItem();
-				if( firstItem != null )
-				{
+				if (firstItem != null) {
 					newColor = firstItem.getItemStack();
 				}
-			}
-			else
-			{
+			} else {
 				final LinkedList<IAEItemStack> list = new LinkedList<IAEItemStack>();
 
-				for( final IAEItemStack i : itemList )
-				{
-					list.add( i );
+				for (final IAEItemStack i : itemList) {
+					list.add(i);
 				}
 
 				Collections.sort( list, new Comparator<IAEItemStack>()
 				{
 
 					@Override
-					public int compare( final IAEItemStack a, final IAEItemStack b )
-					{
-						return ItemSorters.compareInt( a.getItemDamage(), b.getItemDamage() );
+					public int compare(final IAEItemStack a, final IAEItemStack b) {
+						return ItemSorters.compareInt(a.getItemDamage(), b.getItemDamage());
 					}
-				} );
+				});
 
-				if( list.size() <= 0 )
-				{
+				if (list.size() <= 0) {
 					return ItemStack.EMPTY;
 				}
 
 				IAEItemStack where = list.getFirst();
 				int cycles = 1 + list.size();
 
-				while( cycles > 0 && !where.equals( anchor ) )
-				{
-					list.addLast( list.removeFirst() );
+				while (cycles > 0 && !where.equals(anchor)) {
+					list.addLast(list.removeFirst());
 					cycles--;
 					where = list.getFirst();
 				}
 
-				if( scrollOffset > 0 )
-				{
-					list.addLast( list.removeFirst() );
+				if (scrollOffset > 0) {
+					list.addLast(list.removeFirst());
 				}
 
-				if( scrollOffset < 0 )
-				{
-					list.addFirst( list.removeLast() );
+				if (scrollOffset < 0) {
+					list.addFirst(list.removeLast());
 				}
 
-				return list.get( 0 ).getItemStack();
+				return list.get(0).getItemStack();
 			}
 		}
 
-		if( newColor != null )
-		{
-			this.setColor( is, newColor );
+		if (!newColor.isEmpty()) {
+			this.setColor(is, newColor);
 		}
 
 		return newColor;
@@ -327,15 +311,12 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 	private void setColor( final ItemStack is, final ItemStack newColor )
 	{
 		final NBTTagCompound data = Platform.openNbtData( is );
-		if( newColor == null )
-		{
-			data.removeTag( "color" );
-		}
-		else
-		{
+		if (newColor.isEmpty()) {
+			data.removeTag("color");
+		} else {
 			final NBTTagCompound color = new NBTTagCompound();
-			newColor.writeToNBT( color );
-			data.setTag( "color", color );
+			newColor.writeToNBT(color);
+			data.setTag("color", color);
 		}
 	}
 
@@ -404,13 +385,10 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 
 	public void cycleColors( final ItemStack is, final ItemStack paintBall, final int i )
 	{
-		if( paintBall == null )
-		{
-			this.setColor( is, this.getColor( is ) );
-		}
-		else
-		{
-			this.setColor( is, this.findNextColor( is, paintBall, i ) );
+		if (paintBall.isEmpty()) {
+			this.setColor(is, this.getColor(is));
+		} else {
+			this.setColor(is, this.findNextColor(is, paintBall, i));
 		}
 	}
 

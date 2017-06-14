@@ -33,10 +33,9 @@ class Size1Slot extends Slot
 	public ItemStack getStack()
 	{
 		ItemStack orgStack = delegate.getStack();
-		if( orgStack != null )
-		{
+		if (!orgStack.isEmpty()) {
 			ItemStack modifiedStack = orgStack.copy();
-			modifiedStack.setCount( 1 );
+			modifiedStack.setCount(1);
 			return modifiedStack;
 		}
 

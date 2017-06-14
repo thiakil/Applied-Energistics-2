@@ -44,7 +44,7 @@ public class AchievementCraftingHandler
 	@SubscribeEvent
 	public void onPlayerCraftingEvent( final PlayerEvent.ItemCraftedEvent event )
 	{
-		if( this.differentiator.isNoPlayer( event.player ) || event.crafting == null )
+		if(this.differentiator.isNoPlayer(event.player) || event.crafting.isEmpty() )
 		{
 			return;
 		}
@@ -61,7 +61,7 @@ public class AchievementCraftingHandler
 					}
 					break;
 				case CraftItem:
-					if( achievement.getStack() != null && achievement.getStack().getItem().getClass() == event.crafting.getItem().getClass() )
+					if(!achievement.getStack().isEmpty() && achievement.getStack().getItem().getClass() == event.crafting.getItem().getClass() )
 					{
 						achievement.addToPlayer( event.player );
 						return;

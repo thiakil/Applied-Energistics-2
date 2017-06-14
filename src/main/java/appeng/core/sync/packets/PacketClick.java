@@ -106,25 +106,17 @@ public class PacketClick extends AppEngPacket
 		final IComparableDefinition maybeMemoryCard = items.memoryCard();
 		final IComparableDefinition maybeColorApplicator = items.colorApplicator();
 
-		if( is != null )
-		{
-			if( is.getItem() instanceof ToolNetworkTool )
-			{
+		if (!is.isEmpty()) {
+			if (is.getItem() instanceof ToolNetworkTool) {
 				final ToolNetworkTool tnt = (ToolNetworkTool) is.getItem();
-				tnt.serverSideToolLogic( is, player, this.hand, player.world, new BlockPos( this.x, this.y, this.z ), this.side, this.hitX, this.hitY, this.hitZ );
-			}
-
-			else if( maybeMemoryCard.isSameAs( is ) )
-			{
+				tnt.serverSideToolLogic(is, player, this.hand, player.world, new BlockPos(this.x, this.y, this.z), this.side, this.hitX, this.hitY, this.hitZ);
+			} else if (maybeMemoryCard.isSameAs(is)) {
 				final IMemoryCard mem = (IMemoryCard) is.getItem();
-				mem.notifyUser( player, MemoryCardMessages.SETTINGS_CLEARED );
-				is.setTagCompound( null );
-			}
-
-			else if( maybeColorApplicator.isSameAs( is ) )
-			{
+				mem.notifyUser(player, MemoryCardMessages.SETTINGS_CLEARED);
+				is.setTagCompound(null);
+			} else if (maybeColorApplicator.isSameAs(is)) {
 				final ToolColorApplicator mem = (ToolColorApplicator) is.getItem();
-				mem.cycleColors( is, mem.getColor( is ), 1 );
+				mem.cycleColors(is, mem.getColor(is), 1);
 			}
 		}
 	}

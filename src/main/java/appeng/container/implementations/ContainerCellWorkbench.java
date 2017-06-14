@@ -55,7 +55,7 @@ public class ContainerCellWorkbench extends ContainerUpgradeable
 	private final AppEngNullInventory nullInventory = new AppEngNullInventory();
 	@GuiSync( 2 )
 	public CopyMode copyMode = CopyMode.CLEAR_ON_REMOVE;
-	private ItemStack prevStack = null;
+	private ItemStack prevStack = ItemStack.EMPTY;
 	private int lastUpgrades = 0;
 
 	public ContainerCellWorkbench( final InventoryPlayer ip, final TileCellWorkbench te )
@@ -210,7 +210,7 @@ public class ContainerCellWorkbench extends ContainerUpgradeable
 		final IInventory inv = this.getUpgradeable().getInventoryByName( "config" );
 		for( int x = 0; x < inv.getSizeInventory(); x++ )
 		{
-			inv.setInventorySlotContents( x, null );
+			inv.setInventorySlotContents(x, ItemStack.EMPTY);
 		}
 		this.detectAndSendChanges();
 	}
@@ -248,7 +248,7 @@ public class ContainerCellWorkbench extends ContainerUpgradeable
 			}
 			else
 			{
-				inv.setInventorySlotContents( x, null );
+				inv.setInventorySlotContents(x, ItemStack.EMPTY);
 			}
 		}
 

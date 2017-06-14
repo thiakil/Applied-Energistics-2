@@ -257,7 +257,7 @@ public class WirelessTerminalGuiObject implements IPortableCell, IActionHost, II
 	@Override
 	public double extractAEPower( final double amt, final Actionable mode, final PowerMultiplier usePowerMultiplier )
 	{
-		if( this.wth != null && this.effectiveItem != null )
+		if(this.wth != null && !this.effectiveItem.isEmpty() )
 		{
 			if( mode == Actionable.SIMULATE )
 			{

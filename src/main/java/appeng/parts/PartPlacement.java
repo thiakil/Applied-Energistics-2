@@ -78,7 +78,7 @@ public class PartPlacement
 			return EnumActionResult.FAIL;
 		}
 
-		if( held != null && Platform.isWrench( player, held, pos ) && player.isSneaking() )
+		if(!held.isEmpty() && Platform.isWrench(player, held, pos) && player.isSneaking() )
 		{
 			if( !Platform.hasPermissions( new DimensionalCoord( world, pos ), player ) )
 			{
@@ -151,44 +151,33 @@ public class PartPlacement
 			host = (IPartHost) tile;
 		}
 
-		if( held != null )
-		{
-			final IFacadePart fp = isFacade( held, AEPartLocation.fromFacing( side ) );
-			if( fp != null )
-			{
-				if( host != null )
-				{
-					if( !world.isRemote )
-					{
-						if( host.getPart( AEPartLocation.INTERNAL ) == null )
-						{
+		if (!held.isEmpty()) {
+			final IFacadePart fp = isFacade(held, AEPartLocation.fromFacing(side));
+			if (fp != null) {
+				if (host != null) {
+					if (!world.isRemote) {
+						if (host.getPart(AEPartLocation.INTERNAL) == null) {
 							return EnumActionResult.FAIL;
 						}
 
-						if( host.canAddPart( held, AEPartLocation.fromFacing( side ) ) )
-						{
-							if( host.getFacadeContainer().addFacade( fp ) )
-							{
+						if (host.canAddPart(held, AEPartLocation.fromFacing(side))) {
+							if (host.getFacadeContainer().addFacade(fp)) {
 								host.markForSave();
 								host.markForUpdate();
-								if( !player.capabilities.isCreativeMode )
-								{
-									held.grow( -1 );
+								if (!player.capabilities.isCreativeMode) {
+									held.grow(-1);
 									;
-									if( held.getCount() == 0 )
-									{
-										player.inventory.mainInventory.add( player.inventory.currentItem, null );
-										MinecraftForge.EVENT_BUS.post( new PlayerDestroyItemEvent( player, held, hand ) );
+									if (held.getCount() == 0) {
+										player.inventory.mainInventory.add(player.inventory.currentItem, ItemStack.EMPTY);
+										MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, held, hand));
 									}
 								}
 								return EnumActionResult.SUCCESS;
 							}
 						}
-					}
-					else
-					{
-						player.swingArm( hand );
-						NetworkHandler.instance().sendToServer( new PacketPartPlacement( pos, side, getEyeOffset( player ), hand ) );
+					} else {
+						player.swingArm(hand);
+						NetworkHandler.instance().sendToServer(new PacketPartPlacement(pos, side, getEyeOffset(player), hand));
 						return EnumActionResult.SUCCESS;
 					}
 				}
@@ -223,7 +212,7 @@ public class PartPlacement
 			}
 		}
 
-		if( held == null || !( held.getItem() instanceof IPartItem ) )
+		if(held.isEmpty() || !(held.getItem() instanceof IPartItem) )
 		{
 			return EnumActionResult.PASS;
 		}
@@ -352,7 +341,7 @@ public class PartPlacement
 					;
 					if( held.getCount() == 0 )
 					{
-						player.inventory.mainInventory.add( player.inventory.currentItem, null );
+						player.inventory.mainInventory.add(player.inventory.currentItem, ItemStack.EMPTY);
 						MinecraftForge.EVENT_BUS.post( new PlayerDestroyItemEvent( player, held, hand ) );
 					}
 				}
@@ -436,7 +425,7 @@ public class PartPlacement
 				boolean supportedItem = items.memoryCard().isSameAs( held );
 				supportedItem |= items.colorApplicator().isSameAs( held );
 
-				if( event.getEntityPlayer().isSneaking() && held != null && supportedItem )
+				if(event.getEntityPlayer().isSneaking() && !held.isEmpty() && supportedItem )
 				{
 					NetworkHandler.instance().sendToServer( new PacketClick( event.getPos(), event.getFace(), 0, 0, 0, event.getHand() ) );
 				}

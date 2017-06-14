@@ -97,14 +97,11 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 	public double getStorage()
 	{
 		final ItemStack is = this.inv.getStackInSlot( 2 );
-		if( is != null )
-		{
-			if( is.getItem() instanceof IStorageComponent )
-			{
+		if (!is.isEmpty()) {
+			if (is.getItem() instanceof IStorageComponent) {
 				final IStorageComponent sc = (IStorageComponent) is.getItem();
-				if( sc.isStorageComponent( is ) )
-				{
-					return sc.getBytes( is ) * BYTE_MULTIPLIER;
+				if (sc.isStorageComponent(is)) {
+					return sc.getBytes(is) * BYTE_MULTIPLIER;
 				}
 			}
 		}
@@ -118,7 +115,7 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 
 		final double requiredPower = this.getRequiredPower();
 		final ItemStack output = this.getOutput();
-		while( requiredPower <= this.getStoredPower() && output != null && requiredPower > 0 )
+		while(requiredPower <= this.getStoredPower() && !output.isEmpty() && requiredPower > 0 )
 		{
 			if( this.canAddOutput( output ) )
 			{
@@ -135,8 +132,8 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 	private boolean canAddOutput( final ItemStack output )
 	{
 		final ItemStack outputStack = this.getStackInSlot( 1 );
-		return outputStack == null || ( Platform.itemComparisons().isEqualItem( outputStack,
-				output ) && outputStack.getCount() < outputStack.getMaxStackSize() );
+		return outputStack.isEmpty() || (Platform.itemComparisons().isEqualItem(outputStack,
+				output) && outputStack.getCount() < outputStack.getMaxStackSize());
 	}
 
 	/**
@@ -147,14 +144,11 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 	private void addOutput( final ItemStack output )
 	{
 		final ItemStack outputStack = this.getStackInSlot( 1 );
-		if( outputStack == null )
-		{
-			this.setInventorySlotContents( 1, output.copy() );
-		}
-		else
-		{
-			outputStack.grow( 1 );
-			this.setInventorySlotContents( 1, outputStack );
+		if (outputStack.isEmpty()) {
+			this.setInventorySlotContents(1, output.copy());
+		} else {
+			outputStack.grow(1);
+			this.setInventorySlotContents(1, outputStack);
 		}
 	}
 
@@ -165,10 +159,10 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 		switch( (CondenserOutput) this.cm.getSetting( Settings.CONDENSER_OUTPUT ) )
 		{
 			case MATTER_BALLS:
-				return materials.matterBall().maybeStack( 1 ).orElse( null );
+				return materials.matterBall().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 
 			case SINGULARITY:
-				return materials.singularity().maybeStack( 1 ).orElse( null );
+				return materials.singularity().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 
 			case TRASH:
 			default:
@@ -192,9 +186,8 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 	{
 		if( i == 0 )
 		{
-			if( itemstack != null )
-			{
-				this.addPower( itemstack.getCount() );
+			if (!itemstack.isEmpty()) {
+				this.addPower(itemstack.getCount());
 			}
 		}
 		else
@@ -215,10 +208,9 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 		if( slot == 0 )
 		{
 			final ItemStack is = inv.getStackInSlot( 0 );
-			if( is != null )
-			{
-				this.addPower( is.getCount() );
-				inv.setInventorySlotContents( 0, null );
+			if (!is.isEmpty()) {
+				this.addPower(is.getCount());
+				inv.setInventorySlotContents(0, ItemStack.EMPTY);
 			}
 		}
 	}
@@ -324,7 +316,7 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 			{
 				return stack;
 			}
-			if( !simulate && stack != null )
+			if(!simulate && !stack.isEmpty() )
 			{
 				addPower( stack.getCount() );
 			}

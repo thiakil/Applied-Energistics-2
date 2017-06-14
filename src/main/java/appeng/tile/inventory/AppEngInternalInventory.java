@@ -25,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 
 import appeng.core.AELog;
@@ -32,28 +33,23 @@ import appeng.util.Platform;
 import appeng.util.iterators.InvIterator;
 
 
-public class AppEngInternalInventory implements IInventory, Iterable<ItemStack>
-{
+public class AppEngInternalInventory implements IInventory, Iterable<ItemStack> {
 	private final int size;
-	private final ItemStack[] inv;
+	private final NonNullList<ItemStack> inv;
 	private boolean enableClientEvents = false;
 	private IAEAppEngInventory te;
 	private int maxStack;
 
-	public AppEngInternalInventory( final IAEAppEngInventory inventory, final int size )
-	{
-		this.setTileEntity( inventory );
+	public AppEngInternalInventory(final IAEAppEngInventory inventory, final int size) {
+		this.setTileEntity(inventory);
 		this.size = size;
 		this.maxStack = 64;
-		this.inv = new ItemStack[size];
+		this.inv = NonNullList.withSize(size, ItemStack.EMPTY);
 	}
 
-	public boolean isEmpty()
-	{
-		for( int x = 0; x < this.size; x++ )
-		{
-			if( this.getStackInSlot( x ) != null )
-			{
+	public boolean isEmpty() {
+		for (int x = 0; x < this.size; x++) {
+			if (!this.getStackInSlot(x).isEmpty()) {
 				return false;
 			}
 		}
@@ -61,38 +57,30 @@ public class AppEngInternalInventory implements IInventory, Iterable<ItemStack>
 	}
 
 	@Override
-	public int getSizeInventory()
-	{
+	public int getSizeInventory() {
 		return this.size;
 	}
 
 	@Override
-	public ItemStack getStackInSlot( final int var1 )
-	{
-		return this.inv[var1];
+	public ItemStack getStackInSlot(final int var1) {
+		return this.inv.get(var1);
 	}
 
 	@Override
-	public ItemStack decrStackSize( final int slot, final int qty )
-	{
-		if( this.inv[slot] != null )
-		{
-			final ItemStack split = this.getStackInSlot( slot );
-			ItemStack ns = null;
+	public ItemStack decrStackSize(final int slot, final int qty) {
+		if (!this.inv.get(slot).isEmpty()) {
+			final ItemStack split = this.getStackInSlot(slot);
+			ItemStack ns = ItemStack.EMPTY;
 
-			if( qty >= split.getCount() )
-			{
-				ns = this.inv[slot];
-				this.inv[slot] = null;
-			}
-			else
-			{
-				ns = split.splitStack( qty );
+			if (qty >= split.getCount()) {
+				ns = this.inv.get(slot);
+				this.inv.set(slot, ItemStack.EMPTY);
+			} else {
+				ns = split.splitStack(qty);
 			}
 
-			if( this.getTileEntity() != null && this.eventsEnabled() )
-			{
-				this.getTileEntity().onChangeInventory( this, slot, InvOperation.decreaseStackSize, ns, null );
+			if (this.getTileEntity() != null && this.eventsEnabled()) {
+				this.getTileEntity().onChangeInventory(this, slot, InvOperation.decreaseStackSize, ns, ItemStack.EMPTY);
 			}
 
 			this.markDirty();
@@ -102,231 +90,183 @@ public class AppEngInternalInventory implements IInventory, Iterable<ItemStack>
 		return ItemStack.EMPTY;
 	}
 
-	protected boolean eventsEnabled()
-	{
+	protected boolean eventsEnabled() {
 		return Platform.isServer() || this.isEnableClientEvents();
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot( final int var1 )
-	{
+	public ItemStack removeStackFromSlot(final int var1) {
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public void setInventorySlotContents( final int slot, final ItemStack newItemStack )
-	{
-		final ItemStack oldStack = this.inv[slot];
-		this.inv[slot] = newItemStack;
+	public void setInventorySlotContents(final int slot, final ItemStack newItemStack) {
+		final ItemStack oldStack = this.inv.get(slot);
+		this.inv.set(slot, newItemStack);
 
-		if( this.getTileEntity() != null && this.eventsEnabled() )
-		{
+		if (this.getTileEntity() != null && this.eventsEnabled()) {
 			ItemStack removed = oldStack;
 			ItemStack added = newItemStack;
 
-			if( oldStack != null && newItemStack != null && Platform.itemComparisons().isEqualItem( oldStack, newItemStack ) )
-			{
-				if( oldStack.getCount() > newItemStack.getCount() )
-				{
+			if (!oldStack.isEmpty() && !newItemStack.isEmpty() && Platform.itemComparisons().isEqualItem(oldStack, newItemStack)) {
+				if (oldStack.getCount() > newItemStack.getCount()) {
 					removed = removed.copy();
-					removed.grow( -newItemStack.getCount() );
-					added = null;
-				}
-				else if( oldStack.getCount() < newItemStack.getCount() )
-				{
+					removed.grow(-newItemStack.getCount());
+					added = ItemStack.EMPTY;
+				} else if (oldStack.getCount() < newItemStack.getCount()) {
 					added = added.copy();
-					added.grow( -oldStack.getCount() );
-					removed = null;
-				}
-				else
-				{
-					removed = added = null;
+					added.grow(-oldStack.getCount());
+					removed = ItemStack.EMPTY;
+				} else {
+					removed = added = ItemStack.EMPTY;
 				}
 			}
 
-			this.getTileEntity().onChangeInventory( this, slot, InvOperation.setInventorySlotContents, removed, added );
+			this.getTileEntity().onChangeInventory(this, slot, InvOperation.setInventorySlotContents, removed, added);
 
 			this.markDirty();
 		}
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return "appeng-internal";
 	}
 
 	@Override
-	public boolean hasCustomName()
-	{
+	public boolean hasCustomName() {
 		return false;
 	}
 
 	@Override
-	public int getInventoryStackLimit()
-	{
+	public int getInventoryStackLimit() {
 		return this.maxStack > 64 ? 64 : this.maxStack;
 	}
 
 	@Override
-	public void markDirty()
-	{
-		if( this.getTileEntity() != null && this.eventsEnabled() )
-		{
-			this.getTileEntity().onChangeInventory( this, -1, InvOperation.markDirty, null, null );
+	public void markDirty() {
+		if (this.getTileEntity() != null && this.eventsEnabled()) {
+			this.getTileEntity().onChangeInventory(this, -1, InvOperation.markDirty, ItemStack.EMPTY, ItemStack.EMPTY);
 		}
 	}
 
 	@Override
-	public boolean isUsableByPlayer( final EntityPlayer var1 )
-	{
+	public boolean isUsableByPlayer(final EntityPlayer var1) {
 		return true;
 	}
 
 	@Override
-	public boolean isItemValidForSlot( final int i, final ItemStack itemstack )
-	{
+	public boolean isItemValidForSlot(final int i, final ItemStack itemstack) {
 		return true;
 	}
 
-	public void setMaxStackSize( final int s )
-	{
+	public void setMaxStackSize(final int s) {
 		this.maxStack = s;
 	}
 
 	// for guis...
-	public void markDirty( final int slotIndex )
-	{
-		if( this.getTileEntity() != null && this.eventsEnabled() )
-		{
-			this.getTileEntity().onChangeInventory( this, slotIndex, InvOperation.markDirty, null, null );
+	public void markDirty(final int slotIndex) {
+		if (this.getTileEntity() != null && this.eventsEnabled()) {
+			this.getTileEntity().onChangeInventory(this, slotIndex, InvOperation.markDirty, ItemStack.EMPTY, ItemStack.EMPTY);
 		}
 	}
 
-	public void writeToNBT( final NBTTagCompound data, final String name )
-	{
+	public void writeToNBT(final NBTTagCompound data, final String name) {
 		final NBTTagCompound c = new NBTTagCompound();
-		this.writeToNBT( c );
-		data.setTag( name, c );
+		this.writeToNBT(c);
+		data.setTag(name, c);
 	}
 
-	private void writeToNBT( final NBTTagCompound target )
-	{
-		for( int x = 0; x < this.size; x++ )
-		{
-			try
-			{
+	private void writeToNBT(final NBTTagCompound target) {
+		for (int x = 0; x < this.size; x++) {
+			try {
 				final NBTTagCompound c = new NBTTagCompound();
 
-				if( this.inv[x] != null )
-				{
-					this.inv[x].writeToNBT( c );
+				if (!this.inv.get(x).isEmpty()) {
+					this.inv.get(x).writeToNBT(c);
 				}
 
-				target.setTag( "#" + x, c );
-			}
-			catch( final Exception ignored )
-			{
+				target.setTag("#" + x, c);
+			} catch (final Exception ignored) {
 			}
 		}
 	}
 
-	public void readFromNBT( final NBTTagCompound data, final String name )
-	{
-		final NBTTagCompound c = data.getCompoundTag( name );
-		if( c != null )
-		{
-			this.readFromNBT( c );
+	public void readFromNBT(final NBTTagCompound data, final String name) {
+		final NBTTagCompound c = data.getCompoundTag(name);
+		if (c != null) {
+			this.readFromNBT(c);
 		}
 	}
 
-	public void readFromNBT( final NBTTagCompound target )
-	{
-		for( int x = 0; x < this.size; x++ )
-		{
-			try
-			{
-				final NBTTagCompound c = target.getCompoundTag( "#" + x );
+	public void readFromNBT(final NBTTagCompound target) {
+		for (int x = 0; x < this.size; x++) {
+			try {
+				final NBTTagCompound c = target.getCompoundTag("#" + x);
 
-				if( c != null )
-				{
-					this.inv[x] = new ItemStack( c );
+				if (c != null) {
+					this.inv.set(x, new ItemStack(c));
 				}
-			}
-			catch( final Exception e )
-			{
-				AELog.debug( e );
+			} catch (final Exception e) {
+				AELog.debug(e);
 			}
 		}
 	}
 
 	@Override
-	public Iterator<ItemStack> iterator()
-	{
-		return new InvIterator( this );
+	public Iterator<ItemStack> iterator() {
+		return new InvIterator(this);
 	}
 
 	@Override
-	public ITextComponent getDisplayName()
-	{
+	public ITextComponent getDisplayName() {
 		return null;
 	}
 
 	@Override
-	public void openInventory( final EntityPlayer player )
-	{
+	public void openInventory(final EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory( final EntityPlayer player )
-	{
+	public void closeInventory(final EntityPlayer player) {
 
 	}
 
 	@Override
-	public int getField( final int id )
-	{
+	public int getField(final int id) {
 		return 0;
 	}
 
 	@Override
-	public void setField( final int id, final int value )
-	{
+	public void setField(final int id, final int value) {
 	}
 
 	@Override
-	public int getFieldCount()
-	{
+	public int getFieldCount() {
 		return 0;
 	}
 
 	@Override
-	public void clear()
-	{
-		for( int x = 0; x < this.size; x++ )
-		{
-			this.setInventorySlotContents( x, null );
+	public void clear() {
+		for (int x = 0; x < this.size; x++) {
+			this.setInventorySlotContents(x, ItemStack.EMPTY);
 		}
 	}
 
-	private boolean isEnableClientEvents()
-	{
+	private boolean isEnableClientEvents() {
 		return this.enableClientEvents;
 	}
 
-	public void setEnableClientEvents( final boolean enableClientEvents )
-	{
+	public void setEnableClientEvents(final boolean enableClientEvents) {
 		this.enableClientEvents = enableClientEvents;
 	}
 
-	private IAEAppEngInventory getTileEntity()
-	{
+	private IAEAppEngInventory getTileEntity() {
 		return this.te;
 	}
 
-	public void setTileEntity( final IAEAppEngInventory te )
-	{
+	public void setTileEntity(final IAEAppEngInventory te) {
 		this.te = te;
 	}
 }

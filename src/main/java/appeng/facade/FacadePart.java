@@ -43,9 +43,8 @@ public class FacadePart implements IFacadePart, IBoxProvider
 
 	public FacadePart( final ItemStack facade, final AEPartLocation side )
 	{
-		if( facade == null )
-		{
-			throw new IllegalArgumentException( "Facade Part constructed on null item." );
+		if (facade.isEmpty()) {
+			throw new IllegalArgumentException("Facade Part constructed on null item.");
 		}
 		this.facade = facade.copy();
 		this.facade.setCount( 1 );
@@ -88,8 +87,7 @@ public class FacadePart implements IFacadePart, IBoxProvider
 	public Item getItem()
 	{
 		final ItemStack is = this.getTextureItem();
-		if( is == null )
-		{
+		if (is.isEmpty()) {
 			return null;
 		}
 		return is.getItem();
@@ -99,8 +97,7 @@ public class FacadePart implements IFacadePart, IBoxProvider
 	public int getItemDamage()
 	{
 		final ItemStack is = this.getTextureItem();
-		if( is == null )
-		{
+		if (is.isEmpty()) {
 			return 0;
 		}
 		return is.getItemDamage();
@@ -137,7 +134,7 @@ public class FacadePart implements IFacadePart, IBoxProvider
 			return facade.getTextureItem( this.facade );
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

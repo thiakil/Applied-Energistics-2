@@ -75,7 +75,7 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 		boolean simulate = ( type == Actionable.SIMULATE );
 
 		// This uses a brute force approach and tries to jam it in every slot the inventory exposes.
-		for( int i = 0; i < slotCount && remaining != null; i++ )
+		for( int i = 0; i < slotCount && !remaining.isEmpty(); i++ )
 		{
 			remaining = itemHandler.insertItem( i, remaining, simulate );
 		}
@@ -103,7 +103,7 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 		int remainingSize = requestedItemStack.getCount();
 
 		// Use this to gather the requested items
-		ItemStack gathered = null;
+		ItemStack gathered = ItemStack.EMPTY;
 
 		final boolean simulate = ( mode == Actionable.SIMULATE );
 
@@ -125,30 +125,25 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 			do
 			{
 				extracted = itemHandler.extractItem( i, remainingCurrentSlot, simulate );
-				if( extracted != null )
-				{
-					if( extracted.getCount() > remainingCurrentSlot )
-					{
+				if (!extracted.isEmpty()) {
+					if (extracted.getCount() > remainingCurrentSlot) {
 						// Something broke. It should never return more than we requested...
 						// We're going to silently eat the remainder
-						AELog.warn( "Mod that provided item handler %1 is broken. Returned %2 items, even though we requested %3.",
-								itemHandler.getClass().getSimpleName(), extracted.getCount(), remainingCurrentSlot );
-						extracted.setCount( remainingCurrentSlot );
+						AELog.warn("Mod that provided item handler %1 is broken. Returned %2 items, even though we requested %3.",
+								itemHandler.getClass().getSimpleName(), extracted.getCount(), remainingCurrentSlot);
+						extracted.setCount(remainingCurrentSlot);
 					}
 
 					// We're just gonna use the first stack we get our hands on as the template for the rest
-					if( gathered == null )
-					{
+					if (gathered.isEmpty()) {
 						gathered = extracted;
-					}
-					else
-					{
-						gathered.grow( extracted.getCount() );
+					} else {
+						gathered.grow(extracted.getCount());
 					}
 					remainingCurrentSlot -= extracted.getCount();
 				}
 			}
-			while( extracted != null && remainingCurrentSlot > 0 );
+			while(!extracted.isEmpty() && remainingCurrentSlot > 0 );
 
 			remainingSize -= stackSizeCurrentSlot - remainingCurrentSlot;
 
@@ -159,14 +154,12 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 			}
 		}
 
-		if( gathered != null )
-		{
-			if( mode == Actionable.MODULATE )
-			{
+		if (!gathered.isEmpty()) {
+			if (mode == Actionable.MODULATE) {
 				this.onTick();
 			}
 
-			return AEItemStack.create( gathered );
+			return AEItemStack.create(gathered);
 		}
 
 		return null;
@@ -198,7 +191,7 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 			{
 				addItemChange( slot, oldAeIS, newIS, changes );
 			}
-			else if( newIS != null && oldIS != null )
+			else if(!newIS.isEmpty() && !oldIS.isEmpty() )
 			{
 				addPossibleStackSizeChange( slot, oldAeIS, newIS, changes );
 			}
@@ -275,12 +268,12 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 
 	private boolean isDifferent( final ItemStack a, final ItemStack b )
 	{
-		if( a == b && b == null )
+		if(a == b && b.isEmpty() )
 		{
 			return false;
 		}
 
-		return a == null || b == null || !Platform.itemComparisons().isSameItem( a, b );
+		return a.isEmpty() || b.isEmpty() || !Platform.itemComparisons().isSameItem(a, b);
 	}
 
 	private void postDifference( Iterable<IAEItemStack> a )

@@ -153,8 +153,7 @@ public final class GrinderRecipeManager implements IGrinderRegistry, IOreListene
 	{
 		this.log( "Looking up recipe for '%1$s'", Platform.getItemDisplayName( input ) );
 
-		if( input == null )
-		{
+		if (input.isEmpty()) {
 			return null;
 		}
 
@@ -229,8 +228,7 @@ public final class GrinderRecipeManager implements IGrinderRegistry, IOreListene
 
 	private ItemStack copy( final ItemStack is )
 	{
-		if( is != null )
-		{
+		if (!is.isEmpty()) {
 			return is.copy();
 		}
 		return ItemStack.EMPTY;
@@ -243,8 +241,7 @@ public final class GrinderRecipeManager implements IGrinderRegistry, IOreListene
 
 	private void addOre( final String name, final ItemStack item )
 	{
-		if( item == null )
-		{
+		if (item.isEmpty()) {
 			return;
 		}
 		this.log( "Adding Ore: '%1$s'", Platform.getItemDisplayName( item ) );
@@ -270,8 +267,7 @@ public final class GrinderRecipeManager implements IGrinderRegistry, IOreListene
 
 	private void addIngot( final String name, final ItemStack item )
 	{
-		if( item == null )
-		{
+		if (item.isEmpty()) {
 			return;
 		}
 		this.log( "Adding Ingot: '%1$s'", Platform.getItemDisplayName( item ) );
@@ -286,8 +282,7 @@ public final class GrinderRecipeManager implements IGrinderRegistry, IOreListene
 
 	private void addDust( final String name, final ItemStack item )
 	{
-		if( item == null )
-		{
+		if (item.isEmpty()) {
 			return;
 		}
 		if( this.dusts.containsKey( name ) )

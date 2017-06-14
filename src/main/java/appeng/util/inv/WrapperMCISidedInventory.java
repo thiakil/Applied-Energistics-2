@@ -44,7 +44,7 @@ public class WrapperMCISidedInventory extends WrapperInventoryRange implements I
 		{
 			return super.decrStackSize( var1, var2 );
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -67,8 +67,7 @@ public class WrapperMCISidedInventory extends WrapperInventoryRange implements I
 	@Override
 	public boolean canRemoveItemFromSlot( final int i, final ItemStack is )
 	{
-		if( is == null )
-		{
+		if (is.isEmpty()) {
 			return false;
 		}
 

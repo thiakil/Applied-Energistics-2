@@ -150,64 +150,50 @@ public class PacketJEIRecipe extends AppEngPacket
 					{
 						final ItemStack is = r.getCraftingResult( testInv );
 
-						if( is != null )
-						{
+						if (!is.isEmpty()) {
 							final IMEMonitor<IAEItemStack> storage = inv.getItemInventory();
 							final IItemList all = storage.getStorageList();
-							final IPartitionList<IAEItemStack> filter = ItemViewCell.createFilter( cct.getViewCells() );
+							final IPartitionList<IAEItemStack> filter = ItemViewCell.createFilter(cct.getViewCells());
 
-							for( int x = 0; x < craftMatrix.getSizeInventory(); x++ )
-							{
-								final ItemStack patternItem = testInv.getStackInSlot( x );
+							for (int x = 0; x < craftMatrix.getSizeInventory(); x++) {
+								final ItemStack patternItem = testInv.getStackInSlot(x);
 
-								ItemStack currentItem = craftMatrix.getStackInSlot( x );
-								if( currentItem != null )
-								{
-									testInv.setInventorySlotContents( x, currentItem );
-									final ItemStack newItemStack = r.matches( testInv, pmp.world ) ? r.getCraftingResult( testInv ) : null;
-									testInv.setInventorySlotContents( x, patternItem );
+								ItemStack currentItem = craftMatrix.getStackInSlot(x);
+								if (!currentItem.isEmpty()) {
+									testInv.setInventorySlotContents(x, currentItem);
+									final ItemStack newItemStack = r.matches(testInv, pmp.world) ? r.getCraftingResult(testInv) : ItemStack.EMPTY;
+									testInv.setInventorySlotContents(x, patternItem);
 
-									if( newItemStack == null || !Platform.itemComparisons().isSameItem( newItemStack, is ) )
-									{
-										final IAEItemStack in = AEItemStack.create( currentItem );
-										if( in != null )
-										{
-											final IAEItemStack out = realForFake == Actionable.SIMULATE ? null : Platform.poweredInsert( energy, storage, in, cct.getActionSource() );
-											if( out != null )
-											{
-												craftMatrix.setInventorySlotContents( x, out.getItemStack() );
-											}
-											else
-											{
-												craftMatrix.setInventorySlotContents( x, null );
+									if (newItemStack.isEmpty() || !Platform.itemComparisons().isSameItem(newItemStack, is)) {
+										final IAEItemStack in = AEItemStack.create(currentItem);
+										if (in != null) {
+											final IAEItemStack out = realForFake == Actionable.SIMULATE ? null : Platform.poweredInsert(energy, storage, in, cct.getActionSource());
+											if (out != null) {
+												craftMatrix.setInventorySlotContents(x, out.getItemStack());
+											} else {
+												craftMatrix.setInventorySlotContents(x, ItemStack.EMPTY);
 											}
 
-											currentItem = craftMatrix.getStackInSlot( x );
+											currentItem = craftMatrix.getStackInSlot(x);
 										}
 									}
 								}
 
 								// True if we need to fetch an item for the recipe
-								if( patternItem != null && currentItem == null )
-								{
+								if (!patternItem.isEmpty() && currentItem.isEmpty()) {
 									// Grab from network by recipe
-									ItemStack whichItem = Platform.extractItemsByRecipe( energy, cct.getActionSource(), storage, player.world, r, is, testInv, patternItem, x, all, realForFake, filter );
+									ItemStack whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, patternItem, x, all, realForFake, filter);
 
 									// If that doesn't get it, grab exact items from network (?)
 									// TODO see if this code is necessary
-									if( whichItem == null )
-									{
-										for( int y = 0; y < this.recipe[x].length; y++ )
-										{
-											final IAEItemStack request = AEItemStack.create( this.recipe[x][y] );
-											if( request != null )
-											{
-												if( filter == null || filter.isListed( request ) )
-												{
-													request.setStackSize( 1 );
-													final IAEItemStack out = Platform.poweredExtraction( energy, storage, request, cct.getActionSource() );
-													if( out != null )
-													{
+									if (whichItem.isEmpty()) {
+										for (int y = 0; y < this.recipe[x].length; y++) {
+											final IAEItemStack request = AEItemStack.create(this.recipe[x][y]);
+											if (request != null) {
+												if (filter == null || filter.isListed(request)) {
+													request.setStackSize(1);
+													final IAEItemStack out = Platform.poweredExtraction(energy, storage, request, cct.getActionSource());
+													if (out != null) {
 														whichItem = out.getItemStack();
 														break;
 													}
@@ -217,15 +203,14 @@ public class PacketJEIRecipe extends AppEngPacket
 									}
 
 									// If that doesn't work, grab from the player's inventory
-									if( whichItem == null && playerInventory != null )
-									{
-										whichItem = this.extractItemFromPlayerInventory( player, realForFake, patternItem );
+									if (whichItem.isEmpty() && playerInventory != null) {
+										whichItem = this.extractItemFromPlayerInventory(player, realForFake, patternItem);
 									}
 
-									craftMatrix.setInventorySlotContents( x, whichItem );
+									craftMatrix.setInventorySlotContents(x, whichItem);
 								}
 							}
-							con.onCraftMatrixChanged( craftMatrix );
+							con.onCraftMatrixChanged(craftMatrix);
 						}
 					}
 				}

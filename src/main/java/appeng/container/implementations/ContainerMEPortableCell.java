@@ -65,20 +65,14 @@ public class ContainerMEPortableCell extends ContainerMEMonitorable
 		{
 			if( currentItem != this.civ.getItemStack() )
 			{
-				if( currentItem != null )
-				{
-					if( Platform.itemComparisons().isEqualItem( this.civ.getItemStack(), currentItem ) )
-					{
-						this.getPlayerInv().setInventorySlotContents( this.getPlayerInv().currentItem, this.civ.getItemStack() );
+				if (!currentItem.isEmpty()) {
+					if (Platform.itemComparisons().isEqualItem(this.civ.getItemStack(), currentItem)) {
+						this.getPlayerInv().setInventorySlotContents(this.getPlayerInv().currentItem, this.civ.getItemStack());
+					} else {
+						this.setValidContainer(false);
 					}
-					else
-					{
-						this.setValidContainer( false );
-					}
-				}
-				else
-				{
-					this.setValidContainer( false );
+				} else {
+					this.setValidContainer(false);
 				}
 			}
 		}

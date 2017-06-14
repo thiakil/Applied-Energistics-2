@@ -954,8 +954,8 @@ public class CableBusContainer extends CableBusStorage implements AEMultiTile, I
 
 				final Item myItem = Item.getItemById( itemID );
 
-				final ItemStack current = p != null ? p.getItemStack( PartItemStack.NETWORK ) : null;
-				if( current != null && current.getItem() == myItem && current.getItemDamage() == dmgValue )
+				final ItemStack current = p != null ? p.getItemStack(PartItemStack.NETWORK) : ItemStack.EMPTY;
+				if(!current.isEmpty() && current.getItem() == myItem && current.getItemDamage() == dmgValue )
 				{
 					if( p.readFromStream( data ) )
 					{
@@ -1052,12 +1052,11 @@ public class CableBusContainer extends CableBusStorage implements AEMultiTile, I
 			{
 				IPart p = this.getPart( side );
 				final ItemStack iss = new ItemStack( def );
-				if( iss == null )
-				{
+				if (iss.isEmpty()) {
 					continue;
 				}
 
-				final ItemStack current = p == null ? null : p.getItemStack( PartItemStack.WORLD );
+				final ItemStack current = p == null ? ItemStack.EMPTY : p.getItemStack(PartItemStack.WORLD);
 
 				if( Platform.itemComparisons().isEqualItemType( iss, current ) )
 				{
@@ -1256,7 +1255,7 @@ public class CableBusContainer extends CableBusStorage implements AEMultiTile, I
 		{
 			ItemStack textureItem = facade.getTextureItem();
 			IBlockState blockState = facade.getBlockState();
-			if( blockState != null && textureItem != null )
+			if(blockState != null && !textureItem.isEmpty() )
 			{
 				EnumSet<EnumFacing> openFaces = calculateFaceOpenFaces( side );
 				return new FacadeRenderState( blockState, openFaces, textureItem );

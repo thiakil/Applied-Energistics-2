@@ -137,10 +137,9 @@ public class FacadeContainer implements IFacadeContainer
 				if (maybeFacadeItem.isPresent()) {
 					final ItemFacade ifa = (ItemFacade) maybeFacadeItem.get();
 					final ItemStack facade = ifa.createFromIDs( ids );
-					if( facade != null )
-					{
-						changed = changed || this.storage.getFacade( x ) == null;
-						this.storage.setFacade( x, ifa.createPartFromItemStack( facade, side ) );
+					if (!facade.isEmpty()) {
+						changed = changed || this.storage.getFacade(x) == null;
+						this.storage.setFacade(x, ifa.createPartFromItemStack(facade, side));
 					}
 				}
 			}
@@ -165,12 +164,10 @@ public class FacadeContainer implements IFacadeContainer
 			if( t != null )
 			{
 				final ItemStack is = new ItemStack( t );
-				if( is != null )
-				{
+				if (!is.isEmpty()) {
 					final Item i = is.getItem();
-					if( i instanceof IFacadeItem )
-					{
-						this.storage.setFacade( x, ( (IFacadeItem) i ).createPartFromItemStack( is, AEPartLocation.fromOrdinal( x ) ) );
+					if (i instanceof IFacadeItem) {
+						this.storage.setFacade(x, ((IFacadeItem) i).createPartFromItemStack(is, AEPartLocation.fromOrdinal(x)));
 					}
 				}
 			}

@@ -34,16 +34,12 @@ public class OptionalSlotFakeTypeOnly extends OptionalSlotFake
 	@Override
 	public void putStack( ItemStack is )
 	{
-		if( is != null )
-		{
+		if (!is.isEmpty()) {
 			is = is.copy();
-			if( is.getCount() > 1 )
-			{
-				is.setCount( 1 );
-			}
-			else if( is.getCount() < -1 )
-			{
-				is.setCount( -1 );
+			if (is.getCount() > 1) {
+				is.setCount(1);
+			} else if (is.getCount() < -1) {
+				is.setCount(-1);
 			}
 		}
 

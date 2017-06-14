@@ -242,8 +242,7 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
 		{
 			for( int x = 0; x < 6; x++ )
 			{
-				if( this.cells.getStackInSlot( x ) != null )
-				{
+				if (!this.cells.getStackInSlot(x).isEmpty()) {
 					return true;
 				}
 			}
@@ -343,45 +342,33 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
 			for( int x = 0; x < 6; x++ )
 			{
 				final ItemStack is = this.cells.getStackInSlot( x );
-				if( is != null )
-				{
-					if( ItemsToMove > 0 )
-					{
-						final IMEInventory<IAEItemStack> itemInv = this.getInv( is, StorageChannel.ITEMS );
-						final IMEInventory<IAEFluidStack> fluidInv = this.getInv( is, StorageChannel.FLUIDS );
+				if (!is.isEmpty()) {
+					if (ItemsToMove > 0) {
+						final IMEInventory<IAEItemStack> itemInv = this.getInv(is, StorageChannel.ITEMS);
+						final IMEInventory<IAEFluidStack> fluidInv = this.getInv(is, StorageChannel.FLUIDS);
 
-						if( this.manager.getSetting( Settings.OPERATION_MODE ) == OperationMode.EMPTY )
-						{
-							if( itemInv != null )
-							{
-								ItemsToMove = this.transferContents( energy, itemInv, itemNet, ItemsToMove, StorageChannel.ITEMS );
+						if (this.manager.getSetting(Settings.OPERATION_MODE) == OperationMode.EMPTY) {
+							if (itemInv != null) {
+								ItemsToMove = this.transferContents(energy, itemInv, itemNet, ItemsToMove, StorageChannel.ITEMS);
 							}
-							if( fluidInv != null )
-							{
-								ItemsToMove = this.transferContents( energy, fluidInv, fluidNet, ItemsToMove, StorageChannel.FLUIDS );
+							if (fluidInv != null) {
+								ItemsToMove = this.transferContents(energy, fluidInv, fluidNet, ItemsToMove, StorageChannel.FLUIDS);
 							}
-						}
-						else
-						{
-							if( itemInv != null )
-							{
-								ItemsToMove = this.transferContents( energy, itemNet, itemInv, ItemsToMove, StorageChannel.ITEMS );
+						} else {
+							if (itemInv != null) {
+								ItemsToMove = this.transferContents(energy, itemNet, itemInv, ItemsToMove, StorageChannel.ITEMS);
 							}
-							if( fluidInv != null )
-							{
-								ItemsToMove = this.transferContents( energy, fluidNet, fluidInv, ItemsToMove, StorageChannel.FLUIDS );
+							if (fluidInv != null) {
+								ItemsToMove = this.transferContents(energy, fluidNet, fluidInv, ItemsToMove, StorageChannel.FLUIDS);
 							}
 						}
 
-						if( ItemsToMove > 0 && this.shouldMove( itemInv, fluidInv ) && !this.moveSlot( x ) )
-						{
+						if (ItemsToMove > 0 && this.shouldMove(itemInv, fluidInv) && !this.moveSlot(x)) {
 							return TickRateModulation.IDLE;
 						}
 
 						return TickRateModulation.URGENT;
-					}
-					else
-					{
+					} else {
 						return TickRateModulation.URGENT;
 					}
 				}
@@ -513,9 +500,8 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
 		final WrapperInventoryRange wir = new WrapperInventoryRange( this, this.output, true );
 		final ItemStack result = InventoryAdaptor.getAdaptor( wir, EnumFacing.UP ).addItems( this.getStackInSlot( x ) );
 
-		if( result == null )
-		{
-			this.setInventorySlotContents( x, null );
+		if (result.isEmpty()) {
+			this.setInventorySlotContents(x, ItemStack.EMPTY);
 			return true;
 		}
 
@@ -572,9 +558,8 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
 		{
 			final ItemStack stackInSlot = this.upgrades.getStackInSlot( upgradeIndex );
 
-			if( stackInSlot != null )
-			{
-				drops.add( stackInSlot );
+			if (!stackInSlot.isEmpty()) {
+				drops.add(stackInSlot);
 			}
 		}
 	}

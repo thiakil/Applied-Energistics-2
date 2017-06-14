@@ -81,9 +81,8 @@ public class ItemFacade extends AEBaseItem implements IFacadeItem, IAlphaPassIte
 		try
 		{
 			final ItemStack in = this.getTextureItem( is );
-			if( in != null )
-			{
-				return super.getItemStackDisplayName( is ) + " - " + in.getDisplayName();
+			if (!in.isEmpty()) {
+				return super.getItemStackDisplayName(is) + " - " + in.getDisplayName();
 			}
 		}
 		catch( final Throwable ignored )
@@ -122,9 +121,8 @@ public class ItemFacade extends AEBaseItem implements IFacadeItem, IAlphaPassIte
 					for( final ItemStack l : tmpList )
 					{
 						final ItemStack facade = this.createFacadeForItem( l, false );
-						if( facade != null )
-						{
-							this.subTypes.add( facade );
+						if (!facade.isEmpty()) {
+							this.subTypes.add(facade);
 						}
 					}
 				}
@@ -153,8 +151,7 @@ public class ItemFacade extends AEBaseItem implements IFacadeItem, IAlphaPassIte
 
 	public ItemStack createFacadeForItem( final ItemStack l, final boolean returnItem )
 	{
-		if( l == null )
-		{
+		if (l.isEmpty()) {
 			return ItemStack.EMPTY;
 		}
 
@@ -205,9 +202,8 @@ public class ItemFacade extends AEBaseItem implements IFacadeItem, IAlphaPassIte
 	public FacadePart createPartFromItemStack( final ItemStack is, final AEPartLocation side )
 	{
 		final ItemStack in = this.getTextureItem( is );
-		if( in != null )
-		{
-			return new FacadePart( is, side );
+		if (!in.isEmpty()) {
+			return new FacadePart(is, side);
 		}
 		return null;
 	}
@@ -265,8 +261,7 @@ public class ItemFacade extends AEBaseItem implements IFacadeItem, IAlphaPassIte
 
 		ItemStack baseItemStack = getTextureItem( is );
 
-		if( baseItemStack == null )
-		{
+		if (baseItemStack.isEmpty()) {
 			return Blocks.GLASS.getDefaultState();
 		}
 

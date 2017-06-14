@@ -95,14 +95,13 @@ public class GuiTabButton extends GuiButton implements ITooltip
 
 			this.mouseDragged( minecraft, x, y );
 
-			if( this.myItem != null )
-			{
+			if (!this.myItem.isEmpty()) {
 				this.zLevel = 100.0F;
 				this.itemRenderer.zLevel = 100.0F;
 
 				GlStateManager.enableDepth();
 				RenderHelper.enableGUIStandardItemLighting();
-				this.itemRenderer.renderItemAndEffectIntoGUI( this.myItem, offsetX + this.xPosition + 3, this.yPosition + 3 );
+				this.itemRenderer.renderItemAndEffectIntoGUI(this.myItem, offsetX + this.xPosition + 3, this.yPosition + 3);
 				GlStateManager.disableDepth();
 
 				this.itemRenderer.zLevel = 0.0F;
