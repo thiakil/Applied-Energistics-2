@@ -67,7 +67,7 @@ public class CellInventory implements ICellInventory
 	private short storedItems = 0;
 	private int storedItemCount = 0;
 	private IItemList<IAEItemStack> cellItems;
-	private ItemStack i;
+	private ItemStack i = ItemStack.EMPTY;
 	private IStorageCell cellType;
 
 	protected CellInventory( final NBTTagCompound data, final ISaveProvider container )

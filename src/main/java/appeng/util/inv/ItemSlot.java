@@ -32,7 +32,7 @@ public class ItemSlot
 	private boolean isExtractable;
 	// one or the other..
 	private IAEItemStack aeItemStack;
-	private ItemStack itemStack;
+	private ItemStack itemStack = ItemStack.EMPTY;
 
 	public ItemStack getItemStack()
 	{

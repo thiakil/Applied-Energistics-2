@@ -92,7 +92,7 @@ public abstract class AEBaseGui extends GuiContainer
 	private GuiScrollbar myScrollBar = null;
 	private boolean disableShiftClick = false;
 	private Stopwatch dbl_clickTimer = Stopwatch.createStarted();
-	private ItemStack dbl_whichItem;
+	private ItemStack dbl_whichItem = ItemStack.EMPTY;
 	private Slot bl_clicked;
 	private boolean subGui;
 

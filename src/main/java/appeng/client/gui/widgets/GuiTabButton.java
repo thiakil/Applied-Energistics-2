@@ -34,7 +34,7 @@ public class GuiTabButton extends GuiButton implements ITooltip
 	private final String message;
 	private int hideEdge = 0;
 	private int myIcon = -1;
-	private ItemStack myItem;
+	private ItemStack myItem = ItemStack.EMPTY;
 
 	public GuiTabButton( final int x, final int y, final int ico, final String message, final RenderItem ir )
 	{

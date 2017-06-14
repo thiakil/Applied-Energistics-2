@@ -101,7 +101,7 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
 	private final BaseActionSource mySrc;
 
 	private YesNo lastRedstoneState;
-	private ItemStack currentCell;
+	private ItemStack currentCell = ItemStack.EMPTY;
 	private IMEInventory<IAEFluidStack> cachedFluid;
 	private IMEInventory<IAEItemStack> cachedItem;
 

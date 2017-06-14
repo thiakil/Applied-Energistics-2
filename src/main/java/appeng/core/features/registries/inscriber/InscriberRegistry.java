@@ -119,9 +119,9 @@ public final class InscriberRegistry implements IInscriberRegistry
 	private static final class Builder implements IInscriberRecipeBuilder
 	{
 		private List<ItemStack> inputs;
-		private ItemStack output;
-		private ItemStack topOptional;
-		private ItemStack bottomOptional;
+		private ItemStack output = ItemStack.EMPTY;
+		private ItemStack topOptional = ItemStack.EMPTY;
+		private ItemStack bottomOptional = ItemStack.EMPTY;
 		private InscriberProcessType type;
 
 		@Nonnull
