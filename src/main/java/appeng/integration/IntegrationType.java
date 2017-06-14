@@ -19,24 +19,24 @@
 package appeng.integration;
 
 
-import appeng.integration.modules.ic2.IC2Module;
+//import appeng.integration.modules.ic2.IC2Module;
 import appeng.integration.modules.jei.JEIModule;
 import appeng.integration.modules.rf.RFItemModule;
 import appeng.integration.modules.rf.RFTileModule;
 import appeng.integration.modules.theoneprobe.TheOneProbeModule;
-import appeng.integration.modules.waila.WailaModule;
+//import appeng.integration.modules.waila.WailaModule;
 
 
 public enum IntegrationType
 {
 	IC2( IntegrationSide.BOTH, "Industrial Craft 2", "IC2" )
-	{
+	/*{
 		@Override
 		public IIntegrationModule createInstance()
 		{
 			return Integrations.setIc2( new IC2Module() );
 		}
-	},
+	}*/,
 
 	RF( IntegrationSide.BOTH, "RedstoneFlux Power - Tiles", "CoFHAPI" )
 	{
@@ -59,13 +59,13 @@ public enum IntegrationType
 	},
 
 	Waila( IntegrationSide.BOTH, "Waila", "Waila" )
-	{
+	/*{
 		@Override
 		public IIntegrationModule createInstance()
 		{
 			return new WailaModule();
 		}
-	},
+	}*/,
 
 	JEI( IntegrationSide.CLIENT, "Just Enough Items", "JEI" )
 	{
