@@ -161,7 +161,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		short itemNumericId = data.readShort();
 		d.setString( "id", String.valueOf( itemNumericId ) );
 		d.setShort( "Damage", data.readShort() );
-		d.setByte( "Count", (byte) 0 );
+		d.setByte( "Count", (byte) 1 );//1.11: this is so isEmpty does not return true.
 
 		if( hasTagCompound )
 		{
@@ -229,7 +229,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		/*
 		 * if ( Count != null && Count instanceof NBTTagByte ) ((NBTTagByte) Count).data = (byte) 0; else
 		 */
-		i.setByte( "Count", (byte) 0 );
+		i.setByte( "Count", (byte) 1 );
 
 		/*
 		 * if ( Cnt != null && Cnt instanceof NBTTagLong ) ((NBTTagLong) Cnt).data = this.stackSize; else
