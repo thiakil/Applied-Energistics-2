@@ -176,6 +176,10 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 		if( slots > cachedStacks.length )
 		{
 			cachedStacks = Arrays.copyOf( cachedStacks, slots );
+			for (int i = 0; i<cachedStacks.length; i++){
+				if (cachedStacks[i] == null)
+					cachedStacks[i] = ItemStack.EMPTY;
+			}
 			cachedAeStacks = Arrays.copyOf( cachedAeStacks, slots );
 		}
 
