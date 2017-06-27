@@ -87,6 +87,11 @@ class CondenserCategory extends BlankRecipeCategory<CondenserOutputWrapper>
 	}
 
 	@Override
+	public String getModName() {
+		return AppEng.MOD_NAME;
+	}
+
+	@Override
 	public IDrawable getBackground()
 	{
 		return background;

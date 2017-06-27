@@ -62,6 +62,11 @@ class GrinderRecipeCategory extends BlankRecipeCategory<GrinderRecipeWrapper>
 	}
 
 	@Override
+	public String getModName() {
+		return AppEng.MOD_NAME;
+	}
+
+	@Override
 	public IDrawable getBackground()
 	{
 		return background;
