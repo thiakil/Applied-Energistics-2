@@ -28,6 +28,7 @@ import net.minecraft.item.ItemBlock;
 
 import appeng.api.definitions.IBlockDefinition;
 import appeng.core.features.AEFeature;
+import net.minecraft.tileentity.TileEntity;
 
 
 public interface IBlockBuilder
@@ -59,4 +60,6 @@ public interface IBlockBuilder
 	IBlockBuilder item( Function<Block, ItemBlock> factory );
 
 	<T extends IBlockDefinition> T build();
+
+	IBlockBuilder tile( Class<? extends TileEntity> tile );
 }

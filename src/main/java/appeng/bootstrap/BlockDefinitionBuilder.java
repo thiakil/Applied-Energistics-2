@@ -34,6 +34,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -115,6 +116,13 @@ class BlockDefinitionBuilder implements IBlockBuilder
 	public BlockDefinitionBuilder postInit( BiConsumer<Block, Item> callback )
 	{
 		postInitCallbacks.add( callback );
+		return this;
+	}
+
+	@Override
+	public BlockDefinitionBuilder tile( Class<? extends TileEntity> tile)
+	{
+		postInitCallbacks.add( (block,item) -> GameRegistry.registerTileEntity(tile, AppEng.MOD_ID+":"+registryName) );
 		return this;
 	}
 
