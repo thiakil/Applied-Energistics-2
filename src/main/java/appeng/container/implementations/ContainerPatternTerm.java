@@ -201,10 +201,10 @@ public class ContainerPatternTerm extends ContainerMEMonitorable implements IAEA
 			}
 
 			// remove one, and clear the input slot.
-			output.setCount(output.getCount());
-			if (output.getCount() == 0) {
+			output.shrink(1);
+			/*if (output.getCount() == 0) { // this should no longer be necessary
 				this.patternSlotIN.putStack(ItemStack.EMPTY);
-			}
+			}*/
 
 			// add a new encoded pattern.
 			Optional<ItemStack> maybePattern = AEApi.instance().definitions().items().encodedPattern().maybeStack(1);
