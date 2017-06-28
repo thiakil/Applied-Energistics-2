@@ -40,6 +40,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -165,11 +166,12 @@ public class PartPlacement
 								host.markForSave();
 								host.markForUpdate();
 								if (!player.capabilities.isCreativeMode) {
+									ItemStack heldCopy = held.copy();
 									held.grow(-1);
 									;
 									if (held.getCount() == 0) {
-										player.inventory.mainInventory.add(player.inventory.currentItem, ItemStack.EMPTY);
-										MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, held, hand));
+										//player.inventory.mainInventory.add(player.inventory.currentItem, ItemStack.EMPTY);
+										ForgeEventFactory.onPlayerDestroyItem(player, heldCopy, hand);
 									}
 								}
 								return EnumActionResult.SUCCESS;
@@ -337,12 +339,13 @@ public class PartPlacement
 
 				if( !player.capabilities.isCreativeMode )
 				{
+					ItemStack heldCopy = held.copy();
 					held.grow( -1 );
-					;
+
 					if( held.getCount() == 0 )
 					{
-						player.inventory.mainInventory.add(player.inventory.currentItem, ItemStack.EMPTY);
-						MinecraftForge.EVENT_BUS.post( new PlayerDestroyItemEvent( player, held, hand ) );
+						//player.inventory.mainInventory.add(player.inventory.currentItem, ItemStack.EMPTY);
+						ForgeEventFactory.onPlayerDestroyItem( player, heldCopy, hand );
 					}
 				}
 			}
