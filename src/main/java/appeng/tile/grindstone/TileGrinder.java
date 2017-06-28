@@ -97,7 +97,7 @@ public class TileGrinder extends AEBaseInvTile implements ICrankable
 			return false;
 		}
 
-		if( null == this.getStackInSlot( 6 ) ) // Add if there isn't one...
+		if( this.getStackInSlot( 6 ).isEmpty() ) // Add if there isn't one...
 		{
 			final IInventory src = new WrapperInventoryRange( this, this.inputs, true );
 			for( int x = 0; x < src.getSizeInventory(); x++ )
