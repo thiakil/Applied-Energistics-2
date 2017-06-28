@@ -164,7 +164,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 	public ItemStack getOutput( final ItemStack item )
 	{
 		ItemStack out = SIMPLE_CACHE.get( item );
-		if (!out.isEmpty()) {
+		if ( out != null && !out.isEmpty()) {
 			return out;
 		}
 
