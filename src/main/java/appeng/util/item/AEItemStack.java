@@ -443,6 +443,17 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		return is;
 	}
 
+	public ItemStack getDisplayItemStack()
+	{
+		final ItemStack is = new ItemStack( this.getDefinition().getItem(), (int) Math.max(1, Math.min( Integer.MAX_VALUE, this.getStackSize() )), this.getDefinition().getDamageValue() );
+		if( this.getDefinition().getTagCompound() != null )
+		{
+			is.setTagCompound( this.getDefinition().getTagCompound().getNBTTagCompoundCopy() );
+		}
+
+		return is;
+	}
+
 	@Override
 	public Item getItem()
 	{

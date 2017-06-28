@@ -49,6 +49,13 @@ public interface IAEItemStack extends IAEStack<IAEItemStack>
 	ItemStack getItemStack();
 
 	/**
+	 * creates a standard MC ItemStack for the item with min size of 1, to pass isEmpty() checks.
+	 *
+	 * @return new ItemStack
+	 */
+	ItemStack getDisplayItemStack();
+
+	/**
 	 * is there NBT Data for this item?
 	 *
 	 * @return if there is
