@@ -148,7 +148,7 @@ public class GuiCraftAmount extends AEBaseGui
 	{
 		this.next.displayString = isShiftKeyDown() ? GuiText.Start.getLocal() : GuiText.Next.getLocal();
 
-		this.bindTexture( "guis/craftAmt.png" );
+		this.bindTexture( "guis/craft_amt.png" );
 		this.drawTexturedModalRect( offsetX, offsetY, 0, 0, this.xSize, this.ySize );
 
 		try
@@ -295,6 +295,6 @@ public class GuiCraftAmount extends AEBaseGui
 
 	protected String getBackground()
 	{
-		return "guis/craftAmt.png";
+		return "guis/craft_amt.png";
 	}
 }
