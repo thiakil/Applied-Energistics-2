@@ -24,6 +24,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import javax.annotation.Nullable;
+import javax.vecmath.Matrix4f;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -38,13 +39,15 @@ import net.minecraft.util.EnumFacing;
 
 import appeng.client.render.cablebus.CubeBuilder;
 import appeng.client.render.cablebus.FacadeBuilder;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import org.apache.commons.lang3.tuple.Pair;
 
 
 /**
  * This is the actual baked model that will combine the north face of a given block state
  * with the base facade item model to achieve what is then actually rendered on screen.
  */
-public class FacadeWithBlockBakedModel implements IBakedModel
+public class FacadeWithBlockBakedModel implements IBakedModel, IPerspectiveAwareModel
 {
 
 	private final IBakedModel baseModel;
@@ -125,5 +128,12 @@ public class FacadeWithBlockBakedModel implements IBakedModel
 	public ItemOverrideList getOverrides()
 	{
 		return ItemOverrideList.NONE;
+	}
+
+	@Override
+	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
+		if (baseModel instanceof IPerspectiveAwareModel)
+			return Pair.of(this, ((IPerspectiveAwareModel) baseModel).handlePerspective(cameraTransformType).getRight());
+		return Pair.of(this, null);
 	}
 }
