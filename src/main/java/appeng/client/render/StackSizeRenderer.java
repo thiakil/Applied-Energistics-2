@@ -44,7 +44,7 @@ public class StackSizeRenderer
 
 	public void renderStackSize( FontRenderer fontRenderer, IAEItemStack aeStack, ItemStack is, int xPos, int yPos )
 	{
-		if (!is.isEmpty()) {
+		if (aeStack != null || !is.isEmpty()) {
 			final float scaleFactor = AEConfig.instance().useTerminalUseLargeFont() ? 0.85f : 0.5f;
 			final float inverseScaleFactor = 1.0f / scaleFactor;
 			final int offset = AEConfig.instance().useTerminalUseLargeFont() ? 0 : -1;
@@ -52,7 +52,7 @@ public class StackSizeRenderer
 			final boolean unicodeFlag = fontRenderer.getUnicodeFlag();
 			fontRenderer.setUnicodeFlag(false);
 
-			if (is.getCount() == 0) {
+			if (aeStack != null && aeStack.getStackSize() == 0) {
 				final String craftLabelText = AEConfig.instance().useTerminalUseLargeFont() ? GuiText.LargeFontCraft.getLocal() : GuiText.SmallFontCraft.getLocal();
 				GlStateManager.disableLighting();
 				GlStateManager.disableDepth();
