@@ -28,6 +28,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
 import appeng.api.config.Actionable;
@@ -157,7 +158,7 @@ public class SlotCraftingTerm extends AppEngCraftingSlot
 
 		if(!is.isEmpty() && Platform.itemComparisons().isEqualItem(request, is) )
 		{
-			final ItemStack[] set = new ItemStack[this.getPattern().getSizeInventory()];
+			final NonNullList<ItemStack> set = NonNullList.withSize(this.getPattern().getSizeInventory(), ItemStack.EMPTY);
 
 			// add one of each item to the items on the board...
 			if( Platform.isServer() )
@@ -205,8 +206,8 @@ public class SlotCraftingTerm extends AppEngCraftingSlot
 					for( int x = 0; x < this.getPattern().getSizeInventory(); x++ )
 					{
 						if (!this.getPattern().getStackInSlot(x).isEmpty()) {
-							set[x] = Platform.extractItemsByRecipe(this.energySrc, this.mySrc, inv, p.world, r, is, ic, this.getPattern().getStackInSlot(x), x, all, Actionable.MODULATE, ItemViewCell.createFilter(this.container.getViewCells()));
-							ic.setInventorySlotContents(x, set[x]);
+							set.set(x, Platform.extractItemsByRecipe(this.energySrc, this.mySrc, inv, p.world, r, is, ic, this.getPattern().getStackInSlot(x), x, all, Actionable.MODULATE, ItemViewCell.createFilter(this.container.getViewCells())));
+							ic.setInventorySlotContents(x, set.get(x));
 						}
 					}
 				}
@@ -228,7 +229,7 @@ public class SlotCraftingTerm extends AppEngCraftingSlot
 		return ItemStack.EMPTY;
 	}
 
-	private boolean preCraft( final EntityPlayer p, final IMEMonitor<IAEItemStack> inv, final ItemStack[] set, final ItemStack result )
+	private boolean preCraft( final EntityPlayer p, final IMEMonitor<IAEItemStack> inv, final NonNullList<ItemStack> set, final ItemStack result )
 	{
 		return true;
 	}
@@ -238,7 +239,7 @@ public class SlotCraftingTerm extends AppEngCraftingSlot
 		super.onTake( p, is );
 	}
 
-	private void postCraft( final EntityPlayer p, final IMEMonitor<IAEItemStack> inv, final ItemStack[] set, final ItemStack result )
+	private void postCraft( final EntityPlayer p, final IMEMonitor<IAEItemStack> inv, final NonNullList<ItemStack> set, final ItemStack result )
 	{
 		final List<ItemStack> drops = new ArrayList<ItemStack>();
 
@@ -249,10 +250,10 @@ public class SlotCraftingTerm extends AppEngCraftingSlot
 			for( int x = 0; x < this.craftInv.getSizeInventory(); x++ )
 			{
 				if (this.craftInv.getStackInSlot(x).isEmpty()) {
-					this.craftInv.setInventorySlotContents(x, set[x]);
-				} else if (!set[x].isEmpty()) {
+					this.craftInv.setInventorySlotContents(x, set.get(x));
+				} else if (!set.get(x).isEmpty()) {
 					// eek! put it back!
-					final IAEItemStack fail = inv.injectItems(AEItemStack.create(set[x]), Actionable.MODULATE, this.mySrc);
+					final IAEItemStack fail = inv.injectItems(AEItemStack.create(set.get(x)), Actionable.MODULATE, this.mySrc);
 					if (fail != null) {
 						drops.add(fail.getItemStack());
 					}
