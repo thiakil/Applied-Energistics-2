@@ -68,7 +68,7 @@ public class SlotME extends Slot
 	{
 		if( this.mySlot.hasPower() )
 		{
-			return !this.getStack().isEmpty();
+			return this.getAEStack() != null;//!this.getStack().isEmpty();
 		}
 		return false;
 	}
