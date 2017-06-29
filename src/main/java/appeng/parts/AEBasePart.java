@@ -422,9 +422,9 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 		return true;
 	}
 
-	private boolean useMemoryCard( final EntityPlayer player )
+	private boolean useMemoryCard( final EntityPlayer player, final EnumHand hand )
 	{
-		final ItemStack memCardIS = player.inventory.getCurrentItem();
+		final ItemStack memCardIS = player.getHeldItem( hand );
 
 		if(!memCardIS.isEmpty() && this.useStandardMemoryCard() && memCardIS.getItem() instanceof IMemoryCard )
 		{
@@ -476,7 +476,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 	@Override
 	public final boolean onActivate( final EntityPlayer player, final EnumHand hand, final Vec3d pos )
 	{
-		if( this.useMemoryCard( player ) )
+		if( this.useMemoryCard( player, hand ) )
 		{
 			return true;
 		}
@@ -487,7 +487,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 	@Override
 	public final boolean onShiftActivate( final EntityPlayer player, final EnumHand hand, final Vec3d pos )
 	{
-		if( this.useMemoryCard( player ) )
+		if( this.useMemoryCard( player, hand ) )
 		{
 			return true;
 		}

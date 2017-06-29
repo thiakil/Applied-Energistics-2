@@ -84,7 +84,7 @@ public class BlockCharger extends AEBaseTileBlock implements ICustomCollision
 			final TileCharger tc = this.getTileEntity( w, pos );
 			if( tc != null )
 			{
-				tc.activate( player );
+				tc.activate( player, hand );
 			}
 		}
 

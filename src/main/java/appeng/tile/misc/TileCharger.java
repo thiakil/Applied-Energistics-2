@@ -30,6 +30,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 
 import appeng.api.AEApi;
 import appeng.api.config.Actionable;
@@ -209,7 +210,7 @@ public class TileCharger extends AENetworkPowerTile implements ICrankable, IGrid
 		return this.sides;
 	}
 
-	public void activate( final EntityPlayer player )
+	public void activate( final EntityPlayer player, final EnumHand hand )
 	{
 		if( !Platform.hasPermissions( new DimensionalCoord( this ), player ) )
 		{
@@ -218,7 +219,7 @@ public class TileCharger extends AENetworkPowerTile implements ICrankable, IGrid
 
 		final ItemStack myItem = this.getStackInSlot( 0 );
 		if (myItem.isEmpty()) {
-			ItemStack held = player.inventory.getCurrentItem();
+			ItemStack held = player.getHeldItem( hand );
 
 			if (AEApi.instance().definitions().materials().certusQuartzCrystal().isSameAs(held) || Platform.isChargeable(held)) {
 				held = player.inventory.decrStackSize(player.inventory.currentItem, 1);

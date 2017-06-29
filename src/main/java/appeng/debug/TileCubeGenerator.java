@@ -85,11 +85,11 @@ public class TileCubeGenerator extends AEBaseTile implements ITickable
 		}
 	}
 
-	void click( final EntityPlayer player )
+	void click( final EntityPlayer player, final EnumHand enumHand )
 	{
 		if( Platform.isServer() )
 		{
-			final ItemStack hand = player.inventory.getCurrentItem();
+			final ItemStack hand = player.getHeldItem(enumHand);
 			this.who = player;
 
 			if (hand.isEmpty()) {

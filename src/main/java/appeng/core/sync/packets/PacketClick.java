@@ -101,7 +101,7 @@ public class PacketClick extends AppEngPacket
 	@Override
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final EntityPlayer player )
 	{
-		final ItemStack is = player.inventory.getCurrentItem();
+		final ItemStack is = player.getHeldItem(this.hand);
 		final IItems items = AEApi.instance().definitions().items();
 		final IComparableDefinition maybeMemoryCard = items.memoryCard();
 		final IComparableDefinition maybeColorApplicator = items.colorApplicator();

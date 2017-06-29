@@ -194,7 +194,7 @@ public abstract class AbstractPartReporting extends AEBasePart implements IPartM
 	{
 		final TileEntity te = this.getTile();
 
-		if( !player.isSneaking() && Platform.isWrench( player, player.inventory.getCurrentItem(), te.getPos() ) )
+		if( !player.isSneaking() && Platform.isWrench( player, player.getHeldItem( hand ), te.getPos() ) )
 		{
 			if( Platform.isServer() )
 			{
