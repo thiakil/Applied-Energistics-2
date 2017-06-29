@@ -22,6 +22,7 @@ package appeng.hooks;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -47,7 +48,10 @@ public final class DispenserBlockTool extends BehaviorDefaultDispenseItem
 			final World w = dispenser.getWorld();
 			if( w instanceof WorldServer )
 			{
-				tm.onItemUse( dispensedItem, Platform.getPlayer( (WorldServer) w ), w, dispenser.getBlockPos().offset( enumfacing ), EnumHand.MAIN_HAND, enumfacing, 0.5f, 0.5f, 0.5f );
+				EntityPlayer p = Platform.getPlayer( (WorldServer) w );
+				p.setHeldItem(EnumHand.MAIN_HAND, dispensedItem );
+				tm.onItemUse( p, w, dispenser.getBlockPos().offset( enumfacing ), EnumHand.MAIN_HAND, enumfacing, 0.5f, 0.5f, 0.5f );
+				p.setHeldItem( EnumHand.MAIN_HAND, ItemStack.EMPTY );
 			}
 		}
 		return dispensedItem;
