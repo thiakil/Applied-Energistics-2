@@ -19,7 +19,7 @@
 package appeng.integration;
 
 
-//import appeng.integration.modules.ic2.IC2Module;
+import appeng.integration.modules.ic2.IC2Module;
 import appeng.integration.modules.jei.JEIModule;
 import appeng.integration.modules.rf.RFItemModule;
 import appeng.integration.modules.rf.RFTileModule;
@@ -30,13 +30,13 @@ import appeng.integration.modules.theoneprobe.TheOneProbeModule;
 public enum IntegrationType
 {
 	IC2( IntegrationSide.BOTH, "Industrial Craft 2", "IC2" )
-	/*{
+	{
 		@Override
 		public IIntegrationModule createInstance()
 		{
 			return Integrations.setIc2( new IC2Module() );
 		}
-	}*/,
+	},
 
 	RF( IntegrationSide.BOTH, "RedstoneFlux Power - Tiles", "CoFHAPI" )
 	{
