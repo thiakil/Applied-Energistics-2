@@ -57,14 +57,14 @@ public class InscriberRecipe implements IInscriberRecipe
 	@Nonnull
 	private final InscriberProcessType type;
 
-	InscriberRecipe( @Nonnull final Collection<ItemStack> inputs, @Nonnull final ItemStack output, @Nullable final ItemStack top, @Nullable final ItemStack bot, @Nonnull final InscriberProcessType type )
+	InscriberRecipe( @Nonnull final Collection<ItemStack> inputs, @Nonnull final ItemStack output, @Nonnull final ItemStack top, @Nonnull final ItemStack bot, @Nonnull final InscriberProcessType type )
 	{
 		this.inputs = new ArrayList<ItemStack>( inputs.size() );
 		this.inputs.addAll( inputs );
 
 		this.output = output;
-		this.maybeTop = Optional.ofNullable( top );
-		this.maybeBot = Optional.ofNullable( bot );
+		this.maybeTop = top.isEmpty() ? Optional.empty() : Optional.of( top );
+		this.maybeBot = bot.isEmpty() ? Optional.empty() : Optional.of( bot );
 
 		this.type = type;
 	}
