@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import appeng.util.item.AEFluidStack;
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayer;
