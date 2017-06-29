@@ -52,7 +52,7 @@ configurations {
 dependencies {
     // installable runtime dependencies
     //mods "mcp.mobius.waila:Waila:${waila_version}"
-    //mods "net.industrial-craft:industrialcraft-2:${ic2_version}:dev"
+    provided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
     mods "mcjty.theoneprobe:TheOneProbe:${top_version}"
 
     // compile against provided APIs
