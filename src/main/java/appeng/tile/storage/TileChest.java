@@ -36,6 +36,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
@@ -965,15 +966,18 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 		@Override
 		public int fill( final FluidStack resource, final boolean doFill )
 		{
-			final double req = resource.amount / 500.0;
-			final double available = TileChest.this.extractAEPower( req, Actionable.SIMULATE, PowerMultiplier.CONFIG );
-			if( available >= req - 0.01 )
+			try
 			{
-				try
-				{
-					final IMEInventoryHandler h = TileChest.this.getHandler( StorageChannel.FLUIDS );
+				final IMEInventoryHandler<IAEFluidStack> h = TileChest.this.getHandler( StorageChannel.FLUIDS );
 
-					TileChest.this.extractAEPower( req, Actionable.MODULATE, PowerMultiplier.CONFIG );
+				final double req = resource.amount / 500.0;
+				final double available = TileChest.this.extractAEPower( req, Actionable.SIMULATE, PowerMultiplier.CONFIG );
+				if( available >= req - 0.01 )
+				{
+					if (doFill)
+					{
+						TileChest.this.extractAEPower( req, Actionable.MODULATE, PowerMultiplier.CONFIG );
+					}
 
 					final IAEStack results = h.injectItems( AEFluidStack.create( resource ), doFill ? Actionable.MODULATE : Actionable.SIMULATE,
 							TileChest.this.mySrc );
@@ -985,9 +989,9 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 
 					return resource.amount - (int) results.getStackSize();
 				}
-				catch( final ChestNoHandler ignored )
-				{
-				}
+			}
+			catch( final ChestNoHandler ignored )
+			{
 			}
 			return 0;
 		}
@@ -1013,7 +1017,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 
 				if( h.getChannel() == StorageChannel.FLUIDS )
 				{
-					return new IFluidTankProperties[] { new FluidTankProperties( null, 1 ) }; // eh?
+					return new IFluidTankProperties[] { new FluidTankProperties( null, Fluid.BUCKET_VOLUME, true, false ) };
 				}
 			}
 			catch( final ChestNoHandler ignored )
