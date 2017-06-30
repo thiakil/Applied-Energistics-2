@@ -88,8 +88,7 @@ public class AEItemDef
 
 	boolean isItem( final ItemStack otherStack )
 	{
-		// hackery!
-		final int dmg = this.getDamageValueHack( otherStack );
+		final int dmg = otherStack.itemDamage;
 
 		if( this.getItem() == otherStack.getItem() && dmg == this.getDamageValue() )
 		{
@@ -106,11 +105,6 @@ public class AEItemDef
 			return true;
 		}
 		return false;
-	}
-
-	int getDamageValueHack( final ItemStack is )
-	{
-		return Items.BLAZE_ROD.getDamage( is );
 	}
 
 	void reHash()

@@ -90,7 +90,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		/*
 		 * Kinda hackery
 		 */
-		this.getDefinition().setDamageValue( this.def.getDamageValueHack( is ) );
+		this.getDefinition().setDamageValue( is.itemDamage );
 		if( !is.getItem().isDamageable() )
 		{
 			this.getDefinition().setDisplayDamage( Integer.MAX_VALUE );
