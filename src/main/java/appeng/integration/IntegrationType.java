@@ -76,6 +76,8 @@ public enum IntegrationType
 		}
 	},
 
+	OpenComputers( IntegrationSide.BOTH, "OpenComputers", "OpenComputers" ),
+
 	THE_ONE_PROBE( IntegrationSide.BOTH, "TheOneProbe", "theoneprobe" )
 	{
 		@Override

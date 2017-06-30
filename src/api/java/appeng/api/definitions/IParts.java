@@ -84,7 +84,7 @@ public interface IParts
 
 	IItemDefinition p2PTunnelLight();
 
-	// IItemDefinition p2PTunnelOpenComputers();
+	IItemDefinition p2PTunnelOpenComputers();
 
 	IItemDefinition cableAnchor();
 

@@ -48,6 +48,11 @@ repositories {
         name 'hwyla'
         url 'http://tehnut.info/maven'
     }
+
+    maven {
+        name "OpenComputers Repo"
+        url = "http://maven.cil.li/"
+    }
 }
 
 configurations {
@@ -66,6 +71,7 @@ dependencies {
     compileOnly "net.darkhax.tesla:Tesla:${tesla_version}"
     provided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
     compileOnly "mcjty.theoneprobe:TheOneProbe:${top_version}:api"
+    provided "li.cil.oc:OpenComputers:MC${minecraft_version}-${opencomputers_version}:api"
 
     // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"
