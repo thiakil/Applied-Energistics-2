@@ -102,8 +102,6 @@ import appeng.util.Platform;
 
 public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminalHost, IPriorityHost, IConfigManagerHost, IColorableTile, ITickable
 {
-
-	private static final ChestNoHandler NO_HANDLER = new ChestNoHandler();
 	private static final int[] SIDES = { 0 };
 	private static final int[] FRONT = { 1 };
 	private static final int[] NO_SLOTS = {};
@@ -121,7 +119,6 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 	private MEMonitorHandler itemCell;
 	private MEMonitorHandler fluidCell;
 	private Accessor accessor;
-	private IFluidHandler fluidHandler;
 
 	public TileChest()
 	{
@@ -199,7 +196,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 		return 1;
 	}
 
-	private IMEInventoryHandler getHandler( final StorageChannel channel ) throws ChestNoHandler
+	private IMEInventoryHandler getHandler( final StorageChannel channel )
 	{
 		if( !this.isCached )
 		{
@@ -207,7 +204,6 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 			this.fluidCell = null;
 
 			this.accessor = null;
-			this.fluidHandler = null;
 
 			final ItemStack is = this.inv.getStackInSlot( 1 );
 			if (!is.isEmpty()) {
@@ -236,10 +232,6 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 					}
 					this.accessor = new Accessor();
 
-					if( this.fluidCell != null )
-					{
-						this.fluidHandler = new FluidHandler();
-					}
 				}
 			}
 		}
@@ -247,16 +239,8 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 		switch( channel )
 		{
 			case FLUIDS:
-				if( this.fluidCell == null )
-				{
-					throw NO_HANDLER;
-				}
 				return this.fluidCell;
 			case ITEMS:
-				if( this.itemCell == null )
-				{
-					throw NO_HANDLER;
-				}
 				return this.itemCell;
 			default:
 		}
@@ -293,28 +277,16 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 
 		if( ch != null )
 		{
-			try
+			IMEInventoryHandler handler = this.getHandler( StorageChannel.ITEMS );
+			if( handler != null && handler instanceof ChestMonitorHandler )
 			{
-				final IMEInventoryHandler handler = this.getHandler( StorageChannel.ITEMS );
-				if( handler instanceof ChestMonitorHandler )
-				{
-					return ch.getStatusForCell( cell, ( (ChestMonitorHandler) handler ).getInternalHandler() );
-				}
-			}
-			catch( final ChestNoHandler ignored )
-			{
+				return ch.getStatusForCell( cell, ( (ChestMonitorHandler) handler ).getInternalHandler() );
 			}
 
-			try
+			handler = this.getHandler( StorageChannel.FLUIDS );
+			if( handler != null && handler instanceof ChestMonitorHandler )
 			{
-				final IMEInventoryHandler handler = this.getHandler( StorageChannel.FLUIDS );
-				if( handler instanceof ChestMonitorHandler )
-				{
-					return ch.getStatusForCell( cell, ( (ChestMonitorHandler) handler ).getInternalHandler() );
-				}
-			}
-			catch( final ChestNoHandler ignored )
-			{
+				return ch.getStatusForCell( cell, ( (ChestMonitorHandler) handler ).getInternalHandler() );
 			}
 		}
 
@@ -582,16 +554,14 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 		}
 		else
 		{
-			try
+			final IMEInventory<IAEItemStack> cell = this.getHandler( StorageChannel.ITEMS );
+			if ( cell == null )
 			{
-				final IMEInventory<IAEItemStack> cell = this.getHandler( StorageChannel.ITEMS );
-				final IAEItemStack returns = cell.injectItems( AEApi.instance().storage().createItemStack( this.inv.getStackInSlot( 0 ) ), Actionable.SIMULATE,
-						this.mySrc );
-				return returns == null || returns.getStackSize() != insertingItem.getCount();
+				return false;
 			}
-			catch( final ChestNoHandler ignored )
-			{
-			}
+			final IAEItemStack returns = cell.injectItems( AEApi.instance().storage().createItemStack( this.inv.getStackInSlot( 0 ) ), Actionable.SIMULATE,
+					this.mySrc );
+			return returns == null || returns.getStackSize() != insertingItem.getCount();
 		}
 		return false;
 	}
@@ -612,16 +582,9 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 
 		if( this.isPowered() )
 		{
-			try
+			if( this.getHandler( StorageChannel.ITEMS ) != null )
 			{
-				if( this.getHandler( StorageChannel.ITEMS ) != null )
-				{
-					return SIDES;
-				}
-			}
-			catch( final ChestNoHandler e )
-			{
-				// nope!
+				return SIDES;
 			}
 		}
 		return NO_SLOTS;
@@ -629,42 +592,39 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 
 	private void tryToStoreContents()
 	{
-		try
-		{
-			if (!this.getStackInSlot(0).isEmpty()) {
-				final IMEInventory<IAEItemStack> cell = this.getHandler(StorageChannel.ITEMS);
+		if (!this.getStackInSlot(0).isEmpty()) {
+			final IMEInventory<IAEItemStack> cell = this.getHandler(StorageChannel.ITEMS);
 
-				final IAEItemStack returns = Platform.poweredInsert( this, cell, AEApi.instance().storage().createItemStack( this.inv.getStackInSlot( 0 ) ),
-						this.mySrc );
-
-				if( returns == null )
-				{
-					this.inv.setInventorySlotContents(0, ItemStack.EMPTY);
-				} else {
-					this.inv.setInventorySlotContents(0, returns.getItemStack());
-				}
+			if ( cell == null )
+			{
+				return;
 			}
-		}
-		catch( final ChestNoHandler ignored )
-		{
+
+			final IAEItemStack returns = Platform.poweredInsert( this, cell, AEApi.instance().storage().createItemStack( this.inv.getStackInSlot( 0 ) ),
+					this.mySrc );
+
+			if( returns == null )
+			{
+				this.inv.setInventorySlotContents(0, ItemStack.EMPTY);
+			} else {
+				this.inv.setInventorySlotContents(0, returns.getItemStack());
+			}
 		}
 	}
 
 	@Override
 	public List<IMEInventoryHandler> getCellArray( final StorageChannel channel )
 	{
+		List<IMEInventoryHandler> list = new ArrayList<IMEInventoryHandler>();
 		if( this.getProxy().isActive() )
 		{
-			try
+			IMEInventoryHandler handler = this.getHandler( channel );
+			if ( handler != null )
 			{
-				return Collections.singletonList( this.getHandler( channel ) );
-			}
-			catch( final ChestNoHandler e )
-			{
-				// :P
+				list.add( handler );
 			}
 		}
-		return new ArrayList<IMEInventoryHandler>();
+		return list;
 	}
 
 	@Override
@@ -730,32 +690,18 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 
 	public boolean openGui( final EntityPlayer p, final ICellHandler ch, final ItemStack cell, final EnumFacing side )
 	{
-		try
+		IMEInventoryHandler invHandler = this.getHandler( StorageChannel.ITEMS );
+		if( ch != null && invHandler != null )
 		{
-			final IMEInventoryHandler invHandler = this.getHandler( StorageChannel.ITEMS );
-			if( ch != null && invHandler != null )
-			{
-				ch.openChestGui( p, this, ch, invHandler, cell, StorageChannel.ITEMS );
-				return true;
-			}
-		}
-		catch( final ChestNoHandler e )
-		{
-			// :P
+			ch.openChestGui( p, this, ch, invHandler, cell, StorageChannel.ITEMS );
+			return true;
 		}
 
-		try
+		invHandler = this.getHandler( StorageChannel.FLUIDS );
+		if( ch != null && invHandler != null )
 		{
-			final IMEInventoryHandler invHandler = this.getHandler( StorageChannel.FLUIDS );
-			if( ch != null && invHandler != null )
-			{
-				ch.openChestGui( p, this, ch, invHandler, cell, StorageChannel.FLUIDS );
-				return true;
-			}
-		}
-		catch( final ChestNoHandler e )
-		{
-			// :P
+			ch.openChestGui( p, this, ch, invHandler, cell, StorageChannel.FLUIDS );
+			return true;
 		}
 
 		return false;
@@ -785,11 +731,6 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 	public void saveChanges( final IMEInventory cellInventory )
 	{
 		this.world.markChunkDirty( this.pos, this );
-	}
-
-	private static class ChestNoHandler extends Exception
-	{
-		private static final long serialVersionUID = 7995805326136526631L;
 	}
 
 	private class ChestNetNotifier<T extends IAEStack<T>> implements IMEMonitorHandlerReceiver<T>
@@ -855,7 +796,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 		private IMEInventoryHandler<T> getInternalHandler()
 		{
 			final IMEInventoryHandler<T> h = this.getHandler();
-			if( h instanceof MEInventoryHandler )
+			if( h != null && h instanceof MEInventoryHandler )
 			{
 				return (IMEInventoryHandler<T>) ( (MEInventoryHandler) h ).getInternal();
 			}
@@ -920,10 +861,6 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 	@Override
 	public boolean hasCapability( Capability<?> capability, EnumFacing facing )
 	{
-		if( capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && this.fluidHandler != null && facing != getForward() )
-		{
-			return true;
-		}
 		if( capability == Capabilities.STORAGE_MONITORABLE_ACCESSOR && this.accessor != null && facing != getForward() )
 		{
 			return true;
@@ -935,10 +872,6 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 	@Override
 	public <T> T getCapability( Capability<T> capability, @Nullable EnumFacing facing )
 	{
-		if( capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && this.fluidHandler != null && facing != getForward() )
-		{
-			return (T) this.fluidHandler;
-		}
 		if( capability == Capabilities.STORAGE_MONITORABLE_ACCESSOR && this.accessor != null && facing != getForward() )
 		{
 			return (T) accessor;
@@ -956,74 +889,6 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 			{
 				return TileChest.this;
 			}
-			return null;
-		}
-	}
-
-	private class FluidHandler implements IFluidHandler
-	{
-
-		@Override
-		public int fill( final FluidStack resource, final boolean doFill )
-		{
-			try
-			{
-				final IMEInventoryHandler<IAEFluidStack> h = TileChest.this.getHandler( StorageChannel.FLUIDS );
-
-				final double req = resource.amount / 500.0;
-				final double available = TileChest.this.extractAEPower( req, Actionable.SIMULATE, PowerMultiplier.CONFIG );
-				if( available >= req - 0.01 )
-				{
-					if (doFill)
-					{
-						TileChest.this.extractAEPower( req, Actionable.MODULATE, PowerMultiplier.CONFIG );
-					}
-
-					final IAEStack results = h.injectItems( AEFluidStack.create( resource ), doFill ? Actionable.MODULATE : Actionable.SIMULATE,
-							TileChest.this.mySrc );
-
-					if( results == null )
-					{
-						return resource.amount;
-					}
-
-					return resource.amount - (int) results.getStackSize();
-				}
-			}
-			catch( final ChestNoHandler ignored )
-			{
-			}
-			return 0;
-		}
-
-		@Override
-		public FluidStack drain( final FluidStack resource, final boolean doDrain )
-		{
-			return null;
-		}
-
-		@Override
-		public FluidStack drain( final int maxDrain, final boolean doDrain )
-		{
-			return null;
-		}
-
-		@Override
-		public IFluidTankProperties[] getTankProperties()
-		{
-			try
-			{
-				final IMEInventoryHandler h = TileChest.this.getHandler( StorageChannel.FLUIDS );
-
-				if( h.getChannel() == StorageChannel.FLUIDS )
-				{
-					return new IFluidTankProperties[] { new FluidTankProperties( null, Fluid.BUCKET_VOLUME, true, false ) };
-				}
-			}
-			catch( final ChestNoHandler ignored )
-			{
-			}
-
 			return null;
 		}
 	}
