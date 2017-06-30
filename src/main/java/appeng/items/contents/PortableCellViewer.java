@@ -31,7 +31,7 @@ import appeng.api.config.ViewItems;
 import appeng.api.implementations.guiobjects.IPortableCell;
 import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.storage.IMEMonitor;
-import appeng.api.storage.MEMonitorHandler;
+import appeng.me.storage.MEMonitorHandler;
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.IConfigManager;

@@ -71,7 +71,7 @@ import appeng.api.storage.IMEMonitorHandlerReceiver;
 import appeng.api.storage.IStorageMonitorable;
 import appeng.api.storage.IStorageMonitorableAccessor;
 import appeng.api.storage.ITerminalHost;
-import appeng.api.storage.MEMonitorHandler;
+import appeng.me.storage.MEMonitorHandler;
 import appeng.api.storage.StorageChannel;
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;

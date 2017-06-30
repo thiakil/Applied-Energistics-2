@@ -57,7 +57,7 @@ import appeng.api.networking.security.ISecurityProvider;
 import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.IMEMonitor;
 import appeng.api.storage.ITerminalHost;
-import appeng.api.storage.MEMonitorHandler;
+import appeng.me.storage.MEMonitorHandler;
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.AECableType;
