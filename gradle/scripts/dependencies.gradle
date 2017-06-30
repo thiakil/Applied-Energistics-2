@@ -43,6 +43,11 @@ repositories {
         name 'tterrag maven'
         url "http://maven.tterrag.com/"
     }
+
+    maven {
+        name 'hwyla'
+        url 'http://tehnut.info/maven'
+    }
 }
 
 configurations {
@@ -52,14 +57,14 @@ configurations {
 dependencies {
     // installable runtime dependencies
     //mods "mcp.mobius.waila:Waila:${waila_version}"
-    provided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
+    mods "net.industrial-craft:industrialcraft-2:${ic2_version}:dev"
     mods "mcjty.theoneprobe:TheOneProbe:${top_version}"
 
     // compile against provided APIs
     compileOnly "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
-    //compileOnly "mcp.mobius.waila:Waila:${waila_version}"
+    deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}"
     compileOnly "net.darkhax.tesla:Tesla:${tesla_version}"
-    //compileOnly "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
+    provided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
     compileOnly "mcjty.theoneprobe:TheOneProbe:${top_version}:api"
 
     // at runtime, use the full JEI jar

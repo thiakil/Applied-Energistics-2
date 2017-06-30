@@ -24,7 +24,7 @@ import appeng.integration.modules.jei.JEIModule;
 import appeng.integration.modules.rf.RFItemModule;
 import appeng.integration.modules.rf.RFTileModule;
 import appeng.integration.modules.theoneprobe.TheOneProbeModule;
-//import appeng.integration.modules.waila.WailaModule;
+import appeng.integration.modules.waila.WailaModule;
 
 
 public enum IntegrationType
@@ -59,13 +59,13 @@ public enum IntegrationType
 	},
 
 	Waila( IntegrationSide.BOTH, "Waila", "Waila" )
-	/*{
+	{
 		@Override
 		public IIntegrationModule createInstance()
 		{
 			return new WailaModule();
 		}
-	}*/,
+	},
 
 	JEI( IntegrationSide.CLIENT, "Just Enough Items", "JEI" )
 	{
