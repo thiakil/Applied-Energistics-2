@@ -29,7 +29,7 @@ import appeng.integration.modules.waila.WailaModule;
 
 public enum IntegrationType
 {
-	IC2( IntegrationSide.BOTH, "Industrial Craft 2", "IC2" )
+	IC2( IntegrationSide.BOTH, "Industrial Craft 2", "ic2" )
 	{
 		@Override
 		public IIntegrationModule createInstance()
@@ -58,7 +58,7 @@ public enum IntegrationType
 		}
 	},
 
-	Waila( IntegrationSide.BOTH, "Waila", "Waila" )
+	Waila( IntegrationSide.BOTH, "Waila", "waila" )
 	{
 		@Override
 		public IIntegrationModule createInstance()
@@ -67,7 +67,7 @@ public enum IntegrationType
 		}
 	},
 
-	JEI( IntegrationSide.CLIENT, "Just Enough Items", "JEI" )
+	JEI( IntegrationSide.CLIENT, "Just Enough Items", "jei" )
 	{
 		@Override
 		public IIntegrationModule createInstance()
@@ -76,7 +76,7 @@ public enum IntegrationType
 		}
 	},
 
-	OpenComputers( IntegrationSide.BOTH, "OpenComputers", "OpenComputers" ),
+	OpenComputers( IntegrationSide.BOTH, "OpenComputers", "opencomputers" ),
 
 	THE_ONE_PROBE( IntegrationSide.BOTH, "TheOneProbe", "theoneprobe" )
 	{
