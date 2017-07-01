@@ -213,7 +213,7 @@ public abstract class AEBaseGui extends GuiContainer
 			lines.set( i, TextFormatting.GRAY + lines.get( i ) );
 		}
 
-		this.drawHoveringText( lines, x, y, fontRendererObj );
+		this.drawHoveringText( lines, x, y, fontRenderer );
 	}
 
 	@Override
@@ -710,7 +710,7 @@ public abstract class AEBaseGui extends GuiContainer
 				// Annoying but easier than trying to splice into render item
 				super.drawSlot( new Size1Slot( s ) );
 
-				stackSizeRenderer.renderStackSize( fontRendererObj, ( (SlotME) s ).getAEStack(), s.getStack(), s.xPos, s.yPos );
+				stackSizeRenderer.renderStackSize( fontRenderer, ( (SlotME) s ).getAEStack(), s.getStack(), s.xPos, s.yPos );
 
 			}
 			catch( final Exception err )
