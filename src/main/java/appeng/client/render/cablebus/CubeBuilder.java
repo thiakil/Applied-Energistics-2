@@ -55,6 +55,8 @@ public class CubeBuilder
 
 	private final EnumMap<EnumFacing, Vector4f> customUv = new EnumMap<>( EnumFacing.class );
 
+	private final EnumMap<EnumFacing, Boolean> flipUvs = new EnumMap<>( EnumFacing.class );
+
 	private byte[] uvRotations = new byte[EnumFacing.values().length];
 
 	private int color = 0xFFFFFFFF;
@@ -156,7 +158,14 @@ public class CubeBuilder
 		}
 		else
 		{
-			uv = getDefaultUv( face, texture, x1, y1, z1, x2, y2, z2 );
+			if ( getFlipUv( face ) )
+			{
+				uv = getFlippedUv( face, texture, x1, y1, z1, x2, y2, z2 );
+			}
+			else
+			{
+				uv = getDefaultUv( face, texture, x1, y1, z1, x2, y2, z2 );
+			}
 		}
 
 		switch( face )
@@ -212,9 +221,9 @@ public class CubeBuilder
 		{
 			case DOWN:
 				uv.u1 = texture.getInterpolatedU( x1 * 16 );
-				uv.v1 = texture.getInterpolatedV( z1 * 16 );
+				uv.v1 = texture.getInterpolatedV( z2 * 16 );
 				uv.u2 = texture.getInterpolatedU( x2 * 16 );
-				uv.v2 = texture.getInterpolatedV( z2 * 16 );
+				uv.v2 = texture.getInterpolatedV( z1 * 16 );
 				break;
 			case UP:
 				uv.u1 = texture.getInterpolatedU( x1 * 16 );
@@ -223,9 +232,9 @@ public class CubeBuilder
 				uv.v2 = texture.getInterpolatedV( z2 * 16 );
 				break;
 			case NORTH:
-				uv.u1 = texture.getInterpolatedU( x1 * 16 );
+				uv.u1 = texture.getInterpolatedU( x2 * 16 );
 				uv.v1 = texture.getInterpolatedV( 16 - y1 * 16 );
-				uv.u2 = texture.getInterpolatedU( x2 * 16 );
+				uv.u2 = texture.getInterpolatedU( x1 * 16 );
 				uv.v2 = texture.getInterpolatedV( 16 - y2 * 16 );
 				break;
 			case SOUTH:
@@ -241,10 +250,58 @@ public class CubeBuilder
 				uv.v2 = texture.getInterpolatedV( 16 - y2 * 16 );
 				break;
 			case EAST:
-				uv.u1 = texture.getInterpolatedU( z2 * 16 );
+				uv.u1 = texture.getInterpolatedU( z1 * 16 );
 				uv.v1 = texture.getInterpolatedV( 16 - y1 * 16 );
-				uv.u2 = texture.getInterpolatedU( z1 * 16 );
+				uv.u2 = texture.getInterpolatedU( z2 * 16 );
 				uv.v2 = texture.getInterpolatedV( 16 - y2 * 16 );
+				break;
+		}
+
+		return uv;
+	}
+
+	private UvVector getFlippedUv( EnumFacing face, TextureAtlasSprite texture, float x1, float y1, float z1, float x2, float y2, float z2 )
+	{
+
+		UvVector uv = new UvVector();
+
+		switch( face )
+		{
+			case DOWN:
+				uv.u1 = texture.getInterpolatedU( x1 * 16 );
+				uv.v1 = texture.getInterpolatedV( z2 * 16 );
+				uv.u2 = texture.getInterpolatedU( x2 * 16 );
+				uv.v2 = texture.getInterpolatedV( z1 * 16 );
+				break;
+			case UP:
+				uv.u1 = texture.getInterpolatedU( x1 * 16 );
+				uv.v1 = texture.getInterpolatedV( z1 * 16 );
+				uv.u2 = texture.getInterpolatedU( x2 * 16 );
+				uv.v2 = texture.getInterpolatedV( z2 * 16 );
+				break;
+			case NORTH:
+				uv.u1 = texture.getInterpolatedU( 16 - x1 * 16 );
+				uv.v1 = texture.getInterpolatedV( 16 - y1 * 16 );//
+				uv.u2 = texture.getInterpolatedU( 16 - x2 * 16 );
+				uv.v2 = texture.getInterpolatedV( 16 - y2 * 16 );//
+				break;
+			case SOUTH:
+				uv.u1 = texture.getInterpolatedU( x1 * 16 );
+				uv.v1 = texture.getInterpolatedV( 16 - y1 * 16 );
+				uv.u2 = texture.getInterpolatedU( x2 * 16 );
+				uv.v2 = texture.getInterpolatedV( 16 - y2 * 16 );
+				break;
+			case WEST:
+				uv.u1 = texture.getInterpolatedU( z1 * 16 );
+				uv.v1 = texture.getInterpolatedV( 16 - y1 * 16 );
+				uv.u2 = texture.getInterpolatedU( z2 * 16 );
+				uv.v2 = texture.getInterpolatedV( 16 - y2 * 16 );
+				break;
+			case EAST:
+				uv.u1 = texture.getInterpolatedU( 16 - z2 * 16 );
+				uv.v1 = texture.getInterpolatedV( 16 - y1 * 16 );//
+				uv.u2 = texture.getInterpolatedU( 16 - z1 * 16 );
+				uv.v2 = texture.getInterpolatedV( 16 - y2 * 16 );//
 				break;
 		}
 
@@ -469,6 +526,21 @@ public class CubeBuilder
 	public void setCustomUv( EnumFacing facing, float u1, float v1, float u2, float v2 )
 	{
 		customUv.put( facing, new Vector4f( u1, v1, u2, v2 ) );
+	}
+
+	public void setFlipUv( EnumFacing facing, boolean val )
+	{
+		flipUvs.put( facing, val );
+	}
+
+	public boolean getFlipUv( EnumFacing facing )
+	{
+		return flipUvs.containsKey( facing ) && flipUvs.get( facing );
+	}
+
+	public void resetFlipUvs()
+	{
+		flipUvs.clear();
 	}
 
 	public void setUvRotation( EnumFacing facing, int rotation )

@@ -271,6 +271,15 @@ public class FacadeBuilder
 				(float) primaryBox.maxZ * 16
 		);
 
+		if ( side == EnumFacing.EAST || side == EnumFacing.WEST )
+		{
+			builder.setFlipUv( EnumFacing.NORTH, true );
+		}
+		else if ( side == EnumFacing.NORTH || side == EnumFacing.SOUTH )
+		{
+			builder.setFlipUv( EnumFacing.EAST, true );
+		}
+
 		if( busBounds == null )
 		{
 			// Adjust the facade for neighboring facades so that facade cubes dont overlap with each other
@@ -368,6 +377,7 @@ public class FacadeBuilder
 				this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, busMax.y, busMin.z, 16.0f, 16.0f, busMax.z );
 			}
 		}
+		builder.resetFlipUvs();
 	}
 
 	private void renderSegmentBlockCurrentBounds( CubeBuilder builder, Vector3f min, Vector3f max,
