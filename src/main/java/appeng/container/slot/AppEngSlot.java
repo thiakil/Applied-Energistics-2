@@ -140,7 +140,7 @@ public class AppEngSlot extends Slot
 		return false;
 	}
 
-	@Override
+	//@Override
 	public boolean canBeHovered()
 	{
 		return this.isEnabled();

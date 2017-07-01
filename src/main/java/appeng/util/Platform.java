@@ -1177,8 +1177,8 @@ public class Platform
 
 		final Vec3d vec31 = vec3.addVector( f7 * d3, f6 * d3, f8 * d3 );
 
-		final AxisAlignedBB bb = new AxisAlignedBB( Math.min( vec3.xCoord, vec31.xCoord ), Math.min( vec3.yCoord, vec31.yCoord ), Math.min( vec3.zCoord,
-				vec31.zCoord ), Math.max( vec3.xCoord, vec31.xCoord ), Math.max( vec3.yCoord, vec31.yCoord ), Math.max( vec3.zCoord, vec31.zCoord ) ).expand(
+		final AxisAlignedBB bb = new AxisAlignedBB( Math.min( vec3.x, vec31.x ), Math.min( vec3.y, vec31.y ), Math.min( vec3.z,
+				vec31.z ), Math.max( vec3.x, vec31.x ), Math.max( vec3.y, vec31.y ), Math.max( vec3.z, vec31.z ) ).expand(
 						16, 16, 16 );
 
 		Entity entity = null;
@@ -1761,7 +1761,7 @@ public class Platform
 		{
 			final WorldServer ws = (WorldServer) c.getWorld();
 			final PlayerChunkMap pm = ws.getPlayerChunkMap();
-			final PlayerChunkMapEntry playerInstance = pm.getEntry( c.xPosition, c.zPosition );
+			final PlayerChunkMapEntry playerInstance = pm.getEntry( c.x, c.z );
 
 			if( playerInstance != null )
 			{

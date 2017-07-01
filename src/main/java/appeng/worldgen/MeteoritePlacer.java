@@ -188,7 +188,7 @@ public final class MeteoritePlacer
 
 					if( j > h + distanceFrom * 0.02 )
 					{
-						if( lava && j < y && w.getBlock( x, y - 1, z ).isBlockSolid( w.getWorld(), new BlockPos( i, j, k ), EnumFacing.UP ) )
+						if( lava && j < y && w.getBlock( x, y - 1, z ).isSideSolid( w.getBlockState( x,y,z ), w.getWorld(), new BlockPos( i, j, k ), EnumFacing.UP ) )
 						{
 							if( j > h + distanceFrom * 0.02 )
 							{

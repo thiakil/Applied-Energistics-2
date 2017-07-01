@@ -80,12 +80,12 @@ class Size1Slot extends Slot
 		return delegate.canTakeStack( playerIn );
 	}
 
-	@Override
+	/*@Override
 	@SideOnly( Side.CLIENT)
 	public boolean canBeHovered()
 	{
 		return delegate.canBeHovered();
-	}
+	}*/
 
 	@Override
 	@SideOnly( Side.CLIENT)
