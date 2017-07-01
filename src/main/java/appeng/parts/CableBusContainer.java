@@ -405,8 +405,11 @@ public class CableBusContainer extends CableBusStorage implements AEMultiTile, I
 	}
 
 	@Override
-	public SelectedPart selectPart( final Vec3d pos )
+	public SelectedPart selectPart( Vec3d pos )
 	{
+		//TODO find what changed in the Forge/MCP update to make this necessary; AxisAlignedBB.contains checks min > in, not >= !
+		pos = pos.add( new Vec3d( 0.001, 0.001, 0.001 ) );
+
 		for( final AEPartLocation side : AEPartLocation.values() )
 		{
 			final IPart p = this.getPart( side );
