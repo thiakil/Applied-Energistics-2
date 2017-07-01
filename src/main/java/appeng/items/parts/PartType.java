@@ -261,7 +261,14 @@ public enum PartType
 	},
 
 	P2PTunnelOpenComputers( 468, "p2p_tunnel_opencomputers", EnumSet.of( AEFeature.P2P_TUNNEL, AEFeature.P2P_TUNNEL_OPEN_COMPUTERS ), EnumSet.of(
-			IntegrationType.OpenComputers ), PartP2POpenComputers.class, GuiText.OCTunnel ),
+			IntegrationType.OpenComputers ), PartP2POpenComputers.class, GuiText.OCTunnel )
+	{
+		@Override
+		String getUnlocalizedName()
+		{
+			return "P2PTunnel";
+		}
+	},
 
 	InterfaceTerminal( 480, "interface_terminal", EnumSet.of( AEFeature.INTERFACE_TERMINAL ), EnumSet
 			.noneOf( IntegrationType.class ), PartInterfaceTerminal.class );

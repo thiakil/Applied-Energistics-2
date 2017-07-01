@@ -19,6 +19,7 @@
 package appeng.integration;
 
 
+import appeng.integration.modules.OpenComputers;
 import appeng.integration.modules.ic2.IC2Module;
 import appeng.integration.modules.jei.JEIModule;
 import appeng.integration.modules.rf.RFItemModule;
@@ -76,7 +77,14 @@ public enum IntegrationType
 		}
 	},
 
-	OpenComputers( IntegrationSide.BOTH, "OpenComputers", "opencomputers" ),
+	OpenComputers( IntegrationSide.BOTH, "OpenComputers", "opencomputers" )
+	{
+		@Override
+		public IIntegrationModule createInstance()
+		{
+			return new OpenComputers();
+		}
+	},
 
 	THE_ONE_PROBE( IntegrationSide.BOTH, "TheOneProbe", "theoneprobe" )
 	{
