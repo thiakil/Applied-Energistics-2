@@ -19,6 +19,7 @@
 package appeng.parts.p2p;
 
 
+import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
@@ -37,10 +38,13 @@ import appeng.api.networking.events.MENetworkBootingStatusChange;
 import appeng.api.networking.events.MENetworkChannelsChanged;
 import appeng.api.networking.events.MENetworkEventSubscribe;
 import appeng.api.networking.events.MENetworkPowerStatusChange;
+import appeng.api.parts.IPartModel;
+import appeng.core.AELog;
 import appeng.integration.IntegrationRegistry;
 import appeng.integration.IntegrationType;
 import appeng.coremod.annotations.Integration.Interface;
 import appeng.coremod.annotations.Integration.InterfaceList;
+import appeng.items.parts.PartModels;
 
 
 @InterfaceList( value = { @Interface( iface = "li.cil.oc.api.network.Environment", iname = IntegrationType.OpenComputers ), @Interface( iface = "li.cil.oc.api.network.SidedEnvironment", iname = IntegrationType.OpenComputers ) } )
@@ -49,13 +53,22 @@ public final class PartP2POpenComputers extends PartP2PTunnel<PartP2POpenCompute
 	@Nullable
 	private final Node node;
 
+	private static final P2PModels MODELS = new P2PModels( "part/p2p/p2p_tunnel_opencomputers" );
+
+	@PartModels
+	public static List<IPartModel> getModels()
+	{
+		return MODELS.getModels();
+	}
+
 	public PartP2POpenComputers( final ItemStack is )
 	{
 		super( is );
 
 		if( !IntegrationRegistry.INSTANCE.isEnabled( IntegrationType.OpenComputers ) )
 		{
-			throw new RuntimeException( "OpenComputers is not installed!" );
+			//throw new RuntimeException( "OpenComputers is not installed!" );
+			AELog.error( "OpenComputers tunnel part created when integration is disabled. Did you disable it but not remove parts?" );
 		}
 
 		// Avoid NPE when called in pre-init phase (part population).
@@ -175,5 +188,11 @@ public final class PartP2POpenComputers extends PartP2PTunnel<PartP2POpenCompute
 	public boolean canConnect( final EnumFacing side )
 	{
 		return side == this.getSide().getFacing();
+	}
+
+	@Override
+	public IPartModel getStaticModels()
+	{
+		return MODELS.getModel( isPowered(), isActive() );
 	}
 }
