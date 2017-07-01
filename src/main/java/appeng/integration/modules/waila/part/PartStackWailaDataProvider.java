@@ -40,8 +40,7 @@ public class PartStackWailaDataProvider extends BasePartWailaDataProvider
 	@Override
 	public ItemStack getWailaStack( final IPart part, final IWailaConfigHandler config, ItemStack partStack )
 	{
-		partStack = part.getItemStack( PartItemStack.PICK );
-		return partStack;
+		return part.getItemStack( PartItemStack.NETWORK );
 	}
 
 }

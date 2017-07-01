@@ -46,7 +46,7 @@ public abstract class BasePartWailaDataProvider implements IPartWailaDataProvide
 	@Override
 	public ItemStack getWailaStack( final IPart part, final IWailaConfigHandler config, final ItemStack partStack )
 	{
-		return ItemStack.EMPTY;
+		return partStack;
 	}
 
 	@Override
