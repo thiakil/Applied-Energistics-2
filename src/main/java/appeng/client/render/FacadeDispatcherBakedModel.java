@@ -36,6 +36,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import mcp.MethodsReturnNonnullByDefault;
+
 import appeng.items.parts.ItemFacade;
 
 
@@ -44,6 +46,7 @@ import appeng.items.parts.ItemFacade;
  * on the item stack.
  * A custom Item Override List is used to accomplish this.
  */
+@MethodsReturnNonnullByDefault
 public class FacadeDispatcherBakedModel implements IBakedModel
 {
 
