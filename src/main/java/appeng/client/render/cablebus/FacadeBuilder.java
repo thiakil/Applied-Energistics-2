@@ -271,13 +271,18 @@ public class FacadeBuilder
 				(float) primaryBox.maxZ * 16
 		);
 
-		if ( side == EnumFacing.EAST || side == EnumFacing.WEST )
+		if ( side == EnumFacing.EAST || side == EnumFacing.WEST || side == EnumFacing.DOWN || side == EnumFacing.UP )
 		{
 			builder.setFlipUv( EnumFacing.NORTH, true );
 		}
-		else if ( side == EnumFacing.NORTH || side == EnumFacing.SOUTH )
+		if ( side == EnumFacing.NORTH || side == EnumFacing.SOUTH || side == EnumFacing.DOWN || side == EnumFacing.UP )
 		{
 			builder.setFlipUv( EnumFacing.EAST, true );
+		}
+
+		if ( side == EnumFacing.NORTH || side == EnumFacing.EAST || side == EnumFacing.DOWN )
+		{
+			builder.setFlipUv( side, true );
 		}
 
 		if( busBounds == null )
