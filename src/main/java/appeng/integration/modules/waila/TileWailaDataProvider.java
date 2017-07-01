@@ -70,7 +70,7 @@ public final class TileWailaDataProvider implements IWailaDataProvider
 	@Override
 	public ItemStack getWailaStack( final IWailaDataAccessor accessor, final IWailaConfigHandler config )
 	{
-		return ItemStack.EMPTY;
+		return null;
 	}
 
 	@Override
