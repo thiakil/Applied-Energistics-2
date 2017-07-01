@@ -45,6 +45,7 @@ public class AEItemDef
 	private int displayDamage;
 	private int maxDamage;
 	private AESharedNBT tagCompound;
+	private AESharedNBT capsTag;
 	@SideOnly( Side.CLIENT )
 	private String displayName;
 	@SideOnly( Side.CLIENT )
@@ -67,6 +68,7 @@ public class AEItemDef
 		t.setDisplayDamage( this.getDisplayDamage() );
 		t.setMaxDamage( this.getMaxDamage() );
 		t.setTagCompound( this.getTagCompound() );
+		t.setCapsTag( this.getCapsTag() );
 		t.setIsOre( this.getIsOre() );
 		return t;
 	}
@@ -83,7 +85,7 @@ public class AEItemDef
 			return false;
 		}
 		final AEItemDef other = (AEItemDef) obj;
-		return other.getDamageValue() == this.getDamageValue() && other.getItem() == this.getItem() && this.getTagCompound() == other.getTagCompound();
+		return other.getDamageValue() == this.getDamageValue() && other.getItem() == this.getItem() && this.getTagCompound() == other.getTagCompound() && this.getCapsTag() == other.getCapsTag();
 	}
 
 	boolean isItem( final ItemStack otherStack )
@@ -110,7 +112,7 @@ public class AEItemDef
 	void reHash()
 	{
 		this.def = this.getItemID() << Platform.DEF_OFFSET | this.getDamageValue();
-		this.myHash = this.def ^ ( this.getTagCompound() == null ? 0 : System.identityHashCode( this.getTagCompound() ) );
+		this.myHash = this.def ^ ( this.getTagCompound() == null ? 0 : System.identityHashCode( this.getTagCompound() ) ) ^ ( this.getCapsTag() == null ? 0 : System.identityHashCode( this.getCapsTag() ) );
 	}
 
 	AESharedNBT getTagCompound()
@@ -121,6 +123,16 @@ public class AEItemDef
 	void setTagCompound( final AESharedNBT tagCompound )
 	{
 		this.tagCompound = tagCompound;
+	}
+
+	AESharedNBT getCapsTag()
+	{
+		return this.capsTag;
+	}
+
+	void setCapsTag( final AESharedNBT capsTag )
+	{
+		this.capsTag = capsTag;
 	}
 
 	int getDamageValue()

@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.security.InvalidParameterException;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,6 +45,7 @@ import appeng.api.config.FuzzyMode;
 import appeng.api.storage.StorageChannel;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IAETagCompound;
+import appeng.core.AELog;
 import appeng.util.Platform;
 
 
@@ -50,6 +53,61 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 {
 
 	private AEItemDef def;
+
+	private static Field capsField = null;
+	static {
+		try
+		{
+			capsField = ItemStack.class.getDeclaredField( "capabilities" );
+			capsField.setAccessible( true );
+		}
+		catch( NoSuchFieldException e )
+		{
+			AELog.warn( "Caps field has changed in ItemStack, you may lose some data!" );
+		}
+	}
+
+	private enum VANILLA_NBT_KEYS
+	{
+		ITEM_ID( "id" ),
+		DAMAGE( "Damage" ),
+		STACKSIZE( "Count" ),
+		COMPOUND( "tag" ),
+		CAPS( "ForgeCaps" ),
+		;
+
+		private String val;
+
+		VANILLA_NBT_KEYS( String val ){
+			this.val = val;
+		}
+
+		public String toString()
+		{
+			return this.val;
+		}
+	}
+
+	private enum AE2_NBT_KEYS
+	{
+		STACKSIZE( "Cnt" ),
+		REQUESTABLE( "Req" ),
+		CRAFTABLE( "Craft" ),
+		COMBINED_TAG( "compound" ),
+		COMBINED_CAPS( "caps" ),
+		;
+
+		private String val;
+
+		AE2_NBT_KEYS( String val ){
+			this.val = val;
+		}
+
+		public String toString()
+		{
+			return this.val;
+		}
+	}
 
 	private AEItemStack( final AEItemStack is )
 	{
@@ -107,12 +165,39 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 			this.getDefinition().setTagCompound( (AESharedNBT) AESharedNBT.getSharedTagCompound( tagCompound, is ) );
 		}
 
+		this.getDefinition().setCapsTag( getCapsTag( is ) );
+
 		this.setStackSize( is.getCount() );
 		this.setCraftable( false );
 		this.setCountRequestable( 0 );
 
 		this.getDefinition().reHash();
 		this.getDefinition().setIsOre( OreHelper.INSTANCE.isOre( is ) );
+	}
+
+	private static AESharedNBT getCapsTag( ItemStack is )
+	{
+		if ( capsField != null )
+		{
+			try
+			{
+				Object capsFieldO = capsField.get( is );
+				if ( capsFieldO != null && capsFieldO instanceof CapabilityDispatcher )
+				{
+					CapabilityDispatcher capsField = (CapabilityDispatcher)capsFieldO;
+					return (AESharedNBT) AESharedNBT.getSharedTagCompound( capsField.serializeNBT(), is );
+				}
+				else if ( capsFieldO != null )
+				{
+					AELog.debug( "Caps filed has changed object type" );
+				}
+			}
+			catch( IllegalAccessException e )
+			{
+				AELog.debug( "Could not get caps field, access denied" );
+			}
+		}
+		return null;
 	}
 
 	public static IAEItemStack loadItemStackFromNBT( final NBTTagCompound i )
@@ -129,9 +214,9 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 
 		final AEItemStack item = AEItemStack.create( itemstack );
 		// item.priority = i.getInteger( "Priority" );
-		item.setStackSize( i.getLong( "Cnt" ) );
-		item.setCountRequestable( i.getLong( "Req" ) );
-		item.setCraftable( i.getBoolean( "Craft" ) );
+		item.setStackSize( i.getLong( AE2_NBT_KEYS.STACKSIZE.toString() ) );
+		item.setCountRequestable( i.getLong( AE2_NBT_KEYS.REQUESTABLE.toString() ) );
+		item.setCraftable( i.getBoolean( AE2_NBT_KEYS.CRAFTABLE.toString() ) );
 		return item;
 	}
 
@@ -159,9 +244,9 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 
 		// For some insane reason, Vanilla can only parse numeric item ids if they are strings
 		short itemNumericId = data.readShort();
-		d.setString( "id", String.valueOf( itemNumericId ) );
-		d.setShort( "Damage", data.readShort() );
-		d.setByte( "Count", (byte) 1 );//1.11: this is so isEmpty does not return true.
+		d.setString( VANILLA_NBT_KEYS.ITEM_ID.toString(), String.valueOf( itemNumericId ) );
+		d.setShort( VANILLA_NBT_KEYS.DAMAGE.toString(), data.readShort() );
+		d.setByte( VANILLA_NBT_KEYS.STACKSIZE.toString(), (byte) 1 );//1.11: this is so isEmpty does not return true.
 
 		if( hasTagCompound )
 		{
@@ -171,7 +256,11 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 			data.readBytes( bd );
 
 			final ByteArrayInputStream di = new ByteArrayInputStream( bd );
-			d.setTag( "tag", CompressedStreamTools.read( new DataInputStream( di ) ) );
+			final NBTTagCompound combinedTag = CompressedStreamTools.read( new DataInputStream( di ) );
+			if ( combinedTag.hasKey( AE2_NBT_KEYS.COMBINED_TAG.toString() ) )
+				d.setTag( VANILLA_NBT_KEYS.COMPOUND.toString(), combinedTag.getCompoundTag( AE2_NBT_KEYS.COMBINED_TAG.toString() ) );
+			if ( combinedTag.hasKey( AE2_NBT_KEYS.COMBINED_CAPS.toString() ) )
+				d.setTag( VANILLA_NBT_KEYS.CAPS.toString(), combinedTag.getCompoundTag( AE2_NBT_KEYS.COMBINED_CAPS.toString() ) );
 		}
 
 		// long priority = getPacketValue( PriorityType, data );
@@ -224,42 +313,51 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		 */
 		// i.setShort( "id", (short) Item.REGISTRY.getIDForObject( this.getDefinition().getItem() ) );
 		ResourceLocation resourcelocation = Item.REGISTRY.getNameForObject( this.getItem() );
-		i.setString( "id", resourcelocation == null ? "minecraft:air" : resourcelocation.toString() );
+		i.setString( VANILLA_NBT_KEYS.ITEM_ID.toString(), resourcelocation == null ? "minecraft:air" : resourcelocation.toString() );
 
 		/*
 		 * if ( Count != null && Count instanceof NBTTagByte ) ((NBTTagByte) Count).data = (byte) 0; else
 		 */
-		i.setByte( "Count", (byte) 1 );
+		i.setByte( VANILLA_NBT_KEYS.STACKSIZE.toString(), (byte) 1 );
 
 		/*
 		 * if ( Cnt != null && Cnt instanceof NBTTagLong ) ((NBTTagLong) Cnt).data = this.stackSize; else
 		 */
-		i.setLong( "Cnt", this.getStackSize() );
+		i.setLong( AE2_NBT_KEYS.STACKSIZE.toString(), this.getStackSize() );
 
 		/*
 		 * if ( Req != null && Req instanceof NBTTagLong ) ((NBTTagLong) Req).data = this.stackSize; else
 		 */
-		i.setLong( "Req", this.getCountRequestable() );
+		i.setLong( AE2_NBT_KEYS.REQUESTABLE.toString(), this.getCountRequestable() );
 
 		/*
 		 * if ( Craft != null && Craft instanceof NBTTagByte ) ((NBTTagByte) Craft).data = (byte) (this.isCraftable() ?
 		 * 1 : 0); else
 		 */
-		i.setBoolean( "Craft", this.isCraftable() );
+		i.setBoolean( AE2_NBT_KEYS.CRAFTABLE.toString(), this.isCraftable() );
 
 		/*
 		 * if ( Damage != null && Damage instanceof NBTTagShort ) ((NBTTagShort) Damage).data = (short)
 		 * this.def.damageValue; else
 		 */
-		i.setShort( "Damage", (short) this.getDefinition().getDamageValue() );
+		i.setShort( VANILLA_NBT_KEYS.DAMAGE.toString(), (short) this.getDefinition().getDamageValue() );
 
 		if( this.getDefinition().getTagCompound() != null )
 		{
-			i.setTag( "tag", this.getDefinition().getTagCompound() );
+			i.setTag( VANILLA_NBT_KEYS.COMPOUND.toString(), this.getDefinition().getTagCompound() );
 		}
 		else
 		{
-			i.removeTag( "tag" );
+			i.removeTag( VANILLA_NBT_KEYS.COMPOUND.toString() );
+		}
+
+		if ( this.getDefinition().getCapsTag() != null )
+		{
+			i.setTag( VANILLA_NBT_KEYS.CAPS.toString(), this.getDefinition().getCapsTag() );
+		}
+		else
+		{
+			i.removeTag( VANILLA_NBT_KEYS.CAPS.toString() );
 		}
 	}
 
@@ -434,7 +532,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Override
 	public ItemStack getItemStack()
 	{
-		final ItemStack is = new ItemStack( this.getDefinition().getItem(), (int) Math.min( Integer.MAX_VALUE, this.getStackSize() ), this.getDefinition().getDamageValue() );
+		final ItemStack is = new ItemStack( this.getDefinition().getItem(), (int) Math.min( Integer.MAX_VALUE, this.getStackSize() ), this.getDefinition().getDamageValue(), this.getDefinition().getCapsTag() );
 		if( this.getDefinition().getTagCompound() != null )
 		{
 			is.setTagCompound( this.getDefinition().getTagCompound().getNBTTagCompoundCopy() );
@@ -445,7 +543,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 
 	public ItemStack getDisplayItemStack()
 	{
-		final ItemStack is = new ItemStack( this.getDefinition().getItem(), (int) Math.max(1, Math.min( Integer.MAX_VALUE, this.getStackSize() )), this.getDefinition().getDamageValue() );
+		final ItemStack is = new ItemStack( this.getDefinition().getItem(), (int) Math.max(1, Math.min( Integer.MAX_VALUE, this.getStackSize() )), this.getDefinition().getDamageValue(), this.getDefinition().getCapsTag() );
 		if( this.getDefinition().getTagCompound() != null )
 		{
 			is.setTagCompound( this.getDefinition().getTagCompound().getNBTTagCompoundCopy() );
@@ -535,7 +633,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 					return ta == tb;
 				}
 
-				return Platform.itemComparisons().isNbtTagEqual( ta, tb );
+				return Platform.itemComparisons().isNbtTagEqual( ta, tb ) && this.getItemStack().areCapsCompatible( (ItemStack)ia );
 			}
 		}
 		return false;
@@ -547,6 +645,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		return this.getItemStack().toString();
 	}
 
+	//TODO integrate caps tag compare
 	@Override
 	public int compareTo( final AEItemStack b )
 	{
@@ -568,7 +667,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 			return displayDamage;
 		}
 
-		return ( this.getDefinition().getTagCompound() == b.getDefinition().getTagCompound() ) ? 0 : this.compareNBT( b.getDefinition() );
+		return ( this.getDefinition().getTagCompound() == b.getDefinition().getTagCompound() && this.getDefinition().getCapsTag() == b.getDefinition().getCapsTag() ) ? 0 : this.compareNBT( b.getDefinition() );
 	}
 
 	private int compareNBT( final AEItemDef b )
@@ -735,7 +834,17 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 			final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 			final DataOutputStream data = new DataOutputStream( bytes );
 
-			CompressedStreamTools.write( (NBTTagCompound) this.getTagCompound(), data );
+			NBTTagCompound combinedNBT = new NBTTagCompound();
+			if ( this.getTagCompound() != null )
+			{
+				combinedNBT.setTag( AE2_NBT_KEYS.COMBINED_TAG.toString(), this.getDefinition().getTagCompound() );
+			}
+			if ( this.getDefinition().getCapsTag() != null )
+			{
+				combinedNBT.setTag( AE2_NBT_KEYS.COMBINED_CAPS.toString(), this.getDefinition().getCapsTag() );
+			}
+
+			CompressedStreamTools.write( combinedNBT, data );
 
 			final byte[] tagBytes = bytes.toByteArray();
 			final int size = tagBytes.length;
@@ -748,7 +857,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Override
 	public boolean hasTagCompound()
 	{
-		return this.getDefinition().getTagCompound() != null;
+		return this.getDefinition().getTagCompound() != null || this.getDefinition().getCapsTag() != null;
 	}
 
 	AEItemDef getDefinition()
