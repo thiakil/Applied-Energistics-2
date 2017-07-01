@@ -19,7 +19,7 @@
 package appeng.integration;
 
 
-import appeng.integration.modules.OpenComputers;
+import appeng.integration.modules.opencomputers.OpenComputers;
 import appeng.integration.modules.ic2.IC2Module;
 import appeng.integration.modules.jei.JEIModule;
 import appeng.integration.modules.rf.RFItemModule;
