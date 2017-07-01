@@ -98,7 +98,7 @@ public final class PartWailaDataProvider implements IWailaDataProvider
 		{
 			final IPart part = maybePart.get();
 
-			ItemStack wailaStack = null;
+			ItemStack wailaStack = null;//YES, null. See below
 
 			for( final IPartWailaDataProvider provider : this.providers )
 			{
@@ -107,7 +107,8 @@ public final class PartWailaDataProvider implements IWailaDataProvider
 			return wailaStack;
 		}
 
-		return ItemStack.EMPTY;
+		//1.11 note: yes, HWYLA expects null. EMPTY will cause it to not display ANYTHING, shortcutting its fallbacks.
+		return null;
 	}
 
 	@Override
