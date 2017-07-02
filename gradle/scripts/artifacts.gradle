@@ -42,6 +42,14 @@ task javadocJar(type: Jar, dependsOn: javadocs) {
     classifier = 'javadoc'
 }
 
+//NB: different from sourceJar, as forgegradle obfuscates normal sources jar, most IDE users won't want that...
+task deobfSourceJar(type: Jar, dependsOn: 'sourceMainJava') {
+    from "build/sources/main/java"
+    from "build/sources/api/java"
+    //from "build/resources/main/"
+    classifier "sources"
+}
+
 task apiJar(type: Jar) {
     from sourceSets.api.java
     include "appeng/api/**"
@@ -52,8 +60,22 @@ task apiJar(type: Jar) {
     classifier = 'api'
 }
 
+task deobfJar(type: Jar, dependsOn: 'jar') {
+        from sourceSets.main.output
+        from sourceSets.api.output
+
+        manifest {
+                attributes 'FMLCorePluginContainsFMLMod': 'true'
+                attributes 'FMLAT': 'appeng_at.cfg'
+        }
+
+        classifier "deobf"
+        group "build"
+}
+
 artifacts {
     archives apiJar
     archives javadocJar
-    archives sourceJar
+    archives deobfSourceJar
+    archives deobfJar
 }

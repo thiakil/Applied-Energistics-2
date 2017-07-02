@@ -83,6 +83,7 @@ minecraft {
     // used when launching minecraft in dev env
     runDir = "run"
     mappings = mcp_mappings
+    makeObfSourceJar = false
 }
 
 sourceSets {
@@ -122,4 +123,46 @@ processResources
 
     // move access transformer to META-INF
     rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+uploadArchives {
+    if(System.getenv("LOCAL_MAVEN") != null) {
+        repositories {
+            mavenDeployer {
+                repository(url: "file://"+System.getenv("LOCAL_MAVEN"))
+                pom {
+                    groupId = project.group
+                    version = project.version
+                    if (System.getenv("MAVEN_ARTIFACT") != null) {
+                        artifactId = System.getenv("MAVEN_ARTIFACT")
+                    } else {
+                        artifactId = project.archivesBaseName
+                    }
+                    project {
+                        name project.archivesBaseName
+                        packaging 'jar'
+                        description 'A Minecraft Mod about Matter, Energy and using them to conquer the world..'
+                        url 'http://ae-mod.info/'
+                        scm {
+                            url 'https://github.com/AppliedEnergistics/Applied-Energistics-2.git'
+                        }
+                        issueManagement {
+                            system 'github'
+                            url 'https://github.com/AppliedEnergistics/Applied-Energistics-2/issues'
+                        }
+                        licenses {
+                            license {
+                                name 'LGPLv3'
+                                url 'https://github.com/AppliedEnergistics/Applied-Energistics-2/blob/master/LICENSE'
+                                distribution 'repo'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
