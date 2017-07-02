@@ -18,7 +18,13 @@
 
 package appeng.integration.modules.opencomputers;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 
+import li.cil.oc.api.Driver;
+import li.cil.oc.api.IMC;
 import li.cil.oc.api.Items;
 import li.cil.oc.api.detail.ItemInfo;
 
@@ -26,12 +32,16 @@ import appeng.api.AEApi;
 import appeng.api.IAppEngApi;
 import appeng.api.config.TunnelType;
 import appeng.api.features.IP2PTunnelRegistry;
+import appeng.api.implementations.items.IAEWrench;
 import appeng.api.parts.IPartHelper;
+import appeng.core.AELog;
 import appeng.helpers.Reflected;
 import appeng.integration.IIntegrationModule;
 import appeng.integration.IntegrationHelper;
 import appeng.integration.IntegrationRegistry;
 import appeng.integration.IntegrationType;
+
+import appeng.integration.modules.opencomputers.driver.*;
 
 
 
@@ -49,6 +59,8 @@ public class OpenComputers implements IIntegrationModule
 		IntegrationHelper.testClassExistence( this, li.cil.oc.api.network.SidedEnvironment.class );
 		IntegrationHelper.testClassExistence( this, li.cil.oc.api.network.Node.class );
 		IntegrationHelper.testClassExistence( this, li.cil.oc.api.network.Message.class );
+		IntegrationHelper.testClassExistence( this, li.cil.oc.api.IMC.class );
+		IntegrationHelper.testClassExistence( this, li.cil.oc.api.Driver.class );
 	}
 
 	@Override
@@ -61,6 +73,22 @@ public class OpenComputers implements IIntegrationModule
 		{
 			partHelper.registerNewLayer( "appeng.parts.layers.LayerSidedEnvironment", "li.cil.oc.api.network.SidedEnvironment" );
 		}
+
+		AELog.info("Adding AE2 OC Drivers");
+		Driver.add(new NetworkDriver());
+		Driver.add(new InterfaceDriver());
+		Driver.add(new ExportBusDriver());
+		Driver.add(new ImportBusDriver());
+
+		//TODO not quite ready yet
+		//Driver.add(new MEDriveDriver());
+		//Driver.add(new MEChestDriver());
+
+		Driver.add(new ConverterCellInventory());
+		Driver.add(new ConverterAEStack());
+
+		IMC.registerWrenchTool(this.getClass().getName()+".useWrench");
+		IMC.registerWrenchToolCheck(this.getClass().getName()+".isWrench");
 	}
 
 	@Override
@@ -85,5 +113,23 @@ public class OpenComputers implements IIntegrationModule
 		{
 			registry.addNewAttunement( info.createItemStack( 1 ), TunnelType.COMPUTER_MESSAGE );
 		}
+	}
+
+	public static boolean useWrench(EntityPlayer player, BlockPos pos, boolean changeDurability) {
+		ItemStack mainhand = player.getHeldItem( EnumHand.MAIN_HAND);
+		ItemStack offhand = player.getHeldItem( EnumHand.OFF_HAND);
+
+		if (mainhand != null && mainhand.getItem() instanceof IAEWrench ){
+			return ((IAEWrench)mainhand.getItem()).canWrench(mainhand, player, pos);
+		}
+		if (offhand != null && offhand.getItem() instanceof IAEWrench ){
+			return ((IAEWrench)offhand.getItem()).canWrench(offhand, player, pos);
+		}
+
+		return false;
+	}
+
+	public static boolean isWrench(ItemStack stack) {
+		return stack != null && !stack.isEmpty() && stack.getItem() instanceof IAEWrench;
 	}
 }
