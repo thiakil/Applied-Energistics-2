@@ -282,6 +282,9 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 
 				for( final ItemStack i : stack )
 				{
+					if ( i.isEmpty() )
+						continue;
+
 					final ItemStack result = FurnaceRecipes.instance().getSmeltingResult( i );
 
 					if (!result.isEmpty()) {

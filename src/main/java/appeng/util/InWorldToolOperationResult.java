@@ -58,6 +58,8 @@ public class InWorldToolOperationResult
 
 		for( final ItemStack l : items )
 		{
+			if ( l.isEmpty() )
+				continue;
 			if (b.isEmpty()) {
 				final Block bl = Block.getBlockFromItem(l.getItem());
 
