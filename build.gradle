@@ -147,11 +147,11 @@ uploadArchives {
                         description 'A Minecraft Mod about Matter, Energy and using them to conquer the world..'
                         url 'http://ae-mod.info/'
                         scm {
-                            url 'https://github.com/AppliedEnergistics/Applied-Energistics-2.git'
+                            url 'https://github.com/thiakil/Applied-Energistics-2.git'
                         }
                         issueManagement {
                             system 'github'
-                            url 'https://github.com/AppliedEnergistics/Applied-Energistics-2/issues'
+                            url 'https://github.com/thiakil/Applied-Energistics-2/issues'
                         }
                         licenses {
                             license {
