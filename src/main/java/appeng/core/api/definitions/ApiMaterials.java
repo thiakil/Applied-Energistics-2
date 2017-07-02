@@ -93,7 +93,7 @@ public final class ApiMaterials implements IMaterials
 	private final IItemDefinition netherQuartzDust;
 
 	private final IItemDefinition matterBall;
-	private final IItemDefinition ironNugget;
+	//private final IItemDefinition ironNugget;
 
 	private final IItemDefinition certusQuartzCrystal;
 	private final IItemDefinition certusQuartzCrystalCharged;
@@ -182,7 +182,7 @@ public final class ApiMaterials implements IMaterials
 		this.netherQuartzDust = new DamagedItemDefinition( "material.dust.quartz.nether", materials.createMaterial( MaterialType.NetherQuartzDust ) );
 
 		this.matterBall = new DamagedItemDefinition( "material.ammo.matter_ball", materials.createMaterial( MaterialType.MatterBall ) );
-		this.ironNugget = new DamagedItemDefinition( "material.ammo.nugget.iron", materials.createMaterial( MaterialType.IronNugget ) );
+		//this.ironNugget = new DamagedItemDefinition( "material.ammo.nugget.iron", materials.createMaterial( MaterialType.IronNugget ) );
 
 		this.certusQuartzCrystal = new DamagedItemDefinition( "material.crystal.quartz.certus", materials.createMaterial( MaterialType.CertusQuartzCrystal ) );
 		this.certusQuartzCrystalCharged = new DamagedItemDefinition( "material.crystal.quartz.certus.charged", materials.createMaterial( MaterialType.CertusQuartzCrystalCharged ) );
@@ -448,11 +448,11 @@ public final class ApiMaterials implements IMaterials
 		return this.matterBall;
 	}
 
-	@Override
-	public IItemDefinition ironNugget()
-	{
-		return this.ironNugget;
-	}
+	//@Override
+	//public IItemDefinition ironNugget()
+	//{
+	//	return this.ironNugget;
+	//}
 
 	@Override
 	public IItemDefinition certusQuartzCrystal()
