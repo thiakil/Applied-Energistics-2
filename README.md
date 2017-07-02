@@ -1,7 +1,6 @@
-[![Travis](https://img.shields.io/travis/AppliedEnergistics/Applied-Energistics-2.svg?maxAge=2592000&style=flat-square)](https://travis-ci.org/AppliedEnergistics/Applied-Energistics-2)
-[![Latest Release](https://img.shields.io/github/release/AppliedEnergistics/Applied-Energistics-2.svg?label=Latest Release&style=flat-square)](https://github.com/AppliedEnergistics/Applied-Energistics-2/releases)
-
 # Applied Energistics 2
+
+**This version is an "unofficial" port to 1.11.2+ made under the terms of the GPL. The original team has not endorsed this port and will not give you support on it. Please report all bugs here.**
 
 ## Table of Contents
 
@@ -26,7 +25,7 @@ A Mod about Matter, Energy and using them to conquer the world..
 
 * [Website](http://ae-mod.info/)
 * [IRC #appliedenergistics on esper.net](http://webchat.esper.net/?channels=appliedenergistics&prompt=1)
-* [GitHub](https://github.com/AppliedEnergistics/Applied-Energistics-2)
+* [GitHub](https://github.com/thiakil/Applied-Energistics-2)
 
 ## License
 
@@ -44,15 +43,7 @@ A Mod about Matter, Energy and using them to conquer the world..
 
 ## Downloads
 
-Downloads can be found on [CurseForge](http://www.curse.com/mc-mods/minecraft/223794-applied-energistics-2) or on the [official website](http://ae-mod.info/Downloads/).
-
-## Nightly Builds
-
-[![Build status](https://ci.appveyor.com/api/projects/status/w0sg7upakn0vj5gc?svg=true)](https://ci.appveyor.com/project/shartte/applied-energistics-2/history)
-
-[Download Latest Nightly Build](https://ci.appveyor.com/api/projects/shartte/applied-energistics-2/artifacts/ae2-rv4-nightly.zip?branch=master)
-
-Nightly builds for the Minecraft 1.10.2 branch of AE2 (rv4-alpha) are available from [AppVeyor](https://ci.appveyor.com/project/shartte/applied-energistics-2/history). These builds are only for testing purposes and might lead to loss of data, and will contain significant bugs. Please see below on how you can report bugs you find during testing.
+Downloads can be found on [CurseForge](http://www.curse.com/mc-mods/minecraft/223794-applied-energistics-2).
 
 ## Installation
 
@@ -63,7 +54,7 @@ You install this mod by putting it into the `minecraft/mods/` folder. It has no 
 Applied Energistics 2 crashing, have a suggestion, found a bug?  Create an issue now!
 
 1. Make sure your issue has not already been answered or fixed and you are using the latest version. Also think about whether your issue is a valid one before submitting it.
-2. Go to [the issues page](https://github.com/AppliedEnergistics/Applied-Energistics-2/issues) and click [new issue](https://github.com/AppliedEnergistics/Applied-Energistics-2/issues/new)
+2. Go to [the issues page](https://github.com/thiakil/Applied-Energistics-2/issues) and click [new issue](https://github.com/thiakil/Applied-Energistics-2/issues/new)
 3. Enter your a title of your issue (something that summarizes your issue), and then create a detailed description of the issue.
     * Do not tag it with something like `[Feature]` or `[Bug]`. When it is applicable, we will take care of it.
     * The following details are required. Not including them can cause the issue to be closed.
@@ -91,8 +82,8 @@ Providing as many details as possible does help us to find and resolve the issue
 ## Building
 
 1. Clone this repository via 
-  - SSH `git clone git@github.com:AppliedEnergistics/Applied-Energistics-2.git` or 
-  - HTTPS `git clone https://github.com/AppliedEnergistics/Applied-Energistics-2.git`
+  - SSH `git clone git@github.com:thiakil/Applied-Energistics-2.git` or
+  - HTTPS `git clone https://github.com/thiakil/Applied-Energistics-2.git`
 2. Setup workspace 
   - Decompiled source `gradlew setupDecompWorkspace`
   - Obfuscated source `gradlew setupDevWorkspace`
@@ -110,7 +101,7 @@ Providing as many details as possible does help us to find and resolve the issue
 Before you want to add major changes, you might want to discuss them with us first, before wasting your time.
 If you are still willing to contribute to this project, you can contribute via [Pull-Request](https://help.github.com/articles/creating-a-pull-request).
 
-The [guidelines for contributing](https://github.com/AppliedEnergistics/Applied-Energistics-2/blob/master/CONTRIBUTING.md) contain more detailed information about topics like the used code style and should also be considered.
+The [guidelines for contributing](https://github.com/thiakil/Applied-Energistics-2/blob/master/CONTRIBUTING.md) contain more detailed information about topics like the used code style and should also be considered.
 
 Here are a few things to keep in mind that will help get your PR approved.
 
@@ -142,7 +133,7 @@ If you are only doing single file pull requests, GitHub supports using a quick w
 
 The API for Applied Energistics 2. It is open source to discuss changes, improve documentation, and provide better add-on support in general.
 
-Development and standard builds can be obtained [Here](http://ae2.ae-mod.info/Downloads/).
+Development builds and api jars can be found at http://maven.thiakil.com
 
 ### Maven
 
@@ -193,4 +184,4 @@ Thanks to
 * Notch et al for Minecraft
 * Lex et al for MinecraftForge
 * AlgorithmX2 for AppliedEnergistics2
-* all [contributors](https://github.com/AppliedEnergistics/Applied-Energistics-2/graphs/contributors)
+* all [contributors](https://github.com/thiakil/Applied-Energistics-2/graphs/contributors)
