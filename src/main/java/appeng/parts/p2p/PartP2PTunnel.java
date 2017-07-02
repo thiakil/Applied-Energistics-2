@@ -176,7 +176,15 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 
 			if (!newType.isEmpty()) {
 				if (newType.getItem() instanceof IPartItem) {
-					final IPart testPart = ((IPartItem) newType.getItem()).createPartFromItemStack(newType);
+					final IPart testPart;
+					try
+					{
+						testPart = ((IPartItem) newType.getItem()).createPartFromItemStack(newType);
+					}
+					catch( IllegalStateException ignored )
+					{
+						return false;
+					}
 					if (testPart instanceof PartP2PTunnel) {
 						this.getHost().removePart(this.getSide(), true);
 						final AEPartLocation dir = this.getHost().addPart(newType, this.getSide(), player, hand);
