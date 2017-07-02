@@ -29,9 +29,9 @@ import net.minecraft.util.EnumFacing;
 import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
 
 import appeng.api.config.PowerUnits;
-import appeng.api.networking.energy.IEnergySource;
 import appeng.api.parts.IPartModel;
 import appeng.coremod.annotations.Integration.Interface;
 import appeng.coremod.annotations.Integration.InterfaceList;
@@ -46,7 +46,7 @@ import appeng.util.Platform;
 		@Interface( iface = "ic2.api.energy.tile.IEnergySink", iname = IntegrationType.IC2 ),
 		@Interface( iface = "ic2.api.energy.tile.IEnergySource", iname = IntegrationType.IC2 )
 } )
-public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power> implements IEnergySink//, IEnergySource
+public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power> implements IEnergySink, IEnergySource
 {
 
 	private static final String TAG_BUFFERED_ENERGY_1 = "bufferedEnergy1";
@@ -111,7 +111,7 @@ public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power> implements I
 		return !this.isOutput() && direction == this.getSide().getFacing();
 	}
 
-	//@Override
+	@Override
 	public boolean emitsEnergyTo( IEnergyAcceptor receiver, EnumFacing direction )
 	{
 		return this.isOutput() && direction == this.getSide().getFacing();
@@ -221,7 +221,7 @@ public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power> implements I
 		return amount;
 	}
 
-	//@Override
+	@Override
 	public double getOfferedEnergy()
 	{
 		if( this.isOutput() )
@@ -231,7 +231,7 @@ public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power> implements I
 		return 0;
 	}
 
-	//@Override
+	@Override
 	public void drawEnergy( double amount )
 	{
 		this.bufferedEnergy1 -= amount;
@@ -245,7 +245,7 @@ public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power> implements I
 		}
 	}
 
-	//@Override
+	@Override
 	public int getSourceTier()
 	{
 		// Sadly IC2 doesn't support changing the tier once we're registered, so we
