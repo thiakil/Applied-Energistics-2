@@ -77,7 +77,7 @@ public final class AppEng
 	public static final String MOD_DEPENDENCIES =
 			// a few mods, AE should load after, probably.
 			// required-after:AppliedEnergistics2API|all;
-			"after:gregtech_addon;after:mekanism;after:ic2;after:thermalexpansion;after:buildcraft;" +
+			"after:gregtech_addon;after:mekanism;after:ic2;after:thermalexpansion;after:buildcraft;after:opencomputers@[1.7.0,];" +
 
 			// depend on version of forge used for build.
 			"after:appliedenergistics2-core;";// + "required-after:Forge@[" // require forge.
