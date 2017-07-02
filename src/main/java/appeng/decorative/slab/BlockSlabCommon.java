@@ -39,6 +39,7 @@ public abstract class BlockSlabCommon extends BlockSlab
 
 		this.setDefaultState( iblockstate.withProperty( VARIANT, Variant.DEFAULT ) );
 		this.setCreativeTab( CreativeTabs.BUILDING_BLOCKS );
+		this.useNeighborBrightness = true; //MC sets this in a loop after it registers its blocks
 	}
 
 	/**
