@@ -139,15 +139,22 @@ Development builds and api jars can be found at http://maven.thiakil.com
 
 When compiling against the AE2 API you can use gradle dependencies, just add
 
+    repositories {
+        maven {
+            name = "Thiakil"
+            url = "http://maven.thiakil.com/"
+        }
+    }
+
     dependencies {
-        compile "appeng:appliedenergistics2:rv_-_____-__:dev"
+        compile "appeng:appliedenergistics2-unofficial:rv_-_____-__:dev"
     }
 
 or add the compile line to your existing dependencies task to your build.gradle
 
-Where the __ are filled in with the correct version criteria; AE2 is available from the default forge maven so no additional repositories are necessary.
+Where the __ are filled in with the correct version criteria.
 
-An example string would be `appeng:appliedenergistics2:rv2-alpha-30:dev`
+An example string would be `appeng:appliedenergistics2-unofficial:rv5-alpha-0:dev`
 
 ## Applied Energistics 2 Localization
 
