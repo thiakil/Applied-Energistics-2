@@ -250,19 +250,25 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 		{
 			if( AEApi.instance().definitions().materials().namePress().isSameAs( itemstack ) )
 			{
-				return getStackInSlot( i ).isEmpty();
+				return true;
 			}
 
 			for( final ItemStack optionals : AEApi.instance().registries().inscriber().getOptionals() )
 			{
 				if( Platform.itemComparisons().isSameItem( optionals, itemstack ) )
 				{
-					return getStackInSlot( i ).isEmpty();
+					return true;
 				}
 			}
 		}
 
-		return i == SLOT_MIDDLE && getStackInSlot( i ).isEmpty();
+		return i == SLOT_MIDDLE;
+	}
+
+	@Override
+	public boolean canInsertItem( int slotIndex, ItemStack insertingItem, EnumFacing side )
+	{
+		return super.canInsertItem( slotIndex, insertingItem, side ) && getStackInSlot( slotIndex ).isEmpty();
 	}
 
 	@Override
