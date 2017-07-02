@@ -119,15 +119,6 @@ public abstract class AEBaseInvTile extends AEBaseTile implements ISidedInventor
 		this.getInternalInventory().setInventorySlotContents( i, itemstack );
 	}
 
-	/**
-	 * Returns if the inventory is named
-	 */
-	@Override
-	public boolean hasCustomName()
-	{
-		return this.getInternalInventory().hasCustomName();
-	}
-
 	@Override
 	public int getInventoryStackLimit()
 	{

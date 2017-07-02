@@ -250,13 +250,7 @@ public class PartInterface extends PartBasicState implements IGridTickable, ISto
 	@Override
 	public String getName()
 	{
-		return this.duality.getStorage().getName();
-	}
-
-	@Override
-	public boolean hasCustomName()
-	{
-		return this.duality.getStorage().hasCustomName();
+		return this.getCustomName();
 	}
 
 	@Override
