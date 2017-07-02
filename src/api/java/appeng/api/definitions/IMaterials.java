@@ -111,7 +111,7 @@ public interface IMaterials
 
 	IItemDefinition matterBall();
 
-	IItemDefinition ironNugget();
+	//IItemDefinition ironNugget();
 
 	IItemDefinition certusQuartzCrystal();
 
