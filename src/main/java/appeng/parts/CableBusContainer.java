@@ -145,7 +145,17 @@ public class CableBusContainer extends CableBusStorage implements AEMultiTile, I
 			is = is.copy();
 			is.setCount( 1 );
 
-			final IPart bp = bi.createPartFromItemStack( is );
+			final IPart bp;
+
+			try
+			{
+				bp = bi.createPartFromItemStack( is );
+				//Throws IllegalState if an exception occurs in the part's constructor, need to handle so we don't cause a crash!
+			}
+			catch( IllegalStateException ignored )
+			{
+				return false;
+			}
 			if( bp != null )
 			{
 				if( bp instanceof IPartCable )
@@ -193,7 +203,15 @@ public class CableBusContainer extends CableBusStorage implements AEMultiTile, I
 				is = is.copy();
 				is.setCount( 1 );
 
-				final IPart bp = bi.createPartFromItemStack( is );
+				final IPart bp;
+				try
+				{
+					bp = bi.createPartFromItemStack( is );
+				}
+				catch( IllegalStateException ignored )
+				{
+					return null;
+				}
 				if( bp instanceof IPartCable )
 				{
 					boolean canPlace = true;
