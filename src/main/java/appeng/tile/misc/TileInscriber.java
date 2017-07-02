@@ -250,19 +250,19 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 		{
 			if( AEApi.instance().definitions().materials().namePress().isSameAs( itemstack ) )
 			{
-				return true;
+				return getStackInSlot( i ).isEmpty();
 			}
 
 			for( final ItemStack optionals : AEApi.instance().registries().inscriber().getOptionals() )
 			{
 				if( Platform.itemComparisons().isSameItem( optionals, itemstack ) )
 				{
-					return true;
+					return getStackInSlot( i ).isEmpty();
 				}
 			}
 		}
 
-		return i == SLOT_MIDDLE;
+		return i == SLOT_MIDDLE && getStackInSlot( i ).isEmpty();
 	}
 
 	@Override
