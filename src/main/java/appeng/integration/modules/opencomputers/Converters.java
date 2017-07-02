@@ -3,16 +3,7 @@ package appeng.integration.modules.opencomputers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
-import li.cil.oc.api.driver.Converter;
-
 
 /**
  * Created by Thiakil on 2/07/2017.
@@ -21,10 +12,6 @@ import li.cil.oc.api.driver.Converter;
  */
 public class Converters
 {
-
-	private static Converter itemStackConverter;
-	private static Converter fluidStackConverter;
-
 	private static Method convertRecursivey;
 
 	static
