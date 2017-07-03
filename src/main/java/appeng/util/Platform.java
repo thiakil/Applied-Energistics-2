@@ -78,6 +78,8 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 import appeng.api.AEApi;
@@ -380,16 +382,96 @@ public class Platform
 		{
 			if( tile == null && type.getType() == GuiHostType.ITEM )
 			{
-				p.openGui( AppEng.instance(), type.ordinal() << 4, p.getEntityWorld(), p.inventory.currentItem, 0, 0 );
+				AELog.error( "Should not be using this GUI call for an item!" );
+				p.openGui( AppEng.instance(), GuiBridge.encodeModGui( type, (short)p.inventory.currentItem ), p.getEntityWorld(), x, y, z );
 			}
-			else if( tile == null || type.getType() == GuiHostType.ITEM )
+			else if( tile == null )
 			{
-				p.openGui( AppEng.instance(), type.ordinal() << 4 | ( 1 << 3 ), p.getEntityWorld(), x, y, z );
+				p.openGui( AppEng.instance(), GuiBridge.encodeModGui( type, (short)-1 ), p.getEntityWorld(), x, y, z );
 			}
 			else
 			{
-				p.openGui( AppEng.instance(), type.ordinal() << 4 | ( side.ordinal() ), tile.getWorld(), x, y, z );
+				p.openGui( AppEng.instance(), GuiBridge.encodeModGui( type, (short) side.ordinal() ), tile.getWorld(), x, y, z );
 			}
+		}
+	}
+
+	//for network tool, it's a hybrid
+	public static void openGUI( @Nonnull final EntityPlayer p, @Nullable final TileEntity tile, @Nullable final AEPartLocation side, @Nonnull final GuiBridge type, ItemStack is )
+	{
+		if( isClient() )
+		{
+			return;
+		}
+
+		int x = (int) p.posX;
+		int y = (int) p.posY;
+		int z = (int) p.posZ;
+		if( tile != null )
+		{
+			x = tile.getPos().getX();
+			y = tile.getPos().getY();
+			z = tile.getPos().getZ();
+		}
+
+		if( ( type.getType().isItem() && tile == null ) || type.hasPermissions( tile, x, y, z, side, p ) )
+		{
+			if( tile == null && type.getType() == GuiHostType.ITEM )
+			{
+				AELog.error( "Should not be using this GUI call for an item!" );
+				p.openGui( AppEng.instance(), GuiBridge.encodeModGui( type, (short)p.inventory.currentItem ), p.getEntityWorld(), x, y, z );
+			}
+			else if( tile == null || type.getType() == GuiHostType.ITEM )
+			{
+				short invSlot = -1;
+				IItemHandler playerInv = p.getCapability( CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null );// combined inv, as used in GuiBridge
+				for ( short i = 0; i<playerInv.getSlots(); i++)
+				{
+					if ( playerInv.getStackInSlot( i ) == is )
+					{
+						invSlot = i;
+						break;
+					}
+				}
+				p.openGui( AppEng.instance(), GuiBridge.encodeModGui( type, invSlot ), p.getEntityWorld(), x, y, z );
+			}
+			else
+			{
+				p.openGui( AppEng.instance(), GuiBridge.encodeModGui( type, (short) side.ordinal() ), tile.getWorld(), x, y, z );
+			}
+		}
+	}
+
+	/**
+	 * Open a GUI for an Item, which must exist in the player's inventory
+	 * @param p the player to open the gui for, and inventory to scan
+	 * @param type GuiBridge type
+	 * @param is the stack whose GUI we're opening
+	 */
+	public static void openGUI( @Nonnull final EntityPlayer p, @Nonnull final GuiBridge type, @Nonnull ItemStack is )
+	{
+		if( isClient() )
+		{
+			return;
+		}
+
+		int x = (int) p.posX;
+		int y = (int) p.posY;
+		int z = (int) p.posZ;
+
+		if( type.getType().isItem() )
+		{
+			short invSlot = -1;
+			IItemHandler playerInv = p.getCapability( CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null );// combined inv, as used in GuiBridge
+			for ( short i = 0; i<playerInv.getSlots(); i++)
+			{
+				if ( playerInv.getStackInSlot( i ) == is )
+				{
+					invSlot = i;
+					break;
+				}
+			}
+			p.openGui( AppEng.instance(), GuiBridge.encodeModGui( type, invSlot ), p.getEntityWorld(), x, y, z );
 		}
 	}
 

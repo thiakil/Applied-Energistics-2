@@ -66,7 +66,7 @@ public class ToolPortableCell extends AEBasePoweredItem implements IStorageCell,
 	@Override
 	public ActionResult<ItemStack> onItemRightClick( final World w, final EntityPlayer player, final EnumHand hand )
 	{
-		Platform.openGUI( player, null, AEPartLocation.INTERNAL, GuiBridge.GUI_PORTABLE_CELL );
+		Platform.openGUI( player, GuiBridge.GUI_PORTABLE_CELL, player.getHeldItem( hand ) );
 		return new ActionResult<ItemStack>( EnumActionResult.SUCCESS, player.getHeldItem( hand ) );
 	}
 

@@ -54,7 +54,7 @@ public class ToolQuartzCuttingKnife extends AEBaseItem implements IGuiItem
 	{
 		if( Platform.isServer() )
 		{
-			Platform.openGUI( p, null, AEPartLocation.INTERNAL, GuiBridge.GUI_QUARTZ_KNIFE );
+			Platform.openGUI( p, GuiBridge.GUI_QUARTZ_KNIFE, p.getHeldItem( hand ) );
 		}
 		return EnumActionResult.SUCCESS;
 	}
@@ -64,7 +64,7 @@ public class ToolQuartzCuttingKnife extends AEBaseItem implements IGuiItem
 	{
 		if( Platform.isServer() )
 		{
-			Platform.openGUI( p, null, AEPartLocation.INTERNAL, GuiBridge.GUI_QUARTZ_KNIFE );
+			Platform.openGUI( p, GuiBridge.GUI_QUARTZ_KNIFE, p.getHeldItem( hand ) );
 		}
 		p.swingArm( hand );
 		return new ActionResult<ItemStack>( EnumActionResult.SUCCESS, p.getHeldItem( hand ) );
