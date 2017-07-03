@@ -98,9 +98,9 @@ public class TileCraftingTile extends AENetworkTile implements IAEMultiBlock, IP
 	}
 
 	@Override
-	public void setName( final String name )
+	public void setAEDisplayName( final String name )
 	{
-		super.setName( name );
+		super.setAEDisplayName( name );
 		if( this.cluster != null )
 		{
 			this.cluster.updateName();

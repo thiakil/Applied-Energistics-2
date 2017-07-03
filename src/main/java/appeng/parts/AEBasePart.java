@@ -186,13 +186,13 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 	}
 
 	@Override
-	public String getCustomName()
+	public String getAEDisplayName()
 	{
 		return this.getItemStack().getDisplayName();
 	}
 
 	@Override
-	public boolean hasCustomName()
+	public boolean hasAEDisplayName()
 	{
 		return this.getItemStack().hasDisplayName();
 	}

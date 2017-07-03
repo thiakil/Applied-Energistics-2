@@ -22,7 +22,7 @@ package appeng.helpers;
 public interface ICustomNameObject
 {
 
-	String getCustomName();
+	String getAEDisplayName();
 
-	boolean hasCustomName();
+	boolean hasAEDisplayName();
 }

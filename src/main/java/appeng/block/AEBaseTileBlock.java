@@ -263,7 +263,7 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 			final TileEntity te = this.getTileEntity( w, pos );
 			if( te instanceof AEBaseTile )
 			{
-				( (AEBaseTile) w.getTileEntity( pos ) ).setName( is.getDisplayName() );
+				( (AEBaseTile) w.getTileEntity( pos ) ).setAEDisplayName( is.getDisplayName() );
 			}
 		}
 	}

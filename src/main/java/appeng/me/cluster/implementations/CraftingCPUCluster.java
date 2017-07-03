@@ -1236,15 +1236,15 @@ public final class CraftingCPUCluster implements IAECluster, ICraftingCPU
 		for( final TileCraftingTile te : this.tiles )
 		{
 
-			if( te.hasCustomName() )
+			if( te.hasAEDisplayName() )
 			{
 				if( this.myName.length() > 0 )
 				{
-					this.myName += ' ' + te.getCustomName();
+					this.myName += ' ' + te.getAEDisplayName();
 				}
 				else
 				{
-					this.myName = te.getCustomName();
+					this.myName = te.getAEDisplayName();
 				}
 			}
 		}

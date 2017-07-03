@@ -1092,9 +1092,9 @@ public abstract class AEBaseContainer extends Container
 
 				if( name != null )
 				{
-					if( name.hasCustomName() )
+					if( name.hasAEDisplayName() )
 					{
-						this.setCustomName( name.getCustomName() );
+						this.setCustomName( name.getAEDisplayName() );
 					}
 
 					if( this.getCustomName() != null )
