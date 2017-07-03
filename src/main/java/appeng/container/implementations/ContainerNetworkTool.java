@@ -23,6 +23,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import appeng.api.AEApi;
 import appeng.api.implementations.guiobjects.INetworkTool;
 import appeng.container.AEBaseContainer;
 import appeng.container.guisync.GuiSync;
@@ -43,7 +44,8 @@ public class ContainerNetworkTool extends AEBaseContainer
 		super( ip, null, null );
 		this.toolInv = te;
 
-		this.lockPlayerInventorySlot( ip.currentItem );
+		if ( AEApi.instance().definitions().items().networkTool().isSameAs( ip.getCurrentItem() ) )//if it's in the offhand slot theres not much to do
+			this.lockPlayerInventorySlot( ip.currentItem );
 
 		for( int y = 0; y < 3; y++ )
 		{
@@ -67,17 +69,21 @@ public class ContainerNetworkTool extends AEBaseContainer
 	public void detectAndSendChanges()
 	{
 		final ItemStack currentItem = this.getPlayerInv().getCurrentItem();
+		final ItemStack offhandItem = this.getPlayerInv().offHandInventory.get( 0 );
+		final ItemStack toolItem = this.toolInv.getItemStack();
 
-		if( currentItem != this.toolInv.getItemStack() )
+		if( currentItem != toolItem && offhandItem != toolItem )
 		{
-			if (!currentItem.isEmpty()) {
-				if (Platform.itemComparisons().isEqualItem(this.toolInv.getItemStack(), currentItem)) {
-					this.getPlayerInv().setInventorySlotContents(this.getPlayerInv().currentItem, this.toolInv.getItemStack());
-				} else {
-					this.setValidContainer(false);
-				}
-			} else {
-				this.setValidContainer(false);
+			if ( !currentItem.isEmpty() && Platform.itemComparisons().isEqualItem( toolItem, currentItem ) ) {
+				this.getPlayerInv().setInventorySlotContents( this.getPlayerInv().currentItem, toolItem );
+			}
+			else if ( !offhandItem.isEmpty() && Platform.itemComparisons().isEqualItem(toolItem, offhandItem) )
+			{
+				this.getPlayerInv().offHandInventory.set( 0, toolItem );
+			}
+			else
+			{
+				this.setValidContainer( false );
 			}
 		}
 

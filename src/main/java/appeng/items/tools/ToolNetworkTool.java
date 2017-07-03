@@ -169,11 +169,11 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench /
 
 				if( te instanceof IGridHost )
 				{
-					Platform.openGUI( p, te, AEPartLocation.fromFacing( side ), GuiBridge.GUI_NETWORK_STATUS );
+					Platform.openGUI( p, te, AEPartLocation.fromFacing( side ), GuiBridge.GUI_NETWORK_STATUS, is );
 				}
 				else
 				{
-					Platform.openGUI( p, null, AEPartLocation.INTERNAL, GuiBridge.GUI_NETWORK_TOOL );
+					Platform.openGUI( p, GuiBridge.GUI_NETWORK_TOOL, is );
 				}
 
 				return true;
@@ -185,7 +185,7 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench /
 		}
 		else
 		{
-			Platform.openGUI( p, null, AEPartLocation.INTERNAL, GuiBridge.GUI_NETWORK_TOOL );
+			Platform.openGUI( p, GuiBridge.GUI_NETWORK_TOOL, is );
 		}
 
 		return false;

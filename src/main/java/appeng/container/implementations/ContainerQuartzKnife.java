@@ -74,17 +74,21 @@ public class ContainerQuartzKnife extends AEBaseContainer implements IAEAppEngIn
 	public void detectAndSendChanges()
 	{
 		final ItemStack currentItem = this.getPlayerInv().getCurrentItem();
+		final ItemStack offhandItem = this.getPlayerInv().offHandInventory.get( 0 );
+		final ItemStack toolItem = this.toolInv.getItemStack();
 
-		if( currentItem != this.toolInv.getItemStack() )
+		if( currentItem != toolItem && offhandItem != toolItem )
 		{
-			if (!currentItem.isEmpty()) {
-				if (Platform.itemComparisons().isEqualItem(this.toolInv.getItemStack(), currentItem)) {
-					this.getPlayerInv().setInventorySlotContents(this.getPlayerInv().currentItem, this.toolInv.getItemStack());
-				} else {
-					this.setValidContainer(false);
-				}
-			} else {
-				this.setValidContainer(false);
+			if ( !currentItem.isEmpty() && Platform.itemComparisons().isEqualItem( toolItem, currentItem ) ) {
+				this.getPlayerInv().setInventorySlotContents( this.getPlayerInv().currentItem, toolItem );
+			}
+			else if ( !offhandItem.isEmpty() && Platform.itemComparisons().isEqualItem(toolItem, offhandItem) )
+			{
+				this.getPlayerInv().offHandInventory.set( 0, toolItem );
+			}
+			else
+			{
+				this.setValidContainer( false );
 			}
 		}
 

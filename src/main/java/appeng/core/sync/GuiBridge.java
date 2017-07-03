@@ -33,6 +33,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import appeng.api.AEApi;
 import appeng.api.config.SecurityPermissions;
@@ -92,6 +94,7 @@ import appeng.container.implementations.ContainerUpgradeable;
 import appeng.container.implementations.ContainerVibrationChamber;
 import appeng.container.implementations.ContainerWireless;
 import appeng.container.implementations.ContainerWirelessTerm;
+import appeng.core.AELog;
 import appeng.core.stats.Achievements;
 import appeng.helpers.IInterfaceHost;
 import appeng.helpers.IPriorityHost;
@@ -248,30 +251,37 @@ public enum GuiBridge implements IGuiHandler
 	}
 
 	@Override
-	public Object getServerGuiElement( final int ordinal, final EntityPlayer player, final World w, final int x, final int y, final int z )
+	public Object getServerGuiElement( final int modGuiID, final EntityPlayer player, final World w, final int x, final int y, final int z )
 	{
-		final AEPartLocation side = AEPartLocation.fromOrdinal( ordinal & 0x07 );
-		final GuiBridge ID = values()[ordinal >> 4];
-		final boolean stem = ( ( ordinal >> 3 ) & 1 ) == 1;
+		final GuiBridge ID = decodeModGuiType( modGuiID );
 		if( ID.type.isItem() )
 		{
+			final short invSlot = decodeModGui2( modGuiID );
 			ItemStack it = ItemStack.EMPTY;
-			if( stem )
+			IItemHandler playerInv = player.getCapability( CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null );//combined inv handler
+			if ( playerInv == null )
 			{
+				AELog.error( "Could not get player inv handler!" );
+				return new ContainerNull();
+			}
+			if( invSlot == -1 )
+			{
+				AELog.error( "Should have been supplied slotid, but wasn't" );
 				it = player.inventory.getCurrentItem();
 			}
-			else if( x >= 0 && x < player.inventory.mainInventory.size() )
+			else if( invSlot >= 0 && invSlot < playerInv.getSlots() )
 			{
-				it = player.inventory.getStackInSlot( x );
+				it = playerInv.getStackInSlot( invSlot );
 			}
-			final Object myItem = this.getGuiObject( it, player, w, x, y, z );
+			final Object myItem = this.getGuiObject( it, player, w, (it.getItem() instanceof IGuiItem) ? x : invSlot, y, z );
 			if( myItem != null && ID.CorrectTileOrPart( myItem ) )
 			{
-				return this.updateGui( ID.ConstructContainer( player.inventory, side, myItem ), w, x, y, z, side, myItem );
+				return this.updateGui( ID.ConstructContainer( player.inventory, AEPartLocation.INTERNAL, myItem ), w, x, y, z, AEPartLocation.INTERNAL, myItem );
 			}
 		}
 		if( ID.type.isTile() )
 		{
+			final AEPartLocation side = AEPartLocation.fromOrdinal( decodeModGui2( modGuiID ) );
 			final TileEntity TE = w.getTileEntity( new BlockPos( x, y, z ) );
 			if( TE instanceof IPartHost )
 			{
@@ -302,7 +312,7 @@ public enum GuiBridge implements IGuiHandler
 
 			final IWirelessTermHandler wh = AEApi.instance().registries().wireless().getWirelessTerminalHandler(it);
 			if (wh != null) {
-				return new WirelessTerminalGuiObject(wh, it, player, w, x, y, z);
+				return new WirelessTerminalGuiObject(wh, it, player, w, x);//x == slot!
 			}
 		}
 
@@ -427,30 +437,37 @@ public enum GuiBridge implements IGuiHandler
 	}
 
 	@Override
-	public Object getClientGuiElement( final int ordinal, final EntityPlayer player, final World w, final int x, final int y, final int z )
+	public Object getClientGuiElement( final int modGuiID, final EntityPlayer player, final World w, final int x, final int y, final int z )
 	{
-		final AEPartLocation side = AEPartLocation.fromOrdinal( ordinal & 0x07 );
-		final GuiBridge ID = values()[ordinal >> 4];
-		final boolean stem = ( ( ordinal >> 3 ) & 1 ) == 1;
+		final GuiBridge ID = decodeModGuiType( modGuiID );
 		if( ID.type.isItem() )
 		{
+			final short invSlot = decodeModGui2( modGuiID );
 			ItemStack it = ItemStack.EMPTY;
-			if( stem )
+			IItemHandler playerInv = player.getCapability( CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null );//combined inv handler
+			if ( playerInv == null )
 			{
+				AELog.error( "Could not get player inv handler!" );
+				return new GuiNull( new ContainerNull() );
+			}
+			if( invSlot == -1 )
+			{
+				AELog.error( "Should have been supplied slotid, but wasn't" );
 				it = player.inventory.getCurrentItem();
 			}
-			else if( x >= 0 && x < player.inventory.mainInventory.size() )
+			else if( invSlot >= 0 && invSlot < playerInv.getSlots() )
 			{
-				it = player.inventory.getStackInSlot( x );
+				it = playerInv.getStackInSlot( invSlot );
 			}
-			final Object myItem = this.getGuiObject( it, player, w, x, y, z );
+			final Object myItem = this.getGuiObject( it, player, w, (it.getItem() instanceof IGuiItem) ? x : invSlot, y, z );
 			if( myItem != null && ID.CorrectTileOrPart( myItem ) )
 			{
-				return ID.ConstructGui( player.inventory, side, myItem );
+				return ID.ConstructGui( player.inventory, AEPartLocation.INTERNAL, myItem );
 			}
 		}
 		if( ID.type.isTile() )
 		{
+			final AEPartLocation side = AEPartLocation.fromOrdinal( decodeModGui2( modGuiID ) );
 			final TileEntity TE = w.getTileEntity( new BlockPos( x, y, z ) );
 			if( TE instanceof IPartHost )
 			{
@@ -580,4 +597,21 @@ public enum GuiBridge implements IGuiHandler
 		return this.type;
 	}
 
+	public static int encodeModGui( GuiBridge type, short short2 )
+	{
+		return ( short2 << 16 ) | (short)type.ordinal();
+	}
+
+	public static GuiBridge decodeModGuiType( int modguiID )
+	{
+		int id = modguiID & 0xFFFF;
+		if ( id > GuiBridge.GUI_Handler.ordinal() && id < GuiBridge.values().length )
+			return GuiBridge.values()[id];
+		throw new IllegalStateException( "Invalid modgui id supplied" );
+	}
+
+	public static short decodeModGui2( int modguiID )
+	{
+		return (short)( ( modguiID >> 16 ) & 0xFFFF);
+	}
 }
