@@ -569,10 +569,10 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	{
 		final NBTTagCompound output = new NBTTagCompound();
 
-		if( this.hasCustomName() )
+		if( this.hasAEDisplayName() )
 		{
 			final NBTTagCompound dsp = new NBTTagCompound();
-			dsp.setString( "Name", this.getCustomName() );
+			dsp.setString( "Name", this.getAEDisplayName() );
 			output.setTag( "display", dsp );
 		}
 
@@ -604,13 +604,13 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	}
 
 	@Override
-	public String getCustomName()
+	public String getAEDisplayName()
 	{
-		return this.hasCustomName() ? this.customName : this.getClass().getSimpleName();
+		return this.hasAEDisplayName() ? this.customName : this.getClass().getSimpleName();
 	}
 
 	@Override
-	public boolean hasCustomName()
+	public boolean hasAEDisplayName()
 	{
 		return this.customName != null && this.customName.length() > 0;
 	}
@@ -636,7 +636,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 		return false;
 	}
 
-	public void setName( final String name )
+	public void setAEDisplayName( final String name )
 	{
 		this.customName = name;
 	}

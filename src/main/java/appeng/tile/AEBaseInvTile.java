@@ -55,7 +55,12 @@ public abstract class AEBaseInvTile extends AEBaseTile implements ISidedInventor
 	@Override
 	public String getName()
 	{
-		return this.getCustomName();
+		return this.getInternalInventory().getName();
+	}
+
+	public boolean hasCustomName()
+	{
+		return this.getInternalInventory().hasCustomName();
 	}
 
 	@TileEvent( TileEventType.WORLD_NBT_READ )
@@ -206,9 +211,9 @@ public abstract class AEBaseInvTile extends AEBaseTile implements ISidedInventor
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		if( this.hasCustomName() )
+		if( this.hasAEDisplayName() )
 		{
-			return new TextComponentString( this.getCustomName() );
+			return new TextComponentString( this.getAEDisplayName() );
 		}
 		return new TextComponentTranslation( this.getBlockType().getUnlocalizedName() );
 	}
