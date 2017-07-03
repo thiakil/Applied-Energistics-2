@@ -231,13 +231,18 @@ public final class ItemBasicStorageCell extends AEBaseItem implements IStorageCe
 
 			final InventoryPlayer playerInventory = player.inventory;
 			final IMEInventoryHandler inv = AEApi.instance().registries().cell().getCellInventory( stack, null, StorageChannel.ITEMS );
-			if( inv != null && playerInventory.getCurrentItem() == stack )
+			if( inv != null && ( playerInventory.getCurrentItem() == stack || player.getHeldItem( EnumHand.OFF_HAND ) == stack ) )
 			{
 				final InventoryAdaptor ia = InventoryAdaptor.getAdaptor( player, EnumFacing.UP );
 				final IItemList<IAEItemStack> list = inv.getAvailableItems( StorageChannel.ITEMS.createList() );
 				if( list.isEmpty() && ia != null )
 				{
-					playerInventory.setInventorySlotContents(playerInventory.currentItem, ItemStack.EMPTY);
+					if ( playerInventory.getCurrentItem() == stack )
+					{
+						playerInventory.setInventorySlotContents(playerInventory.currentItem, ItemStack.EMPTY);
+					} else {
+						playerInventory.offHandInventory.set( 0, ItemStack.EMPTY );
+					}
 
 					// drop core
 					final ItemStack extraB = ia.addItems( this.component.stack( 1 ) );
