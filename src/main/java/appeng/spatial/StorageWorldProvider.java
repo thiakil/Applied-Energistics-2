@@ -43,7 +43,7 @@ public class StorageWorldProvider extends WorldProvider
 
 	public StorageWorldProvider()
 	{
-		this.hasSkyLight = false;
+		this.nether = true;
 		biome = AppEng.instance().getRegistration().getStorageBiome();
 		this.biomeProvider = new BiomeProviderSingle( biome );
 	}

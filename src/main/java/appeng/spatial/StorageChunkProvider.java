@@ -104,11 +104,11 @@ public class StorageChunkProvider extends ChunkProviderOverworld
 		return false;
 	}
 
-	/*@Override
-	public BlockPos getStrongholdGen( World worldIn, String structureName, BlockPos position, boolean p_180513_4_ )
+	@Override
+	public BlockPos getNearestStructurePos( World worldIn, String structureName, BlockPos position, boolean findUnexplored )
 	{
 		return null;
-	}*/
+	}
 
 	@Override
 	public void recreateStructures( Chunk chunkIn, int x, int z )
