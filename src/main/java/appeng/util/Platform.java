@@ -1178,7 +1178,7 @@ public class Platform
 		final Vec3d vec31 = vec3.addVector( f7 * d3, f6 * d3, f8 * d3 );
 
 		final AxisAlignedBB bb = new AxisAlignedBB( Math.min( vec3.x, vec31.x ), Math.min( vec3.y, vec31.y ), Math.min( vec3.z,
-				vec31.z ), Math.max( vec3.x, vec31.x ), Math.max( vec3.y, vec31.y ), Math.max( vec3.z, vec31.z ) ).expand(
+				vec31.z ), Math.max( vec3.x, vec31.x ), Math.max( vec3.y, vec31.y ), Math.max( vec3.z, vec31.z ) ).grow(
 						16, 16, 16 );
 
 		Entity entity = null;
@@ -1202,7 +1202,7 @@ public class Platform
 						}
 
 						f1 = 0.3F;
-						final AxisAlignedBB boundingBox = entity1.getEntityBoundingBox().expand( f1, f1, f1 );
+						final AxisAlignedBB boundingBox = entity1.getEntityBoundingBox().grow( f1, f1, f1 );
 						final RayTraceResult RayTraceResult = boundingBox.calculateIntercept( vec3, vec31 );
 
 						if( RayTraceResult != null )

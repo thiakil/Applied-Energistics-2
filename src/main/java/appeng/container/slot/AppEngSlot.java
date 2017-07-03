@@ -140,12 +140,6 @@ public class AppEngSlot extends Slot
 		return false;
 	}
 
-	//@Override
-	public boolean canBeHovered()
-	{
-		return this.isEnabled();
-	}
-
 	public ItemStack getDisplayStack()
 	{
 		return super.getStack();

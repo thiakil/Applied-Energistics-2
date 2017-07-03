@@ -190,7 +190,7 @@ public class ToolMatterCannon extends AEBasePoweredItem implements IStorageCell
 
 	private void shootPaintBalls( final ItemStack type, final World w, final EntityPlayer p, final Vec3d Vec3d, final Vec3d Vec3d1, final Vec3d direction, final double d0, final double d1, final double d2 )
 	{
-		final AxisAlignedBB bb = new AxisAlignedBB( Math.min( Vec3d.x, Vec3d1.x ), Math.min( Vec3d.y, Vec3d1.y ), Math.min( Vec3d.z, Vec3d1.z ), Math.max( Vec3d.x, Vec3d1.x ), Math.max( Vec3d.y, Vec3d1.y ), Math.max( Vec3d.z, Vec3d1.z ) ).expand( 16, 16, 16 );
+		final AxisAlignedBB bb = new AxisAlignedBB( Math.min( Vec3d.x, Vec3d1.x ), Math.min( Vec3d.y, Vec3d1.y ), Math.min( Vec3d.z, Vec3d1.z ), Math.max( Vec3d.x, Vec3d1.x ), Math.max( Vec3d.y, Vec3d1.y ), Math.max( Vec3d.z, Vec3d1.z ) ).grow( 16, 16, 16 );
 
 		Entity entity = null;
 		final List list = w.getEntitiesWithinAABBExcludingEntity( p, bb );
@@ -212,7 +212,7 @@ public class ToolMatterCannon extends AEBasePoweredItem implements IStorageCell
 
 					final float f1 = 0.3F;
 
-					final AxisAlignedBB boundingBox = entity1.getEntityBoundingBox().expand( f1, f1, f1 );
+					final AxisAlignedBB boundingBox = entity1.getEntityBoundingBox().grow( f1, f1, f1 );
 					final RayTraceResult RayTraceResult = boundingBox.calculateIntercept( Vec3d, Vec3d1 );
 
 					if( RayTraceResult != null )
@@ -308,7 +308,7 @@ public class ToolMatterCannon extends AEBasePoweredItem implements IStorageCell
 		{
 			hasDestroyed = false;
 
-			final AxisAlignedBB bb = new AxisAlignedBB( Math.min( Vec3d.x, Vec3d1.x ), Math.min( Vec3d.y, Vec3d1.y ), Math.min( Vec3d.z, Vec3d1.z ), Math.max( Vec3d.x, Vec3d1.x ), Math.max( Vec3d.y, Vec3d1.y ), Math.max( Vec3d.z, Vec3d1.z ) ).expand( 16, 16, 16 );
+			final AxisAlignedBB bb = new AxisAlignedBB( Math.min( Vec3d.x, Vec3d1.x ), Math.min( Vec3d.y, Vec3d1.y ), Math.min( Vec3d.z, Vec3d1.z ), Math.max( Vec3d.x, Vec3d1.x ), Math.max( Vec3d.y, Vec3d1.y ), Math.max( Vec3d.z, Vec3d1.z ) ).grow( 16, 16, 16 );
 
 			Entity entity = null;
 			final List list = w.getEntitiesWithinAABBExcludingEntity( p, bb );
@@ -330,7 +330,7 @@ public class ToolMatterCannon extends AEBasePoweredItem implements IStorageCell
 
 						final float f1 = 0.3F;
 
-						final AxisAlignedBB boundingBox = entity1.getEntityBoundingBox().expand( f1, f1, f1 );
+						final AxisAlignedBB boundingBox = entity1.getEntityBoundingBox().grow( f1, f1, f1 );
 						final RayTraceResult RayTraceResult = boundingBox.calculateIntercept( Vec3d, Vec3d1 );
 
 						if( RayTraceResult != null )

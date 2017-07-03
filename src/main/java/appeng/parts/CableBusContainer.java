@@ -425,8 +425,6 @@ public class CableBusContainer extends CableBusStorage implements AEMultiTile, I
 	@Override
 	public SelectedPart selectPart( Vec3d pos )
 	{
-		//TODO find what changed in the Forge/MCP update to make this necessary; AxisAlignedBB.contains checks min > in, not >= !
-		pos = pos.add( new Vec3d( 0.001, 0.001, 0.001 ) );
 
 		for( final AEPartLocation side : AEPartLocation.values() )
 		{
@@ -439,7 +437,7 @@ public class CableBusContainer extends CableBusStorage implements AEMultiTile, I
 				p.getBoxes( bch );
 				for( AxisAlignedBB bb : boxes )
 				{
-					bb = bb.expand( 0.002, 0.002, 0.002 );
+					bb = bb.grow( 0.002, 0.002, 0.002 );
 					if( bb.contains( pos ) )
 					{
 						return new SelectedPart( p, side );
@@ -462,7 +460,7 @@ public class CableBusContainer extends CableBusStorage implements AEMultiTile, I
 					p.getBoxes( bch, null );
 					for( AxisAlignedBB bb : boxes )
 					{
-						bb = bb.expand( 0.01, 0.01, 0.01 );
+						bb = bb.grow( 0.01, 0.01, 0.01 );
 						if( bb.contains( pos ) )
 						{
 							return new SelectedPart( p, side );
