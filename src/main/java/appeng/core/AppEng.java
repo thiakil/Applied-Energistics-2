@@ -63,7 +63,15 @@ import appeng.services.export.ForgeExportConfig;
 import appeng.util.Platform;
 
 
-@Mod( modid = AppEng.MOD_ID, acceptedMinecraftVersions = "[1.11.2]", name = AppEng.MOD_NAME, version = AEConfig.VERSION, dependencies = AppEng.MOD_DEPENDENCIES, guiFactory = "appeng.client.gui.config.AEConfigGuiFactory" )
+@Mod(
+		modid = AppEng.MOD_ID,
+		acceptedMinecraftVersions = "[1.11.2]",
+		name = AppEng.MOD_NAME,
+		version = AEConfig.VERSION,
+		dependencies = AppEng.MOD_DEPENDENCIES,
+		guiFactory = "appeng.client.gui.config.AEConfigGuiFactory",
+		updateJSON = "https://raw.githubusercontent.com/thiakil/Applied-Energistics-2/rv5-1.11/forge_update.json"
+)
 public final class AppEng
 {
 	@SidedProxy( clientSide = "appeng.client.ClientHelper", serverSide = "appeng.server.ServerHelper", modId = AppEng.MOD_ID )
