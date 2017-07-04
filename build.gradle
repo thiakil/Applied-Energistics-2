@@ -187,6 +187,7 @@ task addRelease() {
         mcVersion.put(project.version.toString(), changeLog)
         Map<String,Object> promos = (Map)updaterFile.get("promos")
         promos.put(project.minecraft.version+"-latest", project.version.toString())
+        //TODO only set recommended if not alpha/beta
         promos.put(project.minecraft.version+"-recommended", project.version.toString())
         new File(updaterFileName).write(JsonOutput.prettyPrint(JsonOutput.toJson(updaterFile)))
     }
