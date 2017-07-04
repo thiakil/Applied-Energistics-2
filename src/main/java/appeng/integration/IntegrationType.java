@@ -19,6 +19,8 @@
 package appeng.integration;
 
 
+import appeng.integration.modules.BuildcraftModule;
+import appeng.integration.modules.CofhHammerModule;
 import appeng.integration.modules.opencomputers.OpenComputers;
 import appeng.integration.modules.ic2.IC2Module;
 import appeng.integration.modules.jei.JEIModule;
@@ -36,6 +38,24 @@ public enum IntegrationType
 		public IIntegrationModule createInstance()
 		{
 			return Integrations.setIc2( new IC2Module() );
+		}
+	},
+
+	BUILDCRAFT( IntegrationSide.BOTH, "Buildcraft", "buildcraft" )
+	{
+		@Override
+		public IIntegrationModule createInstance()
+		{
+			return Integrations.setBc( new BuildcraftModule() );
+		}
+	},
+
+	COFH_HAMMER( IntegrationSide.BOTH, "TF Hammer", "cofhapi|item" )
+	{
+		@Override
+		public IIntegrationModule createInstance()
+		{
+			return Integrations.setCofhHammer( new CofhHammerModule() );
 		}
 	},
 

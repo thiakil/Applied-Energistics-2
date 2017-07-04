@@ -19,6 +19,8 @@
 package appeng.integration;
 
 
+import appeng.integration.abstraction.IBuildcraft;
+import appeng.integration.abstraction.ICofhHammer;
 import appeng.integration.abstraction.IIC2;
 import appeng.integration.abstraction.IInvTweaks;
 import appeng.integration.abstraction.IJEI;
@@ -37,6 +39,10 @@ public final class Integrations
 	static IJEI jei = new IJEI.Stub();
 
 	static IRC rc = new IRC.Stub();
+
+	static IBuildcraft bc = new IBuildcraft.Stub();
+
+	static ICofhHammer cofhHammer = new ICofhHammer.Stub();
 
 	static IMekanism mekanism = new IMekanism.Stub();
 
@@ -59,6 +65,16 @@ public final class Integrations
 	public static IRC rc()
 	{
 		return rc;
+	}
+
+	public static IBuildcraft bc()
+	{
+		return bc;
+	}
+
+	public static ICofhHammer cofhHammer()
+	{
+		return cofhHammer;
 	}
 
 	public static IMekanism mekanism()
@@ -87,6 +103,18 @@ public final class Integrations
 	{
 		Integrations.rc = rc;
 		return rc;
+	}
+
+	static IBuildcraft setBc( IBuildcraft rc )
+	{
+		Integrations.bc = bc;
+		return bc;
+	}
+
+	static ICofhHammer setCofhHammer( ICofhHammer ch )
+	{
+		Integrations.cofhHammer = ch;
+		return ch;
 	}
 
 	static IMekanism setMekanism( IMekanism mekanism )

@@ -19,6 +19,8 @@
 package appeng.util;
 
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.InvalidParameterException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -61,6 +63,7 @@ import net.minecraft.stats.Achievement;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -865,25 +868,21 @@ public class Platform
 		return false;
 	}
 
-	public static boolean isWrench( final EntityPlayer player, final ItemStack eq, final BlockPos pos )
+	public static boolean isWrench( final EntityPlayer player, final ItemStack eq, final BlockPos pos, final EnumHand hand, final EnumFacing side, Vec3d hitVec )
 	{
 		if (!eq.isEmpty()) {
-			try {
-				// TODO: Build Craft Wrench?
-				/*
-				 * if( eq.getItem() instanceof IToolWrench )
-				 * {
-				 * IToolWrench wrench = (IToolWrench) eq.getItem();
-				 * return wrench.canWrench( player, x, y, z );
-				 * }
-				 */
-			} catch (final Throwable ignore) { // explodes without BC
-
-			}
-
 			if (eq.getItem() instanceof IAEWrench) {
 				final IAEWrench wrench = (IAEWrench) eq.getItem();
 				return wrench.canWrench(eq, player, pos);
+			}
+
+			if ( Integrations.bc().canWrench( player, hand, eq, new RayTraceResult( hitVec, side, pos ) ) ){
+				return true;
+			}
+
+			if ( Integrations.cofhHammer().isUsable( eq, player, pos ) )
+			{
+				return true;
 			}
 		}
 		return false;

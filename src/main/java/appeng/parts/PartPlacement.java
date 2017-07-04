@@ -39,9 +39,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -79,15 +77,19 @@ public class PartPlacement
 			return EnumActionResult.FAIL;
 		}
 
-		if(!held.isEmpty() && Platform.isWrench(player, held, pos) && player.isSneaking() )
+		final Block block = world.getBlockState( pos ).getBlock();
+		TileEntity tile = world.getTileEntity( pos );
+
+		final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
+		final RayTraceResult mop = block.collisionRayTrace( world.getBlockState( pos ), world, pos, dir.getA(), dir.getB() );
+
+		if(!held.isEmpty() && Platform.isWrench(player, held, pos, hand, side, mop != null ? mop.hitVec : null) && player.isSneaking() )
 		{
 			if( !Platform.hasPermissions( new DimensionalCoord( world, pos ), player ) )
 			{
 				return EnumActionResult.FAIL;
 			}
 
-			final Block block = world.getBlockState( pos ).getBlock();
-			final TileEntity tile = world.getTileEntity( pos );
 			IPartHost host = null;
 
 			if( tile instanceof IPartHost )
@@ -99,8 +101,6 @@ public class PartPlacement
 			{
 				if( !world.isRemote )
 				{
-					final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
-					final RayTraceResult mop = block.collisionRayTrace( world.getBlockState( pos ), world, pos, dir.getA(), dir.getB() );
 
 					if( mop != null )
 					{
@@ -144,7 +144,6 @@ public class PartPlacement
 			return EnumActionResult.PASS;
 		}
 
-		TileEntity tile = world.getTileEntity( pos );
 		IPartHost host = null;
 
 		if( tile instanceof IPartHost )
@@ -189,11 +188,11 @@ public class PartPlacement
 
 		// if ( held == null )
 		{
-			final Block block = world.getBlockState( pos ).getBlock();
+			//final Block block = world.getBlockState( pos ).getBlock();
 			if( host != null && player.isSneaking() && block != null )
 			{
-				final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
-				final RayTraceResult mop = block.collisionRayTrace( world.getBlockState( pos ), world, pos, dir.getA(), dir.getB() );
+				//final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
+				//final RayTraceResult mop = block.collisionRayTrace( world.getBlockState( pos ), world, pos, dir.getA(), dir.getB() );
 
 				if( mop != null )
 				{
@@ -304,8 +303,8 @@ public class PartPlacement
 		if( !world.isRemote )
 		{
 			final IBlockState state = world.getBlockState( pos );
-			final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
-			final RayTraceResult mop = state.getBlock().collisionRayTrace( state, world, pos, dir.getA(), dir.getB() );
+			//final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
+			//final RayTraceResult mop = state.getBlock().collisionRayTrace( state, world, pos, dir.getA(), dir.getB() );
 
 			if( mop != null )
 			{
