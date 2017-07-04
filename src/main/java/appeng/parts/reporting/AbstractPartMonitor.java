@@ -164,7 +164,7 @@ public abstract class AbstractPartMonitor extends AbstractPartDisplay implements
 		final TileEntity te = this.getTile();
 		final ItemStack eq = player.getHeldItem( hand );
 
-		if( Platform.isWrench( player, eq, te.getPos() ) )
+		if( Platform.isWrench( player, eq, te.getPos(), hand, this.getSide().getFacing(), pos ) )
 		{
 			this.isLocked = !this.isLocked;
 			player.sendMessage( ( this.isLocked ? PlayerMessages.isNowLocked : PlayerMessages.isNowUnlocked ).get() );

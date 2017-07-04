@@ -43,6 +43,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -276,7 +277,7 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 		{
 			heldItem = player.getHeldItem( hand );
 			
-			if( Platform.isWrench( player, heldItem, pos ) && player.isSneaking() )
+			if( player.isSneaking() && Platform.isWrench( player, heldItem, pos, hand, facing, new Vec3d( hitX,hitY,hitZ ) ) )
 			{
 				final IBlockState blockState = world.getBlockState( pos );
 				final Block block = blockState.getBlock();
