@@ -166,3 +166,28 @@ uploadArchives {
         }
     }
 }
+
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+task addRelease() {
+    doFirst {
+        def curTag = "git describe --abbrev=0".execute().getText().trim()
+        println curTag
+        def updaterFileName = "forge_update.json"
+        def updaterFile = (Map)(new JsonSlurper().parse(new File(updaterFileName)))
+        println "git log --no-merges --oneline --date-order --reverse $curTag..HEAD"
+        //Process proc = "git log --no-merges --oneline --date-order --reverse $curTag..HEAD".execute()
+        //proc.waitFor()
+        def changeLog = "git log --no-merges --oneline --date-order --reverse $curTag..HEAD".execute().getText().trim()
+        println changeLog
+        Map<String,Object> mcVersion = updaterFile.containsKey(project.minecraft.version) ? (Map)updaterFile.get(project.minecraft.version) : new HashMap<String,Object>()
+        if (!updaterFile.containsKey(project.minecraft.version))
+            updaterFile.put(project.minecraft.version, mcVersion)
+        mcVersion.put(project.version.toString(), changeLog)
+        Map<String,Object> promos = (Map)updaterFile.get("promos")
+        promos.put(project.minecraft.version+"-latest", project.version.toString())
+        promos.put(project.minecraft.version+"-recommended", project.version.toString())
+        new File(updaterFileName).write(JsonOutput.prettyPrint(JsonOutput.toJson(updaterFile)))
+    }
+}

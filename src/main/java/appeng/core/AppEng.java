@@ -70,7 +70,7 @@ public final class AppEng
 	public static CommonHelper proxy;
 	
 	public static final String MOD_ID = "appliedenergistics2";
-	public static final String MOD_NAME = "Applied Energistics 2 (Unofficial)";
+	public static final String MOD_NAME = "Applied Energistics 2 (Unofficial - Thiakil)";
 
 	public static final String ASSETS = "appliedenergistics2:";
 

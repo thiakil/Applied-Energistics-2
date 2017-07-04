@@ -1,16 +1,16 @@
 [
     {
         "modid":"appliedenergistics2",
-        "name":"Applied Energistics 2 (Unofficial)",
+        "name":"Applied Energistics 2 (Unofficial - Thiakil)",
         "description":"A Mod about Matter, Energy and using them to conquer the world. This version is a Fork of the original to port to newer MC versions.",
         "version":"${version}",
         "mcversion":"${mcversion}",
         "url":"https://github.com/thiakil/Applied-Energistics-2",
-        "updateUrl":"",
+        "updateUrl":"https://raw.githubusercontent.com/thiakil/Applied-Energistics-2/rv5-1.11/forge_update.json",
         "authorList":[
          "Thiakil"
         ],
-        "credits":"AlgorithmX2",
+        "credits":"AlgorithmX2, yueh and the original AE2 team",
         "logoFile":"assets/appliedenergistics2/meta/logo.png",
         "screenshots":[]
     }

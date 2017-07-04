@@ -27,5 +27,7 @@
 # Github specific files and directories
 !.github/
 
+!forge_update.json
+
 # Explicit ignores
 Thumbs.db

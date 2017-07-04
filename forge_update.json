@@ -1,0 +1,9 @@
+{
+    "1.11.2": {
+        "rv5-alpha-0": "Ported to 1.11.2\nFixed Facade Rendering\nFixed Slab lighting\nFixed itemstacks with serialisable caps being stored (e.g. Botania flower bag)\nAdded back OpenComputers integration\nAdded integrated OC drivers\nFixed some minor bugs."
+    },
+    "promos": {
+        "1.11.2-latest": "rv5-alpha-0",
+        "1.11.2-recommended": "rv5-alpha-0"
+    }
+}
