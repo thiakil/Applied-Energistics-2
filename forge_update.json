@@ -1,10 +1,11 @@
 {
-    "homepage":"https://github.com/thiakil/Applied-Energistics-2/releases",
     "1.11.2": {
-        "rv5-alpha-0": "Ported to 1.11.2\nFixed Facade Rendering\nFixed Slab lighting\nFixed itemstacks with serialisable caps being stored (e.g. Botania flower bag)\nAdded back OpenComputers integration\nAdded integrated OC drivers\nFixed some minor bugs."
+        "rv5-alpha-0": "Ported to 1.11.2\nFixed Facade Rendering\nFixed Slab lighting\nFixed itemstacks with serialisable caps being stored (e.g. Botania flower bag)\nAdded back OpenComputers integration\nAdded integrated OC drivers\nFixed some minor bugs.",
+        "rv5-alpha-1": "72fb550 update display name and filenames to better communicate this is a fork\nc1a1dd7 fix missing IC2 layer to make eu tunnel work again\na67ae19 temp fix for interface names. Member name clash between AE's interface and IWorldNameable on hasCustomName\n6e41ab2 disabled AE's iron nugget as it is now redundant\n4434fc4 disable old recipe file integrations for mods that never made it out of 1.7\ne63725d Refactor ICustomNameObject to prevent clash with MCP name\nbca4239 MCP!\nf302860 MCP\n065c7f8 allow storage cells to be disassembled in the offhand\n4cd0f01 remove AE item hiding (e.g. gold and iron dust) when another mod has the same items. Could cause problems down the 1.12 track. Also stops recipe warnings because it can't find the item\n7986e4d make gui items work in the off hand\n4dc6cbe add basic forge update file and a generator task. Update mod name to include my name to make it clear what version people are using\ne336f91 bump version in prep for next release\nebe9779 add updateJSON param to @mod too\n27cb02e refresh COFH api to use extracted version from 1.11 cofhcore jar. adds full API\n4402326 lowercases cofhapi ids for integration so we only use the official ones\n585f3df add buildcraft and cofh hammer support as integration modules. Includes PartPlacement changes which will need testing\n28369e3 fix NPE from hitVec trying to create a copy"
     },
+    "homepage": "https://github.com/thiakil/Applied-Energistics-2/releases",
     "promos": {
-        "1.11.2-latest": "rv5-alpha-0",
-        "1.11.2-recommended": "rv5-alpha-0"
+        "1.11.2-latest": "rv5-alpha-1",
+        "1.11.2-recommended": "rv5-alpha-1"
     }
 }
