@@ -60,6 +60,7 @@ import appeng.parts.networking.PartCableSmart;
 import appeng.parts.networking.PartDenseCable;
 import appeng.parts.networking.PartQuartzFiber;
 import appeng.parts.p2p.PartP2PFluids;
+import appeng.parts.p2p.PartP2PForgeEnergy;
 import appeng.parts.p2p.PartP2PIC2Power;
 import appeng.parts.p2p.PartP2PItems;
 import appeng.parts.p2p.PartP2PLight;
@@ -262,6 +263,15 @@ public enum PartType
 
 	P2PTunnelOpenComputers( 468, "p2p_tunnel_opencomputers", EnumSet.of( AEFeature.P2P_TUNNEL, AEFeature.P2P_TUNNEL_OPEN_COMPUTERS ), EnumSet.of(
 			IntegrationType.OpenComputers ), PartP2POpenComputers.class, GuiText.OCTunnel )
+	{
+		@Override
+		String getUnlocalizedName()
+		{
+			return "P2PTunnel";
+		}
+	},
+
+	P2PTunnelFE( 469, "p2p_tunnel_fe", EnumSet.of( AEFeature.P2P_TUNNEL, AEFeature.P2P_TUNNEL_FE ), EnumSet.noneOf( IntegrationType.class ), PartP2PForgeEnergy.class, GuiText.FETunnel )
 	{
 		@Override
 		String getUnlocalizedName()

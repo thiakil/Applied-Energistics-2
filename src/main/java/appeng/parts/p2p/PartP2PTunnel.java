@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 import appeng.api.AEApi;
 import appeng.api.config.Actionable;
@@ -165,7 +166,11 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 		// UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor( is.getItem() );
 		// AELog.info( "ID:" + id.toString() + " : " + is.getItemDamage() );
 
-		final TunnelType tt = AEApi.instance().registries().p2pTunnel().getTunnelTypeByItem( is );
+		TunnelType tt = AEApi.instance().registries().p2pTunnel().getTunnelTypeByItem( is );
+		if ( tt == null && is.hasCapability( CapabilityEnergy.ENERGY, null ))
+		{
+			tt = TunnelType.FORGE_POWER;
+		}
 		if(!is.isEmpty() && is.getItem() instanceof IMemoryCard )
 		{
 			final IMemoryCard mc = (IMemoryCard) is.getItem();
@@ -254,6 +259,10 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 
 				case COMPUTER_MESSAGE:
 					newType = parts.p2PTunnelOpenComputers().maybeStack( 1 ).orElse(ItemStack.EMPTY);
+					break;
+
+				case FORGE_POWER:
+					newType = parts.p2PTunnelFE().maybeStack( 1 ).orElse( ItemStack.EMPTY );
 					break;
 
 				default:
