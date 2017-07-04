@@ -91,6 +91,7 @@ public enum GuiText
 	LightTunnel,
 	RFTunnel,
 	PressureTunnel,
+	FETunnel,
 
 	StoredSize,
 	CopyMode,
