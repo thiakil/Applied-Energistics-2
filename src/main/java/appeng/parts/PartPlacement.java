@@ -83,7 +83,7 @@ public class PartPlacement
 		final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
 		final RayTraceResult mop = block.collisionRayTrace( world.getBlockState( pos ), world, pos, dir.getA(), dir.getB() );
 
-		if(!held.isEmpty() && Platform.isWrench(player, held, pos, hand, side, mop != null ? mop.hitVec : null) && player.isSneaking() )
+		if(!held.isEmpty() && Platform.isWrench(player, held, pos, hand, side, mop != null ? mop.hitVec : new Vec3d( 0,0,0 )) && player.isSneaking() )
 		{
 			if( !Platform.hasPermissions( new DimensionalCoord( world, pos ), player ) )
 			{
