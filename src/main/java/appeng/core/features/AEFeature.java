@@ -46,6 +46,7 @@ public enum AEFeature
 	CRYSTAL_GROWTH_ACCELERATOR( "CrystalGrowthAccelerator", Constants.CATEGORY_WORLD ),
 	CHEST_LOOT( "ChestLoot", Constants.CATEGORY_WORLD ),
 	VILLAGER_TRADING( "VillagerTrading", Constants.CATEGORY_WORLD ),
+	VILLAGER_TRADING_PRESSES( "VillagerTradingPresses", Constants.CATEGORY_WORLD ),
 	TINY_TNT( "TinyTNT", Constants.CATEGORY_WORLD ),
 	CERTUS_ORE( "CertusOre", Constants.CATEGORY_WORLD ),
 	CHARGED_CERTUS_ORE( "ChargedCertusOre", Constants.CATEGORY_WORLD ),

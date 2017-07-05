@@ -21,6 +21,8 @@ package appeng.hooks;
 import java.util.Optional;
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
@@ -33,7 +35,9 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import appeng.api.AEApi;
 import appeng.api.definitions.IItemDefinition;
 import appeng.api.definitions.IMaterials;
+import appeng.core.AEConfig;
 import appeng.core.AELog;
+import appeng.core.features.AEFeature;
 
 
 /**
@@ -43,8 +47,10 @@ import appeng.core.AELog;
  * @author yueh
  * @since rv2
  */
-public class AETrading implements EntityVillager.ITradeList
+public abstract class AETrading implements EntityVillager.ITradeList
 {
+
+	final IMaterials materials = AEApi.instance().definitions().materials();
 
 	public static void registerVillageTrades()
 	{
@@ -55,20 +61,37 @@ public class AETrading implements EntityVillager.ITradeList
 			return;
 		}
 		VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer( smith, "certus" );
-		career.addTrade( 1, new AETrading() );
+		career.addTrade( 1, new Lvl1() );
+		if ( AEConfig.instance().isFeatureEnabled( AEFeature.VILLAGER_TRADING_PRESSES ) )
+		{
+			career.addTrade( 2, new Presses() );
+		}
 	}
 
-	@Override
-	public void addMerchantRecipe( IMerchant villager, MerchantRecipeList recipeList, Random random )
+	private static class Lvl1 extends AETrading
 	{
-		final IMaterials materials = AEApi.instance().definitions().materials();
-		this.addMerchant( recipeList, materials.silicon(), 1, random, 2 );
-		this.addMerchant( recipeList, materials.certusQuartzCrystal(), 2, random, 4 );
-		this.addMerchant( recipeList, materials.certusQuartzDust(), 1, random, 3 );
-		this.addTrade( recipeList, materials.certusQuartzDust(), materials.certusQuartzCrystal(), random, 2 );
+		@Override
+		public void addMerchantRecipe( @Nonnull IMerchant villager, @Nonnull MerchantRecipeList recipeList, @Nonnull Random random )
+		{
+			addMerchant( recipeList, materials.silicon(), 1, random, 2 );
+			addMerchant( recipeList, materials.certusQuartzCrystal(), 2, random, 4 );
+			addMerchant( recipeList, materials.certusQuartzDust(), 1, random, 3 );
+			addTrade( recipeList, materials.certusQuartzDust(), materials.certusQuartzCrystal(), random, 2 );
+		}
 	}
 
-	private void addMerchant( MerchantRecipeList list, IItemDefinition item, int emera, Random rand, int greed )
+	private static class Presses extends AETrading
+	{
+		@Override
+		public void addMerchantRecipe( @Nonnull IMerchant villager, @Nonnull MerchantRecipeList recipeList, @Nonnull Random random )
+		{
+			addMerchant( recipeList ,materials.logicProcessorPress(), 3, random, 2 );
+			addMerchant( recipeList ,materials.calcProcessorPress(), 4, random, 3 );
+			addMerchant( recipeList ,materials.engProcessorPress(), 6, random, 4 );
+		}
+	}
+
+	private static void addMerchant( @Nonnull MerchantRecipeList list, @Nonnull IItemDefinition item, int emera, Random rand, int greed )
 	{
 		item.maybeStack( 1 ).ifPresent( itemStack ->
 		{
@@ -85,16 +108,16 @@ public class AETrading implements EntityVillager.ITradeList
 				from.setCount( from.getCount() - to.getCount() );
 				to.setCount( 0 );
 			}
-			this.addToList( list, from, to );
+			addToList( list, from, to );
 			// Buy
 			ItemStack reverseTo = from.copy();
 			ItemStack reverseFrom = to.copy();
 			reverseFrom.setCount( (int)( reverseFrom.getCount() * rand.nextFloat() * 3.0f + 1.0f ) );
-			this.addToList( list, reverseFrom, reverseTo );
+			addToList( list, reverseFrom, reverseTo );
 		} );
 	}
 
-	private void addTrade( MerchantRecipeList list, IItemDefinition inputDefinition, IItemDefinition outputDefinition, Random rand, int conversionVariance )
+	private static void addTrade( @Nonnull MerchantRecipeList list, IItemDefinition inputDefinition, IItemDefinition outputDefinition, Random rand, int conversionVariance )
 	{
 		final Optional<ItemStack> maybeInputStack = inputDefinition.maybeStack( 1 );
 		final Optional<ItemStack> maybeOutputStack = outputDefinition.maybeStack( 1 );
@@ -105,11 +128,11 @@ public class AETrading implements EntityVillager.ITradeList
 			ItemStack outputStack = maybeOutputStack.get().copy();
 			inputStack.setCount( 1 + ( Math.abs( rand.nextInt() ) % ( 1 + conversionVariance ) ) );
 			outputStack.setCount( 1 );
-			this.addToList( list, inputStack, outputStack );
+			addToList( list, inputStack, outputStack );
 		}
 	}
 
-	private void addToList( MerchantRecipeList l, ItemStack a, ItemStack b )
+	private static void addToList( @Nonnull MerchantRecipeList l, ItemStack a, ItemStack b )
 	{
 		if( a.getCount() < 1 )
 		{
