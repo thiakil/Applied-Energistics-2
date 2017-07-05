@@ -31,9 +31,7 @@ import appeng.tile.networking.*;
 import appeng.tile.qnb.TileQuantumBridge;
 import appeng.tile.spatial.TileSpatialIOPort;
 import appeng.tile.spatial.TileSpatialPylon;
-import appeng.tile.storage.TileChest;
-import appeng.tile.storage.TileDrive;
-import appeng.tile.storage.TileIOPort;
+import appeng.tile.storage.*;
 import com.google.common.base.Verify;
 
 import net.minecraft.block.Block;
@@ -263,6 +261,7 @@ public final class ApiBlocks implements IBlocks
 		this.skyStoneChest = registry.block( "sky_stone_chest", () -> new BlockSkyChest( SkyChestType.STONE ) )
 				.features( AEFeature.SKY_STONE_CHESTS )
 				.rendering( new SkyChestRenderingCustomizer( SkyChestType.STONE ) )
+				.tile( TileSkyChest.class )
 				.build();
 		this.smoothSkyStoneChest = registry.block( "smooth_sky_stone_chest", () -> new BlockSkyChest( SkyChestType.BLOCK ) )
 				.features( AEFeature.SKY_STONE_CHESTS )
