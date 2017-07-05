@@ -27,21 +27,24 @@ import cofh.api.energy.IEnergyReceiver;
 import appeng.api.config.PowerUnits;
 //import appeng.coremod.annotations.Integration.Interface;
 import appeng.integration.IntegrationType;
+import appeng.tile.layers.TileLayerBase;
 
 
 //@Interface( iname = IntegrationType.RF, iface = "cofh.api.energy.IEnergyReceiver" )
 @Optional.Interface( modid = "cofhapi|energy", iface = "cofh.api.energy.IEnergyReceiver" )
-public abstract class RedstoneFlux extends AERootPoweredTile implements IEnergyReceiver
+public class RedstoneFlux extends TileLayerBase implements IEnergyReceiver
 {
+	private final AERootPoweredTile thisPt = (AERootPoweredTile)this.getTile();
+
 	@Override
 	public final int receiveEnergy( final EnumFacing from, final int maxReceive, final boolean simulate )
 	{
-		final int networkRFDemand = (int) Math.floor( this.getExternalPowerDemand( PowerUnits.RF, maxReceive ) );
+		final int networkRFDemand = (int) Math.floor( thisPt.getExternalPowerDemand( PowerUnits.RF, maxReceive ) );
 		final int usedRF = Math.min( maxReceive, networkRFDemand );
 
 		if( !simulate )
 		{
-			this.injectExternalPower( PowerUnits.RF, usedRF );
+			thisPt.injectExternalPower( PowerUnits.RF, usedRF );
 		}
 
 		return usedRF;
@@ -50,18 +53,18 @@ public abstract class RedstoneFlux extends AERootPoweredTile implements IEnergyR
 	@Override
 	public final int getEnergyStored( final EnumFacing from )
 	{
-		return (int) Math.floor( PowerUnits.AE.convertTo( PowerUnits.RF, this.getAECurrentPower() ) );
+		return (int) Math.floor( PowerUnits.AE.convertTo( PowerUnits.RF, thisPt.getAECurrentPower() ) );
 	}
 
 	@Override
 	public final int getMaxEnergyStored( final EnumFacing from )
 	{
-		return (int) Math.floor( PowerUnits.AE.convertTo( PowerUnits.RF, this.getAEMaxPower() ) );
+		return (int) Math.floor( PowerUnits.AE.convertTo( PowerUnits.RF, thisPt.getAEMaxPower() ) );
 	}
 
 	@Override
 	public final boolean canConnectEnergy( final EnumFacing from )
 	{
-		return this.getPowerSides().contains( from );
+		return thisPt.getPowerSides().contains( from );
 	}
 }

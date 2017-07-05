@@ -45,6 +45,7 @@ import appeng.block.AEBaseBlock;
 import appeng.block.AEBaseItemBlock;
 import appeng.block.AEBaseTileBlock;
 import appeng.core.AEConfig;
+import appeng.core.Api;
 import appeng.core.AppEng;
 import appeng.core.CreativeTab;
 import appeng.core.features.AEFeature;
@@ -78,6 +79,8 @@ class BlockDefinitionBuilder implements IBlockBuilder
 	private boolean disableItem = false;
 
 	private Function<Block, ItemBlock> itemFactory;
+
+	private List<String> tileAlternateNames = new ArrayList<>();
 
 	@SideOnly( Side.CLIENT )
 	private BlockRendering blockRendering;
@@ -120,9 +123,18 @@ class BlockDefinitionBuilder implements IBlockBuilder
 	}
 
 	@Override
-	public BlockDefinitionBuilder tile( Class<? extends TileEntity> tile)
+	@SuppressWarnings( "unchecked" )
+	public BlockDefinitionBuilder tile( Class<? extends TileEntity> tile, String... alternateNames)
 	{
-		postInitCallbacks.add( (block,item) -> GameRegistry.registerTileEntity(tile, AppEng.MOD_ID+":"+registryName) );
+		postInitCallbacks.add( (block,item) -> {
+			Class<? extends TileEntity> mappedTile = tile;
+			if ( AEBaseTile.class.isAssignableFrom( mappedTile ) && block instanceof AEBaseTileBlock )
+			{
+				((AEBaseTileBlock)block).setupTile();
+				mappedTile = ((AEBaseTileBlock)block).getTileEntityClass();
+			}
+			GameRegistry.registerTileEntityWithAlternatives(mappedTile, AppEng.MOD_ID+":"+registryName, alternateNames);
+		} );
 		return this;
 	}
 

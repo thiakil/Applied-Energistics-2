@@ -19,8 +19,11 @@
 package appeng.integration.modules.rf;
 
 
+import appeng.core.Api;
+import appeng.core.api.ApiTile;
 import appeng.integration.IIntegrationModule;
 import appeng.integration.IntegrationHelper;
+import appeng.tile.powersink.AERootPoweredTile;
 
 
 public class RFTileModule implements IIntegrationModule
@@ -28,5 +31,11 @@ public class RFTileModule implements IIntegrationModule
 	public RFTileModule()
 	{
 		IntegrationHelper.testClassExistence( this, cofh.api.energy.IEnergyReceiver.class );
+	}
+
+	@Override
+	public void init() throws Throwable
+	{
+		Api.INSTANCE.tileHelper().registerNewLayer( "appeng.tile.powersink.RedstoneFlux", "cofh.api.energy.IEnergyReceiver", AERootPoweredTile.class );
 	}
 }

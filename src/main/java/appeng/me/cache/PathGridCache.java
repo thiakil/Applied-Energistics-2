@@ -24,8 +24,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import net.minecraft.tileentity.TileEntity;
+
+import appeng.api.AEApi;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridBlock;
@@ -142,19 +146,23 @@ public class PathGridCache implements IPathingGrid
 
 				// myGrid.getPivot().beginVisit( new AdHocChannelUpdater( 0 )
 				// );
-				for( final IGridNode node : this.myGrid.getMachines( TileController.class ) )
+				Optional<? extends Class<?extends TileEntity>> controller = AEApi.instance().definitions().blocks().controller().maybeEntity();
+				if ( controller.isPresent() )
 				{
-					closedList.add( (IPathItem) node );
-					for( final IGridConnection gcc : node.getConnections() )
+					for( final IGridNode node : this.myGrid.getMachines( (Class<?extends TileController>)controller.get() ) )
 					{
-						final GridConnection gc = (GridConnection) gcc;
-						if( !( gc.getOtherSide( node ).getMachine() instanceof TileController ) )
+						closedList.add( (IPathItem) node );
+						for( final IGridConnection gcc : node.getConnections() )
 						{
-							final List<IPathItem> open = new LinkedList<IPathItem>();
-							closedList.add( gc );
-							open.add( gc );
-							gc.setControllerRoute( (GridNode) node, true );
-							this.active.add( new PathSegment( this, open, this.semiOpen, closedList ) );
+							final GridConnection gc = (GridConnection) gcc;
+							if( !( gc.getOtherSide( node ).getMachine() instanceof TileController ) )
+							{
+								final List<IPathItem> open = new LinkedList<IPathItem>();
+								closedList.add( gc );
+								open.add( gc );
+								gc.setControllerRoute( (GridNode) node, true );
+								this.active.add( new PathSegment( this, open, this.semiOpen, closedList ) );
+							}
 						}
 					}
 				}

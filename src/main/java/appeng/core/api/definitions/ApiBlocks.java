@@ -41,10 +41,14 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSlab;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+
+import scala.App;
 
 import appeng.api.definitions.IBlockDefinition;
 import appeng.api.definitions.IBlocks;
@@ -435,10 +439,7 @@ public final class ApiBlocks implements IBlocks
 
 		this.multiPart = registry.block( "cable_bus", BlockCableBus::new )
 				.rendering( new CableBusRendering( partModels ) )
-				.postInit( ( block, item ) ->
-				{
-					( (BlockCableBus) block ).setupTile();
-				} )
+				.tile( TileCableBus.class, AppEng.MOD_ID+":BlockCableBus" )
 				.build();
 
 		this.skyStoneSlab = makeSlab( "sky_stone_slab", "sky_stone_double_slab", registry, this.skyStoneBlock() );

@@ -56,6 +56,7 @@ import appeng.api.implementations.tiles.IColorableTile;
 import appeng.api.util.AEColor;
 import appeng.api.util.IOrientable;
 import appeng.block.networking.BlockCableBus;
+import appeng.core.Api;
 import appeng.helpers.ICustomCollision;
 import appeng.tile.AEBaseTile;
 import appeng.tile.networking.TileCableBus;
@@ -384,6 +385,15 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 		}
 
 		return super.getCustomCollision( w, pos );
+	}
+
+	public void setupTile()
+	{
+		if ( tileEntityType != null )
+		{
+			tileEntityType = Api.INSTANCE.tileHelper().getCombinedInstance( tileEntityType );
+		}
+
 	}
 
 }

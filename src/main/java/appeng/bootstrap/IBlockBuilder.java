@@ -61,5 +61,5 @@ public interface IBlockBuilder
 
 	<T extends IBlockDefinition> T build();
 
-	IBlockBuilder tile( Class<? extends TileEntity> tile );
+	IBlockBuilder tile( Class<? extends TileEntity> tile, String... alternateNames );
 }

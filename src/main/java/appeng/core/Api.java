@@ -29,6 +29,7 @@ import appeng.api.storage.IStorageHelper;
 import appeng.api.util.AEPartLocation;
 import appeng.core.api.ApiPart;
 import appeng.core.api.ApiStorage;
+import appeng.core.api.ApiTile;
 import appeng.core.features.registries.PartModels;
 import appeng.core.features.registries.RegistryContainer;
 import appeng.me.GridConnection;
@@ -41,6 +42,7 @@ public final class Api implements IAppEngApi
 	public static final Api INSTANCE = new Api();
 
 	private final ApiPart partHelper;
+	private final ApiTile tileHelper;
 
 	// private MovableTileRegistry MovableRegistry = new MovableTileRegistry();
 	private final IRegistryContainer registryContainer;
@@ -52,6 +54,7 @@ public final class Api implements IAppEngApi
 		this.storageHelper = new ApiStorage();
 		this.registryContainer = new RegistryContainer();
 		this.partHelper = new ApiPart();
+		this.tileHelper = new ApiTile();
 		this.definitions = new ApiDefinitions( (PartModels) this.registryContainer.partModels() );
 	}
 
@@ -71,6 +74,11 @@ public final class Api implements IAppEngApi
 	public ApiPart partHelper()
 	{
 		return this.partHelper;
+	}
+
+	public ApiTile tileHelper()
+	{
+		return this.tileHelper;
 	}
 
 	@Override

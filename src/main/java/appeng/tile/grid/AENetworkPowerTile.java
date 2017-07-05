@@ -30,10 +30,10 @@ import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import appeng.tile.TileEvent;
 import appeng.tile.events.TileEventType;
-import appeng.tile.powersink.AEBasePoweredTile;
+import appeng.tile.powersink.AERootPoweredTile;
 
 
-public abstract class AENetworkPowerTile extends AEBasePoweredTile implements IActionHost, IGridProxyable
+public abstract class AENetworkPowerTile extends AERootPoweredTile implements IActionHost, IGridProxyable
 {
 
 	private final AENetworkProxy gridProxy = new AENetworkProxy( this, "proxy", this.getItemFromTile( this ), true );
