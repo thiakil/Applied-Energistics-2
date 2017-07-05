@@ -54,6 +54,7 @@ import appeng.core.sync.network.NetworkHandler;
 import appeng.core.worlddata.WorldData;
 import appeng.hooks.TickHandler;
 import appeng.integration.IntegrationRegistry;
+import appeng.integration.IntegrationType;
 import appeng.recipes.CustomRecipeConfig;
 import appeng.recipes.CustomRecipeForgeConfiguration;
 import appeng.server.AECommand;
@@ -137,9 +138,14 @@ public final class AppEng
 	@EventHandler
 	private void preInit( final FMLPreInitializationEvent event )
 	{
-		if( !Loader.isModLoaded( "appliedenergistics2-core" ) )
+		/*if( !Loader.isModLoaded( "appliedenergistics2-core" ) )
 		{
 			AppEng.proxy.missingCoreMod();
+		}*/
+
+		for( final IntegrationType type : IntegrationType.values() )
+		{
+			IntegrationRegistry.INSTANCE.add( type );
 		}
 
 		final Stopwatch watch = Stopwatch.createStarted();

@@ -20,15 +20,17 @@ package appeng.tile.powersink;
 
 
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
 
 import cofh.api.energy.IEnergyReceiver;
 
 import appeng.api.config.PowerUnits;
-import appeng.coremod.annotations.Integration.Interface;
+//import appeng.coremod.annotations.Integration.Interface;
 import appeng.integration.IntegrationType;
 
 
-@Interface( iname = IntegrationType.RF, iface = "cofh.api.energy.IEnergyReceiver" )
+//@Interface( iname = IntegrationType.RF, iface = "cofh.api.energy.IEnergyReceiver" )
+@Optional.Interface( modid = "cofhapi|energy", iface = "cofh.api.energy.IEnergyReceiver" )
 public abstract class RedstoneFlux extends AERootPoweredTile implements IEnergyReceiver
 {
 	@Override

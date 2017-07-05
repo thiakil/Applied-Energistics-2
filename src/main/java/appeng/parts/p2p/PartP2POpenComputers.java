@@ -42,12 +42,12 @@ import appeng.api.parts.IPartModel;
 import appeng.core.AELog;
 import appeng.integration.IntegrationRegistry;
 import appeng.integration.IntegrationType;
-import appeng.coremod.annotations.Integration.Interface;
-import appeng.coremod.annotations.Integration.InterfaceList;
+//import appeng.coremod.annotations.Integration.Interface;
+//import appeng.coremod.annotations.Integration.InterfaceList;
 import appeng.items.parts.PartModels;
 
 
-@InterfaceList( value = { @Interface( iface = "li.cil.oc.api.network.Environment", iname = IntegrationType.OpenComputers ), @Interface( iface = "li.cil.oc.api.network.SidedEnvironment", iname = IntegrationType.OpenComputers ) } )
+//@InterfaceList( value = { @Interface( iface = "li.cil.oc.api.network.Environment", iname = IntegrationType.OpenComputers ), @Interface( iface = "li.cil.oc.api.network.SidedEnvironment", iname = IntegrationType.OpenComputers ) } )
 public final class PartP2POpenComputers extends PartP2PTunnel<PartP2POpenComputers> implements Environment, SidedEnvironment
 {
 	@Nullable

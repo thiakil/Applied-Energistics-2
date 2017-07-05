@@ -20,15 +20,17 @@ package appeng.items.tools.powered.powersink;
 
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Optional;
 
 import cofh.api.energy.IEnergyContainerItem;
 
 import appeng.api.config.PowerUnits;
-import appeng.coremod.annotations.Integration.Interface;
+//import appeng.coremod.annotations.Integration.Interface;
 import appeng.integration.IntegrationType;
 
 
-@Interface( iface = "cofh.api.energy.IEnergyContainerItem", iname = IntegrationType.RFItem )
+//@Interface( iface = "cofh.api.energy.IEnergyContainerItem", iname = IntegrationType.RFItem )
+@Optional.Interface( modid = "cofhapi|energy", iface = "cofh.api.energy.IEnergyReceiver" )
 public abstract class RedstoneFlux extends AERootPoweredItem implements IEnergyContainerItem
 {
 	public RedstoneFlux( final double powerCapacity )
