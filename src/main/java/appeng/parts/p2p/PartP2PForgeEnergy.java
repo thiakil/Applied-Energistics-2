@@ -39,6 +39,11 @@ import appeng.me.GridAccessException;
 import appeng.util.Platform;
 
 
+/**
+ * P2P tunnel that works with Forge Energy, based on the old RF tunnel.
+ * @author Thiakil
+ * @since rv5
+ */
 public final class PartP2PForgeEnergy extends PartP2PTunnel<PartP2PForgeEnergy>
 {
 	private static final ThreadLocal<Stack<PartP2PForgeEnergy>> THREAD_STACK = new ThreadLocal<Stack<PartP2PForgeEnergy>>();
