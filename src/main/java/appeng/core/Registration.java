@@ -63,6 +63,7 @@ import appeng.core.features.registries.cell.CreativeCellHandler;
 import appeng.core.localization.GuiText;
 import appeng.core.localization.PlayerMessages;
 import appeng.core.stats.PlayerStatsRegistration;
+import appeng.hooks.AETrading;
 import appeng.hooks.TickHandler;
 import appeng.integration.Integrations;
 import appeng.items.materials.ItemMaterial;
@@ -404,8 +405,7 @@ public final class Registration
 		// add villager trading to black smiths for a few basic materials
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.VILLAGER_TRADING ) )
 		{
-			// TODO: VILLAGER TRADING
-			// VillagerRegistry.instance().getRegisteredVillagers()..registerVillageTradeHandler( 3, new AETrading() );
+			AETrading.registerVillageTrades();
 		}
 
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.CERTUS_QUARTZ_WORLD_GEN ) )

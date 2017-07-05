@@ -407,7 +407,7 @@ public class CachedPlane
 				ExtendedBlockStorage extendedblockstorage = this.storage[by];
 				if( extendedblockstorage == null )
 				{
-					extendedblockstorage = this.storage[by] = new ExtendedBlockStorage( by << 4, this.c.getWorld().provider.hasSkyLight() );
+					extendedblockstorage = this.storage[by] = new ExtendedBlockStorage( by << 4, !this.c.getWorld().provider.isNether() );
 				}
 			}
 		}
