@@ -89,7 +89,7 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 
 		if( type == Actionable.MODULATE )
 		{
-			this.onTick();
+			this.onTick( orgInput );
 		}
 
 		return AEItemStack.create( remaining );
@@ -156,7 +156,7 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 
 		if (!gathered.isEmpty()) {
 			if (mode == Actionable.MODULATE) {
-				this.onTick();
+				this.onTick( gathered );
 			}
 
 			return AEItemStack.create(gathered);
@@ -167,6 +167,11 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 
 	@Override
 	public TickRateModulation onTick()
+	{
+		return onTick( null );
+	}
+
+	public TickRateModulation onTick(ItemStack expectedChange)
 	{
 		LinkedList<IAEItemStack> changes = new LinkedList<>();
 
@@ -191,13 +196,17 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 
 			ItemStack newIS = itemHandler.getStackInSlot( slot );
 
-			if( this.isDifferent( newIS, oldIS ) )
+			// if we're expecting a change, make sure it's the expected one, else we leave it til the next onTick
+			if ( expectedChange == null || newIS.isItemEqual( expectedChange ) || oldIS.isItemEqual( expectedChange ))
 			{
-				addItemChange( slot, oldAeIS, newIS, changes );
-			}
-			else if(!newIS.isEmpty() && !oldIS.isEmpty() )
-			{
-				addPossibleStackSizeChange( slot, oldAeIS, newIS, changes );
+				if( this.isDifferent( newIS, oldIS ) )
+				{
+					addItemChange( slot, oldAeIS, newIS, changes );
+				}
+				else if( !newIS.isEmpty() && !oldIS.isEmpty() )
+				{
+					addPossibleStackSizeChange( slot, oldAeIS, newIS, changes );
+				}
 			}
 		}
 
