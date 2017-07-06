@@ -86,7 +86,8 @@ public class BlockSkyStone extends AEBaseBlock
 		{
 			if ( WorldData.instance() == null )
 			{
-				AELog.error( "Worlddata was null, server has not started?" );
+				AELog.error( "Worlddata was null, server has not started?!" );
+				return;
 			}
 			WorldData.instance().compassData().service().updateArea( w, pos.getX(), pos.getY(), pos.getZ() );
 		}
@@ -99,6 +100,11 @@ public class BlockSkyStone extends AEBaseBlock
 
 		if( Platform.isServer() )
 		{
+			if ( WorldData.instance() == null )
+			{
+				AELog.error( "Worlddata was null, server has not started?!" );
+				return;
+			}
 			WorldData.instance().compassData().service().updateArea( w, pos.getX(), pos.getY(), pos.getZ() );
 		}
 	}
