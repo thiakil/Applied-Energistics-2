@@ -7,19 +7,15 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -27,8 +23,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.common.model.TRSRTransformation;
 
 import appeng.api.implementations.items.IBiometricCard;
 import appeng.api.util.AEColor;
@@ -36,7 +30,7 @@ import appeng.client.render.cablebus.CubeBuilder;
 import appeng.core.AELog;
 
 
-class BiometricCardBakedModel implements IPerspectiveAwareModel
+class BiometricCardBakedModel extends BaseBakedModel
 {
 
 	private final VertexFormat format;
@@ -58,6 +52,7 @@ class BiometricCardBakedModel implements IPerspectiveAwareModel
 
 	private BiometricCardBakedModel( VertexFormat format, IBakedModel baseModel, TextureAtlasSprite texture, int hash, Cache<Integer, BiometricCardBakedModel> modelCache )
 	{
+		super( baseModel );
 		this.format = format;
 		this.baseModel = baseModel;
 		this.texture = texture;
@@ -134,36 +129,6 @@ class BiometricCardBakedModel implements IPerspectiveAwareModel
 	}
 
 	@Override
-	public boolean isAmbientOcclusion()
-	{
-		return baseModel.isAmbientOcclusion();
-	}
-
-	@Override
-	public boolean isGui3d()
-	{
-		return baseModel.isGui3d();
-	}
-
-	@Override
-	public boolean isBuiltInRenderer()
-	{
-		return baseModel.isBuiltInRenderer();
-	}
-
-	@Override
-	public TextureAtlasSprite getParticleTexture()
-	{
-		return baseModel.getParticleTexture();
-	}
-
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms()
-	{
-		return baseModel.getItemCameraTransforms();
-	}
-
-	@Override
 	public ItemOverrideList getOverrides()
 	{
 		return new ItemOverrideList( Collections.emptyList() )
@@ -206,18 +171,5 @@ class BiometricCardBakedModel implements IPerspectiveAwareModel
 				}
 			}
 		};
-	}
-
-	@Override
-	public Pair<? extends IBakedModel, Matrix4f> handlePerspective( ItemCameraTransforms.TransformType type )
-	{
-		// Delegate to the base model if possible
-		if( baseModel instanceof IPerspectiveAwareModel )
-		{
-			IPerspectiveAwareModel pam = (IPerspectiveAwareModel) baseModel;
-			Pair<? extends IBakedModel, Matrix4f> pair = pam.handlePerspective( type );
-			return Pair.of( this, pair.getValue() );
-		}
-		return Pair.of( this, TRSRTransformation.identity().getMatrix() );
 	}
 }

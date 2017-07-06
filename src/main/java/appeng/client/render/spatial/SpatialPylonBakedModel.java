@@ -23,8 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+import javax.vecmath.Matrix4f;
 
 import com.google.common.collect.ImmutableMap;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -34,6 +37,8 @@ import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 import appeng.block.spatial.BlockSpatialPylon;
@@ -44,17 +49,20 @@ import appeng.tile.spatial.TileSpatialPylon;
 /**
  * The baked model that will be used for rendering the spatial pylon.
  */
-class SpatialPylonBakedModel implements IBakedModel
+class SpatialPylonBakedModel implements IPerspectiveAwareModel
 {
 
 	private final Map<SpatialPylonTextureType, TextureAtlasSprite> textures;
 
 	private final VertexFormat format;
 
-	SpatialPylonBakedModel( VertexFormat format, Map<SpatialPylonTextureType, TextureAtlasSprite> textures )
+	private final IPerspectiveAwareModel.MapWrapper perspective;
+
+	SpatialPylonBakedModel( ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms, VertexFormat format, Map<SpatialPylonTextureType, TextureAtlasSprite> textures )
 	{
 		this.textures = ImmutableMap.copyOf( textures );
 		this.format = format;
+		perspective = new IPerspectiveAwareModel.MapWrapper( this, transforms );
 	}
 
 	@Override
@@ -246,5 +254,11 @@ class SpatialPylonBakedModel implements IBakedModel
 	public ItemOverrideList getOverrides()
 	{
 		return ItemOverrideList.NONE;
+	}
+
+	@Override
+	public Pair<? extends IBakedModel, Matrix4f> handlePerspective( ItemCameraTransforms.TransformType cameraTransformType )
+	{
+		return this.perspective.handlePerspective( cameraTransformType );
 	}
 }

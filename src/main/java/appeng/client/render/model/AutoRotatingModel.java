@@ -49,7 +49,7 @@ import appeng.block.AEBaseTileBlock;
 import appeng.client.render.FacingToRotation;
 
 
-public class AutoRotatingModel implements IBakedModel
+public class AutoRotatingModel extends BaseBakedModel
 {
 
 	private final IBakedModel parent;
@@ -57,6 +57,7 @@ public class AutoRotatingModel implements IBakedModel
 
 	public AutoRotatingModel( IBakedModel parent )
 	{
+		super( parent );
 		this.parent = parent;
 		// 6 (DUNSWE) * 6 (DUNSWE) * 7 (DUNSWE + null) = 252
 		this.quadCache = CacheBuilder.newBuilder().maximumSize( 252 ).build( new CacheLoader<AutoRotatingCacheKey, List<BakedQuad>>(){

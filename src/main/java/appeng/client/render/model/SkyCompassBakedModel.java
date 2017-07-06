@@ -31,9 +31,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -52,7 +50,7 @@ import appeng.hooks.CompassResult;
  * This baked model combines the quads of a compass base and the quads of a compass pointer, which will be rotated
  * around the Y-axis to get the compass to point in the right direction.
  */
-public class SkyCompassBakedModel implements IBakedModel
+public class SkyCompassBakedModel extends BaseBakedModel
 {
 
 	private final IBakedModel base;
@@ -63,6 +61,7 @@ public class SkyCompassBakedModel implements IBakedModel
 
 	public SkyCompassBakedModel( IBakedModel base, IBakedModel pointer )
 	{
+		super( base );
 		this.base = base;
 		this.pointer = pointer;
 	}
@@ -117,12 +116,6 @@ public class SkyCompassBakedModel implements IBakedModel
 	}
 
 	@Override
-	public boolean isAmbientOcclusion()
-	{
-		return base.isAmbientOcclusion();
-	}
-
-	@Override
 	public boolean isGui3d()
 	{
 		return true;
@@ -132,18 +125,6 @@ public class SkyCompassBakedModel implements IBakedModel
 	public boolean isBuiltInRenderer()
 	{
 		return false;
-	}
-
-	@Override
-	public TextureAtlasSprite getParticleTexture()
-	{
-		return base.getParticleTexture();
-	}
-
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms()
-	{
-		return base.getItemCameraTransforms();
 	}
 
 	@Override

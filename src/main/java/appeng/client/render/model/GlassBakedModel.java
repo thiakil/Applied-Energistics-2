@@ -26,9 +26,13 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
+import javax.vecmath.Matrix4f;
 
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -41,14 +45,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 import appeng.decorative.solid.BlockQuartzGlass;
 import appeng.decorative.solid.GlassState;
 
 
-class GlassBakedModel implements IBakedModel
+class GlassBakedModel implements IPerspectiveAwareModel
 {
 
 	private static final byte[][][] OFFSETS = generateOffsets();
@@ -78,7 +85,9 @@ class GlassBakedModel implements IBakedModel
 
 	private final VertexFormat vertexFormat;
 
-	public GlassBakedModel( VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
+	private final IPerspectiveAwareModel.MapWrapper perspective;
+
+	public GlassBakedModel( ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
 	{
 		this.glassTextures = new TextureAtlasSprite[] {
 				bakedTextureGetter.apply( TEXTURE_A ),
@@ -95,6 +104,8 @@ class GlassBakedModel implements IBakedModel
 		{
 			this.frameTextures[1 + i] = bakedTextureGetter.apply( TEXTURES_FRAME[i] );
 		}
+
+		perspective = new IPerspectiveAwareModel.MapWrapper( this, transforms );
 	}
 
 	@Override
@@ -291,6 +302,7 @@ class GlassBakedModel implements IBakedModel
 	}
 
 	@Override
+	@Deprecated
 	public ItemCameraTransforms getItemCameraTransforms()
 	{
 		return ItemCameraTransforms.DEFAULT;
@@ -310,5 +322,11 @@ class GlassBakedModel implements IBakedModel
 		}
 
 		return offset;
+	}
+
+	@Override
+	public Pair<? extends IBakedModel, Matrix4f> handlePerspective( ItemCameraTransforms.TransformType cameraTransformType )
+	{
+		return this.perspective.handlePerspective( cameraTransformType );
 	}
 }

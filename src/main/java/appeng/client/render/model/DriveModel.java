@@ -34,12 +34,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.common.model.TRSRTransformation;
 
 import appeng.block.storage.DriveSlotState;
 
 
-public class DriveModel implements IModel
+public class DriveModel extends BaseModel
 {
 
 	private static final ResourceLocation MODEL_BASE = new ResourceLocation( "appliedenergistics2:block/drive_base" );
@@ -51,6 +50,11 @@ public class DriveModel implements IModel
 			DriveSlotState.TYPES_FULL, new ResourceLocation( "appliedenergistics2:block/drive_cell_types_full" ),
 			DriveSlotState.FULL, new ResourceLocation( "appliedenergistics2:block/drive_cell_full" )
 	);
+
+	public DriveModel()
+	{
+		super( MODEL_BASE );
+	}
 
 	@Override
 	public Collection<ResourceLocation> getDependencies()
@@ -70,10 +74,9 @@ public class DriveModel implements IModel
 		EnumMap<DriveSlotState, IBakedModel> cellModels = new EnumMap<>( DriveSlotState.class );
 
 		// Load the base model and the model for each cell state.
-		IModel baseModel;
+
 		try
 		{
-			baseModel = ModelLoaderRegistry.getModel( MODEL_BASE );
 			for( DriveSlotState slotState : MODELS_CELLS.keySet() )
 			{
 				IModel model = ModelLoaderRegistry.getModel( MODELS_CELLS.get( slotState ) );
@@ -85,13 +88,8 @@ public class DriveModel implements IModel
 			throw new RuntimeException( e );
 		}
 
-		IBakedModel bakedBase = baseModel.bake( state, format, bakedTextureGetter );
+		IBakedModel bakedBase = getBakedBaseModel( state, format, bakedTextureGetter );
 		return new DriveBakedModel( bakedBase, cellModels );
 	}
 
-	@Override
-	public IModelState getDefaultState()
-	{
-		return TRSRTransformation.identity();
-	}
 }

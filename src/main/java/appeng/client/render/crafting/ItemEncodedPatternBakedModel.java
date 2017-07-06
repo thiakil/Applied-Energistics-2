@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -26,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.TRSRTransformation;
 
+import appeng.client.render.model.BaseBakedModel;
 import appeng.items.misc.ItemEncodedPattern;
 
 
@@ -34,7 +34,7 @@ import appeng.items.misc.ItemEncodedPattern;
  * showing the encoded pattern itself. Matters are further complicated by only wanting to show the crafting output when the pattern is being
  * rendered in the GUI, and not anywhere else.
  */
-class ItemEncodedPatternBakedModel implements IPerspectiveAwareModel
+class ItemEncodedPatternBakedModel extends BaseBakedModel
 {
 	private final IBakedModel baseModel;
 
@@ -44,6 +44,7 @@ class ItemEncodedPatternBakedModel implements IPerspectiveAwareModel
 
 	ItemEncodedPatternBakedModel( IBakedModel baseModel, ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms )
 	{
+		super( baseModel );
 		this.baseModel = baseModel;
 		this.transforms = transforms;
 		this.overrides = new CustomOverrideList();
@@ -56,43 +57,12 @@ class ItemEncodedPatternBakedModel implements IPerspectiveAwareModel
 	}
 
 	@Override
-	public boolean isAmbientOcclusion()
-	{
-		return baseModel.isAmbientOcclusion();
-	}
-
-	@Override
-	public boolean isGui3d()
-	{
-		return baseModel.isGui3d();
-	}
-
-	@Override
-	public boolean isBuiltInRenderer()
-	{
-		return baseModel.isBuiltInRenderer();
-	}
-
-	@Override
-	public TextureAtlasSprite getParticleTexture()
-	{
-		return baseModel.getParticleTexture();
-	}
-
-	@Override
-	@Deprecated
-	public ItemCameraTransforms getItemCameraTransforms()
-	{
-		return baseModel.getItemCameraTransforms();
-	}
-
-	@Override
 	public ItemOverrideList getOverrides()
 	{
 		return overrides;
 	}
 
-	@Override
+	/*@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective( ItemCameraTransforms.TransformType cameraTransformType )
 	{
 		if( baseModel instanceof IPerspectiveAwareModel )
@@ -101,7 +71,7 @@ class ItemEncodedPatternBakedModel implements IPerspectiveAwareModel
 		}
 
 		return IPerspectiveAwareModel.MapWrapper.handlePerspective( this, transforms, cameraTransformType );
-	}
+	}*/
 
 	/**
 	 * Since the ItemOverrideList handling comes before handling the perspective awareness (which is the first place where we
@@ -110,13 +80,14 @@ class ItemEncodedPatternBakedModel implements IPerspectiveAwareModel
 	 * Usually those methods only matter for rendering on the ground and other cases, where we wouldn't render the crafting output model anyway,
 	 * so in those cases we delegate to the model of the encoded pattern.
 	 */
-	private class ShiftHoldingModelWrapper implements IPerspectiveAwareModel
+	private class ShiftHoldingModelWrapper extends BaseBakedModel
 	{
 
 		private final IBakedModel outputModel;
 
 		private ShiftHoldingModelWrapper( IBakedModel outputModel )
 		{
+			super( baseModel );
 			this.outputModel = outputModel;
 		}
 
@@ -149,52 +120,13 @@ class ItemEncodedPatternBakedModel implements IPerspectiveAwareModel
 			return IPerspectiveAwareModel.MapWrapper.handlePerspective( this, transforms, cameraTransformType );
 		}
 
+		// Other methods may be called for items on the ground, in which case we will always fall back to the pattern
+
 		@Override
 		public List<BakedQuad> getQuads( @Nullable IBlockState state, @Nullable EnumFacing side, long rand )
 		{
 			// This may be called for items on the ground, in which case we will always fall back to the pattern
 			return baseModel.getQuads( state, side, rand );
-		}
-
-		@Override
-		public boolean isAmbientOcclusion()
-		{
-			return baseModel.isAmbientOcclusion();
-		}
-
-		@Override
-		public boolean isGui3d()
-		{
-			// NOTE: Sadly, Forge will let Minecraft call this method before handling the perspective awareness
-			return baseModel.isGui3d();
-		}
-
-		@Override
-		public boolean isBuiltInRenderer()
-		{
-			// This may be called for items on the ground, in which case we will always fall back to the pattern
-			return baseModel.isBuiltInRenderer();
-		}
-
-		@Override
-		public TextureAtlasSprite getParticleTexture()
-		{
-			// This may be called for items on the ground, in which case we will always fall back to the pattern
-			return baseModel.getParticleTexture();
-		}
-
-		@Override
-		public ItemCameraTransforms getItemCameraTransforms()
-		{
-			// This may be called for items on the ground, in which case we will always fall back to the pattern
-			return baseModel.getItemCameraTransforms();
-		}
-
-		@Override
-		public ItemOverrideList getOverrides()
-		{
-			// This may be called for items on the ground, in which case we will always fall back to the pattern
-			return baseModel.getOverrides();
 		}
 	}
 
