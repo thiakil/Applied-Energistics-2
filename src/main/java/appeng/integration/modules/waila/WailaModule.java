@@ -21,7 +21,6 @@ package appeng.integration.modules.waila;
 
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
-import mcp.mobius.waila.Waila;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 
@@ -32,6 +31,8 @@ import appeng.tile.AEBaseTile;
 
 public class WailaModule implements IIntegrationModule
 {
+
+	private static String MODID = "waila";
 
 	public WailaModule()
 	{
@@ -59,7 +60,7 @@ public class WailaModule implements IIntegrationModule
 	@Override
 	public void init() throws Throwable
 	{
-		FMLInterModComms.sendMessage( Waila.MODID, "register", this.getClass().getName() + ".register" );
+		FMLInterModComms.sendMessage( MODID, "register", this.getClass().getName() + ".register" );
 	}
 
 }
