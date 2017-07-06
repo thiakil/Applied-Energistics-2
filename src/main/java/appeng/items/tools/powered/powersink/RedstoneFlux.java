@@ -30,7 +30,7 @@ import appeng.integration.IntegrationType;
 
 
 //@Interface( iface = "cofh.api.energy.IEnergyContainerItem", iname = IntegrationType.RFItem )
-@Optional.Interface( modid = "cofhapi|energy", iface = "cofh.api.energy.IEnergyReceiver" )
+@Optional.Interface( modid = "cofhapi|energy", iface = "cofh.api.energy.IEnergyContainerItem" )
 public abstract class RedstoneFlux extends AERootPoweredItem implements IEnergyContainerItem
 {
 	public RedstoneFlux( final double powerCapacity )
