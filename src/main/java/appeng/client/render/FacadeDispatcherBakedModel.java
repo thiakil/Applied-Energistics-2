@@ -27,9 +27,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -38,6 +36,7 @@ import net.minecraft.world.World;
 
 import mcp.MethodsReturnNonnullByDefault;
 
+import appeng.client.render.model.BaseBakedModel;
 import appeng.items.parts.ItemFacade;
 
 
@@ -47,7 +46,7 @@ import appeng.items.parts.ItemFacade;
  * A custom Item Override List is used to accomplish this.
  */
 @MethodsReturnNonnullByDefault
-public class FacadeDispatcherBakedModel implements IBakedModel
+public class FacadeDispatcherBakedModel extends BaseBakedModel
 {
 
 	private final IBakedModel baseModel;
@@ -56,6 +55,7 @@ public class FacadeDispatcherBakedModel implements IBakedModel
 
 	public FacadeDispatcherBakedModel( IBakedModel baseModel, VertexFormat format )
 	{
+		super( baseModel );
 		this.baseModel = baseModel;
 		this.format = format;
 	}
@@ -68,33 +68,9 @@ public class FacadeDispatcherBakedModel implements IBakedModel
 	}
 
 	@Override
-	public boolean isAmbientOcclusion()
-	{
-		return baseModel.isAmbientOcclusion();
-	}
-
-	@Override
-	public boolean isGui3d()
-	{
-		return baseModel.isGui3d();
-	}
-
-	@Override
 	public boolean isBuiltInRenderer()
 	{
 		return false;
-	}
-
-	@Override
-	public TextureAtlasSprite getParticleTexture()
-	{
-		return baseModel.getParticleTexture();
-	}
-
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms()
-	{
-		return baseModel.getItemCameraTransforms();
 	}
 
 	@Override

@@ -6,39 +6,27 @@ import java.util.EnumMap;
 import java.util.List;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
-
-import com.google.common.collect.ImmutableMap;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.common.model.TRSRTransformation;
 
 
-class ColorApplicatorBakedModel implements IPerspectiveAwareModel
+class ColorApplicatorBakedModel extends BaseBakedModel
 {
 
 	private final IBakedModel baseModel;
-
-	private final ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms;
 
 	private final EnumMap<EnumFacing, List<BakedQuad>> quadsBySide;
 
 	private final List<BakedQuad> generalQuads;
 
-	ColorApplicatorBakedModel( IBakedModel baseModel, ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> map,
-			TextureAtlasSprite texDark, TextureAtlasSprite texMedium, TextureAtlasSprite texBright )
+	ColorApplicatorBakedModel( IBakedModel baseModel, TextureAtlasSprite texDark, TextureAtlasSprite texMedium, TextureAtlasSprite texBright )
 	{
+		super( baseModel );
 		this.baseModel = baseModel;
-		this.transforms = map;
 
 		// Put the tint indices in... Since this is an item model, we are ignoring rand
 		this.generalQuads = fixQuadTint( null, texDark, texMedium, texBright );
@@ -97,47 +85,5 @@ class ColorApplicatorBakedModel implements IPerspectiveAwareModel
 			return generalQuads;
 		}
 		return this.quadsBySide.get( side );
-	}
-
-	@Override
-	public boolean isAmbientOcclusion()
-	{
-		return baseModel.isAmbientOcclusion();
-	}
-
-	@Override
-	public boolean isGui3d()
-	{
-		return baseModel.isGui3d();
-	}
-
-	@Override
-	public boolean isBuiltInRenderer()
-	{
-		return baseModel.isBuiltInRenderer();
-	}
-
-	@Override
-	public TextureAtlasSprite getParticleTexture()
-	{
-		return baseModel.getParticleTexture();
-	}
-
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms()
-	{
-		return baseModel.getItemCameraTransforms();
-	}
-
-	@Override
-	public ItemOverrideList getOverrides()
-	{
-		return baseModel.getOverrides();
-	}
-
-	@Override
-	public Pair<? extends IBakedModel, Matrix4f> handlePerspective( ItemCameraTransforms.TransformType type )
-	{
-		return MapWrapper.handlePerspective( this, transforms, type );
 	}
 }

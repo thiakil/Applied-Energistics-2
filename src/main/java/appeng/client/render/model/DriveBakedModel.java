@@ -29,9 +29,6 @@ import javax.vecmath.Vector3f;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -41,13 +38,14 @@ import appeng.block.storage.DriveSlotState;
 import appeng.block.storage.DriveSlotsState;
 
 
-public class DriveBakedModel implements IBakedModel
+public class DriveBakedModel extends BaseBakedModel
 {
 	private final IBakedModel bakedBase;
 	private final Map<DriveSlotState, IBakedModel> bakedCells;
 
 	public DriveBakedModel( IBakedModel bakedBase, Map<DriveSlotState, IBakedModel> bakedCells )
 	{
+		super( bakedBase );
 		this.bakedBase = bakedBase;
 		this.bakedCells = bakedCells;
 	}
@@ -97,41 +95,5 @@ public class DriveBakedModel implements IBakedModel
 		}
 
 		return result;
-	}
-
-	@Override
-	public boolean isAmbientOcclusion()
-	{
-		return bakedBase.isAmbientOcclusion();
-	}
-
-	@Override
-	public boolean isGui3d()
-	{
-		return bakedBase.isGui3d();
-	}
-
-	@Override
-	public boolean isBuiltInRenderer()
-	{
-		return bakedBase.isGui3d();
-	}
-
-	@Override
-	public TextureAtlasSprite getParticleTexture()
-	{
-		return bakedBase.getParticleTexture();
-	}
-
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms()
-	{
-		return bakedBase.getItemCameraTransforms();
-	}
-
-	@Override
-	public ItemOverrideList getOverrides()
-	{
-		return bakedBase.getOverrides();
 	}
 }

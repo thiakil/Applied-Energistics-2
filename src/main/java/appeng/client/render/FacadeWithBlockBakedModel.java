@@ -24,30 +24,26 @@ import java.util.EnumSet;
 import java.util.List;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
 import appeng.client.render.cablebus.CubeBuilder;
 import appeng.client.render.cablebus.FacadeBuilder;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import org.apache.commons.lang3.tuple.Pair;
+import appeng.client.render.model.BaseBakedModel;
 
 
 /**
  * This is the actual baked model that will combine the north face of a given block state
  * with the base facade item model to achieve what is then actually rendered on screen.
  */
-public class FacadeWithBlockBakedModel implements IBakedModel, IPerspectiveAwareModel
+public class FacadeWithBlockBakedModel extends BaseBakedModel
 {
 
 	private final IBakedModel baseModel;
@@ -62,6 +58,7 @@ public class FacadeWithBlockBakedModel implements IBakedModel, IPerspectiveAware
 
 	public FacadeWithBlockBakedModel( IBakedModel baseModel, IBlockState blockState, ItemStack textureItem, VertexFormat format )
 	{
+		super( baseModel );
 		this.baseModel = baseModel;
 		this.blockState = blockState;
 		this.textureItem = textureItem;
@@ -95,12 +92,6 @@ public class FacadeWithBlockBakedModel implements IBakedModel, IPerspectiveAware
 	}
 
 	@Override
-	public boolean isAmbientOcclusion()
-	{
-		return baseModel.isAmbientOcclusion();
-	}
-
-	@Override
 	public boolean isGui3d()
 	{
 		return false;
@@ -113,27 +104,15 @@ public class FacadeWithBlockBakedModel implements IBakedModel, IPerspectiveAware
 	}
 
 	@Override
-	public TextureAtlasSprite getParticleTexture()
-	{
-		return baseModel.getParticleTexture();
-	}
-
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms()
-	{
-		return baseModel.getItemCameraTransforms();
-	}
-
-	@Override
 	public ItemOverrideList getOverrides()
 	{
 		return ItemOverrideList.NONE;
 	}
 
-	@Override
+	/*@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
 		if (baseModel instanceof IPerspectiveAwareModel)
 			return Pair.of(this, ((IPerspectiveAwareModel) baseModel).handlePerspective(cameraTransformType).getRight());
 		return Pair.of(this, null);
-	}
+	}*/
 }
