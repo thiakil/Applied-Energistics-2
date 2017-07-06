@@ -94,7 +94,7 @@ Providing as many details as possible does help us to find and resolve the issue
   - Eclipse: execute `gradlew eclipse`
 5. For add-on developer: Core-Mod Detection
   - In order to have FML detect AE from your dev environment, add the following VM Option to your run profile
-  - `-Dfml.coreMods.load=appeng.coremod.AppEngCore`
+  - `-Dfml.coreMods.load=appeng.coremod.CoreModeLoader`
 
 ## Contribution
 
