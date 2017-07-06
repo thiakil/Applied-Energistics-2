@@ -125,6 +125,10 @@ processResources
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
+runServer {
+    args 'nogui'
+}
+
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
