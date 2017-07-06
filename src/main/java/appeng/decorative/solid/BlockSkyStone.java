@@ -30,6 +30,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import appeng.block.AEBaseBlock;
+import appeng.core.AELog;
 import appeng.core.worlddata.WorldData;
 import appeng.util.Platform;
 
@@ -80,8 +81,13 @@ public class BlockSkyStone extends AEBaseBlock
 	public void onBlockAdded( final World w, final BlockPos pos, final IBlockState state )
 	{
 		super.onBlockAdded( w, pos, state );
+		assert pos != null;
 		if( Platform.isServer() )
 		{
+			if ( WorldData.instance() == null )
+			{
+				AELog.error( "Worlddata was null, server has not started?" );
+			}
 			WorldData.instance().compassData().service().updateArea( w, pos.getX(), pos.getY(), pos.getZ() );
 		}
 	}
