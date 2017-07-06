@@ -37,8 +37,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import appeng.core.AEConfig;
 
 
-@MCVersion( "1.11.2" )
-public final class AppEngCore extends DummyModContainer implements IFMLLoadingPlugin
+public final class AppEngCore extends DummyModContainer
 {
 	private final ModMetadata metadata = new ModMetadata();
 
@@ -59,37 +58,6 @@ public final class AppEngCore extends DummyModContainer implements IFMLLoadingPl
 	@EventHandler
 	public void load( final FMLInitializationEvent event )
 	{
-	}
-
-	@Override
-	public String[] getASMTransformerClass()
-	{
-		return new String[] { "appeng.coremod.transformer.ASMIntegration" };
-	}
-
-	@Override
-	public String getModContainerClass()
-	{
-		return "appeng.coremod.AppEngCore";
-	}
-
-	@Nullable
-	@Override
-	public String getSetupClass()
-	{
-		return null;
-	}
-
-	@Override
-	public void injectData( final Map<String, Object> data )
-	{
-
-	}
-
-	@Override
-	public String getAccessTransformerClass()
-	{
-		return null;
 	}
 
 	@Override
