@@ -377,8 +377,8 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 			{
 				if( this.getDefinition().getItem().isDamageable() )
 				{
-					final ItemStack a = this.getItemStack();
-					final ItemStack b = o.getItemStack();
+					final ItemStack a = this.getDisplayItemStack();
+					final ItemStack b = o.getDisplayItemStack();
 
 					try
 					{
@@ -438,7 +438,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 			{
 				if( this.getDefinition().getItem().isDamageable() )
 				{
-					final ItemStack a = this.getItemStack();
+					final ItemStack a = this.getDisplayItemStack();
 
 					try
 					{
@@ -642,7 +642,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Override
 	public String toString()
 	{
-		return this.getItemStack().toString();
+		return this.getStackSize() + "x" + this.getItem().getUnlocalizedName() + "@" + this.getItemDamage();
 	}
 
 	//TODO integrate caps tag compare
@@ -693,7 +693,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 			return this.getDefinition().getTooltip();
 		}
 
-		return this.getDefinition().setTooltip( Platform.getTooltip( this.getItemStack() ) );
+		return this.getDefinition().setTooltip( Platform.getTooltip( this.getDisplayItemStack() ) );
 	}
 
 	@SideOnly( Side.CLIENT )
@@ -701,7 +701,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	{
 		if( this.getDefinition().getDisplayName() == null )
 		{
-			this.getDefinition().setDisplayName( Platform.getItemDisplayName( this.getItemStack() ) );
+			this.getDefinition().setDisplayName( Platform.getItemDisplayName( this.getDisplayItemStack() ) );
 		}
 
 		return this.getDefinition().getDisplayName();
