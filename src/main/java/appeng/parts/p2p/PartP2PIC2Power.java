@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
 
 import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -46,6 +47,10 @@ import appeng.util.Platform;
 		@Interface( iface = "ic2.api.energy.tile.IEnergySink", iname = IntegrationType.IC2 ),
 		@Interface( iface = "ic2.api.energy.tile.IEnergySource", iname = IntegrationType.IC2 )
 } )*/
+@Optional.InterfaceList( value = {
+		@Optional.Interface( iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2" ),
+		@Optional.Interface( iface = "ic2.api.energy.tile.IEnergySource", modid = "ic2" )
+})
 public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power> implements IEnergySink, IEnergySource
 {
 

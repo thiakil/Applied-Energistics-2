@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
 
 import li.cil.oc.api.API;
 import li.cil.oc.api.Network;
@@ -47,7 +48,10 @@ import appeng.integration.IntegrationType;
 import appeng.items.parts.PartModels;
 
 
-//@InterfaceList( value = { @Interface( iface = "li.cil.oc.api.network.Environment", iname = IntegrationType.OpenComputers ), @Interface( iface = "li.cil.oc.api.network.SidedEnvironment", iname = IntegrationType.OpenComputers ) } )
+@Optional.InterfaceList( value = {
+		@Optional.Interface( iface = "li.cil.oc.api.network.Environment", modid = "opencomputers" ),
+		@Optional.Interface( iface = "li.cil.oc.api.network.SidedEnvironment", modid = "opencomputers" )
+} )
 public final class PartP2POpenComputers extends PartP2PTunnel<PartP2POpenComputers> implements Environment, SidedEnvironment
 {
 	@Nullable
