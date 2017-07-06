@@ -34,17 +34,18 @@ public class AppEngCoreTest
 	};
 
 	private AppEngCore coreModContainer = new AppEngCore();
+	private CoreModLoader loader = new CoreModLoader();
 
 	@Test
 	public void testTransformerStringsMatchActualClasses()
 	{
-		assertArrayEquals( EXPECTED_TRANSFORMERS, coreModContainer.getASMTransformerClass() );
+		assertArrayEquals( EXPECTED_TRANSFORMERS, loader.getASMTransformerClass() );
 	}
 
 	@Test
 	public void testContainerClassExists()
 	{
-		assertEquals( EXPECTED_CONTAINER_CLASS_NAME, coreModContainer.getModContainerClass() );
+		assertEquals( EXPECTED_CONTAINER_CLASS_NAME, loader.getModContainerClass() );
 	}
 
 	@Test
