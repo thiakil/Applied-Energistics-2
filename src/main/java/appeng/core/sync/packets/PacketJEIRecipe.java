@@ -184,20 +184,13 @@ public class PacketJEIRecipe extends AppEngPacket
 									// Grab from network by recipe
 									ItemStack whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, patternItem, x, all, realForFake, filter);
 
-									// If that doesn't get it, grab exact items from network (?)
-									// TODO see if this code is necessary
+									// If that doesn't get it, check the other possible items from the JEI packet
 									if (whichItem.isEmpty()) {
 										for (int y = 0; y < this.recipe[x].length; y++) {
-											final IAEItemStack request = AEItemStack.create(this.recipe[x][y]);
-											if (request != null) {
-												if (filter == null || filter.isListed(request)) {
-													request.setStackSize(1);
-													final IAEItemStack out = Platform.poweredExtraction(energy, storage, request, cct.getActionSource());
-													if (out != null) {
-														whichItem = out.getItemStack();
-														break;
-													}
-												}
+											whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, this.recipe[x][y], x, all, realForFake, filter);
+											if ( !whichItem.isEmpty() )
+											{
+												break;
 											}
 										}
 									}
