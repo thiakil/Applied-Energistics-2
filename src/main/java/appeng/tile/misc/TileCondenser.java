@@ -26,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
@@ -336,7 +337,7 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 		}
 	}
 
-	private static final IFluidTankProperties[] EMPTY = { new FluidTankProperties( null, 10, true, false ) };
+	private static final IFluidTankProperties[] EMPTY = { new FluidTankProperties( null, 10 * Fluid.BUCKET_VOLUME, true, false ) };
 
 	/**
 	 * A fluid handler that exposes a 10 bucket tank that can only be filled, and - when filled - will add power
