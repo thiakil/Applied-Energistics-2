@@ -253,10 +253,5 @@ public class TileSkyChest extends AEBaseInvTile implements ITickable
 		this.lastEvent = lastEvent;
 	}
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }

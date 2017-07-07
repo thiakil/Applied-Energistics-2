@@ -223,11 +223,4 @@ public class TileWireless extends AENetworkInvTile implements IWirelessAccessPoi
 	{
 		this.clientFlags = clientFlags;
 	}
-
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

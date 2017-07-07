@@ -344,10 +344,5 @@ public class TileQuantumBridge extends AENetworkInvTile implements IAEMultiBlock
 		return this.corner;
 	}
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }

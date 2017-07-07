@@ -564,10 +564,5 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
 		}
 	}
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }

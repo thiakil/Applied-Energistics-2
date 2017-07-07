@@ -319,10 +319,5 @@ public class TileVibrationChamber extends AENetworkInvTile implements IGridTicka
 		this.burnTime = burnTime;
 	}
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }

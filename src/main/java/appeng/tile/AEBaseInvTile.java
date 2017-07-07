@@ -248,4 +248,9 @@ public abstract class AEBaseInvTile extends AEBaseTile implements ISidedInventor
 		return super.getCapability( capability, facing );
 	}
 
+	@Override
+	public boolean isEmpty()
+	{
+		return false;
+	}
 }

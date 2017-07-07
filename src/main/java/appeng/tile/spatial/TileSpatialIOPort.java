@@ -205,11 +205,4 @@ public class TileSpatialIOPort extends AENetworkInvTile implements IWorldCallabl
 	{
 		return this.sides;
 	}
-
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

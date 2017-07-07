@@ -404,10 +404,5 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
 		this.world.markChunkDirty( this.pos, this );
 	}
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }
