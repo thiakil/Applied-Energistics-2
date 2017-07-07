@@ -38,6 +38,8 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.AEApi;
 import appeng.api.config.Actionable;
@@ -546,5 +548,13 @@ public class ContainerPatternTerm extends ContainerMEMonitorable implements IAEA
 	public void setSubstitute( final boolean substitute )
 	{
 		this.substitute = substitute;
+	}
+
+	//Called on sync, need to update output
+	@SideOnly( Side.CLIENT )
+	public void setAll(List<ItemStack> stacks)
+	{
+		super.setAll( stacks );
+		this.getAndUpdateOutput();
 	}
 }
