@@ -21,7 +21,8 @@ package appeng.core.stats;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
+//TODO achievements
+//import net.minecraft.stats.Achievement;
 
 import appeng.api.AEApi;
 import appeng.api.definitions.IItemDefinition;
@@ -111,8 +112,8 @@ public enum Achievements
 	private final int x;
 	private final int y;
 
-	private Achievement parent;
-	private Achievement stat;
+	//private Achievement parent;
+	//private Achievement stat;
 
 	Achievements( final int x, final int y, final AEColoredItemDefinition which, final AchievementType type )
 	{
@@ -140,10 +141,10 @@ public enum Achievements
 
 	void setParent( final Achievements parent )
 	{
-		this.parent = parent.getAchievement();
+		//this.parent = parent.getAchievement();
 	}
 
-	public Achievement getAchievement()
+	/*public Achievement getAchievement()
 	{
 		if(this.stat == null && !this.getStack().isEmpty() )
 		{
@@ -157,7 +158,7 @@ public enum Achievements
 	public void addToPlayer( final EntityPlayer player )
 	{
 		player.addStat( this.getAchievement(), 1 );
-	}
+	}*/
 
 	AchievementType getType()
 	{

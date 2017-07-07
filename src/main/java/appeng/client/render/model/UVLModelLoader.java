@@ -30,13 +30,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.function.Function;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -49,49 +49,51 @@ public class UVLightmapJsonTest
 	public static Block uvlblock;
 	public static Item uvlblockItem;
 
-	@EventHandler
-	public void preInit( FMLPreInitializationEvent event )
-	{
-		GameRegistry.register( uvlblock = new Block( Material.IRON )
-		{
+	//TODO registry test
 
-			final AxisAlignedBB box = new AxisAlignedBB( 0.25, 0, 7 / 16d, 0.75, 1, 9 / 16d );
-
-			@Override
-			public boolean isFullBlock( IBlockState state )
-			{
-				return false;
-			}
-
-			@Override
-			public boolean isOpaqueCube( IBlockState state )
-			{
-				return false;
-			}
-
-			@Override
-			public AxisAlignedBB getBoundingBox( IBlockState state, IBlockAccess source, BlockPos pos )
-			{
-				return box;
-			}
-
-			@Override
-			public BlockRenderLayer getBlockLayer()
-			{
-				return BlockRenderLayer.CUTOUT;
-			}
-
-		}.setLightLevel( 0.2f ).setCreativeTab( CreativeTabs.DECORATIONS ).setRegistryName( uvlblockR ) );
-		GameRegistry.register( uvlblockItem = new ItemBlock( uvlblock ).setRegistryName( uvlblockR ) );
-
-		ModelBakery.registerItemVariants( uvlblockItem, uvlblockR );
-
-	}
-
-	@EventHandler
-	public void init( FMLInitializationEvent event )
-	{
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register( uvlblockItem, 0, new ModelResourceLocation( uvlblockR, "inventory" ) );
-	}
+//	@EventHandler
+//	public void preInit( FMLPreInitializationEvent event )
+//	{
+//		GameRegistry.register( uvlblock = new Block( Material.IRON )
+//		{
+//
+//			final AxisAlignedBB box = new AxisAlignedBB( 0.25, 0, 7 / 16d, 0.75, 1, 9 / 16d );
+//
+//			@Override
+//			public boolean isFullBlock( IBlockState state )
+//			{
+//				return false;
+//			}
+//
+//			@Override
+//			public boolean isOpaqueCube( IBlockState state )
+//			{
+//				return false;
+//			}
+//
+//			@Override
+//			public AxisAlignedBB getBoundingBox( IBlockState state, IBlockAccess source, BlockPos pos )
+//			{
+//				return box;
+//			}
+//
+//			@Override
+//			public BlockRenderLayer getBlockLayer()
+//			{
+//				return BlockRenderLayer.CUTOUT;
+//			}
+//
+//		}.setLightLevel( 0.2f ).setCreativeTab( CreativeTabs.DECORATIONS ).setRegistryName( uvlblockR ) );
+//		GameRegistry.register( uvlblockItem = new ItemBlock( uvlblock ).setRegistryName( uvlblockR ) );
+//
+//		ModelBakery.registerItemVariants( uvlblockItem, uvlblockR );
+//
+//	}
+//
+//	@EventHandler
+//	public void init( FMLInitializationEvent event )
+//	{
+//		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register( uvlblockItem, 0, new ModelResourceLocation( uvlblockR, "inventory" ) );
+//	}
 
 }

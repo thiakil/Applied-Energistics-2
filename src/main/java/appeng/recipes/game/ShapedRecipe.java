@@ -23,10 +23,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
@@ -43,7 +47,7 @@ public class ShapedRecipe implements IRecipe, IRecipeBakeable
 	private static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
 	private ItemStack output = ItemStack.EMPTY;
-	private Object[] input = null;
+	private IIngredient[] input = null;
 	private int width = 0;
 	private int height = 0;
 	private boolean mirrored = true;
@@ -128,7 +132,7 @@ public class ShapedRecipe implements IRecipe, IRecipeBakeable
 			}
 		}
 
-		this.input = new Object[this.width * this.height];
+		this.input = new IIngredient[this.width * this.height];
 		int x = 0;
 		for( final char chr : shape.toString().toCharArray() )
 		{
@@ -176,9 +180,9 @@ public class ShapedRecipe implements IRecipe, IRecipeBakeable
 	}
 
 	@Override
-	public int getRecipeSize()
+	public boolean canFit(int x, int y)
 	{
-		return this.input.length;
+		return this.input.length <= x*y;
 	}
 
 	@Override
@@ -302,9 +306,23 @@ public class ShapedRecipe implements IRecipe, IRecipeBakeable
 		return this.height;
 	}
 
-	public Object[] getIngredients()
+	public NonNullList<Ingredient> getIngredients()
 	{
-		return this.input;
+		NonNullList<Ingredient> out = NonNullList.withSize(this.input.length, Ingredient.EMPTY);
+		for (IIngredient in : this.input)
+		{
+			if (in != null)
+			{
+				try
+				{
+					out.add( Ingredient.fromStacks( in.getItemStack() ) );
+				}
+				catch( RegistrationError|MissingIngredientError registrationError )
+				{
+				}
+			}
+		}
+		return out;
 	}
 
 	@Override
@@ -333,4 +351,47 @@ public class ShapedRecipe implements IRecipe, IRecipeBakeable
 		return ForgeHooks.defaultRecipeGetRemainingItems( inv );
 	}
 
+	private ResourceLocation name;
+	/**
+	 * A unique identifier for this entry, if this entry is registered already it will return it's official registry name.
+	 * Otherwise it will return the name set in setRegistryName().
+	 * If neither are valid null is returned.
+	 *
+	 * @return Unique identifier or null.
+	 */
+	@Nullable
+	@Override
+	public ResourceLocation getRegistryName()
+	{
+		return name;
+	}
+
+	/**
+	 * Sets a unique name for this Item. This should be used for uniquely identify the instance of the Item.
+	 * This is the valid replacement for the atrocious 'getUnlocalizedName().substring(6)' stuff that everyone does.
+	 * Unlocalized names have NOTHING to do with unique identifiers. As demonstrated by vanilla blocks and items.
+	 *
+	 * The supplied name will be prefixed with the currently active mod's modId.
+	 * If the supplied name already has a prefix that is different, it will be used and a warning will be logged.
+	 *
+	 * If a name already exists, or this Item is already registered in a registry, then an IllegalStateException is thrown.
+	 *
+	 * Returns 'this' to allow for chaining.
+	 *
+	 * @param name Unique registry name
+	 *
+	 * @return This instance
+	 */
+	@Override
+	public IRecipe setRegistryName( ResourceLocation name )
+	{
+		this.name = name;
+		return this;
+	}
+
+	@Override
+	public Class<IRecipe> getRegistryType()
+	{
+		return IRecipe.class;
+	}
 }

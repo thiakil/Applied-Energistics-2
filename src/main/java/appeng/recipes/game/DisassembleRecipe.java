@@ -31,6 +31,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -157,9 +158,9 @@ public final class DisassembleRecipe implements IRecipe
 	}
 
 	@Override
-	public int getRecipeSize()
+	public boolean canFit(int x, int y)
 	{
-		return 1;
+		return 1 <= x*y;
 	}
 
 	@Nullable
@@ -173,5 +174,49 @@ public final class DisassembleRecipe implements IRecipe
 	public NonNullList<ItemStack> getRemainingItems( final InventoryCrafting inv )
 	{
 		return ForgeHooks.defaultRecipeGetRemainingItems( inv );
+	}
+
+	private ResourceLocation name;
+	/**
+	 * A unique identifier for this entry, if this entry is registered already it will return it's official registry name.
+	 * Otherwise it will return the name set in setRegistryName().
+	 * If neither are valid null is returned.
+	 *
+	 * @return Unique identifier or null.
+	 */
+	@Nullable
+	@Override
+	public ResourceLocation getRegistryName()
+	{
+		return name;
+	}
+
+	/**
+	 * Sets a unique name for this Item. This should be used for uniquely identify the instance of the Item.
+	 * This is the valid replacement for the atrocious 'getUnlocalizedName().substring(6)' stuff that everyone does.
+	 * Unlocalized names have NOTHING to do with unique identifiers. As demonstrated by vanilla blocks and items.
+	 *
+	 * The supplied name will be prefixed with the currently active mod's modId.
+	 * If the supplied name already has a prefix that is different, it will be used and a warning will be logged.
+	 *
+	 * If a name already exists, or this Item is already registered in a registry, then an IllegalStateException is thrown.
+	 *
+	 * Returns 'this' to allow for chaining.
+	 *
+	 * @param name Unique registry name
+	 *
+	 * @return This instance
+	 */
+	@Override
+	public IRecipe setRegistryName( ResourceLocation name )
+	{
+		this.name = name;
+		return this;
+	}
+
+	@Override
+	public Class<IRecipe> getRegistryType()
+	{
+		return IRecipe.class;
 	}
 }

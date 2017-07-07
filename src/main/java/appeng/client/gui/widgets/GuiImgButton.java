@@ -181,7 +181,7 @@ public class GuiImgButton extends GuiButton implements ITooltip
 	}
 
 	@Override
-	public void drawButton( final Minecraft par1Minecraft, final int par2, final int par3 )
+	public void drawButton( Minecraft par1Minecraft, int par2, int par3, float partialTicks )
 	{
 		if( this.visible )
 		{

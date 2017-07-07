@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
@@ -38,7 +40,7 @@ import appeng.recipes.game.ShapedRecipe;
 import appeng.util.Platform;
 
 
-class ShapedRecipeWrapper extends BlankRecipeWrapper implements IShapedCraftingRecipeWrapper
+class ShapedRecipeWrapper implements IShapedCraftingRecipeWrapper
 {
 
 	private final ShapedRecipe recipe;
@@ -53,7 +55,7 @@ class ShapedRecipeWrapper extends BlankRecipeWrapper implements IShapedCraftingR
 	{
 		final boolean useSingleItems = AEConfig.instance().disableColoredCableRecipesInJEI();
 
-		Object[] items = recipe.getIngredients();
+		NonNullList<Ingredient> items = recipe.getIngredients();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();
 
@@ -63,9 +65,9 @@ class ShapedRecipeWrapper extends BlankRecipeWrapper implements IShapedCraftingR
 		{
 			for( int y = 0; y < height; y++ )
 			{
-				if( items[( x * height + y )] != null )
+				if( items.get( x * height + y ) != Ingredient.EMPTY )
 				{
-					final IIngredient ing = (IIngredient) items[( x * height + y )];
+					final IIngredient ing = (IIngredient) items.get( x * height + y );
 
 					List<ItemStack> slotList = Collections.emptyList();
 					try

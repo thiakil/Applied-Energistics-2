@@ -45,7 +45,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
@@ -748,7 +748,7 @@ public abstract class AEBaseGui extends GuiContainer
 							final float par4 = uv_y * 16;
 
 							final Tessellator tessellator = Tessellator.getInstance();
-							final VertexBuffer vb = tessellator.getBuffer();
+							final BufferBuilder vb = tessellator.getBuffer();
 
 							vb.begin( GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR );
 

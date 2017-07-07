@@ -22,7 +22,7 @@ package appeng.parts.automation;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;

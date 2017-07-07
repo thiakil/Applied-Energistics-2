@@ -45,11 +45,6 @@ public class AEConfigGuiFactory implements IModGuiFactory
 		return new AEConfigGui(parentScreen);
 	}
 
-	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass()
-	{
-		return AEConfigGui.class;
-	}
 
 	@Override
 	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories()
@@ -57,9 +52,5 @@ public class AEConfigGuiFactory implements IModGuiFactory
 		return null;
 	}
 
-	@Override
-	public RuntimeOptionGuiHandler getHandlerFor( final RuntimeOptionCategoryElement element )
-	{
-		return null;
-	}
+
 }

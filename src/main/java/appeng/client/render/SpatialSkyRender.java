@@ -30,7 +30,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.client.IRenderHandler;
 
@@ -77,7 +77,7 @@ public class SpatialSkyRender extends IRenderHandler
 		GlStateManager.depthMask( false );
 		GlStateManager.color( 0.0f, 0.0f, 0.0f, 1.0f );
 		final Tessellator tessellator = Tessellator.getInstance();
-		final VertexBuffer VertexBuffer = tessellator.getBuffer();
+		final BufferBuilder BufferBuilder = tessellator.getBuffer();
 
 		// This renders a skybox around the player at a far, fixed distance from them.
 		// The skybox is pitch black and untextured
@@ -111,11 +111,11 @@ public class SpatialSkyRender extends IRenderHandler
 			}
 
 			GlStateManager.disableTexture2D();
-			VertexBuffer.begin( GL11.GL_QUADS, DefaultVertexFormats.POSITION );
-			VertexBuffer.pos( -100.0D, -100.0D, -100.0D ).endVertex();
-			VertexBuffer.pos( -100.0D, -100.0D, 100.0D ).endVertex();
-			VertexBuffer.pos( 100.0D, -100.0D, 100.0D ).endVertex();
-			VertexBuffer.pos( 100.0D, -100.0D, -100.0D ).endVertex();
+			BufferBuilder.begin( GL11.GL_QUADS, DefaultVertexFormats.POSITION );
+			BufferBuilder.pos( -100.0D, -100.0D, -100.0D ).endVertex();
+			BufferBuilder.pos( -100.0D, -100.0D, 100.0D ).endVertex();
+			BufferBuilder.pos( 100.0D, -100.0D, 100.0D ).endVertex();
+			BufferBuilder.pos( 100.0D, -100.0D, -100.0D ).endVertex();
 			tessellator.draw();
 			GlStateManager.enableTexture2D();
 			GlStateManager.popMatrix();
@@ -150,8 +150,8 @@ public class SpatialSkyRender extends IRenderHandler
 	private void renderTwinkles()
 	{
 		final Tessellator tessellator = Tessellator.getInstance();
-		final VertexBuffer VertexBuffer = tessellator.getBuffer();
-		VertexBuffer.begin( GL11.GL_QUADS, DefaultVertexFormats.POSITION );
+		final BufferBuilder BufferBuilder = tessellator.getBuffer();
+		BufferBuilder.begin( GL11.GL_QUADS, DefaultVertexFormats.POSITION );
 
 		for( int i = 0; i < 50; ++i )
 		{
@@ -191,7 +191,7 @@ public class SpatialSkyRender extends IRenderHandler
 					final double d23 = d17 * d12 - d20 * d13;
 					final double d24 = d23 * d9 - d21 * d10;
 					final double d25 = d21 * d9 + d23 * d10;
-					VertexBuffer.pos( x + d24, y + d22, z + d25 ).endVertex();
+					BufferBuilder.pos( x + d24, y + d22, z + d25 ).endVertex();
 				}
 			}
 		}

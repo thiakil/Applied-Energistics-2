@@ -21,6 +21,7 @@ package appeng.integration.modules.waila.tile;
 
 import java.util.List;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -69,7 +70,7 @@ public final class ChargerWailaDataProvider extends BaseWailaDataProvider
 				final EntityPlayer player = accessor.getPlayer();
 
 				currentToolTip.add( WailaText.Contains + ": " + currentInventory );
-				chargingItem.getItem().addInformation( chargingItem, player, currentToolTip, true );
+				chargingItem.getItem().addInformation( chargingItem, player.getEntityWorld(), currentToolTip, ITooltipFlag.TooltipFlags.ADVANCED );
 			}
 		}
 

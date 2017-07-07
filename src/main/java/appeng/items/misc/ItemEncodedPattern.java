@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -95,9 +96,9 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 	}
 
 	@Override
-	public void addCheckedInformation( final ItemStack stack, final EntityPlayer player, final List<String> lines, final boolean displayMoreInfo )
+	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag displayMoreInfo )
 	{
-		final ICraftingPatternDetails details = this.getPatternForItem( stack, player.world );
+		final ICraftingPatternDetails details = this.getPatternForItem( stack, world );
 
 		if( details == null )
 		{

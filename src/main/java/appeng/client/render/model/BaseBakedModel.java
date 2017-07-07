@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 
@@ -20,7 +20,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
  * @author Thiakil
  * @since rv5
  */
-public abstract class BaseBakedModel implements IPerspectiveAwareModel
+public abstract class BaseBakedModel implements IBakedModel
 {
 	private IBakedModel parent;
 
@@ -33,9 +33,9 @@ public abstract class BaseBakedModel implements IPerspectiveAwareModel
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective( ItemCameraTransforms.TransformType type )
 	{
 		// Delegate to the base model if possible
-		if( parent instanceof IPerspectiveAwareModel )
+		if( parent instanceof IBakedModel )
 		{
-			IPerspectiveAwareModel pam = (IPerspectiveAwareModel) parent;
+			IBakedModel pam = (IBakedModel) parent;
 			Pair<? extends IBakedModel, Matrix4f> pair = pam.handlePerspective( type );
 			return Pair.of( this, pair.getValue() );
 		}

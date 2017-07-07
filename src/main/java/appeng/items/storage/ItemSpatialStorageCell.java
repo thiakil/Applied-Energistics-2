@@ -21,7 +21,7 @@ package appeng.items.storage;
 
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -49,7 +49,7 @@ public class ItemSpatialStorageCell extends AEBaseItem implements ISpatialStorag
 	}
 
 	@Override
-	public void addCheckedInformation( final ItemStack stack, final EntityPlayer player, final List<String> lines, final boolean displayMoreInfo )
+	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag displayMoreInfo )
 	{
 		final WorldCoord wc = this.getStoredSize( stack );
 		if( wc.x > 0 )

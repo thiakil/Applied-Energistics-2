@@ -22,6 +22,7 @@ package appeng.items.tools.powered;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -44,7 +45,6 @@ import appeng.api.storage.ICellInventoryHandler;
 import appeng.api.storage.IMEInventory;
 import appeng.api.storage.StorageChannel;
 import appeng.api.storage.data.IAEItemStack;
-import appeng.api.util.AEPartLocation;
 import appeng.core.AEConfig;
 import appeng.core.localization.GuiText;
 import appeng.core.sync.GuiBridge;
@@ -78,9 +78,9 @@ public class ToolPortableCell extends AEBasePoweredItem implements IStorageCell,
 	}
 
 	@Override
-	public void addCheckedInformation( final ItemStack stack, final EntityPlayer player, final List<String> lines, final boolean displayMoreInfo )
+	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag displayMoreInfo )
 	{
-		super.addCheckedInformation( stack, player, lines, displayMoreInfo );
+		super.addCheckedInformation( stack, world, lines, displayMoreInfo );
 
 		final IMEInventory<IAEItemStack> cdi = AEApi.instance().registries().cell().getCellInventory( stack, null, StorageChannel.ITEMS );
 

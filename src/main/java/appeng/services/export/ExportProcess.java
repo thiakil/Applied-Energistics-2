@@ -31,8 +31,8 @@ import com.google.common.base.Stopwatch;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import appeng.core.AELog;
 
@@ -118,7 +118,7 @@ public class ExportProcess implements Runnable
 		AELog.info( EXPORT_START_MESSAGE );
 		final Stopwatch watch = Stopwatch.createStarted();
 
-		final FMLControlledNamespacedRegistry<Item> itemRegistry = GameData.getItemRegistry();
+		final IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
 
 		final ExportMode mode = this.config.isAdditionalInformationEnabled() ? ExportMode.VERBOSE : ExportMode.MINIMAL;
 		final Exporter exporter = new MinecraftItemCSVExporter( this.exportDirectory, itemRegistry, mode );

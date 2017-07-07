@@ -41,6 +41,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,7 +60,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.server.management.PlayerChunkMapEntry;
-import net.minecraft.stats.Achievement;
+//import net.minecraft.stats.Achievement;
+import net.minecraft.stats.StatBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
@@ -519,18 +521,19 @@ public class Platform
 	 */
 	public static IRecipe findMatchingRecipe( final InventoryCrafting inventoryCrafting, final World par2World )
 	{
-		final CraftingManager cm = CraftingManager.getInstance();
-		final List<IRecipe> rl = cm.getRecipeList();
-
-		for( final IRecipe r : rl )
-		{
-			if( r.matches( inventoryCrafting, par2World ) )
-			{
-				return r;
-			}
-		}
-
-		return null;
+		return CraftingManager.findMatchingRecipe( inventoryCrafting, par2World );
+//		final CraftingManager cm = CraftingManager.getInstance();
+//		final List<IRecipe> rl = cm.getRecipeList();
+//
+//		for( final IRecipe r : rl )
+//		{
+//			if( r.matches( inventoryCrafting, par2World ) )
+//			{
+//				return r;
+//			}
+//		}
+//
+//		return null;
 	}
 
 	public static ItemStack[] getBlockDrops( final World w, final BlockPos pos )
@@ -750,7 +753,7 @@ public class Platform
 
 	public static ItemStack findMatchingRecipeOutput( final InventoryCrafting ic, final World world )
 	{
-		return CraftingManager.getInstance().findMatchingRecipe( ic, world );
+		return CraftingManager.findMatchingResult( ic, world );
 	}
 
 	@SideOnly( Side.CLIENT )
@@ -778,7 +781,7 @@ public class Platform
 
 		try
 		{
-			return itemStack.getTooltip( Minecraft.getMinecraft().player, false );
+			return itemStack.getTooltip( Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL );
 		}
 		catch( final Exception errB )
 		{
@@ -1861,7 +1864,7 @@ public class Platform
 		return (float) ( player.posY + player.getEyeHeight() - player.getDefaultEyeHeight() );
 	}
 
-	public static void addStat( final int playerID, final Achievement achievement )
+	public static void addStat( final int playerID, final StatBase achievement )
 	{
 		final EntityPlayer p = AEApi.instance().registries().players().findPlayer( playerID );
 		if( p != null )

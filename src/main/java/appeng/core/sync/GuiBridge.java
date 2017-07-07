@@ -418,22 +418,23 @@ public enum GuiBridge implements IGuiHandler
 
 	private void addPressAchievementToPlayer( final ItemStack newItem, final IMaterials possibleMaterials, final EntityPlayer player )
 	{
-		final IComparableDefinition logic = possibleMaterials.logicProcessorPress();
-		final IComparableDefinition eng = possibleMaterials.engProcessorPress();
-		final IComparableDefinition calc = possibleMaterials.calcProcessorPress();
-		final IComparableDefinition silicon = possibleMaterials.siliconPress();
-
-		final List<IComparableDefinition> presses = Lists.newArrayList( logic, eng, calc, silicon );
-
-		for( final IComparableDefinition press : presses )
-		{
-			if( press.isSameAs( newItem ) )
-			{
-				Achievements.Presses.addToPlayer( player );
-
-				return;
-			}
-		}
+		//TODO achievements
+//		final IComparableDefinition logic = possibleMaterials.logicProcessorPress();
+//		final IComparableDefinition eng = possibleMaterials.engProcessorPress();
+//		final IComparableDefinition calc = possibleMaterials.calcProcessorPress();
+//		final IComparableDefinition silicon = possibleMaterials.siliconPress();
+//
+//		final List<IComparableDefinition> presses = Lists.newArrayList( logic, eng, calc, silicon );
+//
+//		for( final IComparableDefinition press : presses )
+//		{
+//			if( press.isSameAs( newItem ) )
+//			{
+//				Achievements.Presses.addToPlayer( player );
+//
+//				return;
+//			}
+//		}
 	}
 
 	@Override

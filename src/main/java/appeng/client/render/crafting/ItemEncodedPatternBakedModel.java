@@ -22,7 +22,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 import appeng.client.render.model.BaseBakedModel;
@@ -65,12 +66,12 @@ class ItemEncodedPatternBakedModel extends BaseBakedModel
 	/*@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective( ItemCameraTransforms.TransformType cameraTransformType )
 	{
-		if( baseModel instanceof IPerspectiveAwareModel )
+		if( baseModel instanceof IBakedModel )
 		{
-			return ( (IPerspectiveAwareModel) baseModel ).handlePerspective( cameraTransformType );
+			return ( (IBakedModel) baseModel ).handlePerspective( cameraTransformType );
 		}
 
-		return IPerspectiveAwareModel.MapWrapper.handlePerspective( this, transforms, cameraTransformType );
+		return PerspectiveMapWrapper.handlePerspective( this, transforms, cameraTransformType );
 	}*/
 
 	/**
@@ -112,12 +113,12 @@ class ItemEncodedPatternBakedModel extends BaseBakedModel
 				GlStateManager.enableLighting();
 			}
 
-			if( selectedModel instanceof IPerspectiveAwareModel )
+			if( selectedModel instanceof IBakedModel )
 			{
-				return ( (IPerspectiveAwareModel) selectedModel ).handlePerspective( cameraTransformType );
+				return ( (IBakedModel) selectedModel ).handlePerspective( cameraTransformType );
 			}
 
-			return IPerspectiveAwareModel.MapWrapper.handlePerspective( this, transforms, cameraTransformType );
+			return PerspectiveMapWrapper.handlePerspective( this, transforms, cameraTransformType );
 		}
 
 		// Other methods may be called for items on the ground, in which case we will always fall back to the pattern

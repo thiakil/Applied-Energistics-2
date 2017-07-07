@@ -45,7 +45,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import appeng.core.AELog;
 
@@ -68,7 +68,7 @@ final class MinecraftItemCSVExporter implements Exporter
 	@Nonnull
 	private final File exportDirectory;
 	@Nonnull
-	private final FMLControlledNamespacedRegistry<Item> itemRegistry;
+	private final IForgeRegistry<Item> itemRegistry;
 	@Nonnull
 	private final ExportMode mode;
 
@@ -79,7 +79,7 @@ final class MinecraftItemCSVExporter implements Exporter
 	 * phase when all items are determined)
 	 * @param mode mode in which the export should be operated. Resulting CSV will change depending on this.
 	 */
-	MinecraftItemCSVExporter( @Nonnull final File exportDirectory, @Nonnull final FMLControlledNamespacedRegistry<Item> itemRegistry, @Nonnull final ExportMode mode )
+	MinecraftItemCSVExporter( @Nonnull final File exportDirectory, @Nonnull final IForgeRegistry<Item> itemRegistry, @Nonnull final ExportMode mode )
 	{
 		this.exportDirectory = Preconditions.checkNotNull( exportDirectory );
 		Preconditions.checkArgument( !exportDirectory.isFile() );
@@ -90,7 +90,7 @@ final class MinecraftItemCSVExporter implements Exporter
 	@Override
 	public void export()
 	{
-		final Iterable<Item> items = this.itemRegistry.typeSafeIterable();
+		final Iterable<Item> items = this.itemRegistry.getValues();
 		final List<Item> itemList = Lists.newArrayList( items );
 
 		final List<String> lines = Lists.transform( itemList, new ItemRowExtractFunction( this.itemRegistry, this.mode ) );
@@ -199,7 +199,7 @@ final class MinecraftItemCSVExporter implements Exporter
 		private static final String EXPORTING_SUBTYPES_FAILED_MESSAGE = "Could not export subtypes of: %s";
 
 		@Nonnull
-		private final FMLControlledNamespacedRegistry<Item> itemRegistry;
+		private final IForgeRegistry<Item> itemRegistry;
 		@Nonnull
 		private final ExportMode mode;
 
@@ -207,7 +207,7 @@ final class MinecraftItemCSVExporter implements Exporter
 		 * @param itemRegistry used to retrieve the name of the item
 		 * @param mode extracts more or less information from item depending on mode
 		 */
-		ItemRowExtractFunction( @Nonnull final FMLControlledNamespacedRegistry<Item> itemRegistry, @Nonnull final ExportMode mode )
+		ItemRowExtractFunction( @Nonnull final IForgeRegistry<Item> itemRegistry, @Nonnull final ExportMode mode )
 		{
 			this.itemRegistry = Preconditions.checkNotNull( itemRegistry );
 			this.mode = Preconditions.checkNotNull( mode );
@@ -228,7 +228,7 @@ final class MinecraftItemCSVExporter implements Exporter
 				AELog.debug( EXPORTING_SUBTYPES_MESSAGE, input.getUnlocalizedName(), input.getHasSubtypes() );
 			}
 
-			final String itemName = this.itemRegistry.getNameForObject( input ).toString();
+			final String itemName = this.itemRegistry.getKey( input ).toString();
 			final boolean hasSubtypes = input.getHasSubtypes();
 			if( hasSubtypes )
 			{
@@ -238,7 +238,7 @@ final class MinecraftItemCSVExporter implements Exporter
 				// modifies the stacks list and adds the different sub types to it
 				try
 				{
-					input.getSubItems( input, creativeTab, stacks );
+					input.getSubItems( creativeTab, stacks );
 				}
 				catch( final Exception ignored )
 				{
