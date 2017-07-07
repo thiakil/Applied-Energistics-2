@@ -28,7 +28,7 @@ import java.util.stream.IntStream;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 
@@ -46,7 +46,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -55,7 +56,7 @@ import appeng.decorative.solid.BlockQuartzGlass;
 import appeng.decorative.solid.GlassState;
 
 
-class GlassBakedModel implements IPerspectiveAwareModel
+class GlassBakedModel implements IBakedModel
 {
 
 	private static final byte[][][] OFFSETS = generateOffsets();
@@ -85,7 +86,7 @@ class GlassBakedModel implements IPerspectiveAwareModel
 
 	private final VertexFormat vertexFormat;
 
-	private final IPerspectiveAwareModel.MapWrapper perspective;
+	private final PerspectiveMapWrapper perspective;
 
 	public GlassBakedModel( ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
 	{
@@ -105,7 +106,7 @@ class GlassBakedModel implements IPerspectiveAwareModel
 			this.frameTextures[1 + i] = bakedTextureGetter.apply( TEXTURES_FRAME[i] );
 		}
 
-		perspective = new IPerspectiveAwareModel.MapWrapper( this, transforms );
+		perspective = new PerspectiveMapWrapper( this, transforms );
 	}
 
 	@Override
@@ -238,7 +239,7 @@ class GlassBakedModel implements IPerspectiveAwareModel
 	}
 
 	/*
-	This method is as complicated as it is, because the order in which we push data into the vertexbuffer actually has to be precisely the order
+	This method is as complicated as it is, because the order in which we push data into the BufferBuilder actually has to be precisely the order
 	in which the vertex elements had been declared in the vertex format.
 	 */
 	private void putVertex( UnpackedBakedQuad.Builder builder, Vec3d normal, double x, double y, double z, TextureAtlasSprite sprite, float u, float v )

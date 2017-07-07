@@ -209,13 +209,14 @@ class BlockDefinitionBuilder implements IBlockBuilder
 		}
 
 		// Register the item and block with the game
-		factory.addPreInit( side -> {
-			GameRegistry.register( block );
-			if( item != null )
-			{
-				GameRegistry.register( item );
-			}
-		} );
+		//TODO registry
+//		factory.addPreInit( side -> {
+//			GameRegistry.register( block );
+//			if( item != null )
+//			{
+//				GameRegistry.register( item );
+//			}
+//		} );
 
 		block.setCreativeTab( creativeTab );
 		block.setUnlocalizedName( "appliedenergistics2." + registryName );

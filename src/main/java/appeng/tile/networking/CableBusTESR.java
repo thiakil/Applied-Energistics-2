@@ -30,7 +30,7 @@ public class CableBusTESR extends TileEntitySpecialRenderer<AEBaseTile>
 {
 
 	@Override
-	public void renderTileEntityAt( AEBaseTile te, double x, double y, double z, float partialTicks, int destroyStage )
+	public void render( AEBaseTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha )
 	{
 
 		if( !( te instanceof TileCableBusTESR ) )

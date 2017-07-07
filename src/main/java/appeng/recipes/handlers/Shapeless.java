@@ -76,7 +76,8 @@ public class Shapeless implements ICraftHandler, IWebsiteSerializer
 
 		try
 		{
-			GameRegistry.addRecipe( new ShapelessRecipe( outIS, args.toArray( new Object[args.size()] ) ) );
+			//TODO recipes
+			//GameRegistry.addRecipe( new ShapelessRecipe( outIS, args.toArray( new Object[args.size()] ) ) );
 		}
 		catch( final Throwable e )
 		{

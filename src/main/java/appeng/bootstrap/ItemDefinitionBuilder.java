@@ -174,7 +174,8 @@ class ItemDefinitionBuilder implements IItemBuilder
 			} );
 		}
 
-		factory.addPreInit( side -> GameRegistry.register( item ) );
+		//TODO Register shit
+		//factory.addPreInit( side -> GameRegistry.register( item ) );
 
 		if( Platform.isClient() )
 		{

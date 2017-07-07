@@ -25,7 +25,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

@@ -300,15 +300,17 @@ public final class Registration
 
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.ENABLE_DISASSEMBLY_CRAFTING ) )
 		{
-			GameRegistry.addRecipe( new DisassembleRecipe() );
-			RecipeSorter.register( "appliedenergistics2:disassemble", DisassembleRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless" );
+			//TODO recipes
+			//GameRegistry.addRecipe( new DisassembleRecipe() );
+			//RecipeSorter.register( "appliedenergistics2:disassemble", DisassembleRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless" );
 		}
 
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.ENABLE_FACADE_CRAFTING ) )
 		{
+			//TODO recipes
 			definitions.items().facade().maybeItem().ifPresent( facadeItem -> {
-				GameRegistry.addRecipe( new FacadeRecipe( (ItemFacade) facadeItem ) );
-				RecipeSorter.register( "appliedenergistics2:facade", FacadeRecipe.class, Category.SHAPED, "after:minecraft:shaped" );
+				//GameRegistry.addRecipe( new FacadeRecipe( (ItemFacade) facadeItem ) );
+				//RecipeSorter.register( "appliedenergistics2:facade", FacadeRecipe.class, Category.SHAPED, "after:minecraft:shaped" );
 			} );
 		}
 	}

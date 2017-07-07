@@ -23,9 +23,10 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -48,7 +49,7 @@ public class AEBaseItemBlockChargeable extends AEBaseItemBlock implements IAEIte
 
 	@Override
 	@SideOnly( Side.CLIENT )
-	public void addCheckedInformation( final ItemStack itemStack, final EntityPlayer player, final List<String> toolTip, final boolean advancedTooltips )
+	public void addCheckedInformation( final ItemStack itemStack, final World world, final List<String> toolTip, final ITooltipFlag advancedTooltips )
 	{
 		final NBTTagCompound tag = itemStack.getTagCompound();
 		double internalCurrentPower = 0;

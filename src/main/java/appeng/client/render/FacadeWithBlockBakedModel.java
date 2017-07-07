@@ -111,8 +111,8 @@ public class FacadeWithBlockBakedModel extends BaseBakedModel
 
 	/*@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
-		if (baseModel instanceof IPerspectiveAwareModel)
-			return Pair.of(this, ((IPerspectiveAwareModel) baseModel).handlePerspective(cameraTransformType).getRight());
+		if (baseModel instanceof IBakedModel)
+			return Pair.of(this, ((IBakedModel) baseModel).handlePerspective(cameraTransformType).getRight());
 		return Pair.of(this, null);
 	}*/
 }

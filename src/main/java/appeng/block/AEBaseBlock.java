@@ -31,6 +31,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -333,7 +334,7 @@ public abstract class AEBaseBlock extends Block
 	}
 
 	@Override
-	public void addInformation( final ItemStack is, final EntityPlayer player, final List<String> lines, final boolean advancedItemTooltips )
+	public void addInformation( final ItemStack is, final World w, final List<String> lines, final ITooltipFlag advancedItemTooltips )
 	{
 
 	}

@@ -113,7 +113,8 @@ public class Shaped implements ICraftHandler, IWebsiteSerializer
 
 		try
 		{
-			GameRegistry.addRecipe( new ShapedRecipe( outIS, args.toArray( new Object[args.size()] ) ) );
+			//TODO recipes
+			//GameRegistry.addRecipe( new ShapedRecipe( outIS, args.toArray( new Object[args.size()] ) ) );
 		}
 		catch( final Throwable e )
 		{

@@ -49,25 +49,27 @@ public class AchievementCraftingHandler
 			return;
 		}
 
-		for( final Achievements achievement : Achievements.values() )
-		{
-			switch( achievement.getType() )
-			{
-				case Craft:
-					if( Platform.itemComparisons().isSameItem( achievement.getStack(), event.crafting ) )
-					{
-						achievement.addToPlayer( event.player );
-						return;
-					}
-					break;
-				case CraftItem:
-					if(!achievement.getStack().isEmpty() && achievement.getStack().getItem().getClass() == event.crafting.getItem().getClass() )
-					{
-						achievement.addToPlayer( event.player );
-						return;
-					}
-				default:
-			}
-		}
+		//TODO achievements
+
+//		for( final Achievements achievement : Achievements.values() )
+//		{
+//			switch( achievement.getType() )
+//			{
+//				case Craft:
+//					if( Platform.itemComparisons().isSameItem( achievement.getStack(), event.crafting ) )
+//					{
+//						achievement.addToPlayer( event.player );
+//						return;
+//					}
+//					break;
+//				case CraftItem:
+//					if(!achievement.getStack().isEmpty() && achievement.getStack().getItem().getClass() == event.crafting.getItem().getClass() )
+//					{
+//						achievement.addToPlayer( event.player );
+//						return;
+//					}
+//				default:
+//			}
+//		}
 	}
 }

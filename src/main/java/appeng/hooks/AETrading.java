@@ -30,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import appeng.api.AEApi;
@@ -52,9 +53,11 @@ public abstract class AETrading implements EntityVillager.ITradeList
 
 	final IMaterials materials = AEApi.instance().definitions().materials();
 
+	@GameRegistry.ObjectHolder("minecraft:smith")
+	private static VillagerRegistry.VillagerProfession smith;
+
 	public static void registerVillageTrades()
 	{
-		VillagerRegistry.VillagerProfession smith = VillagerRegistry.instance().getRegistry().getValue( new ResourceLocation( "minecraft", "smith" ) );
 		if ( smith == null )
 		{
 			AELog.error( "Could not get smith profession." );

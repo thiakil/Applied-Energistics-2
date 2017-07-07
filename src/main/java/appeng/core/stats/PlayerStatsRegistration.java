@@ -20,9 +20,9 @@ package appeng.core.stats;
 
 
 import java.util.ArrayList;
-
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.common.AchievementPage;
+//TODO achievents
+//import net.minecraft.stats.Achievement;
+//import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 
 import appeng.core.AEConfig;
@@ -100,19 +100,19 @@ public class PlayerStatsRegistration
 			/**
 			 * register
 			 */
-			final ArrayList<Achievement> list = new ArrayList<Achievement>();
-
-			for( final Achievements a : Achievements.values() )
-			{
-				final Achievement ach = a.getAchievement();
-				if( ach != null )
-				{
-					list.add( ach );
-				}
-			}
-
-			final AchievementPage ae2AchievementPage = new AchievementPage( "Applied Energistics 2", list.toArray( new Achievement[list.size()] ) );
-			AchievementPage.registerAchievementPage( ae2AchievementPage );
+//			final ArrayList<Achievement> list = new ArrayList<Achievement>();
+//
+//			for( final Achievements a : Achievements.values() )
+//			{
+//				final Achievement ach = a.getAchievement();
+//				if( ach != null )
+//				{
+//					list.add( ach );
+//				}
+//			}
+//
+//			final AchievementPage ae2AchievementPage = new AchievementPage( "Applied Energistics 2", list.toArray( new Achievement[list.size()] ) );
+//			AchievementPage.registerAchievementPage( ae2AchievementPage );
 		}
 	}
 }

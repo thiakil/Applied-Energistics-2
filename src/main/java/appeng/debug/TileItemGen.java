@@ -56,7 +56,7 @@ public class TileItemGen extends AEBaseTile implements IInventory
 					else
 					{
 						final NonNullList<ItemStack> list = NonNullList.create();
-						mi.getSubItems( mi, mi.getCreativeTab(), list );
+						mi.getSubItems( mi.getCreativeTab(), list );
 						POSSIBLE_ITEMS.addAll( list );
 					}
 				}

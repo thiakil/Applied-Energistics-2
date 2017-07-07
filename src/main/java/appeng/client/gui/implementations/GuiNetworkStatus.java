@@ -26,6 +26,7 @@ import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -253,7 +254,7 @@ public class GuiNetworkStatus extends AEBaseGui implements ISortSource
 
 			if( myStack != null )
 			{
-				List<String> currentToolTip = stack.getTooltip( this.mc.player, this.mc.gameSettings.advancedItemTooltips );
+				List<String> currentToolTip = stack.getTooltip( this.mc.player, this.mc.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL );
 
 				while( currentToolTip.size() > 1 )
 				{

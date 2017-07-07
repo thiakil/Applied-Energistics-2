@@ -30,7 +30,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3f;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

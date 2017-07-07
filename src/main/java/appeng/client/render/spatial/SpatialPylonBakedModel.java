@@ -37,7 +37,8 @@ import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
@@ -49,20 +50,20 @@ import appeng.tile.spatial.TileSpatialPylon;
 /**
  * The baked model that will be used for rendering the spatial pylon.
  */
-class SpatialPylonBakedModel implements IPerspectiveAwareModel
+class SpatialPylonBakedModel implements IBakedModel
 {
 
 	private final Map<SpatialPylonTextureType, TextureAtlasSprite> textures;
 
 	private final VertexFormat format;
 
-	private final IPerspectiveAwareModel.MapWrapper perspective;
+	private final PerspectiveMapWrapper perspective;
 
 	SpatialPylonBakedModel( ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms, VertexFormat format, Map<SpatialPylonTextureType, TextureAtlasSprite> textures )
 	{
 		this.textures = ImmutableMap.copyOf( textures );
 		this.format = format;
-		perspective = new IPerspectiveAwareModel.MapWrapper( this, transforms );
+		perspective = new PerspectiveMapWrapper( this, transforms );
 	}
 
 	@Override
