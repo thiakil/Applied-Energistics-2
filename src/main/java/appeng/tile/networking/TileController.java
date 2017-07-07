@@ -227,10 +227,5 @@ public class TileController extends AENetworkPowerTile
 		return false;
 	}
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }

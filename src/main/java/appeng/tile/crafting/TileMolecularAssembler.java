@@ -635,11 +635,6 @@ public class TileMolecularAssembler extends AENetworkInvTile implements IUpgrade
 		return this.isPowered;
 	}
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 
 }

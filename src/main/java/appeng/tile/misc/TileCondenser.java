@@ -424,10 +424,5 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 		}
 	}
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }

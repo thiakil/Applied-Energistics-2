@@ -201,10 +201,5 @@ public class TileGrinder extends AEBaseInvTile implements ICrankable
 		return this.getUp() == directionToCrank;
 	}
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }
