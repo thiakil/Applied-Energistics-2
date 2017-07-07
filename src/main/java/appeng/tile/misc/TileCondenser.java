@@ -299,15 +299,16 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 		@Override
 		public int getSlots()
 		{
-			// We only expose the void slot
-			return 1;
+			// We only expose the void slot and the output slot
+			// 0 = void, 1 = output
+			return 2;
 		}
 
 		@Override
 		public ItemStack getStackInSlot( int slot )
 		{
 			// The void slot never has any content
-			return ItemStack.EMPTY;
+			return slot == 0 ? ItemStack.EMPTY : TileCondenser.this.inv.getStackInSlot( 1 );
 		}
 
 		@Override
@@ -327,13 +328,25 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
 		@Override
 		public ItemStack extractItem( int slot, int amount, boolean simulate )
 		{
-			return ItemStack.EMPTY;
+			if ( slot != 1 )
+			{
+				return ItemStack.EMPTY;
+			}
+			ItemStack available = TileCondenser.this.inv.getStackInSlot( 1 );
+			ItemStack output = available.copy();
+			output.setCount( Math.min( amount, available.getCount() ) );
+			if ( !simulate )
+			{
+				available.shrink( output.getCount() );
+				TileCondenser.this.inv.setInventorySlotContents( 1, available );
+			}
+			return output;
 		}
 
 		@Override
 		public int getSlotLimit( int slot )
 		{
-			return 0;
+			return slot == 0 ? Integer.MAX_VALUE : TileCondenser.this.inv.getStackInSlot( 1 ).getMaxStackSize();
 		}
 	}
 
