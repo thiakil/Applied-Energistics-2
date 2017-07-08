@@ -18,12 +18,16 @@
 package appeng.client.render;
 
 
+import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 
 /**
  * TODO: Removed useless stuff.
@@ -77,7 +81,18 @@ public enum FacingToRotation
 	private FacingToRotation( Vector3f rot )
 	{
 		this.rot = rot;
-		this.mat = TRSRTransformation.toVecmath( new org.lwjgl.util.vector.Matrix4f().rotate( (float) Math.toRadians( rot.x ), new org.lwjgl.util.vector.Vector3f( 1, 0, 0 ) ).rotate( (float) Math.toRadians( rot.y ), new org.lwjgl.util.vector.Vector3f( 0, 1, 0 ) ).rotate( (float) Math.toRadians( rot.z ), new org.lwjgl.util.vector.Vector3f( 0, 0, 1 ) ) );
+		/*this.mat = TRSRTransformation.toVecmath( new org.lwjgl.util.vector.Matrix4f().
+				rotate( (float) Math.toRadians( rot.x ), new org.lwjgl.util.vector.Vector3f( 1, 0, 0 ) ).
+				rotate( (float) Math.toRadians( rot.y ), new org.lwjgl.util.vector.Vector3f( 0, 1, 0 ) ).
+				rotate( (float) Math.toRadians( rot.z ), new org.lwjgl.util.vector.Vector3f( 0, 0, 1 ) ) );*/
+		//plain vecmath of doing the above
+		this.mat = new Matrix4f();
+		this.mat.set( new AxisAngle4f( 1, 0, 0, (float)Math.toRadians( rot.x ) ) );
+		Matrix4f tmp = new Matrix4f();
+		tmp.set( new AxisAngle4f( 0, 1, 0, (float)Math.toRadians( rot.y ) ) );
+		this.mat.mul( tmp );
+		tmp.set( new AxisAngle4f( 0, 0, 1, (float)Math.toRadians( rot.z ) ) );
+		this.mat.mul( tmp );
 	}
 
 	public Vector3f getRot()
@@ -90,6 +105,7 @@ public enum FacingToRotation
 		return new Matrix4f( this.mat );
 	}
 
+	@SideOnly( Side.CLIENT )
 	public void glRotateCurrentMat()
 	{
 		GlStateManager.rotate( rot.x, 1, 0, 0 );
