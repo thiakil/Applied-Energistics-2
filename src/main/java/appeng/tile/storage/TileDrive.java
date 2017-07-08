@@ -25,10 +25,12 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 
 import appeng.api.AEApi;
 import appeng.api.implementations.tiles.IChestOrDrive;
@@ -48,6 +50,7 @@ import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.AECableType;
 import appeng.api.util.AEPartLocation;
 import appeng.api.util.DimensionalCoord;
+import appeng.core.AELog;
 import appeng.helpers.IPriorityHost;
 import appeng.me.GridAccessException;
 import appeng.me.storage.DriveWatcher;
@@ -77,6 +80,27 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
 	private List<MEInventoryHandler> fluids = new LinkedList<MEInventoryHandler>();
 	private int priority = 0;
 	private boolean wasActive = false;
+
+	private static byte NUMBER_CELLS = 10;
+	private static byte NUMBER_COLS = 2;
+	private static byte CELL_WIDTH = 5;
+	private static byte CELL_HEIGHT = 2;
+	private static byte CELL_GAP_X = 2;
+	private static byte CELL_GAP_Y = 1;
+
+	//x1, y1
+	private static byte[][] DRIVE_BOXES = new byte[NUMBER_CELLS][2];
+	static {
+		for ( byte col = 0; col < NUMBER_COLS; col++)
+		{
+			for ( byte row = 0; row < NUMBER_CELLS/NUMBER_COLS; row++ )
+			{
+				byte[] cell = DRIVE_BOXES[row*2+col];
+				cell[0] = (byte)(( CELL_GAP_X + CELL_WIDTH ) * col + CELL_GAP_X);
+				cell[1] = (byte)(( CELL_GAP_Y + CELL_HEIGHT) * row + CELL_GAP_Y);
+			}
+		}
+	}
 
 	/**
 	 * The state of all cells inside a drive as bitset, using the following format.
@@ -404,5 +428,63 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
 		this.world.markChunkDirty( this.pos, this );
 	}
 
+	/**
+	 * Calculates a slot position based on the XY position on the from face.
+	 * @param x position on the X axis. 0.0 <= x <= 1.0
+	 * @param y position on the Y axis. 0.0 <= y <= 1.0
+	 * @return slot number if found, -1 otherwise
+	 */
+	public int findSlotByXY( float x, float y )
+	{
+		int xPos = (int)(( 1.0 - x )  * 16);
+		int yPos = (int)(( 1.0 - y ) * 16); // coords are from bottom. Maths used above requires from top.
+		//AELog.info( "x="+xPos+", y="+yPos );
+		int slot;
+		for ( slot = 0; slot < DRIVE_BOXES.length; slot++ )
+		{
+			byte[] box = DRIVE_BOXES[slot];
+			if (box[1] > yPos ){//not gonna find more matches
+				slot = DRIVE_BOXES.length;
+				break;
+			} else if ( xPos >= box[0] && xPos < box[0]+CELL_WIDTH && yPos >= box[1] && yPos < box[1]+CELL_HEIGHT){
+				//found it!
+				break;
+			}
+		}
 
+		return slot < DRIVE_BOXES.length ? slot : -1;
+	}
+
+	public boolean tryAutoInsertDrive( float x, float y, ItemStack cell, EntityPlayer p, EnumHand hand )
+	{
+		int slot = findSlotByXY( x, y );
+		if ( slot > -1 )
+		{
+			//AELog.info( "found slot "+slot );
+			if ( !getStackInSlot( slot ).isEmpty() )
+				return false;
+			setInventorySlotContents( slot, cell );
+			p.setHeldItem( hand, ItemStack.EMPTY );
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean tryAutoExtractDrive( float x, float y, EntityPlayer p, EnumHand hand )
+	{
+		int slot = findSlotByXY( x, y );
+		if ( slot > -1 )
+		{
+			//AELog.info( "found slot "+slot );
+			ItemStack cell = getStackInSlot( slot );
+			if ( cell.isEmpty() )
+				return false;
+			setInventorySlotContents( slot, ItemStack.EMPTY );
+			p.setHeldItem( hand, cell );
+			return true;
+		}
+
+		return false;
+	}
 }
