@@ -20,6 +20,8 @@ package appeng.block.storage;
 
 
 import javax.annotation.Nullable;
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Vector3f;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -36,9 +38,11 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
+import appeng.api.AEApi;
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
 import appeng.client.UnlistedProperty;
+import appeng.client.render.FacingToRotation;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.storage.TileDrive;
 import appeng.util.Platform;
@@ -84,20 +88,43 @@ public class BlockDrive extends AEBaseTileBlock
 		return extState.withProperty( SLOTS_STATE, DriveSlotsState.fromChestOrDrive( te ) );
 	}
 
-	@Override
-	public boolean onActivated( final World w, final BlockPos pos, final EntityPlayer p, final EnumHand hand, final @Nullable ItemStack heldItem, final EnumFacing side, final float hitX, final float hitY, final float hitZ )
+	private Vector3f rotateHitByFacing(float x, float y, float z, EnumFacing front, EnumFacing up)
 	{
-		if( p.isSneaking() )
-		{
-			return false;
-		}
+		//AELog.info( "in = "+x+", "+y+", "+z );
+		Vector3f coord = new Vector3f(x,y,z);
+		Matrix4f transform = FacingToRotation.get( front, up ).getMat();//new Matrix3f();
+		transform.invert();
+		transform.transform( coord );
 
+		if ( coord.x < 0 )
+			coord.x += 1;
+		if ( coord.y < 0 )
+			coord.y += 1;
+
+		return new Vector3f( coord.x, coord.y, coord.z );
+	}
+
+	@Override
+	public boolean onActivated( final World w, final BlockPos pos, final EntityPlayer p, final EnumHand hand, final ItemStack heldItem, final EnumFacing side, final float hitX, final float hitY, final float hitZ )
+	{
 		final TileDrive tg = this.getTileEntity( w, pos );
 		if( tg != null )
 		{
+			Vector3f mapped = rotateHitByFacing( hitX, hitY, hitZ, tg.getForward(), tg.getUp() );
+			if( p.isSneaking() )
+			{
+				if ( !w.isRemote && p.getHeldItem( hand ).isEmpty() && side == tg.getForward() )
+				{
+					return tg.tryAutoExtractDrive( mapped.x, mapped.y, p, hand );
+				}
+				return p.getHeldItem( hand ).isEmpty();
+			}
+
+
 			if( Platform.isServer() )
 			{
-				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_DRIVE );
+				if ( side != tg.getForward() || heldItem.isEmpty() || !AEApi.instance().registries().cell().isCellHandled( heldItem ) || !tg.tryAutoInsertDrive( mapped.x, mapped.y, heldItem, p, hand ) )
+					Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_DRIVE );
 			}
 			return true;
 		}
