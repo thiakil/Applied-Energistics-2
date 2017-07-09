@@ -64,7 +64,7 @@ public class IC2PowerSinkAdapter extends BasicSink implements IC2PowerSink
 	@Override
 	public void onLoad()
 	{
-		//super.onLoaded();
+		super.onLoad();
 	}
 
 	@Override
