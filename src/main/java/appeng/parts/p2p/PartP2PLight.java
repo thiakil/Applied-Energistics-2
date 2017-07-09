@@ -137,7 +137,7 @@ public class PartP2PLight extends PartP2PTunnel<PartP2PLight> implements IGridTi
 	@Override
 	public int getLightLevel()
 	{
-		if( this.isOutput() && this.isPowered() )
+		if( this.isOutput() && this.isPowered() && this.isActive() )
 		{
 			return this.blockLight( this.lastValue );
 		}
