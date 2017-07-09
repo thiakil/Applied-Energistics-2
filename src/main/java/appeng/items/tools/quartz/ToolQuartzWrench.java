@@ -60,7 +60,7 @@ public class ToolQuartzWrench extends AEBaseItem implements IAEWrench /* , ITool
 
 			if( b.rotateBlock( world, pos, side ) )
 			{
-				b.neighborChanged( Platform.AIR_BLOCK.getDefaultState(), world, pos, Platform.AIR_BLOCK, pos );
+				b.neighborChanged( world.getBlockState( pos ), world, pos, b, pos );
 				player.swingArm( hand );
 				return !world.isRemote ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
 			}
