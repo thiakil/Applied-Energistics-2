@@ -115,7 +115,7 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench /
 			{
 				if( part.part instanceof INetworkToolAgent && !( (INetworkToolAgent) part.part ).showNetworkInfo( mop ) )
 				{
-					return EnumActionResult.FAIL;
+					return EnumActionResult.PASS;
 				}
 				else if( player.isSneaking() )
 				{
@@ -125,7 +125,7 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench /
 		}
 		else if( te instanceof INetworkToolAgent && !( (INetworkToolAgent) te ).showNetworkInfo( mop ) )
 		{
-			return EnumActionResult.FAIL;
+			return EnumActionResult.PASS;
 		}
 
 		if( Platform.isClient() )

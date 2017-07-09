@@ -128,7 +128,7 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 
 			if( !Platform.hasPermissions( new DimensionalCoord( w, pos ), p ) )
 			{
-				return EnumActionResult.FAIL;
+				return EnumActionResult.PASS;
 			}
 
 			final double powerPerUse = 100;
@@ -178,7 +178,7 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 			this.cycleColors( is, paintBall, 1 );
 		}
 
-		return EnumActionResult.FAIL;
+		return EnumActionResult.PASS;
 	}
 
 	@Override

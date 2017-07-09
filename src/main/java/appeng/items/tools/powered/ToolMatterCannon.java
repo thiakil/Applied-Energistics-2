@@ -185,7 +185,7 @@ public class ToolMatterCannon extends AEBasePoweredItem implements IStorageCell
 				}
 			}
 		}
-		return new ActionResult<ItemStack>( EnumActionResult.FAIL, p.getHeldItem( hand ) );
+		return new ActionResult<ItemStack>( EnumActionResult.PASS, p.getHeldItem( hand ) );
 	}
 
 	private void shootPaintBalls( final ItemStack type, final World w, final EntityPlayer p, final Vec3d Vec3d, final Vec3d Vec3d1, final Vec3d direction, final double d0, final double d1, final double d2 )
