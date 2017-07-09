@@ -270,7 +270,10 @@ public class EnergyGridCache implements IEnergyGrid
 				final Iterator<IEnergyGridProvider> i = this.energyGridProviders.iterator();
 				while( extractedPower < amt && i.hasNext() )
 				{
-					extractedPower += i.next().extractAEPower( amt - extractedPower, mode, seen );
+					try
+					{
+						extractedPower += i.next().extractAEPower( amt - extractedPower, mode, seen );
+					} catch ( StackOverflowError ignored ){}
 				}
 			}
 
@@ -297,7 +300,10 @@ public class EnergyGridCache implements IEnergyGrid
 			final Iterator<IEnergyGridProvider> i = this.energyGridProviders.iterator();
 			while( extractedPower < amt && i.hasNext() )
 			{
-				extractedPower += i.next().extractAEPower( amt - extractedPower, mode, seen );
+				try
+				{
+					extractedPower += i.next().extractAEPower( amt - extractedPower, mode, seen );
+				} catch ( StackOverflowError ignored ){}
 			}
 		}
 
@@ -330,7 +336,10 @@ public class EnergyGridCache implements IEnergyGrid
 			final Iterator<IEnergyGridProvider> i = this.energyGridProviders.iterator();
 			while( amt > 0 && i.hasNext() )
 			{
-				amt = i.next().injectAEPower( amt, mode, seen );
+				try
+				{
+					amt = i.next().injectAEPower( amt, mode, seen );
+				} catch ( StackOverflowError ignored ){}
 			}
 		}
 		else
@@ -357,10 +366,12 @@ public class EnergyGridCache implements IEnergyGrid
 				final Set<IEnergyGrid> listCopy = new HashSet<IEnergyGrid>();
 				listCopy.addAll( seen );
 
-				final double cannotHold = what.injectAEPower( amt, Actionable.SIMULATE, listCopy );
-				what.injectAEPower( amt - cannotHold, mode, seen );
-
-				amt = cannotHold;
+				try
+				{
+					final double cannotHold = what.injectAEPower( amt, Actionable.SIMULATE, listCopy );
+					what.injectAEPower( amt - cannotHold, mode, seen );
+					amt = cannotHold;
+				} catch ( StackOverflowError ignored ){}
 			}
 
 			this.extra = amt;
@@ -392,8 +403,11 @@ public class EnergyGridCache implements IEnergyGrid
 		final Iterator<IEnergyGridProvider> ix = this.energyGridProviders.iterator();
 		while( required < maxRequired && ix.hasNext() )
 		{
-			final IEnergyGridProvider node = ix.next();
-			required += node.getEnergyDemand( maxRequired - required, seen );
+			try
+			{
+				final IEnergyGridProvider node = ix.next();
+				required += node.getEnergyDemand( maxRequired - required, seen );
+			} catch ( StackOverflowError ignored ){}
 		}
 
 		return required;
