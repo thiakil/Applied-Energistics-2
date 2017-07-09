@@ -57,8 +57,6 @@ public abstract class AERootPoweredTile extends AEBaseInvTile implements IAEPowe
 	private final IEnergyStorage forgeEnergyAdapter;
 	private Object teslaEnergyAdapter;
 
-	private IC2PowerSink ic2Sink;
-
 	public AERootPoweredTile()
 	{
 		forgeEnergyAdapter = new ForgeEnergyAdapter( this );
@@ -66,8 +64,6 @@ public abstract class AERootPoweredTile extends AEBaseInvTile implements IAEPowe
 		{
 			teslaEnergyAdapter = new TeslaEnergyAdapter( this );
 		}
-		ic2Sink = Integrations.ic2().createPowerSink( this, this );
-		ic2Sink.setValidFaces( internalPowerSides );
 	}
 
 	protected EnumSet<EnumFacing> getPowerSides()
@@ -78,8 +74,6 @@ public abstract class AERootPoweredTile extends AEBaseInvTile implements IAEPowe
 	protected void setPowerSides( final EnumSet<EnumFacing> sides )
 	{
 		this.internalPowerSides = sides;
-		ic2Sink.setValidFaces( sides );
-		// trigger re-calc!
 	}
 
 	@TileEvent( TileEventType.WORLD_NBT_WRITE )
@@ -255,30 +249,6 @@ public abstract class AERootPoweredTile extends AEBaseInvTile implements IAEPowe
 	public void setInternalPowerFlow( final AccessRestriction internalPowerFlow )
 	{
 		this.internalPowerFlow = internalPowerFlow;
-	}
-
-	@Override
-	public void onReady()
-	{
-		super.onReady();
-
-		ic2Sink.onLoad();
-	}
-
-	@Override
-	public void onChunkUnload()
-	{
-		super.onChunkUnload();
-
-		ic2Sink.onChunkUnload();
-	}
-
-	@Override
-	public void invalidate()
-	{
-		super.invalidate();
-
-		ic2Sink.invalidate();
 	}
 
 	@Override

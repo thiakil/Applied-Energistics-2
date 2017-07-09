@@ -46,4 +46,20 @@ public interface IC2PowerSink
 	default void setValidFaces( Set<EnumFacing> faces )
 	{
 	}
+
+	default boolean acceptsEnergyFrom(Object emitter, EnumFacing direction) {
+		return false;
+	}
+
+	default double getDemandedEnergy() {
+		return 0.0;
+	}
+
+	default double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
+		return amount;
+	}
+
+	default int getSinkTier() {
+		return 0;
+	}
 }

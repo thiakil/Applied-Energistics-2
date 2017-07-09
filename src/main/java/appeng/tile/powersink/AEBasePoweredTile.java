@@ -19,7 +19,123 @@
 package appeng.tile.powersink;
 
 
-public abstract class AEBasePoweredTile extends RedstoneFlux
-{
+import java.util.EnumSet;
 
+import net.minecraft.util.EnumFacing;
+
+import cofh.api.energy.IEnergyReceiver;
+import ic2.api.energy.tile.IEnergyEmitter;
+import ic2.api.energy.tile.IEnergySink;
+
+import appeng.api.config.PowerUnits;
+import appeng.coremod.annotations.Integration;
+import appeng.integration.IntegrationType;
+import appeng.integration.Integrations;
+import appeng.integration.abstraction.IC2PowerSink;
+
+
+@Integration.InterfaceList( value={
+		@Integration.Interface( iname = IntegrationType.RF, iface = "cofh.api.energy.IEnergyReceiver" ),
+		@Integration.Interface( iname = IntegrationType.IC2, iface = "ic2.api.energy.tile.IEnergySink" )
+} )
+public abstract class AEBasePoweredTile extends AERootPoweredTile implements IEnergyReceiver, IEnergySink
+{
+	private IC2PowerSink ic2Sink;
+
+	public AEBasePoweredTile()
+	{
+		super();
+		ic2Sink = Integrations.ic2().createPowerSink( this, this );
+		ic2Sink.setValidFaces( EnumSet.allOf( EnumFacing.class ) );
+	}
+
+	//Begin RF
+	@Override
+	public final int receiveEnergy( final EnumFacing from, final int maxReceive, final boolean simulate )
+	{
+		final int networkRFDemand = (int) Math.floor( this.getExternalPowerDemand( PowerUnits.RF, maxReceive ) );
+		final int usedRF = Math.min( maxReceive, networkRFDemand );
+
+		if( !simulate )
+		{
+			this.injectExternalPower( PowerUnits.RF, usedRF );
+		}
+
+		return usedRF;
+	}
+
+	@Override
+	public final int getEnergyStored( final EnumFacing from )
+	{
+		return (int) Math.floor( PowerUnits.AE.convertTo( PowerUnits.RF, this.getAECurrentPower() ) );
+	}
+
+	@Override
+	public final int getMaxEnergyStored( final EnumFacing from )
+	{
+		return (int) Math.floor( PowerUnits.AE.convertTo( PowerUnits.RF, this.getAEMaxPower() ) );
+	}
+
+	@Override
+	public final boolean canConnectEnergy( final EnumFacing from )
+	{
+		return this.getPowerSides().contains( from );
+	}
+	//End RF
+
+	@Override
+	protected void setPowerSides( EnumSet<EnumFacing> sides )
+	{
+		super.setPowerSides( sides );
+		ic2Sink.setValidFaces( sides );
+		// trigger re-calc!
+	}
+
+	@Override
+	public void onReady()
+	{
+		super.onReady();
+
+		ic2Sink.onLoad();
+	}
+
+	@Override
+	public void onChunkUnload()
+	{
+		super.onChunkUnload();
+
+		ic2Sink.onChunkUnload();
+	}
+
+	@Override
+	public void invalidate()
+	{
+		super.invalidate();
+
+		ic2Sink.invalidate();
+	}
+
+	//Begin IC2
+	public double getDemandedEnergy()
+	{
+		return ic2Sink.getDemandedEnergy();
+	}
+
+	public int getSinkTier()
+	{
+		return ic2Sink.getSinkTier();
+	}
+
+	public double injectEnergy(EnumFacing var1, double var2, double var4)
+	{
+		return ic2Sink.injectEnergy( var1, var2, var4 );
+	}
+
+	@Integration.Method( iname = IntegrationType.IC2 )
+	@Override
+	public boolean acceptsEnergyFrom( IEnergyEmitter iEnergyEmitter, EnumFacing enumFacing )
+	{
+		return ic2Sink.acceptsEnergyFrom( iEnergyEmitter, enumFacing );
+	}
+	//End IC2
 }
