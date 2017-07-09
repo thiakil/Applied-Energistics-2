@@ -19,9 +19,12 @@
 package appeng.parts.p2p;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+
+import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -29,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import appeng.api.AEApi;
 import appeng.api.config.Actionable;
@@ -144,6 +148,29 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 		super.writeToNBT( data );
 		data.setBoolean( "output", this.isOutput() );
 		data.setLong( "freq", this.getFrequency() );
+	}
+
+	@Override
+	public void writeToStream( ByteBuf data ) throws IOException
+	{
+		super.writeToStream( data );
+		ItemStack myStack = this.getItemStack();
+		data.writeByte( myStack.hasDisplayName() ? 1 : 0 );
+		if ( myStack.hasDisplayName() )
+		{
+			ByteBufUtils.writeUTF8String(data, myStack.getDisplayName());
+		}
+	}
+
+	@Override
+	public boolean readFromStream( ByteBuf data ) throws IOException
+	{
+		final boolean superRead = super.readFromStream( data );
+		if ( data.readByte() != 0 )
+		{
+			this.getItemStack().setStackDisplayName( ByteBufUtils.readUTF8String( data ) );
+		}
+		return superRead;
 	}
 
 	@Override
