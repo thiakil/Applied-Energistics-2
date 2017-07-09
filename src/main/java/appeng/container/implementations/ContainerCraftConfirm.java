@@ -131,7 +131,7 @@ public class ContainerCraftConfirm extends AEBaseContainer
 	@Override
 	public void detectAndSendChanges()
 	{
-		if( Platform.isClient() )
+		if( Platform.isClient() || this.getGrid() == null )
 		{
 			return;
 		}
@@ -293,6 +293,9 @@ public class ContainerCraftConfirm extends AEBaseContainer
 	private IGrid getGrid()
 	{
 		final IActionHost h = ( (IActionHost) this.getTarget() );
+		if ( h == null || h.getActionableNode() == null )
+			return null;
+
 		return h.getActionableNode().getGrid();
 	}
 
