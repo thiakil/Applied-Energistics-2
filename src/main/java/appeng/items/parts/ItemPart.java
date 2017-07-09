@@ -157,7 +157,7 @@ public final class ItemPart extends AEBaseItem implements IPartItem, IItemGroup
 	{
 		if( this.getTypeByStack( player.getHeldItem( hand ) ) == PartType.InvalidType )
 		{
-			return EnumActionResult.FAIL;
+			return EnumActionResult.PASS;
 		}
 
 		return AEApi.instance().partHelper().placeBus( player.getHeldItem( hand ), pos, side, player, hand, w );

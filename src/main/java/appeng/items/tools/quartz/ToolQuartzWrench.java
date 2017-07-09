@@ -54,7 +54,6 @@ public class ToolQuartzWrench extends AEBaseItem implements IAEWrench /* , ITool
 		{
 			if( Platform.isClient() )
 			{
-				//TODO 1.10-R - if we return FAIL on client, action will not be sent to server. Fix that in all Block#onItemUseFirst overrides.
 				return !world.isRemote ? EnumActionResult.SUCCESS : EnumActionResult.PASS;
 			}
 
@@ -62,7 +61,7 @@ public class ToolQuartzWrench extends AEBaseItem implements IAEWrench /* , ITool
 			{
 				b.neighborChanged( world.getBlockState( pos ), world, pos, b, pos );
 				player.swingArm( hand );
-				return !world.isRemote ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
+				return !world.isRemote ? EnumActionResult.SUCCESS : EnumActionResult.PASS;
 			}
 		}
 		return EnumActionResult.PASS;
