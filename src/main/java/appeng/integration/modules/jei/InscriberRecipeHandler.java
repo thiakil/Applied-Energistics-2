@@ -19,23 +19,23 @@
 package appeng.integration.modules.jei;
 
 
-import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapperFactory;
 
 import appeng.api.features.IInscriberRecipe;
 
 
-class InscriberRecipeHandler implements IRecipeHandler<IInscriberRecipe>
+class InscriberRecipeHandler implements IRecipeWrapperFactory<IInscriberRecipe>
 {
 
-	@Override
-	public Class<IInscriberRecipe> getRecipeClass()
+	//@Override
+	public static Class<IInscriberRecipe> getRecipeClass()
 	{
 		return IInscriberRecipe.class;
 	}
 
-	@Override
-	public String getRecipeCategoryUid( IInscriberRecipe recipe )
+	//@Override
+	public static String getRecipeCategoryUid()
 	{
 		return InscriberRecipeCategory.UID;
 	}
@@ -44,12 +44,6 @@ class InscriberRecipeHandler implements IRecipeHandler<IInscriberRecipe>
 	public IRecipeWrapper getRecipeWrapper( IInscriberRecipe recipe )
 	{
 		return new InscriberRecipeWrapper( recipe );
-	}
-
-	@Override
-	public boolean isRecipeValid( IInscriberRecipe recipe )
-	{
-		return true;
 	}
 
 }
