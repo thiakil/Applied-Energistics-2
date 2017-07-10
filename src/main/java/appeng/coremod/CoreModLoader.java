@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 /**
  * Coremod loading plugin, to separate from DummyModContainer, which some people want to transform
  */
-@IFMLLoadingPlugin.MCVersion( "1.11.2" )
+@IFMLLoadingPlugin.MCVersion( "1.12" )
 public class CoreModLoader implements IFMLLoadingPlugin
 {
 	@Override

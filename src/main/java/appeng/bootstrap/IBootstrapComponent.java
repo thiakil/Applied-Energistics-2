@@ -20,6 +20,8 @@ package appeng.bootstrap;
 
 
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 
 /**
@@ -37,6 +39,10 @@ public interface IBootstrapComponent
 	}
 
 	default void postInitialize( Side side )
+	{
+	}
+
+	default <T extends IForgeRegistryEntry<T>> void registryEvent( IForgeRegistry<T> registry, Class<T> clazz )
 	{
 	}
 }

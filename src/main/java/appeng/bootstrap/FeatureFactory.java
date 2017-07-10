@@ -37,6 +37,7 @@ import appeng.bootstrap.components.InitComponent;
 import appeng.bootstrap.components.ModelOverrideComponent;
 import appeng.bootstrap.components.PostInitComponent;
 import appeng.bootstrap.components.PreInitComponent;
+import appeng.bootstrap.components.RegistryComponent;
 import appeng.core.features.AEFeature;
 import appeng.core.features.ActivityState;
 import appeng.core.features.ColoredItemDefinition;
@@ -130,6 +131,11 @@ public class FeatureFactory
 	}
 
 	void addPostInit( PostInitComponent component )
+	{
+		this.bootstrapComponents.add( component );
+	}
+
+	void addRegistry( RegistryComponent component )
 	{
 		this.bootstrapComponents.add( component );
 	}

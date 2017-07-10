@@ -33,7 +33,10 @@ import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import appeng.bootstrap.components.RegistryComponent;
 import appeng.core.AEConfig;
 import appeng.core.AppEng;
 import appeng.core.CreativeTab;
@@ -175,7 +178,20 @@ class ItemDefinitionBuilder implements IItemBuilder
 		}
 
 		//TODO Register shit
-		//factory.addPreInit( side -> GameRegistry.register( item ) );
+		factory.addRegistry( new RegistryComponent()
+		{
+			@Override
+			public <T extends IForgeRegistryEntry<T>> void registryEvent( IForgeRegistry<T> registry, Class<T> clazz )
+			{
+				if (clazz == Item.class)
+				{
+					if( item != null )
+					{
+						((IForgeRegistry<Item>) registry).register( item );
+					}
+				}
+			}
+		} );
 
 		if( Platform.isClient() )
 		{
