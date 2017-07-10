@@ -29,6 +29,8 @@ import mcjty.theoneprobe.api.ProbeMode;
 
 import appeng.api.implementations.IPowerChannelState;
 import appeng.integration.modules.theoneprobe.TheOneProbeText;
+import appeng.me.helpers.AENetworkProxy;
+import appeng.me.helpers.IGridProxyable;
 import appeng.tile.AEBaseTile;
 
 
@@ -38,12 +40,21 @@ public class PowerStateInfoProvider implements ITileProbInfoProvider
 	@Override
 	public void addProbeInfo( AEBaseTile tile, ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data )
 	{
-		if( tile instanceof IPowerChannelState )
+		if( tile instanceof IGridProxyable ||  tile instanceof IPowerChannelState )
 		{
-			final IPowerChannelState state = (IPowerChannelState) tile;
+			final boolean isActive;
+			final boolean isPowered;
 
-			final boolean isActive = state.isActive();
-			final boolean isPowered = state.isPowered();
+			if ( tile instanceof IPowerChannelState )
+			{
+				final IPowerChannelState state = (IPowerChannelState) tile;
+				isActive = state.isActive();
+				isPowered = state.isPowered();
+			} else {
+				AENetworkProxy proxy = ((IGridProxyable)tile).getProxy();
+				isActive = proxy.isActive();
+				isPowered = proxy.isPowered();
+			}
 
 			if( isActive && isPowered )
 			{
