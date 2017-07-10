@@ -156,7 +156,7 @@ public class ItemFacade extends AEBaseItem implements IFacadeItem, IAlphaPassIte
 		}
 
 		final Block b = Block.getBlockFromItem( l.getItem() );
-		if( b == null || l.hasTagCompound() )
+		if( b == null || l.hasTagCompound() || b == Blocks.AIR )
 		{
 			return ItemStack.EMPTY;
 		}

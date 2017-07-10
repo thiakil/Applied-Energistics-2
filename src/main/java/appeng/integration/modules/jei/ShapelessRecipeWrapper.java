@@ -28,7 +28,6 @@ import net.minecraft.item.ItemStack;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
-import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 
 import appeng.api.exceptions.MissingIngredientError;
 import appeng.api.exceptions.RegistrationError;
@@ -36,7 +35,7 @@ import appeng.api.recipes.IIngredient;
 import appeng.recipes.game.ShapelessRecipe;
 
 
-class ShapelessRecipeWrapper extends BlankRecipeWrapper implements ICraftingRecipeWrapper
+class ShapelessRecipeWrapper extends BlankRecipeWrapper
 {
 
 	private final ShapelessRecipe recipe;

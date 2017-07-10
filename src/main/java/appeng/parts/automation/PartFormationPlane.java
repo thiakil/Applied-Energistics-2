@@ -24,8 +24,10 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -34,6 +36,7 @@ import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -520,15 +523,14 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 				worked = true;
 				final Chunk c = w.getChunkFromBlockCoords( tePos );
 
-				final int sum = 0;
+				int sum = 0;
 
 				// TODO: LIMIT OTHER THIGNS!
-				/*
-				 * for( List Z : c.entityLists )
-				 * {
-				 * sum += Z.size();
-				 * }
-				 */
+
+				for( ClassInheritanceMultiMap<Entity> Z : c.getEntityLists() )
+				{
+					sum += Z.size();
+				}
 
 				if( sum < AEConfig.instance().getFormationPlaneEntityLimit() )
 				{
@@ -558,6 +560,18 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 							{
 								result = ei;
 							}
+						}
+
+						if ( is.getItem() == Items.NAME_TAG && is.hasDisplayName() && is.getDisplayName().equals("Carl") )
+						{
+							EntityLlama llama = new EntityLlama( w );
+							result = llama;
+							ei.setDead();
+							maxStorage = 1;
+							llama.setCustomNameTag(is.getDisplayName());
+							llama.enablePersistence();
+							BlockPos spawnPos = te.getPos().offset( side.getFacing() );
+							llama.setPosition( spawnPos.getX(), spawnPos.getY(), spawnPos.getZ() );
 						}
 
 						if( !w.spawnEntity( result ) )

@@ -24,14 +24,14 @@ import net.minecraft.util.ResourceLocation;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapperFactory;
 
 import appeng.api.config.CondenserOutput;
 import appeng.core.AppEng;
 
 
-class CondenserOutputHandler implements IRecipeHandler<CondenserOutput>
+class CondenserOutputHandler implements IRecipeWrapperFactory<CondenserOutput>
 {
 
 	private final ItemStack matterBall;
@@ -49,14 +49,14 @@ class CondenserOutputHandler implements IRecipeHandler<CondenserOutput>
 		this.iconButtonSingularity = guiHelper.createDrawable( statesLocation, 32, 112, 14, 14, 28, 0, 78, 0 );
 	}
 
-	@Override
+	//@Override
 	public Class<CondenserOutput> getRecipeClass()
 	{
 		return CondenserOutput.class;
 	}
 
-	@Override
-	public String getRecipeCategoryUid( CondenserOutput recipe )
+	//@Override
+	public static String getRecipeCategoryUid()
 	{
 		return CondenserCategory.UID;
 	}
@@ -75,7 +75,7 @@ class CondenserOutputHandler implements IRecipeHandler<CondenserOutput>
 		}
 	}
 
-	@Override
+	//@Override
 	public boolean isRecipeValid( CondenserOutput recipe )
 	{
 		switch( recipe )

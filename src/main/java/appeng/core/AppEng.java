@@ -157,7 +157,7 @@ public final class AppEng
 		this.customRecipeConfig = new CustomRecipeForgeConfiguration( recipeConfiguration );
 		this.exportConfig = new ForgeExportConfig( recipeConfiguration );
 
-		AELog.info( "Pre Initialization ( started )" );
+		AELog.debug( "Pre Initialization ( started )" );
 
 		CreativeTab.init();
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.FACADES ) )
@@ -172,7 +172,7 @@ public final class AppEng
 			AppEng.proxy.preinit();
 		}
 
-		AELog.info( "Pre Initialization ( ended after " + watch.elapsed( TimeUnit.MILLISECONDS ) + "ms )" );
+		AELog.debug( "Pre Initialization ( ended after " + watch.elapsed( TimeUnit.MILLISECONDS ) + "ms )" );
 
 		// Instantiate all Plugins
 		List<Object> injectables = Lists.newArrayList(
@@ -193,7 +193,7 @@ public final class AppEng
 	private void init( final FMLInitializationEvent event )
 	{
 		final Stopwatch start = Stopwatch.createStarted();
-		AELog.info( "Initialization ( started )" );
+		AELog.debug( "Initialization ( started )" );
 
 		if( this.exportConfig.isExportingItemNamesEnabled() )
 		{
@@ -213,14 +213,14 @@ public final class AppEng
 		this.registration.initialize( event, this.recipeDirectory, this.customRecipeConfig );
 		IntegrationRegistry.INSTANCE.init();
 
-		AELog.info( "Initialization ( ended after " + start.elapsed( TimeUnit.MILLISECONDS ) + "ms )" );
+		AELog.debug( "Initialization ( ended after " + start.elapsed( TimeUnit.MILLISECONDS ) + "ms )" );
 	}
 
 	@EventHandler
 	private void postInit( final FMLPostInitializationEvent event )
 	{
 		final Stopwatch start = Stopwatch.createStarted();
-		AELog.info( "Post Initialization ( started )" );
+		AELog.debug( "Post Initialization ( started )" );
 
 		this.registration.postInit( event );
 		IntegrationRegistry.INSTANCE.postInit();
@@ -232,7 +232,7 @@ public final class AppEng
 		NetworkRegistry.INSTANCE.registerGuiHandler( this, GuiBridge.GUI_Handler );
 		NetworkHandler.init( "AE2" );
 
-		AELog.info( "Post Initialization ( ended after " + start.elapsed( TimeUnit.MILLISECONDS ) + "ms )" );
+		AELog.debug( "Post Initialization ( ended after " + start.elapsed( TimeUnit.MILLISECONDS ) + "ms )" );
 	}
 
 	@EventHandler

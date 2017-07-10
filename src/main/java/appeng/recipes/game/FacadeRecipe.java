@@ -55,7 +55,6 @@ public final class FacadeRecipe implements IRecipe
 		return !this.getOutput(inv, false).isEmpty();
 	}
 
-	@Nullable
 	private ItemStack getOutput( final IInventory inv, final boolean createFacade )
 	{
 		if(inv.getStackInSlot(0).isEmpty() && inv.getStackInSlot(2).isEmpty() && inv.getStackInSlot(6).isEmpty() && inv.getStackInSlot(8).isEmpty() )

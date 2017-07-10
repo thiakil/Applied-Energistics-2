@@ -209,7 +209,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 
 		if( target == null )
 		{
-			return new ActionResult<ItemStack>( EnumActionResult.FAIL, p.getHeldItem( hand ) );
+			return new ActionResult<ItemStack>( EnumActionResult.PASS, p.getHeldItem( hand ) );
 		}
 		else
 		{
@@ -237,7 +237,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 		{
 			if( !p.canPlayerEdit( pos, side, item ) )
 			{
-				return EnumActionResult.FAIL;
+				return EnumActionResult.PASS;
 			}
 
 			final IBlockState state = w.getBlockState( pos );
@@ -327,7 +327,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 
 					if( !p.canPlayerEdit( offsetPos, side, item ) )
 					{
-						return EnumActionResult.FAIL;
+						return EnumActionResult.PASS;
 					}
 
 					if( w.isAirBlock( offsetPos ) )

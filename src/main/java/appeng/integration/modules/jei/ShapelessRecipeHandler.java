@@ -19,24 +19,23 @@
 package appeng.integration.modules.jei;
 
 
-import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapperFactory;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 
 import appeng.recipes.game.ShapelessRecipe;
 
 
-class ShapelessRecipeHandler implements IRecipeHandler<ShapelessRecipe>
+class ShapelessRecipeHandler implements IRecipeWrapperFactory<ShapelessRecipe>
 {
 
-	@Override
-	public Class<ShapelessRecipe> getRecipeClass()
+	//@Override
+	public static Class<ShapelessRecipe> getRecipeClass()
 	{
 		return ShapelessRecipe.class;
 	}
 
-	@Override
-	public String getRecipeCategoryUid( ShapelessRecipe recipe )
+	public static String getRecipeCategoryUid()
 	{
 		return VanillaRecipeCategoryUid.CRAFTING;
 	}
@@ -47,7 +46,7 @@ class ShapelessRecipeHandler implements IRecipeHandler<ShapelessRecipe>
 		return new ShapelessRecipeWrapper( recipe );
 	}
 
-	@Override
+	//@Override
 	public boolean isRecipeValid( ShapelessRecipe recipe )
 	{
 		return recipe.isEnabled();

@@ -74,7 +74,7 @@ public class PartPlacement
 	{
 		if( depth > 3 )
 		{
-			return EnumActionResult.FAIL;
+			return EnumActionResult.PASS;
 		}
 
 		final Block block = world.getBlockState( pos ).getBlock();
@@ -87,7 +87,7 @@ public class PartPlacement
 		{
 			if( !Platform.hasPermissions( new DimensionalCoord( world, pos ), player ) )
 			{
-				return EnumActionResult.FAIL;
+				return EnumActionResult.PASS;
 			}
 
 			IPartHost host = null;
@@ -157,7 +157,7 @@ public class PartPlacement
 				if (host != null) {
 					if (!world.isRemote) {
 						if (host.getPart(AEPartLocation.INTERNAL) == null) {
-							return EnumActionResult.FAIL;
+							return EnumActionResult.PASS;
 						}
 
 						if (host.canAddPart(held, AEPartLocation.fromFacing(side))) {
@@ -182,7 +182,7 @@ public class PartPlacement
 						return EnumActionResult.SUCCESS;
 					}
 				}
-				return EnumActionResult.FAIL;
+				return EnumActionResult.PASS;
 			}
 		}
 
@@ -274,7 +274,7 @@ public class PartPlacement
 			}
 			else if( host != null && !host.canAddPart( held, AEPartLocation.fromFacing( side ) ) )
 			{
-				return EnumActionResult.FAIL;
+				return EnumActionResult.PASS;
 			}
 		}
 
@@ -315,7 +315,7 @@ public class PartPlacement
 				{
 					if( !player.isSneaking() && sp.part.onActivate( player, hand, mop.hitVec ) )
 					{
-						return EnumActionResult.FAIL;
+						return EnumActionResult.PASS;
 					}
 				}
 			}
@@ -323,7 +323,7 @@ public class PartPlacement
 			final DimensionalCoord dc = host.getLocation();
 			if( !Platform.hasPermissions( dc, player ) )
 			{
-				return EnumActionResult.FAIL;
+				return EnumActionResult.PASS;
 			}
 
 			final AEPartLocation mySide = host.addPart( held, AEPartLocation.fromFacing( side ), player, hand );

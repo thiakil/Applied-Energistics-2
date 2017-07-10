@@ -123,8 +123,12 @@ public class StorageHelper
 			}
 			else
 			{
+				boolean wasDead = entity.isDead;
+				oldWorld.removeEntityDangerously(entity);
+				entity.isDead = wasDead;
 				entity.getServer().getPlayerList().transferEntityToWorld( entity, entity.dimension,
 						entity.getServer().getWorld( entity.dimension ), (WorldServer) link.dim, new METeleporter( newWorld, link ) );
+				link.dim.updateEntityWithOptionalForce(entity, true);
 			}
 		}
 

@@ -299,10 +299,5 @@ public class TileCharger extends AENetworkPowerTile implements ICrankable, IGrid
 		return true;
 	}
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }

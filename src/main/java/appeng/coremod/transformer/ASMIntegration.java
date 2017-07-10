@@ -23,7 +23,8 @@ import java.util.Iterator;
 
 import javax.annotation.Nullable;
 
-import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Type;
@@ -32,7 +33,6 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraftforge.fml.relauncher.FMLRelaunchLog;
 
 import appeng.coremod.annotations.Integration;
 import appeng.helpers.Reflected;
@@ -43,6 +43,8 @@ import appeng.integration.IntegrationType;
 @Reflected
 public final class ASMIntegration implements IClassTransformer
 {
+	private static Logger logger = LogManager.getLogger("AE2-CORE");
+
 	@Reflected
 	public ASMIntegration()
 	{
@@ -151,7 +153,7 @@ public final class ASMIntegration implements IClassTransformer
 
 		if( changed )
 		{
-			this.log( "Updated " + classNode.name );
+			logger.debug( "Updated " + classNode.name );
 		}
 
 		return changed;
@@ -195,13 +197,13 @@ public final class ASMIntegration implements IClassTransformer
 			final IntegrationType type = IntegrationType.valueOf( iName );
 			if( !IntegrationRegistry.INSTANCE.isEnabled( type ) )
 			{
-				this.log( "Removing Interface " + iFace + " from " + classNode.name + " because " + iName + " integration is disabled." );
+				logger.info( "Removing Interface " + iFace + " from " + classNode.name + " because " + iName + " integration is disabled." );
 				classNode.interfaces.remove( iFace.replace( '.', '/' ) );
 				return true;
 			}
 			else
 			{
-				this.log( "Allowing Interface " + iFace + " from " + classNode.name + " because " + iName + " integration is enabled." );
+				logger.debug( "Allowing Interface " + iFace + " from " + classNode.name + " because " + iName + " integration is enabled." );
 			}
 		}
 		else
@@ -231,13 +233,13 @@ public final class ASMIntegration implements IClassTransformer
 			final IntegrationType type = IntegrationType.valueOf( iName );
 			if( !IntegrationRegistry.INSTANCE.isEnabled( type ) )
 			{
-				this.log( "Removing Method " + mn.name + " from " + classNode.name + " because " + iName + " integration is disabled." );
+				logger.info( "Removing Method " + mn.name + " from " + classNode.name + " because " + iName + " integration is disabled." );
 				i.remove();
 				return true;
 			}
 			else
 			{
-				this.log( "Allowing Method " + mn.name + " from " + classNode.name + " because " + iName + " integration is enabled." );
+				logger.debug( "Allowing Method " + mn.name + " from " + classNode.name + " because " + iName + " integration is enabled." );
 			}
 		}
 		else
@@ -248,8 +250,4 @@ public final class ASMIntegration implements IClassTransformer
 		return false;
 	}
 
-	private void log( final String string )
-	{
-		FMLRelaunchLog.log( "AE2-CORE", Level.INFO, string );
-	}
 }
