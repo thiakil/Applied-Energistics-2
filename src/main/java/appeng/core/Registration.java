@@ -27,16 +27,24 @@ import javax.annotation.Nonnull;
 
 import com.google.common.base.Preconditions;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import appeng.api.AEApi;
 import appeng.api.config.Upgrades;
 import appeng.api.definitions.IBlocks;
 import appeng.api.definitions.IItems;
@@ -55,6 +63,7 @@ import appeng.api.networking.spatial.ISpatialCache;
 import appeng.api.networking.storage.IStorageGrid;
 import appeng.api.networking.ticking.ITickManager;
 import appeng.api.parts.IPartHelper;
+import appeng.bootstrap.components.RegistryComponent;
 import appeng.capabilities.Capabilities;
 import appeng.core.features.AEFeature;
 import appeng.core.features.registries.P2PTunnelRegistry;
@@ -129,24 +138,40 @@ public final class Registration
 
 	void preInitialize( final FMLPreInitializationEvent event )
 	{
-		this.registerSpatial( false );
-
 		Capabilities.register();
 
 		final Api api = Api.INSTANCE;
+		ApiDefinitions definitions = api.definitions();
 		final IRecipeHandlerRegistry recipeRegistry = api.registries().recipes();
 		this.registerCraftHandlers( recipeRegistry );
 
-		RecipeSorter.register( "AE2-Facade", FacadeRecipe.class, Category.SHAPED, "" );
-		RecipeSorter.register( "AE2-Shaped", ShapedRecipe.class, Category.SHAPED, "" );
-		RecipeSorter.register( "AE2-Shapeless", ShapelessRecipe.class, Category.SHAPELESS, "" );
+		this.registerSpatial( false );
+
+		//RecipeSorter.register( "AE2-Facade", FacadeRecipe.class, Category.SHAPED, "" );
+		//RecipeSorter.register( "AE2-Shaped", ShapedRecipe.class, Category.SHAPED, "" );
+		//RecipeSorter.register( "AE2-Shapeless", ShapelessRecipe.class, Category.SHAPELESS, "" );
 
 		MinecraftForge.EVENT_BUS.register( OreDictionaryHandler.INSTANCE );
-
-		ApiDefinitions definitions = api.definitions();
+		MinecraftForge.EVENT_BUS.register( this );
 
 		// Register all detected handlers and features (items, blocks) in pre-init
 		definitions.getRegistry().getBootstrapComponents().forEach( b -> b.preInitialize( event.getSide() ) );
+	}
+
+	@SubscribeEvent
+	void registryBlocks( final RegistryEvent.Register<Block> event)
+	{
+		ApiDefinitions definitions = Api.INSTANCE.definitions();
+		IForgeRegistry<Block> registry = event.getRegistry();
+		definitions.getRegistry().getBootstrapComponents().forEach( b -> b.registryEvent( registry, Block.class ) );
+	}
+
+	@SubscribeEvent
+	void registryItems( final RegistryEvent.Register<Item> event)
+	{
+		ApiDefinitions definitions = Api.INSTANCE.definitions();
+		IForgeRegistry<Item> registry = event.getRegistry();
+		definitions.getRegistry().getBootstrapComponents().forEach( b -> b.registryEvent( registry, Item.class ) );
 	}
 
 	private void registerSpatial( final boolean force )
@@ -176,7 +201,20 @@ public final class Registration
 			if( !force && config.getStorageBiomeID() != -1 )
 			{
 				this.storageBiome = new BiomeGenStorage();
-				Biome.registerBiome( config.getStorageBiomeID(), "appliedenergistics2:storage_biome", this.storageBiome );
+				this.storageBiome.setRegistryName( "appliedenergistics2:storage_biome" );
+				//Biome.registerBiome( config.getStorageBiomeID(),
+				((ApiDefinitions)AEApi.instance().definitions()).getRegistry().getBootstrapComponents().add( new RegistryComponent()
+					 {
+						 @Override
+						 public <T extends IForgeRegistryEntry<T>> void registryEvent( IForgeRegistry<T> registry, Class<T> clazz )
+						 {
+							 if ( clazz == Biome.class )
+							 {
+								 ((IForgeRegistry<Biome>)registry).register( storageBiome );
+							 }
+						 }
+					 }
+				);
 			}
 
 		}

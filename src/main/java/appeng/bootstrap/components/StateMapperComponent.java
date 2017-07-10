@@ -26,12 +26,14 @@ import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 
 /**
  * Registers a custom state mapper for a given block.
  */
-public class StateMapperComponent implements PreInitComponent
+public class StateMapperComponent implements RegistryComponent
 {
 
 	private final Block block;
@@ -45,12 +47,15 @@ public class StateMapperComponent implements PreInitComponent
 	}
 
 	@Override
-	public void preInitialize( Side side )
+	public <T extends IForgeRegistryEntry<T>> void registryEvent( IForgeRegistry<T> registry, Class<T> clazz )
 	{
-		ModelLoader.setCustomStateMapper( block, stateMapper );
-		if( stateMapper instanceof IResourceManagerReloadListener )
+		if ( clazz == Block.class )
 		{
-			( (IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager() ).registerReloadListener( (IResourceManagerReloadListener) stateMapper );
+			ModelLoader.setCustomStateMapper( block, stateMapper );
+			if( stateMapper instanceof IResourceManagerReloadListener )
+			{
+				( (IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager() ).registerReloadListener( (IResourceManagerReloadListener) stateMapper );
+			}
 		}
 	}
 }

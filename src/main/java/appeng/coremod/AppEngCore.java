@@ -37,7 +37,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import appeng.core.AEConfig;
 
 
-@MCVersion( "1.11.2" )
+@MCVersion( "1.12" )
 public final class AppEngCore extends DummyModContainer implements IFMLLoadingPlugin
 {
 	private final ModMetadata metadata = new ModMetadata();

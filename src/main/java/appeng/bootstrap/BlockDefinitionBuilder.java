@@ -39,11 +39,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import appeng.api.definitions.IBlockDefinition;
 import appeng.block.AEBaseBlock;
 import appeng.block.AEBaseItemBlock;
 import appeng.block.AEBaseTileBlock;
+import appeng.bootstrap.components.RegistryComponent;
 import appeng.core.AEConfig;
 import appeng.core.AppEng;
 import appeng.core.CreativeTab;
@@ -210,13 +213,24 @@ class BlockDefinitionBuilder implements IBlockBuilder
 
 		// Register the item and block with the game
 		//TODO registry
-//		factory.addPreInit( side -> {
-//			GameRegistry.register( block );
-//			if( item != null )
-//			{
-//				GameRegistry.register( item );
-//			}
-//		} );
+		factory.addRegistry( new RegistryComponent()
+		{
+			@Override
+			public <T extends IForgeRegistryEntry<T>> void registryEvent( IForgeRegistry<T> registry, Class<T> clazz )
+			{
+				if (clazz == Item.class)
+				{
+					if( item != null )
+					{
+						((IForgeRegistry<Item>) registry).register( item );
+					}
+				}
+				else if ( clazz == Block.class )
+				{
+					((IForgeRegistry<Block>) registry).register( block );
+				}
+			}
+		} );
 
 		block.setCreativeTab( creativeTab );
 		block.setUnlocalizedName( "appliedenergistics2." + registryName );
