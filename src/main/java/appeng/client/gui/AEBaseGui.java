@@ -186,6 +186,7 @@ public abstract class AEBaseGui extends GuiContainer
 				}
 			}
 		}
+		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
 	protected void drawTooltip( int x, int y, String message )
