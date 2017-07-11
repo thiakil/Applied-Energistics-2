@@ -55,7 +55,10 @@ public abstract class AEBaseItem extends Item
 	@SuppressWarnings( "unchecked" )
 	public final void getSubItems( final CreativeTabs creativeTab, final NonNullList<ItemStack> itemStacks )
 	{
-		this.getCheckedSubItems( creativeTab, itemStacks );
+		if (this.isInCreativeTab( creativeTab ))
+		{
+			this.getCheckedSubItems( creativeTab, itemStacks );
+		}
 	}
 
 	@Override
