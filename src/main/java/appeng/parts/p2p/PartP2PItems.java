@@ -44,6 +44,7 @@ import appeng.items.parts.PartModels;
 import appeng.me.GridAccessException;
 import appeng.me.cache.helpers.TunnelCollection;
 import appeng.util.Platform;
+import appeng.util.inv.NullItemHandler;
 import appeng.util.inv.WrapperChainedItemHandler;
 
 
@@ -301,43 +302,6 @@ public class PartP2PItems extends PartP2PTunnel<PartP2PItems>// implements /* IP
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast( NULL_ITEM_HANDLER );//fallback incase it fails between has and get cap. (and avoid the op in has)
 		}
 		return super.getCapability( capabilityClass );
-	}
-
-	private static class NullItemHandler implements IItemHandler
-	{
-
-		@Override
-		public int getSlots()
-		{
-			return 0;
-		}
-
-		@Nonnull
-		@Override
-		public ItemStack getStackInSlot( int slot )
-		{
-			return ItemStack.EMPTY;
-		}
-
-		@Nonnull
-		@Override
-		public ItemStack insertItem( int slot, @Nonnull ItemStack stack, boolean simulate )
-		{
-			return stack;
-		}
-
-		@Nonnull
-		@Override
-		public ItemStack extractItem( int slot, int amount, boolean simulate )
-		{
-			return ItemStack.EMPTY;
-		}
-
-		@Override
-		public int getSlotLimit( int slot )
-		{
-			return 0;
-		}
 	}
 
 }
