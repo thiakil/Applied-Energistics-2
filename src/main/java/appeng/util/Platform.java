@@ -1512,28 +1512,41 @@ public class Platform
 				hash ^= chest.adjacentChestXNeg.hashCode();
 			}
 		}
-		else if( target instanceof IInventory )
+		else
 		{
-			hash ^= ( (IInventory) target ).getSizeInventory();
-
-			if( target instanceof ISidedInventory )
+			boolean foundInvCap = false;
+			for( final EnumFacing dir : EnumFacing.VALUES )
 			{
-				for( final EnumFacing dir : EnumFacing.VALUES )
+				IItemHandler handler = target.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir);
+				if (handler != null){
+					foundInvCap = true;
+					hash ^= handler.getSlots();
+				}
+			}
+
+			if( !foundInvCap && target instanceof IInventory )
+			{
+				hash ^= ( (IInventory) target ).getSizeInventory();
+
+				if( target instanceof ISidedInventory )
 				{
-
-					final int[] sides = ( (ISidedInventory) target ).getSlotsForFace( dir );
-
-					if( sides == null )
+					for( final EnumFacing dir : EnumFacing.VALUES )
 					{
-						return 0;
-					}
 
-					int offset = 0;
-					for( final int side : sides )
-					{
-						final int c = ( side << ( offset % 8 ) ) ^ ( 1 << dir.ordinal() );
-						offset++;
-						hash = c + ( hash << 6 ) + ( hash << 16 ) - hash;
+						final int[] sides = ( (ISidedInventory) target ).getSlotsForFace( dir );
+
+						if( sides == null )
+						{
+							continue;
+						}
+
+						int offset = 0;
+						for( final int side : sides )
+						{
+							final int c = ( side << ( offset % 8 ) ) ^ ( 1 << dir.ordinal() );
+							offset++;
+							hash = c + ( hash << 6 ) + ( hash << 16 ) - hash;
+						}
 					}
 				}
 			}
