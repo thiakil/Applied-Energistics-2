@@ -26,7 +26,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import appeng.api.config.Actionable;
@@ -41,6 +46,7 @@ import appeng.api.storage.data.IItemList;
 import appeng.core.AELog;
 import appeng.me.storage.ITickingMonitor;
 import appeng.util.Platform;
+import appeng.util.inv.NullItemHandler;
 import appeng.util.item.AEItemStack;
 
 
@@ -54,15 +60,23 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 
 	private BaseActionSource mySource;
 
-	private final IItemHandler itemHandler;
+	private IItemHandler itemHandler;
+
+	private final ICapabilityProvider provider;
+
+	private static final IItemHandler NULL_HANDLER = new NullItemHandler();
+
+	private final EnumFacing facing;
 
 	private ItemStack[] cachedStacks = new ItemStack[0];
 
 	private IAEItemStack[] cachedAeStacks = new IAEItemStack[0];
 
-	ItemHandlerAdapter( IItemHandler itemHandler )
+	ItemHandlerAdapter( IItemHandler itemHandler, ICapabilityProvider provider, EnumFacing facing )
 	{
 		this.itemHandler = itemHandler;
+		this.provider = provider;
+		this.facing = facing;
 	}
 
 	@Override
@@ -168,10 +182,17 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 	@Override
 	public TickRateModulation onTick()
 	{
+		IItemHandler handler = provider.getCapability( CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing );
+		if (handler == null){
+			this.itemHandler = NULL_HANDLER;
+		} else {
+			this.itemHandler = handler;
+		}
+
 		return onTick( null );
 	}
 
-	public TickRateModulation onTick(ItemStack expectedChange)
+	public TickRateModulation onTick(@Nullable ItemStack expectedChange)
 	{
 		LinkedList<IAEItemStack> changes = new LinkedList<>();
 

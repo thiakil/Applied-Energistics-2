@@ -72,7 +72,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryNamespaced;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -1207,7 +1206,7 @@ public class Platform
 	@SideOnly( Side.CLIENT )
 	public static String gui_localize( final String string )
 	{
-		return I18n.translateToLocal( string );
+		return net.minecraft.client.resources.I18n.format( string );
 	}
 
 	public static LookDirection getPlayerRay( final EntityPlayer playerIn, final float eyeOffset )
@@ -1515,28 +1514,41 @@ public class Platform
 				hash ^= chest.adjacentChestXNeg.hashCode();
 			}
 		}
-		else if( target instanceof IInventory )
+		else
 		{
-			hash ^= ( (IInventory) target ).getSizeInventory();
-
-			if( target instanceof ISidedInventory )
+			boolean foundInvCap = false;
+			for( final EnumFacing dir : EnumFacing.VALUES )
 			{
-				for( final EnumFacing dir : EnumFacing.VALUES )
+				IItemHandler handler = target.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir);
+				if (handler != null){
+					foundInvCap = true;
+					hash ^= handler.getSlots();
+				}
+			}
+
+			if( !foundInvCap && target instanceof IInventory )
+			{
+				hash ^= ( (IInventory) target ).getSizeInventory();
+
+				if( target instanceof ISidedInventory )
 				{
-
-					final int[] sides = ( (ISidedInventory) target ).getSlotsForFace( dir );
-
-					if( sides == null )
+					for( final EnumFacing dir : EnumFacing.VALUES )
 					{
-						return 0;
-					}
 
-					int offset = 0;
-					for( final int side : sides )
-					{
-						final int c = ( side << ( offset % 8 ) ) ^ ( 1 << dir.ordinal() );
-						offset++;
-						hash = c + ( hash << 6 ) + ( hash << 16 ) - hash;
+						final int[] sides = ( (ISidedInventory) target ).getSlotsForFace( dir );
+
+						if( sides == null )
+						{
+							continue;
+						}
+
+						int offset = 0;
+						for( final int side : sides )
+						{
+							final int c = ( side << ( offset % 8 ) ) ^ ( 1 << dir.ordinal() );
+							offset++;
+							hash = c + ( hash << 6 ) + ( hash << 16 ) - hash;
+						}
 					}
 				}
 			}
