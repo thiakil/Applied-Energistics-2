@@ -38,9 +38,10 @@ import net.minecraftforge.oredict.OreDictionary;
 import appeng.api.exceptions.MissingIngredientError;
 import appeng.api.exceptions.RegistrationError;
 import appeng.api.recipes.IIngredient;
+import appeng.recipes.IngredientSet;
 
 
-public class ShapedRecipe implements IRecipe, IRecipeBakeable
+public class ShapedRecipe extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe, IRecipeBakeable
 {
 	// Added in for future ease of change, but hard coded for now.
 	private static final int MAX_CRAFT_GRID_WIDTH = 3;
@@ -55,6 +56,10 @@ public class ShapedRecipe implements IRecipe, IRecipeBakeable
 
 	public ShapedRecipe( final ItemStack result, Object... recipe )
 	{
+		if (result.isEmpty())
+		{
+			throw new IllegalStateException("Result is empty!");
+		}
 		this.output = result.copy();
 
 		final StringBuilder shape = new StringBuilder();
@@ -309,16 +314,19 @@ public class ShapedRecipe implements IRecipe, IRecipeBakeable
 	public NonNullList<Ingredient> getIngredients()
 	{
 		NonNullList<Ingredient> out = NonNullList.withSize(this.input.length, Ingredient.EMPTY);
-		for (IIngredient in : this.input)
+		int index = 0;
+		for (int i=0; i<this.input.length; i++)
 		{
+			IIngredient in = this.input[i];
 			if (in != null)
 			{
 				try
 				{
-					out.add( Ingredient.fromStacks( in.getItemStack() ) );
+					out.set(i, Ingredient.fromStacks( in.getItemStackSet() ) );
 				}
 				catch( RegistrationError|MissingIngredientError registrationError )
 				{
+					//s
 				}
 			}
 		}
@@ -346,52 +354,14 @@ public class ShapedRecipe implements IRecipe, IRecipeBakeable
 	}
 
 	@Override
+	public String getGroup()
+	{
+		return "ae2";
+	}
+
+	@Override
 	public NonNullList<ItemStack> getRemainingItems( final InventoryCrafting inv )
 	{
 		return ForgeHooks.defaultRecipeGetRemainingItems( inv );
-	}
-
-	private ResourceLocation name;
-	/**
-	 * A unique identifier for this entry, if this entry is registered already it will return it's official registry name.
-	 * Otherwise it will return the name set in setRegistryName().
-	 * If neither are valid null is returned.
-	 *
-	 * @return Unique identifier or null.
-	 */
-	@Nullable
-	@Override
-	public ResourceLocation getRegistryName()
-	{
-		return name;
-	}
-
-	/**
-	 * Sets a unique name for this Item. This should be used for uniquely identify the instance of the Item.
-	 * This is the valid replacement for the atrocious 'getUnlocalizedName().substring(6)' stuff that everyone does.
-	 * Unlocalized names have NOTHING to do with unique identifiers. As demonstrated by vanilla blocks and items.
-	 *
-	 * The supplied name will be prefixed with the currently active mod's modId.
-	 * If the supplied name already has a prefix that is different, it will be used and a warning will be logged.
-	 *
-	 * If a name already exists, or this Item is already registered in a registry, then an IllegalStateException is thrown.
-	 *
-	 * Returns 'this' to allow for chaining.
-	 *
-	 * @param name Unique registry name
-	 *
-	 * @return This instance
-	 */
-	@Override
-	public IRecipe setRegistryName( ResourceLocation name )
-	{
-		this.name = name;
-		return this;
-	}
-
-	@Override
-	public Class<IRecipe> getRegistryType()
-	{
-		return IRecipe.class;
 	}
 }

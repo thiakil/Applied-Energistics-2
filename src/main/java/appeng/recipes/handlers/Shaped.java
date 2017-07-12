@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import appeng.api.exceptions.MissingIngredientError;
 import appeng.api.exceptions.RecipeError;
@@ -31,6 +33,7 @@ import appeng.api.exceptions.RegistrationError;
 import appeng.api.recipes.ICraftHandler;
 import appeng.api.recipes.IIngredient;
 import appeng.core.AELog;
+import appeng.core.AppEng;
 import appeng.recipes.RecipeHandler;
 import appeng.recipes.game.ShapedRecipe;
 import appeng.util.Platform;
@@ -43,6 +46,8 @@ public class Shaped implements ICraftHandler, IWebsiteSerializer
 	private IIngredient output;
 	private int rows;
 	private int cols;
+
+	private static int index = 0;
 
 	@Override
 	public void setup( final List<List<IIngredient>> input, final List<List<IIngredient>> output ) throws RecipeError
@@ -83,7 +88,7 @@ public class Shaped implements ICraftHandler, IWebsiteSerializer
 	}
 
 	@Override
-	public void register() throws RegistrationError, MissingIngredientError
+	public void register( IForgeRegistry<IRecipe> registry ) throws RegistrationError, MissingIngredientError
 	{
 		char first = 'A';
 		final List<Object> args = new ArrayList<Object>();
@@ -114,7 +119,7 @@ public class Shaped implements ICraftHandler, IWebsiteSerializer
 		try
 		{
 			//TODO recipes
-			//GameRegistry.addRecipe( new ShapedRecipe( outIS, args.toArray( new Object[args.size()] ) ) );
+			registry.register( new ShapedRecipe( outIS, args.toArray( new Object[args.size()] ) ).setRegistryName( new ResourceLocation( AppEng.MOD_ID, "recipes.Shaped."+ index++)) );
 		}
 		catch( final Throwable e )
 		{

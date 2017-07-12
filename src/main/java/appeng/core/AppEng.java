@@ -168,7 +168,7 @@ public final class AppEng
 			CreativeTabFacade.init();
 		}
 
-		this.registration.preInitialize( event );
+		this.registration.preInitialize( event, this.recipeDirectory, this.customRecipeConfig );
 
 		if( Platform.isClient() )
 		{
@@ -221,7 +221,7 @@ public final class AppEng
 			}
 		}
 
-		this.registration.initialize( event, this.recipeDirectory, this.customRecipeConfig );
+		this.registration.initialize( event );
 		IntegrationRegistry.INSTANCE.init();
 
 		AELog.info( "Initialization ( ended after " + start.elapsed( TimeUnit.MILLISECONDS ) + "ms )" );

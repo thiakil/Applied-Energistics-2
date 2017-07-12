@@ -24,11 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import scala.actors.threadpool.Arrays;
 
@@ -55,7 +52,7 @@ class ShapedRecipeWrapper implements IShapedCraftingRecipeWrapper
 	{
 		final boolean useSingleItems = AEConfig.instance().disableColoredCableRecipesInJEI();
 
-		NonNullList<Ingredient> items = recipe.getIngredients();
+		Object[] items = recipe.getInput();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();
 
@@ -65,9 +62,9 @@ class ShapedRecipeWrapper implements IShapedCraftingRecipeWrapper
 		{
 			for( int y = 0; y < height; y++ )
 			{
-				if( items.get( x * height + y ) != Ingredient.EMPTY )
+				if( items[ x * height + y ] != null )
 				{
-					final IIngredient ing = (IIngredient) items.get( x * height + y );
+					final IIngredient ing = (IIngredient) items[ x * height + y ];
 
 					List<ItemStack> slotList = Collections.emptyList();
 					try
@@ -77,6 +74,7 @@ class ShapedRecipeWrapper implements IShapedCraftingRecipeWrapper
 					}
 					catch( final RegistrationError | MissingIngredientError ignored )
 					{
+						//ignored.printStackTrace();
 					}
 					in.add( slotList );
 				}

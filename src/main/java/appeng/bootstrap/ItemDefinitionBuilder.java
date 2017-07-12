@@ -177,7 +177,6 @@ class ItemDefinitionBuilder implements IItemBuilder
 			} );
 		}
 
-		//TODO Register shit
 		factory.addRegistry( new RegistryComponent()
 		{
 			@Override

@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import appeng.api.AEApi;
 import appeng.api.exceptions.MissingIngredientError;
@@ -44,7 +46,7 @@ import appeng.api.features.InscriberProcessType;
 public final class Inscribe extends InscriberProcess
 {
 	@Override
-	public void register() throws RegistrationError, MissingIngredientError
+	public void register( IForgeRegistry<IRecipe> registry ) throws RegistrationError, MissingIngredientError
 	{
 		if( this.getImprintable() == null )
 		{

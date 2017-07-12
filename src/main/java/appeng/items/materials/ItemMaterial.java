@@ -198,7 +198,21 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 		return mat.getStackSrc();
 	}
 
-	public void makeUnique()
+	public void registerOre(){
+		for( final MaterialType mat : ImmutableSet.copyOf( this.dmgToMaterial.values() ) )
+		{
+			if( mat.getOreName() != null )
+			{
+				final String[] names = mat.getOreName().split( "," );
+				for( final String name : names )
+				{
+					OreDictionary.registerOre( name, mat.stack( 1 ) );
+				}
+			}
+		}
+	}
+
+	/*public void makeUnique()
 	{
 		for( final MaterialType mt : ImmutableSet.copyOf( this.dmgToMaterial.values() ) )
 		{
@@ -208,7 +222,7 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 
 				final String[] names = mt.getOreName().split( "," );
 
-				/*for( final String name : names )
+				for( final String name : names )
 				{
 					if (!replacement.isEmpty()) {
 						break;
@@ -229,13 +243,13 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 				}
 
 				if(replacement.isEmpty() || AEConfig.instance().useAEVersion(mt) )
-				{*/
+				{
 					// continue using the AE2 item.
-					for( final String name : names )
-					{
-						OreDictionary.registerOre( name, mt.stack( 1 ) );
-					}
-				/*}
+				for( final String name : names )
+				{
+					OreDictionary.registerOre( name, mt.stack( 1 ) );
+				}
+				}
 				else
 				{
 					if( mt.getItemInstance() == this )
@@ -245,10 +259,10 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 
 					mt.setItemInstance( replacement.getItem() );
 					mt.setDamageValue( replacement.getItemDamage() );
-				}*/
+				}
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public String getUnlocalizedName( final ItemStack is )

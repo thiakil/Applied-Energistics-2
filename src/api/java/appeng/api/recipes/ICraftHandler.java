@@ -26,6 +26,9 @@ package appeng.api.recipes;
 
 import java.util.List;
 
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.registries.IForgeRegistry;
+
 import appeng.api.exceptions.MissingIngredientError;
 import appeng.api.exceptions.RecipeError;
 import appeng.api.exceptions.RegistrationError;
@@ -49,6 +52,7 @@ public interface ICraftHandler
 	 *
 	 * @throws RegistrationError
 	 * @throws MissingIngredientError
+	 * @param registry the IForgeRegistry for registering IRecipes
 	 */
-	void register() throws RegistrationError, MissingIngredientError;
+	void register( IForgeRegistry<IRecipe> registry ) throws RegistrationError, MissingIngredientError;
 }

@@ -212,7 +212,6 @@ class BlockDefinitionBuilder implements IBlockBuilder
 		}
 
 		// Register the item and block with the game
-		//TODO registry
 		factory.addRegistry( new RegistryComponent()
 		{
 			@Override
