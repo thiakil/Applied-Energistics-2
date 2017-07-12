@@ -1,8 +1,8 @@
 [
     {
         "modid":"appliedenergistics2",
-        "name":"Applied Energistics 2 (Unofficial - Thiakil)",
-        "description":"A Mod about Matter, Energy and using them to conquer the world. This version is a Fork of the original to port to newer MC versions.",
+        "name":"Applied Llamagistics",
+        "description":"A Mod about Matter, Energy and using them to conquer the world. This is a Fork of the original AE2 to port to newer MC versions.",
         "version":"${version}",
         "mcversion":"${mcversion}",
         "url":"https://github.com/thiakil/Applied-Energistics-2",
