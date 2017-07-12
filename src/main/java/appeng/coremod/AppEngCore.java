@@ -52,7 +52,7 @@ public final class AppEngCore extends DummyModContainer
 		this.metadata.name = this.getName();
 		this.metadata.url = "http://ae2.ae-mod.info";
 		this.metadata.logoFile = "assets/appliedenergistics2/meta/logo.png";
-		this.metadata.description = "Embedded Coremod for Applied Energistics 2";
+		this.metadata.description = "Embedded Coremod for Applied Llamagistics";
 	}
 
 	@EventHandler
@@ -75,7 +75,7 @@ public final class AppEngCore extends DummyModContainer
 	@Override
 	public String getName()
 	{
-		return "Applied Energistics 2 Core";
+		return "Applied Llamagistics Core";
 	}
 
 	@Override

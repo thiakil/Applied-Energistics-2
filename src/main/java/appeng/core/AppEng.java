@@ -78,7 +78,7 @@ public final class AppEng
 	public static CommonHelper proxy;
 	
 	public static final String MOD_ID = "appliedenergistics2";
-	public static final String MOD_NAME = "Applied Energistics 2 (Unofficial - Thiakil)";
+	public static final String MOD_NAME = "Applied Llamagistics";
 
 	public static final String ASSETS = "appliedenergistics2:";
 
@@ -88,7 +88,7 @@ public final class AppEng
 			"after:gregtech_addon;after:mekanism;after:ic2;after:thermalexpansion;after:buildcraft;after:opencomputers@[1.7.0,];" +
 
 			// depend on version of forge used for build.
-			"after:appliedenergistics2-core;";// + "required-after:Forge@[" // require forge.
+			"required-after:appliedenergistics2-core;";// + "required-after:Forge@[" // require forge.
 					//+ net.minecraftforge.common.ForgeVersion.majorVersion + '.' // majorVersion
 					//+ net.minecraftforge.common.ForgeVersion.minorVersion + '.' // minorVersion
 					//+ net.minecraftforge.common.ForgeVersion.revisionVersion + '.' // revisionVersion

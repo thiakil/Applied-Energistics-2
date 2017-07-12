@@ -47,7 +47,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 version = aeversion + "-" + aechannel + "-" + aebuild
 group = aegroup
-archivesBaseName = aebasename
+archivesBaseName = aebasename + "-" + minecraft_version
 
 // Add Coremod Manifest
 jar {
