@@ -22,7 +22,6 @@ package appeng.parts.p2p;
 import java.util.List;
 import java.util.Stack;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -33,7 +32,6 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import appeng.api.config.PowerUnits;
 import appeng.api.parts.IPartModel;
-import appeng.api.util.DimensionalCoord;
 import appeng.items.parts.PartModels;
 import appeng.me.GridAccessException;
 import appeng.util.Platform;
@@ -51,7 +49,8 @@ public final class PartP2PForgeEnergy extends PartP2PTunnel<PartP2PForgeEnergy>
 	 * Default element based on the null element pattern
 	 */
 	private static final IEnergyStorage NULL_HANDLER = new EnergyStorage(0);
-	private final FEProxy inputCap = new FEProxy();
+	private final IEnergyStorage inputCap = new FEInputCap();
+	private final IEnergyStorage outputCap = new FEOutputCap();
 	private TileEntity myHost;
 	private BlockPos facingPos;
 
@@ -86,41 +85,63 @@ public final class PartP2PForgeEnergy extends PartP2PTunnel<PartP2PForgeEnergy>
 		return s;
 	}
 
+	private IEnergyStorage getFacingProvider(){
+		IEnergyStorage outputTarget = null;
+		TileEntity te = myHost.getWorld().getTileEntity( facingPos );
+		if ( te != null && te.hasCapability( CapabilityEnergy.ENERGY, this.getSide().getOpposite().getFacing() ) )
+		{
+			outputTarget = te.getCapability( CapabilityEnergy.ENERGY, this.getSide().getOpposite().getFacing() );
+		}
+
+		if( outputTarget == null )
+		{
+			return NULL_HANDLER;
+		}
+
+		return outputTarget;
+	}
+
 	private IEnergyStorage getOutput()
 	{
-		if( this.isOutput() )
-		{
-			IEnergyStorage outputTarget = null;
-			TileEntity te = myHost.getWorld().getTileEntity( facingPos );
-			if ( te != null && te.hasCapability( CapabilityEnergy.ENERGY, this.getSide().getOpposite().getFacing() ) )
-			{
-				outputTarget = te.getCapability( CapabilityEnergy.ENERGY, this.getSide().getOpposite().getFacing() );
-			}
+		return this.isOutput() && this.isActive() ? getFacingProvider() : NULL_HANDLER;
+	}
 
-			if( outputTarget == null )
-			{
-				return NULL_HANDLER;
-			}
-
-			return outputTarget;
-		}
-		return NULL_HANDLER;
+	private IEnergyStorage getInputCap()
+	{
+		return !this.isOutput() && this.isActive() ? getFacingProvider() : NULL_HANDLER;
 	}
 
 	@Override
 	public boolean hasCapability( Capability<?> capabilityClass )
 	{
-		if ( !this.isOutput() && capabilityClass == CapabilityEnergy.ENERGY )
-			return true;
-		return super.hasCapability( capabilityClass );
+		return ( this.isActive() && capabilityClass == CapabilityEnergy.ENERGY ) || super.hasCapability( capabilityClass );
 	}
 
 	@Override
 	@SuppressWarnings( "unchecked" )
 	public <T> T getCapability( Capability<T> capabilityClass )
 	{
-		if ( !this.isOutput() && capabilityClass == CapabilityEnergy.ENERGY )
-			return (T)inputCap;
+		if ( capabilityClass == CapabilityEnergy.ENERGY && this.isActive() )
+		{
+			if (this.isOutput() && this.getInput() != null)
+			{
+				return (T)outputCap;
+			}
+			else
+			{
+				try
+				{
+					if (!this.getOutputs().isEmpty())
+					{
+						return (T) inputCap;
+					}
+				}
+				catch( GridAccessException ignored )
+				{
+					//pass to super.
+				}
+			}
+		}
 		return super.getCapability( capabilityClass );
 	}
 
@@ -138,7 +159,7 @@ public final class PartP2PForgeEnergy extends PartP2PTunnel<PartP2PForgeEnergy>
 		return MODELS.getModel( isPowered(), isActive() );
 	}
 
-	private class FEProxy implements IEnergyStorage
+	private class FEInputCap implements IEnergyStorage
 	{
 
 		@Override
@@ -307,13 +328,88 @@ public final class PartP2PForgeEnergy extends PartP2PTunnel<PartP2PForgeEnergy>
 		@Override
 		public boolean canReceive()
 		{
-			return !isOutput();
+			return true;
 		}
 
 		@Override
 		public int extractEnergy( int maxExtract, boolean simulate )
 		{
 			return 0;
+		}
+	}
+
+	private class FEOutputCap implements IEnergyStorage{
+
+		/**
+		 * Adds energy to the storage. Returns quantity of energy that was accepted.
+		 *
+		 * @param maxReceive Maximum amount of energy to be inserted.
+		 * @param simulate If TRUE, the insertion will only be simulated.
+		 *
+		 * @return Amount of energy that was (or would have been, if simulated) accepted by the storage.
+		 */
+		@Override
+		public int receiveEnergy( int maxReceive, boolean simulate )
+		{
+			return 0;
+		}
+
+		/**
+		 * Removes energy from the storage. Returns quantity of energy that was removed.
+		 *
+		 * @param maxExtract Maximum amount of energy to be extracted.
+		 * @param simulate If TRUE, the extraction will only be simulated.
+		 *
+		 * @return Amount of energy that was (or would have been, if simulated) extracted from the storage.
+		 */
+		@Override
+		public int extractEnergy( int maxExtract, boolean simulate )
+		{
+			if (PartP2PForgeEnergy.this.getInput() == null)
+				return 0;
+			return PartP2PForgeEnergy.this.getInput().getInputCap().extractEnergy( maxExtract, simulate );
+		}
+
+		/**
+		 * Returns the amount of energy currently stored.
+		 */
+		@Override
+		public int getEnergyStored()
+		{
+			if (PartP2PForgeEnergy.this.getInput() == null)
+				return 0;
+			return PartP2PForgeEnergy.this.getInput().getInputCap().getEnergyStored();
+		}
+
+		/**
+		 * Returns the maximum amount of energy that can be stored.
+		 */
+		@Override
+		public int getMaxEnergyStored()
+		{
+			if (PartP2PForgeEnergy.this.getInput() == null)
+				return 0;
+			return PartP2PForgeEnergy.this.getInput().getInputCap().getMaxEnergyStored();
+		}
+
+		/**
+		 * Returns if this storage can have energy extracted.
+		 * If this is false, then any calls to extractEnergy will return 0.
+		 */
+		@Override
+		public boolean canExtract()
+		{
+			return PartP2PForgeEnergy.this.getInput() != null && PartP2PForgeEnergy.this.getInput().getInputCap().canExtract();
+		}
+
+		/**
+		 * Used to determine if this storage can receive energy.
+		 * If this is false, then any calls to receiveEnergy will return 0.
+		 */
+		@Override
+		public boolean canReceive()
+		{
+			return false;
 		}
 	}
 }
