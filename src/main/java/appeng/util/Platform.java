@@ -70,7 +70,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryNamespaced;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -1204,7 +1203,7 @@ public class Platform
 	@SideOnly( Side.CLIENT )
 	public static String gui_localize( final String string )
 	{
-		return I18n.translateToLocal( string );
+		return net.minecraft.client.resources.I18n.format( string );
 	}
 
 	public static LookDirection getPlayerRay( final EntityPlayer playerIn, final float eyeOffset )
