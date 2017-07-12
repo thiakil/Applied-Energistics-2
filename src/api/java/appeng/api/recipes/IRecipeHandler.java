@@ -24,6 +24,10 @@
 package appeng.api.recipes;
 
 
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.registries.IForgeRegistry;
+
+
 /**
  * Represents the AE2 Recipe Loading/Reading Class
  */
@@ -40,6 +44,9 @@ public interface IRecipeHandler
 
 	/**
 	 * this loads the read recipes into minecraft, should be called in Init.
+	 *
+	 * 1.12: This has to be called in pre-init now.
+	 * @param registry
 	 */
-	void injectRecipes();
+	void injectRecipes( IForgeRegistry<IRecipe> registry );
 }

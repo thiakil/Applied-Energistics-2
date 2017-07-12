@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -38,10 +39,10 @@ import appeng.api.recipes.IIngredient;
 import appeng.core.AppEng;
 
 
-public class ShapelessRecipe implements IRecipe, IRecipeBakeable
+public class ShapelessRecipe extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe, IRecipeBakeable
 {
 
-	private final ArrayList<Object> input = new ArrayList<Object>();
+	private final ArrayList<IIngredient> input = new ArrayList<>();
 	private ItemStack output = ItemStack.EMPTY;
 	private boolean disable = false;
 
@@ -54,7 +55,7 @@ public class ShapelessRecipe implements IRecipe, IRecipeBakeable
 		{
 			if( in instanceof IIngredient )
 			{
-				this.input.add( in );
+				this.input.add( (IIngredient)in );
 			}
 			else
 			{
@@ -164,7 +165,7 @@ public class ShapelessRecipe implements IRecipe, IRecipeBakeable
 	 *
 	 * @return The recipes input vales.
 	 */
-	public ArrayList<Object> getInput()
+	public ArrayList<IIngredient> getInput()
 	{
 		return this.input;
 	}
@@ -195,46 +196,30 @@ public class ShapelessRecipe implements IRecipe, IRecipeBakeable
 		return ForgeHooks.defaultRecipeGetRemainingItems( inv );
 	}
 
-	/**
-	 * A unique identifier for this entry, if this entry is registered already it will return it's official registry name.
-	 * Otherwise it will return the name set in setRegistryName().
-	 * If neither are valid null is returned.
-	 *
-	 * @return Unique identifier or null.
-	 */
-	@Nullable
 	@Override
-	public ResourceLocation getRegistryName()
+	public NonNullList<Ingredient> getIngredients()
 	{
-		return name;
-	}
-
-	/**
-	 * Sets a unique name for this Item. This should be used for uniquely identify the instance of the Item.
-	 * This is the valid replacement for the atrocious 'getUnlocalizedName().substring(6)' stuff that everyone does.
-	 * Unlocalized names have NOTHING to do with unique identifiers. As demonstrated by vanilla blocks and items.
-	 *
-	 * The supplied name will be prefixed with the currently active mod's modId.
-	 * If the supplied name already has a prefix that is different, it will be used and a warning will be logged.
-	 *
-	 * If a name already exists, or this Item is already registered in a registry, then an IllegalStateException is thrown.
-	 *
-	 * Returns 'this' to allow for chaining.
-	 *
-	 * @param name Unique registry name
-	 *
-	 * @return This instance
-	 */
-	@Override
-	public IRecipe setRegistryName( ResourceLocation name )
-	{
-		this.name = name;
-		return this;
+		NonNullList<Ingredient> out = NonNullList.withSize(this.input.size(), Ingredient.EMPTY);
+		int index = 0;
+		for (IIngredient in : this.input)
+		{
+			if (in != null)
+			{
+				try
+				{
+					out.set(index++, Ingredient.fromStacks( in.getItemStackSet() ) );
+				}
+				catch( RegistrationError|MissingIngredientError registrationError )
+				{
+				}
+			}
+		}
+		return out;
 	}
 
 	@Override
-	public Class<IRecipe> getRegistryType()
+	public String getGroup()
 	{
-		return IRecipe.class;
+		return "ae2";
 	}
 }

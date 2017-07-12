@@ -27,7 +27,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 
 import appeng.api.exceptions.MissingIngredientError;
 import appeng.api.exceptions.RegistrationError;
@@ -35,7 +35,7 @@ import appeng.api.recipes.IIngredient;
 import appeng.recipes.game.ShapelessRecipe;
 
 
-class ShapelessRecipeWrapper extends BlankRecipeWrapper
+class ShapelessRecipeWrapper implements IRecipeWrapper
 {
 
 	private final ShapelessRecipe recipe;
@@ -48,12 +48,12 @@ class ShapelessRecipeWrapper extends BlankRecipeWrapper
 	@Override
 	public void getIngredients( IIngredients ingredients )
 	{
-		List<Object> recipeInput = this.recipe.getInput();
+		List<IIngredient> recipeInput = this.recipe.getInput();
 		List<List<ItemStack>> inputs = new ArrayList<>( recipeInput.size() );
 
-		for( Object inputObj : recipeInput )
+		for( IIngredient inputObj : recipeInput )
 		{
-			if( inputObj instanceof IIngredient )
+			//if( inputObj instanceof IIngredient )
 			{
 				IIngredient ingredient = (IIngredient) inputObj;
 				try

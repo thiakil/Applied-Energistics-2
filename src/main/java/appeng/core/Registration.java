@@ -29,22 +29,20 @@ import com.google.common.base.Preconditions;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.RecipeSorter;
-import net.minecraftforge.oredict.RecipeSorter.Category;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import appeng.api.AEApi;
 import appeng.api.config.Upgrades;
 import appeng.api.definitions.IBlocks;
 import appeng.api.definitions.IItems;
@@ -92,8 +90,6 @@ import appeng.recipes.CustomRecipeConfig;
 import appeng.recipes.RecipeHandler;
 import appeng.recipes.game.DisassembleRecipe;
 import appeng.recipes.game.FacadeRecipe;
-import appeng.recipes.game.ShapedRecipe;
-import appeng.recipes.game.ShapelessRecipe;
 import appeng.recipes.handlers.Crusher;
 import appeng.recipes.handlers.Grind;
 import appeng.recipes.handlers.HCCrusher;
@@ -121,6 +117,9 @@ public final class Registration
 	private DimensionType storageDimensionType;
 	private Biome storageBiome;
 
+	private File recipeDirectory;
+	private CustomRecipeConfig customRecipeConfig;
+
 	Registration()
 	{
 		this.recipeHandler = new RecipeHandler();
@@ -136,8 +135,15 @@ public final class Registration
 		return storageDimensionType;
 	}
 
-	void preInitialize( final FMLPreInitializationEvent event )
+	void preInitialize( final FMLPreInitializationEvent event, @Nonnull final File recipeDirectory, @Nonnull final CustomRecipeConfig customRecipeConfig )
 	{
+		Preconditions.checkNotNull( recipeDirectory );
+		Preconditions.checkArgument( !recipeDirectory.isFile() );
+		Preconditions.checkNotNull( customRecipeConfig );
+
+		this.recipeDirectory = recipeDirectory;
+		this.customRecipeConfig = customRecipeConfig;
+
 		Capabilities.register();
 
 		final Api api = Api.INSTANCE;
@@ -172,6 +178,33 @@ public final class Registration
 		ApiDefinitions definitions = Api.INSTANCE.definitions();
 		IForgeRegistry<Item> registry = event.getRegistry();
 		definitions.getRegistry().getBootstrapComponents().forEach( b -> b.registryEvent( registry, Item.class ) );
+		ItemMaterial.instance.registerOre();
+	}
+
+	@SubscribeEvent
+	void registerRecipies( final RegistryEvent.Register<IRecipe> event ){
+		IForgeRegistry<IRecipe> registry = event.getRegistry();
+		ApiDefinitions definitions = Api.INSTANCE.definitions();
+
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.ENABLE_DISASSEMBLY_CRAFTING ) )
+		{
+			//TODO recipes
+			registry.register( new DisassembleRecipe().setRegistryName( new ResourceLocation( AppEng.MOD_ID, "disassemble" ) ) );
+			//RecipeSorter.register( "appliedenergistics2:disassemble", DisassembleRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless" );
+		}
+
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.ENABLE_FACADE_CRAFTING ) )
+		{
+			//TODO recipes
+			definitions.items().facade().maybeItem().ifPresent( facadeItem -> {
+				registry.register( new FacadeRecipe( (ItemFacade) facadeItem ).setRegistryName( new ResourceLocation( AppEng.MOD_ID, "facade" ) ) );
+				//RecipeSorter.register( "appliedenergistics2:facade", FacadeRecipe.class, Category.SHAPED, "after:minecraft:shaped" );
+			} );
+		}
+
+		final Runnable recipeLoader = new RecipeLoader( this.recipeDirectory, this.customRecipeConfig, this.recipeHandler );
+		recipeLoader.run();
+		this.recipeHandler.injectRecipes(registry);
 	}
 
 	private void registerSpatial( final boolean force )
@@ -203,7 +236,7 @@ public final class Registration
 				this.storageBiome = new BiomeGenStorage();
 				this.storageBiome.setRegistryName( "appliedenergistics2:storage_biome" );
 				//Biome.registerBiome( config.getStorageBiomeID(),
-				((ApiDefinitions)AEApi.instance().definitions()).getRegistry().getBootstrapComponents().add( new RegistryComponent()
+				Api.INSTANCE.definitions().getRegistry().getBootstrapComponents().add( new RegistryComponent()
 					 {
 						 @Override
 						 public <T extends IForgeRegistryEntry<T>> void registryEvent( IForgeRegistry<T> registry, Class<T> clazz )
@@ -265,12 +298,9 @@ public final class Registration
 		registry.addNewCraftHandler( "shapeless", Shapeless.class );
 	}
 
-	public void initialize( @Nonnull final FMLInitializationEvent event, @Nonnull final File recipeDirectory, @Nonnull final CustomRecipeConfig customRecipeConfig )
+	public void initialize( @Nonnull final FMLInitializationEvent event )
 	{
 		Preconditions.checkNotNull( event );
-		Preconditions.checkNotNull( recipeDirectory );
-		Preconditions.checkArgument( !recipeDirectory.isFile() );
-		Preconditions.checkNotNull( customRecipeConfig );
 
 		final Api api = Api.INSTANCE;
 		final IPartHelper partHelper = api.partHelper();
@@ -280,10 +310,7 @@ public final class Registration
 		definitions.getRegistry().getBootstrapComponents().forEach( b -> b.initialize( event.getSide() ) );
 
 		// Perform ore camouflage!
-		ItemMaterial.instance.makeUnique();
-
-		final Runnable recipeLoader = new RecipeLoader( recipeDirectory, customRecipeConfig, this.recipeHandler );
-		recipeLoader.run();
+		//ItemMaterial.instance.makeUnique();
 
 		if( Integrations.ic2().isEnabled() )
 		{
@@ -330,27 +357,10 @@ public final class Registration
 			registries.matterCannon().registerAmmo( ammoStack, weight );
 		} );
 
-		this.recipeHandler.injectRecipes();
-
 		final PlayerStatsRegistration registration = new PlayerStatsRegistration( MinecraftForge.EVENT_BUS, AEConfig.instance() );
 		registration.registerAchievementHandlers();
 		registration.registerAchievements();
 
-		if( AEConfig.instance().isFeatureEnabled( AEFeature.ENABLE_DISASSEMBLY_CRAFTING ) )
-		{
-			//TODO recipes
-			//GameRegistry.addRecipe( new DisassembleRecipe() );
-			//RecipeSorter.register( "appliedenergistics2:disassemble", DisassembleRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless" );
-		}
-
-		if( AEConfig.instance().isFeatureEnabled( AEFeature.ENABLE_FACADE_CRAFTING ) )
-		{
-			//TODO recipes
-			definitions.items().facade().maybeItem().ifPresent( facadeItem -> {
-				//GameRegistry.addRecipe( new FacadeRecipe( (ItemFacade) facadeItem ) );
-				//RecipeSorter.register( "appliedenergistics2:facade", FacadeRecipe.class, Category.SHAPED, "after:minecraft:shaped" );
-			} );
-		}
 	}
 
 	void postInit( final FMLPostInitializationEvent event )

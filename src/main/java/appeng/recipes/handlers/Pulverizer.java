@@ -22,8 +22,10 @@ package appeng.recipes.handlers;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import appeng.api.exceptions.MissingIngredientError;
 import appeng.api.exceptions.RecipeError;
@@ -57,7 +59,7 @@ public class Pulverizer implements ICraftHandler, IWebsiteSerializer
 	}
 
 	@Override
-	public void register() throws RegistrationError, MissingIngredientError
+	public void register( IForgeRegistry<IRecipe> registry ) throws RegistrationError, MissingIngredientError
 	{
 		final NBTTagCompound toSend = new NBTTagCompound();
 		toSend.setInteger( "energy", 800 );

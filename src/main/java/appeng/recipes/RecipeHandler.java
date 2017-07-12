@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,8 +41,10 @@ import com.google.common.collect.HashMultimap;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.LoaderState;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import appeng.api.AEApi;
 import appeng.api.definitions.IBlocks;
@@ -363,19 +366,36 @@ public class RecipeHandler implements IRecipeHandler
 	}
 
 	@Override
-	public void injectRecipes()
+	public void injectRecipes( IForgeRegistry<IRecipe> registry )
 	{
 		if( net.minecraftforge.fml.common.Loader.instance().hasReachedState( LoaderState.POSTINITIALIZATION ) )
 		{
 			throw new IllegalStateException( "Recipes must now be loaded in Init." );
 		}
 
+		this.data.handlers.sort( new Comparator<ICraftHandler>()
+		{
+			@Override
+			public int compare( ICraftHandler o1, ICraftHandler o2 )
+			{
+				Class<? extends ICraftHandler> o1Clazz = o1.getClass();
+				Class<? extends ICraftHandler> o2Clazz = o2.getClass();
+				if (o1Clazz == o2Clazz)
+					return 0;
+				if (o1Clazz == OreRegistration.class)
+					return -1;
+				if (o2Clazz == OreRegistration.class)
+					return 1;
+				return 0;//other wise don't care?
+			}
+		} );
+
 		final Map<Class, Integer> processed = new HashMap<Class, Integer>();
 		for( final ICraftHandler ch : this.data.handlers )
 		{
 			try
 			{
-				ch.register();
+				ch.register(registry);
 
 				final Class clz = ch.getClass();
 				final Integer i = processed.get( clz );
