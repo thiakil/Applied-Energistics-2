@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -37,6 +38,8 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -1514,28 +1517,49 @@ public class Platform
 				hash ^= chest.adjacentChestXNeg.hashCode();
 			}
 		}
-		else if( target instanceof IInventory )
+		else
 		{
-			hash ^= ( (IInventory) target ).getSizeInventory();
-
-			if( target instanceof ISidedInventory )
+			HashMap<EnumFacing,Integer> handlers = new HashMap<>( EnumFacing.VALUES.length );
+			for( final EnumFacing dir : EnumFacing.VALUES )
 			{
-				for( final EnumFacing dir : EnumFacing.VALUES )
+				IItemHandler handler = target.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir);
+				if (handler != null){
+					handlers.put( dir, handler.getSlots() );
+				}
+			}
+			if (handlers.size() > 0)
+			{
+				HashCodeBuilder builder = new HashCodeBuilder();
+				builder.append( target );
+				handlers.forEach( (k,v)-> {
+					builder.append( k );
+					builder.append( v );
+				} );
+				hash = builder.toHashCode();
+			}
+			else if( target instanceof IInventory )
+			{
+				hash ^= ( (IInventory) target ).getSizeInventory();
+
+				if( target instanceof ISidedInventory )
 				{
-
-					final int[] sides = ( (ISidedInventory) target ).getSlotsForFace( dir );
-
-					if( sides == null )
+					for( final EnumFacing dir : EnumFacing.VALUES )
 					{
-						return 0;
-					}
 
-					int offset = 0;
-					for( final int side : sides )
-					{
-						final int c = ( side << ( offset % 8 ) ) ^ ( 1 << dir.ordinal() );
-						offset++;
-						hash = c + ( hash << 6 ) + ( hash << 16 ) - hash;
+						final int[] sides = ( (ISidedInventory) target ).getSlotsForFace( dir );
+
+						if( sides == null )
+						{
+							continue;
+						}
+
+						int offset = 0;
+						for( final int side : sides )
+						{
+							final int c = ( side << ( offset % 8 ) ) ^ ( 1 << dir.ordinal() );
+							offset++;
+							hash = c + ( hash << 6 ) + ( hash << 16 ) - hash;
+						}
 					}
 				}
 			}
