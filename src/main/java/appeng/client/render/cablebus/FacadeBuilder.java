@@ -64,8 +64,6 @@ public class FacadeBuilder
 
 	private final TextureAtlasSprite facadeTexture;
 
-	private final BlockRendererDispatcher blockRendererDispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
-
 	private static final Set<ResourceLocation> warnedFor = new HashSet<>();
 
 	FacadeBuilder( VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
@@ -214,7 +212,7 @@ public class FacadeBuilder
 
 		final float thickness = thinFacades ? 1 : 2;
 
-		IBakedModel blockModel = blockRendererDispatcher.getModelForState( blockState );
+		IBakedModel blockModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState( blockState );
 
 		final int color;
 		if( translucent )
