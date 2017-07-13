@@ -6,7 +6,7 @@
         "version":"${version}",
         "mcversion":"${mcversion}",
         "url":"https://github.com/thiakil/Applied-Energistics-2",
-        "updateUrl":"https://raw.githubusercontent.com/thiakil/Applied-Energistics-2/rv5-1.11/forge_update.json",
+        "updateUrl":"https://raw.githubusercontent.com/thiakil/Applied-Energistics-2/rv5-1.12/forge_update.json",
         "authorList":[
          "Thiakil"
         ],

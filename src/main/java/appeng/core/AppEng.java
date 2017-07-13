@@ -70,7 +70,7 @@ import appeng.util.Platform;
 		version = AEConfig.VERSION,
 		dependencies = AppEng.MOD_DEPENDENCIES,
 		guiFactory = "appeng.client.gui.config.AEConfigGuiFactory",
-		updateJSON = "https://raw.githubusercontent.com/thiakil/Applied-Energistics-2/rv5-1.11/forge_update.json"
+		updateJSON = "https://raw.githubusercontent.com/thiakil/Applied-Energistics-2/rv5-1.12/forge_update.json"
 )
 public final class AppEng
 {
