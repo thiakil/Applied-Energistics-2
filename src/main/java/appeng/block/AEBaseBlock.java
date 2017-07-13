@@ -333,11 +333,12 @@ public abstract class AEBaseBlock extends Block
 		return new EnumFacing[0];
 	}
 
-	@Override
+	//Why override a method with something that's empty?!
+	/*@Override
 	public void addInformation( final ItemStack is, final World w, final List<String> lines, final ITooltipFlag advancedItemTooltips )
 	{
 
-	}
+	}*/
 
 	public boolean onActivated( final World w, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final @Nullable ItemStack heldItem, final EnumFacing side, final float hitX, final float hitY, final float hitZ )
 	{

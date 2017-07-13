@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -159,7 +158,7 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 	}
 
 	@Override
-	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag displayMoreInfo )
+	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final boolean displayMoreInfo )
 	{
 		lines.add( ButtonToolTips.DoesntDespawn.getLocal() );
 		final int progress = getProgress( stack ) % SINGLE_OFFSET;

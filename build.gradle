@@ -90,13 +90,13 @@ sourceSets {
 
     api
 
-    main
-
     // This source set will contain third party API code that we need to compile, but which is not shipped with the jar
     thirdparty {
         // Third Party APIs often need access to Minecraft classes (i.e. EnumFacing), so set this up here
         compileClasspath += configurations.forgeGradleMc + configurations.forgeGradleMcDeps
     }
+
+    main { compileClasspath += sourceSets.thirdparty.output }
 
 }
 

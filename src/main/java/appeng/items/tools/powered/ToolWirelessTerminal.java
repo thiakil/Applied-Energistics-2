@@ -21,7 +21,6 @@ package appeng.items.tools.powered;
 
 import java.util.List;
 
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -71,7 +70,7 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 	}
 
 	@Override
-	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag displayMoreInfo )
+	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final boolean displayMoreInfo )
 	{
 		super.addCheckedInformation( stack, world, lines, displayMoreInfo );
 
