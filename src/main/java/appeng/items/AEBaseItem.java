@@ -27,6 +27,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public abstract class AEBaseItem extends Item
@@ -46,9 +48,10 @@ public abstract class AEBaseItem extends Item
 
 	@Override
 	@SuppressWarnings( "unchecked" )
+	@SideOnly( Side.CLIENT )
 	public final void addInformation( final ItemStack stack, final World world, final List lines, final ITooltipFlag displayMoreInfo )
 	{
-		this.addCheckedInformation( stack, world, lines, displayMoreInfo );
+		this.addCheckedInformation( stack, world, lines, displayMoreInfo == ITooltipFlag.TooltipFlags.ADVANCED );
 	}
 
 	@Override
@@ -67,9 +70,10 @@ public abstract class AEBaseItem extends Item
 		return false;
 	}
 
-	protected void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag displayMoreInfo )
+	protected void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final boolean displayMoreInfo )
 	{
-		super.addInformation( stack, world, lines, displayMoreInfo );
+		//Super does nothing.
+		//super.addInformation( stack, world, lines, displayMoreInfo );
 	}
 
 	protected void getCheckedSubItems( final CreativeTabs creativeTab, final NonNullList<ItemStack> itemStacks )
