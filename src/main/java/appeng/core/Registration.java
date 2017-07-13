@@ -151,8 +151,6 @@ public final class Registration
 		final IRecipeHandlerRegistry recipeRegistry = api.registries().recipes();
 		this.registerCraftHandlers( recipeRegistry );
 
-		this.registerSpatial( false );
-
 		//RecipeSorter.register( "AE2-Facade", FacadeRecipe.class, Category.SHAPED, "" );
 		//RecipeSorter.register( "AE2-Shaped", ShapedRecipe.class, Category.SHAPED, "" );
 		//RecipeSorter.register( "AE2-Shapeless", ShapelessRecipe.class, Category.SHAPELESS, "" );
@@ -207,47 +205,29 @@ public final class Registration
 		this.recipeHandler.injectRecipes(registry);
 	}
 
-	private void registerSpatial( final boolean force )
+	@SubscribeEvent
+	void registerSpatial( final RegistryEvent.Register<Biome> event )
 	{
 		if( !AEConfig.instance().isFeatureEnabled( AEFeature.SPATIAL_IO ) )
 		{
 			return;
 		}
 
+		AELog.info( "Registering spatial Biome & Dimension type" );
+
 		final AEConfig config = AEConfig.instance();
 
 		if( this.storageBiome == null )
 		{
-			if( force && config.getStorageBiomeID() == -1 )
-			{
-				config.setStorageBiomeID( Platform.findEmpty( Biome.REGISTRY, 0, 256 ) );
-				if( config.getStorageBiomeID() == -1 )
-				{
-					throw new IllegalStateException( "Biome Array is full, please free up some Biome ID's or disable spatial." );
-				}
+			this.storageBiome = new BiomeGenStorage();
+			this.storageBiome.setRegistryName( "appliedenergistics2:storage_biome" );
+			//Biome.registerBiome( config.getStorageBiomeID(),
+			event.getRegistry().register( storageBiome );
 
-				this.storageBiome = new BiomeGenStorage();
-				Biome.registerBiome( config.getStorageBiomeID(), "appliedenergistics2:storage_biome", this.storageBiome );
+			if (Biome.REGISTRY.getIDForObject( storageBiome ) != config.getStorageBiomeID())
+			{
+				config.setStorageBiomeID(Biome.REGISTRY.getIDForObject( storageBiome ));
 				config.save();
-			}
-
-			if( !force && config.getStorageBiomeID() != -1 )
-			{
-				this.storageBiome = new BiomeGenStorage();
-				this.storageBiome.setRegistryName( "appliedenergistics2:storage_biome" );
-				//Biome.registerBiome( config.getStorageBiomeID(),
-				Api.INSTANCE.definitions().getRegistry().getBootstrapComponents().add( new RegistryComponent()
-					 {
-						 @Override
-						 public <T extends IForgeRegistryEntry<T>> void registryEvent( IForgeRegistry<T> registry, Class<T> clazz )
-						 {
-							 if ( clazz == Biome.class )
-							 {
-								 ((IForgeRegistry<Biome>)registry).register( storageBiome );
-							 }
-						 }
-					 }
-				);
 			}
 
 		}
@@ -256,8 +236,7 @@ public final class Registration
 		{
 			storageDimensionType = DimensionType.register( "Storage Cell", "_cell", config.getStorageProviderID(), StorageWorldProvider.class, false );
 		}
-
-		if( config.getStorageProviderID() == -1 && force )
+		else
 		{
 			final Set<Integer> ids = new HashSet<>();
 			for( DimensionType type : DimensionType.values() )
@@ -365,8 +344,6 @@ public final class Registration
 
 	void postInit( final FMLPostInitializationEvent event )
 	{
-		this.registerSpatial( true );
-
 		final Api api = Api.INSTANCE;
 		final IRegistryContainer registries = api.registries();
 		ApiDefinitions definitions = api.definitions();
