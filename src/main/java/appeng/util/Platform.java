@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -37,6 +38,8 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -1513,17 +1516,25 @@ public class Platform
 		}
 		else
 		{
-			boolean foundInvCap = false;
+			HashMap<EnumFacing,Integer> handlers = new HashMap<>( EnumFacing.VALUES.length );
 			for( final EnumFacing dir : EnumFacing.VALUES )
 			{
 				IItemHandler handler = target.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir);
 				if (handler != null){
-					foundInvCap = true;
-					hash ^= handler.getSlots();
+					handlers.put( dir, handler.getSlots() );
 				}
 			}
-
-			if( !foundInvCap && target instanceof IInventory )
+			if (handlers.size() > 0)
+			{
+				HashCodeBuilder builder = new HashCodeBuilder();
+				builder.append( target );
+				handlers.forEach( (k,v)-> {
+					builder.append( k );
+					builder.append( v );
+				} );
+				hash = builder.toHashCode();
+			}
+			else if( target instanceof IInventory )
 			{
 				hash ^= ( (IInventory) target ).getSizeInventory();
 
