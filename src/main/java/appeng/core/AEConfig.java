@@ -397,7 +397,7 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 	{
 		if( this.isFeatureEnabled( AEFeature.SPATIAL_IO ) )
 		{
-			this.get( "spatialio", "storageBiomeID", this.storageBiomeID ).set( this.storageBiomeID );
+			this.get( "spatialio", "storageBiomeID", this.storageBiomeID, "This value is now informational only. It will be overwritten." ).set( this.storageBiomeID );
 			this.get( "spatialio", "storageProviderID", this.storageProviderID ).set( this.storageProviderID );
 		}
 
