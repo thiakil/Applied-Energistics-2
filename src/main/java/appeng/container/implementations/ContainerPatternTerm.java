@@ -28,6 +28,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
@@ -74,7 +75,7 @@ public class ContainerPatternTerm extends ContainerMEMonitorable implements IAEA
 {
 
 	private final PartPatternTerminal patternTerminal;
-	private final AppEngInternalInventory cOut = new AppEngInternalInventory( null, 1 );
+	private final InventoryCraftResult cOut = new InventoryCraftResult();
 	private final IInventory crafting;
 	private final SlotFakeCraftingMatrix[] craftingSlots = new SlotFakeCraftingMatrix[9];
 	private final OptionalSlotFake[] outputSlots = new OptionalSlotFake[3];
