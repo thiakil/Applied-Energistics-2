@@ -7,7 +7,6 @@
 * [About](#about)
 * [License](#license)
 * [Downloads](#downloads)
-* [Nightly Builds](#nightly-builds)
 * [Installation](#installation)
 * [Issues](#issues)
 * [Building](#building)
