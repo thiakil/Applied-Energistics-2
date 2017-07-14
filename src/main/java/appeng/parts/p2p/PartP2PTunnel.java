@@ -151,29 +151,6 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 	}
 
 	@Override
-	public void writeToStream( ByteBuf data ) throws IOException
-	{
-		super.writeToStream( data );
-		ItemStack myStack = this.getItemStack();
-		data.writeByte( myStack.hasDisplayName() ? 1 : 0 );
-		if ( myStack.hasDisplayName() )
-		{
-			ByteBufUtils.writeUTF8String(data, myStack.getDisplayName());
-		}
-	}
-
-	@Override
-	public boolean readFromStream( ByteBuf data ) throws IOException
-	{
-		final boolean superRead = super.readFromStream( data );
-		if ( data.readByte() != 0 )
-		{
-			this.getItemStack().setStackDisplayName( ByteBufUtils.readUTF8String( data ) );
-		}
-		return superRead;
-	}
-
-	@Override
 	public float getCableConnectionLength( AECableType cable )
 	{
 		return 1;
