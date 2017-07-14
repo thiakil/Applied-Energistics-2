@@ -45,6 +45,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import appeng.api.implementations.tiles.ISegmentedInventory;
 import appeng.api.util.ICommonTile;
@@ -305,6 +306,10 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 				output = this.forward != old_Forward || this.up != old_Up;
 			}
 
+			if (data.readByte() != 0){
+				this.setAEDisplayName( ByteBufUtils.readUTF8String( data ) );
+			}
+
 			this.renderFragment = 100;
 			for( final AETileEventHandler h : this.getHandlerListFor( TileEventType.NETWORK_READ ) )
 			{
@@ -353,6 +358,11 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 			{
 				final byte orientation = (byte) ( ( this.up.ordinal() << 3 ) | this.forward.ordinal() );
 				data.writeByte( orientation );
+			}
+
+			data.writeByte( this.hasAEDisplayName() ? 1 : 0 );
+			if (this.hasAEDisplayName()){
+				ByteBufUtils.writeUTF8String(data, this.getAEDisplayName());
 			}
 
 			for( final AETileEventHandler h : this.getHandlerListFor( TileEventType.NETWORK_WRITE ) )

@@ -36,6 +36,7 @@ import mcjty.theoneprobe.api.ProbeMode;
 import appeng.core.AppEng;
 import appeng.integration.modules.theoneprobe.tile.ChargerInfoProvider;
 import appeng.integration.modules.theoneprobe.tile.CraftingMonitorInfoProvider;
+import appeng.integration.modules.theoneprobe.tile.CustomNameProvider;
 import appeng.integration.modules.theoneprobe.tile.ITileProbInfoProvider;
 import appeng.integration.modules.theoneprobe.tile.PowerStateInfoProvider;
 import appeng.integration.modules.theoneprobe.tile.PowerStorageInfoProvider;
@@ -52,8 +53,9 @@ public final class TileInfoProvider implements IProbeInfoProvider
 		final ITileProbInfoProvider energyCell = new CraftingMonitorInfoProvider();
 		final ITileProbInfoProvider craftingBlock = new PowerStateInfoProvider();
 		final ITileProbInfoProvider craftingMonitor = new PowerStorageInfoProvider();
+		final ITileProbInfoProvider names = new CustomNameProvider();
 
-		this.providers = Lists.newArrayList( charger, energyCell, craftingBlock, craftingMonitor );
+		this.providers = Lists.newArrayList( names, charger, energyCell, craftingBlock, craftingMonitor );
 	}
 
 	@Override

@@ -43,6 +43,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -209,6 +210,9 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 		{
 			final ItemStack copy = this.is.copy();
 			copy.setTagCompound( null );
+			/*if (this.is.hasDisplayName()){
+				copy.setStackDisplayName( is.getDisplayName() );
+			}*/
 			return copy;
 		}
 		return this.is;
@@ -259,12 +263,22 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 	@Override
 	public void writeToStream( final ByteBuf data ) throws IOException
 	{
-
+		data.writeByte( this.is.hasDisplayName() ? 1 : 0 );
+		if ( this.is.hasDisplayName() )
+		{
+			ByteBufUtils.writeUTF8String(data, this.is.getDisplayName());
+		}
 	}
 
 	@Override
 	public boolean readFromStream( final ByteBuf data ) throws IOException
 	{
+		if ( data.readByte() != 0 )
+		{
+			this.is.setStackDisplayName( ByteBufUtils.readUTF8String( data ) );
+		} else if (this.is.hasDisplayName()){
+			this.is.clearCustomName();
+		}
 		return false;
 	}
 

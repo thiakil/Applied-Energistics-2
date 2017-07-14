@@ -104,6 +104,8 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 	private boolean wasActive = false;
 	private boolean blocked = false;
 
+	private boolean laidEgg = false;
+
 	public PartFormationPlane( final ItemStack is )
 	{
 		super( is );
@@ -186,6 +188,7 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 		super.readFromNBT( data );
 		this.Config.readFromNBT( data, "config" );
 		this.priority = data.getInteger( "priority" );
+		this.laidEgg = data.getBoolean( "laid_egg" );
 		this.updateHandler();
 	}
 
@@ -195,6 +198,7 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 		super.writeToNBT( data );
 		this.Config.writeToNBT( data, "config" );
 		data.setInteger( "priority", this.priority );
+		data.setBoolean( "laid_egg", this.laidEgg );
 	}
 
 	@Override
@@ -562,7 +566,7 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 							}
 						}
 
-						if ( is.getItem() == Items.NAME_TAG && is.hasDisplayName() && is.getDisplayName().equals("Carl") )
+						if ( !laidEgg && is.getItem() == Items.NAME_TAG && is.hasDisplayName() && is.getDisplayName().equals("Carl") )
 						{
 							EntityLlama llama = new EntityLlama( w );
 							result = llama;
@@ -572,6 +576,7 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 							llama.enablePersistence();
 							BlockPos spawnPos = te.getPos().offset( side.getFacing() );
 							llama.setPosition( spawnPos.getX(), spawnPos.getY(), spawnPos.getZ() );
+							laidEgg = true;
 						}
 
 						if( !w.spawnEntity( result ) )
