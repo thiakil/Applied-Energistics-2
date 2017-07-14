@@ -7,13 +7,14 @@
     },
     "1.12": {
         "rv5-alpha-3": "9bcc120 missing sideonly fixes for ITooltipFlag\n14f1973 properly migrate storage biome to new registration system",
-        "rv5-alpha-4": "18b2c01 Fix class cast exception in slotcrafting. Closes #13\n4257333 Fix facades not rendering\ne54ac73 copy itemstack before shrinking it. Found by tyra314"
+        "rv5-alpha-4": "18b2c01 Fix class cast exception in slotcrafting. Closes #13\n4257333 Fix facades not rendering\ne54ac73 copy itemstack before shrinking it. Found by tyra314",
+        "rv5-alpha-5": "c4607e6 readme update\n9796ba4 readme update\n478cc6b sync all custom tile/part names to the client\nce0cb83 show tile/part custom names in Waila. Also returns IS.EMPTY instead of null in waila handlers\n526de10 make TOP display custom names separate from the item name like waila\nf1704c2 nerf the egg a little\nba1a165 because why not"
     },
     "homepage": "https://github.com/thiakil/Applied-Energistics-2/releases",
     "promos": {
         "1.11.2-latest": "rv5-alpha-3",
         "1.11.2-recommended": "rv5-alpha-3",
-        "1.12-latest": "rv5-alpha-4",
-        "1.12-recommended": "rv5-alpha-4"
+        "1.12-latest": "rv5-alpha-5",
+        "1.12-recommended": "rv5-alpha-5"
     }
 }
