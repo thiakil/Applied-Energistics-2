@@ -37,6 +37,7 @@ import mcjty.theoneprobe.api.ProbeMode;
 import appeng.api.parts.IPart;
 import appeng.core.AppEng;
 import appeng.integration.modules.theoneprobe.part.ChannelInfoProvider;
+import appeng.integration.modules.theoneprobe.part.CustomNameProvider;
 import appeng.integration.modules.theoneprobe.part.IPartProbInfoProvider;
 import appeng.integration.modules.theoneprobe.part.P2PStateInfoProvider;
 import appeng.integration.modules.theoneprobe.part.PartAccessor;
@@ -56,8 +57,9 @@ public final class PartInfoProvider implements IProbeInfoProvider
 		final IPartProbInfoProvider power = new PowerStateInfoProvider();
 		final IPartProbInfoProvider storageMonitor = new StorageMonitorInfoProvider();
 		final IPartProbInfoProvider p2p = new P2PStateInfoProvider();
+		final IPartProbInfoProvider names = new CustomNameProvider();
 
-		this.providers = Lists.newArrayList( channel, power, p2p, storageMonitor );
+		this.providers = Lists.newArrayList( names, channel, power, p2p, storageMonitor );
 	}
 
 	@Override
