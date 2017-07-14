@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityLlama;
+import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -566,17 +567,30 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 							}
 						}
 
-						if ( !laidEgg && is.getItem() == Items.NAME_TAG && is.hasDisplayName() && is.getDisplayName().equals("Carl") )
+						if (!laidEgg && is.getItem() == Items.NAME_TAG && is.hasDisplayName())
 						{
-							EntityLlama llama = new EntityLlama( w );
-							result = llama;
-							ei.setDead();
-							maxStorage = 1;
-							llama.setCustomNameTag(is.getDisplayName());
-							llama.enablePersistence();
-							BlockPos spawnPos = te.getPos().offset( side.getFacing() );
-							llama.setPosition( spawnPos.getX(), spawnPos.getY(), spawnPos.getZ() );
-							laidEgg = true;
+							if ( is.getDisplayName().equals("Carl") )
+							{
+								EntityLlama llama = new EntityLlama( w );
+								result = llama;
+								ei.setDead();
+								maxStorage = 1;
+								llama.setCustomNameTag(is.getDisplayName());
+								llama.enablePersistence();
+								BlockPos spawnPos = te.getPos().offset( side.getFacing() );
+								llama.setPosition( spawnPos.getX(), spawnPos.getY(), spawnPos.getZ() );
+								laidEgg = true;
+							} else if ( is.getDisplayName().equals( "Polly" ) ) {
+								EntityParrot parrot = new EntityParrot( w );
+								result = parrot;
+								ei.setDead();
+								maxStorage = 1;
+								parrot.setCustomNameTag(is.getDisplayName());
+								parrot.enablePersistence();
+								BlockPos spawnPos = te.getPos().offset( side.getFacing() );
+								parrot.setPosition( spawnPos.getX(), spawnPos.getY(), spawnPos.getZ() );
+								laidEgg = true;
+							}
 						}
 
 						if( !w.spawnEntity( result ) )
