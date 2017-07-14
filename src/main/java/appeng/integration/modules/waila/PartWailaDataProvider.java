@@ -41,6 +41,7 @@ import appeng.integration.modules.waila.part.ChannelWailaDataProvider;
 import appeng.integration.modules.waila.part.IPartWailaDataProvider;
 import appeng.integration.modules.waila.part.P2PStateWailaDataProvider;
 import appeng.integration.modules.waila.part.PartAccessor;
+import appeng.integration.modules.waila.part.PartCustomNameProvider;
 import appeng.integration.modules.waila.part.PartStackWailaDataProvider;
 import appeng.integration.modules.waila.part.PowerStateWailaDataProvider;
 import appeng.integration.modules.waila.part.StorageMonitorWailaDataProvider;
@@ -81,8 +82,9 @@ public final class PartWailaDataProvider implements IWailaDataProvider
 		final IPartWailaDataProvider powerState = new PowerStateWailaDataProvider();
 		final IPartWailaDataProvider p2pState = new P2PStateWailaDataProvider();
 		final IPartWailaDataProvider partStack = new PartStackWailaDataProvider();
+		final IPartWailaDataProvider names = new PartCustomNameProvider();
 
-		this.providers = Lists.newArrayList( channel, storageMonitor, powerState, partStack, p2pState );
+		this.providers = Lists.newArrayList( channel, storageMonitor, powerState, partStack, p2pState, names );
 	}
 
 	@Override
@@ -98,7 +100,7 @@ public final class PartWailaDataProvider implements IWailaDataProvider
 		{
 			final IPart part = maybePart.get();
 
-			ItemStack wailaStack = null;//YES, null. See below
+			ItemStack wailaStack = ItemStack.EMPTY;
 
 			for( final IPartWailaDataProvider provider : this.providers )
 			{
@@ -107,8 +109,7 @@ public final class PartWailaDataProvider implements IWailaDataProvider
 			return wailaStack;
 		}
 
-		//1.11 note: yes, HWYLA expects null. EMPTY will cause it to not display ANYTHING, shortcutting its fallbacks.
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
