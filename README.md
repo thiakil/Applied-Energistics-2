@@ -1,14 +1,12 @@
-# Applied Energistics 2
+# Applied Llamagistics
 
-**This version is an "unofficial" port to 1.11.2+ made under the terms of the GPL. The original team has not endorsed this port and will not give you support on it. Please report all bugs here.**
+**This is a [Fork](https://en.wikipedia.org/wiki/Fork_(software_development)) in order to port to 1.11.2+ made under the terms of the GPL. The original team has not endorsed this port and will not give you support on it, it is a new project. Please report all bugs here.**
 
 ## Table of Contents
 
 * [About](#about)
-* [Contacts](#contacts)
 * [License](#license)
 * [Downloads](#downloads)
-* [Nightly Builds](#nightly-builds)
 * [Installation](#installation)
 * [Issues](#issues)
 * [Building](#building)
@@ -21,19 +19,15 @@
 
 A Mod about Matter, Energy and using them to conquer the world..
 
-## Contacts
-
-* [Website](http://ae-mod.info/)
-* [IRC #appliedenergistics on esper.net](http://webchat.esper.net/?channels=appliedenergistics&prompt=1)
-* [GitHub](https://github.com/thiakil/Applied-Energistics-2)
-
 ## License
 
 * Applied Energistics 2 API
   - (c) 2013 - 2015 AlgorithmX2 et al
+  - Significant modifications since 2017 (c) Thiakil
   - [![License](https://img.shields.io/badge/License-MIT-red.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 * Applied Energistics 2
   - (c) 2013 - 2015 AlgorithmX2 et al
+  - Significant modifications since 2017 (c) Thiakil
   - [![License](https://img.shields.io/badge/License-LGPLv3-blue.svg?style=flat-square)](https://raw.githubusercontent.com/AppliedEnergistics/Applied-Energistics-2/rv2/LICENSE)
 * Textures and Models
   - (c) 2013 - 2015 AlgorithmX2 et al
@@ -43,7 +37,7 @@ A Mod about Matter, Energy and using them to conquer the world..
 
 ## Downloads
 
-Downloads can be found on [CurseForge](http://www.curse.com/mc-mods/minecraft/223794-applied-energistics-2).
+Downloads can be found on [CurseForge](https://minecraft.curseforge.com/projects/applied-llamagistics).
 
 ## Installation
 
@@ -51,7 +45,7 @@ You install this mod by putting it into the `minecraft/mods/` folder. It has no 
 
 ## Issues
 
-Applied Energistics 2 crashing, have a suggestion, found a bug?  Create an issue now!
+Applied Llamagistics crashing, have a suggestion, found a bug?  Create an issue now!
 
 1. Make sure your issue has not already been answered or fixed and you are using the latest version. Also think about whether your issue is a valid one before submitting it.
 2. Go to [the issues page](https://github.com/thiakil/Applied-Energistics-2/issues) and click [new issue](https://github.com/thiakil/Applied-Energistics-2/issues/new)
@@ -59,7 +53,7 @@ Applied Energistics 2 crashing, have a suggestion, found a bug?  Create an issue
     * Do not tag it with something like `[Feature]` or `[Bug]`. When it is applicable, we will take care of it.
     * The following details are required. Not including them can cause the issue to be closed.
         * Forge version
-        * AE2 version
+        * Applied Llamagistics version
         * Crash log, when reporting a crash (Please make sure to use [pastebin](http://pastebin.com/))
             * Do not post an excerpt of what you consider important, instead:
             * Post the full log
@@ -73,7 +67,7 @@ Applied Energistics 2 crashing, have a suggestion, found a bug?  Create an issue
         * Server or Single Player?
         * Screen shots or Pictures of the problem
         * Mod Pack using and version?
-            * Keep in mind that some mods might use an outdated version of AE2
+            * Keep in mind that some mods might use an outdated version of Applied Llamagistics
             * If so you should report it to your modpack
 5. Click `Submit New Issue`, and wait for feedback!
 
@@ -85,15 +79,15 @@ Providing as many details as possible does help us to find and resolve the issue
   - SSH `git clone git@github.com:thiakil/Applied-Energistics-2.git` or
   - HTTPS `git clone https://github.com/thiakil/Applied-Energistics-2.git`
 2. Setup workspace 
-  - Decompiled source `gradlew setupDecompWorkspace`
-  - Obfuscated source `gradlew setupDevWorkspace`
+  - Decompiled source `gradlew setupDecompWorkspace` or
+  - Obfuscated source `gradlew setupDevWorkspace` or
   - CI server `gradlew setupCIWorkspace`
 3. Build `gradlew build`. Jar will be in `build/libs`
 4. For core developer: Setup IDE
   - IntelliJ: Import into IDE, execute `gradlew genIntellijRuns` and change RunConfiguration to `*_main` as quickfix for [ForgeGradle](https://github.com/MinecraftForge/ForgeGradle/issues/357)
   - Eclipse: execute `gradlew eclipse`
 5. For add-on developer: Core-Mod Detection
-  - In order to have FML detect AE from your dev environment, add the following VM Option to your run profile
+  - In order to have FML detect Applied Llamagistics from your dev environment, add the following VM Option to your run profile
   - `-Dfml.coreMods.load=appeng.coremod.CoreModeLoader`
 
 ## Contribution
@@ -108,9 +102,9 @@ Here are a few things to keep in mind that will help get your PR approved.
 * A PR should be focused on content. Any PRs where the changes are only syntax will be rejected.
 * Use the file you are editing as a style guide.
 * Consider your feature. [Suggestion Guidelines](http://ae-mod.info/Suggestion-Guidelines/)
-  - Is your suggestion already possible using Vanilla + AE2?
+  - Is your suggestion already possible using Vanilla + Applied Llamagistics?
   - Make sure your feature isn't already in the works, or hasn't been rejected previously.
-  - Does your feature simplify another feature of AE2? These changes will not be accepted.
+  - Does your feature simplify another feature of Applied Llamagistics? These changes will not be accepted.
   - If your feature can be done by any popular mod, discuss with us first.
 
 Getting Started
@@ -121,7 +115,7 @@ Getting Started
   * HTTPS `git clone https://github.com/<your username>/Applied-Energistics-2.git`
 3. Change code base
 4. Add changes to git `git add -A`
-5. Commit changes to your clone `git commit -m "<summery of made changes>"`
+5. Commit changes to your clone `git commit -m "<summary of made changes>"`
 6. Push to your fork `git push`
 7. Create a Pull-Request on GitHub
 8. Wait for review
@@ -147,14 +141,14 @@ When compiling against the AE2 API you can use gradle dependencies, just add
     }
 
     dependencies {
-        compile "appeng:appliedenergistics2-unofficial:rv_-_____-__:dev"
+        compile "appeng:applied-llamagistics-${minecraft_version}:rv_-_____-__:dev"
     }
 
 or add the compile line to your existing dependencies task to your build.gradle
 
 Where the __ are filled in with the correct version criteria.
 
-An example string would be `appeng:appliedenergistics2-unofficial:rv5-alpha-0:dev`
+An example string would be `appeng:applied-llamagistics-1.12:rv5-alpha-0:dev`
 
 ## Applied Energistics 2 Localization
 
