@@ -48,11 +48,13 @@ public class WailaModule implements IIntegrationModule
 		final IWailaDataProvider partHost = new PartWailaDataProvider();
 
 		registrar.registerStackProvider( partHost, AEBaseTile.class );
+		registrar.registerHeadProvider( partHost, AEBaseTile.class );
 		registrar.registerBodyProvider( partHost, AEBaseTile.class );
 		registrar.registerNBTProvider( partHost, AEBaseTile.class );
 
 		final IWailaDataProvider tile = new TileWailaDataProvider();
 
+		registrar.registerHeadProvider( tile, AEBaseTile.class );
 		registrar.registerBodyProvider( tile, AEBaseTile.class );
 		registrar.registerNBTProvider( tile, AEBaseTile.class );
 	}

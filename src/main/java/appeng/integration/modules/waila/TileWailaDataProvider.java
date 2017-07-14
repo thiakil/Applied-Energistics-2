@@ -36,6 +36,7 @@ import mcp.mobius.waila.api.IWailaDataProvider;
 
 import appeng.integration.modules.waila.tile.ChargerWailaDataProvider;
 import appeng.integration.modules.waila.tile.CraftingMonitorWailaDataProvider;
+import appeng.integration.modules.waila.tile.CustomNameProvider;
 import appeng.integration.modules.waila.tile.PowerStateWailaDataProvider;
 import appeng.integration.modules.waila.tile.PowerStorageWailaDataProvider;
 
@@ -63,14 +64,15 @@ public final class TileWailaDataProvider implements IWailaDataProvider
 		final IWailaDataProvider energyCell = new PowerStorageWailaDataProvider();
 		final IWailaDataProvider craftingBlock = new PowerStateWailaDataProvider();
 		final IWailaDataProvider craftingMonitor = new CraftingMonitorWailaDataProvider();
+		final IWailaDataProvider names = new CustomNameProvider();
 
-		this.providers = Lists.newArrayList( charger, energyCell, craftingBlock, craftingMonitor );
+		this.providers = Lists.newArrayList( charger, energyCell, craftingBlock, craftingMonitor, names );
 	}
 
 	@Override
 	public ItemStack getWailaStack( final IWailaDataAccessor accessor, final IWailaConfigHandler config )
 	{
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
