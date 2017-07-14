@@ -6,13 +6,14 @@
         "rv5-alpha-3": "0650a03 update jei plugin to use not deprecated interfaces\nd2e439d properly check for block in facade recipe\n25fc5c8 allow any grid proxyable tile to give TOP its power/channel info as it's server side\nf8c37b1 register primed tiny tnt entity\n3433013 Let ItemHandlerAdapter refresh its provided cap on tick. IItemHandlers are not guaranteed to stay the same.\nc5df2f8 add untested hashing of item cap to Platform.generateTileHash\n8528883 I18n deprecation change\nbd42fc3 refactor ME Gui tooltip code to re-use an unused func and handle colours. Closes #10\n86ab433 let FE tunnel pull from input, and only give out cap if has input/output as relevant. Closes #9\n72a2bf4 fix resource location for tiny tnt\n487dfea name update & set basenames to use MC version\nbd342c4 build a better tile hash"
     },
     "1.12": {
-        "rv5-alpha-3": "9bcc120 missing sideonly fixes for ITooltipFlag\n14f1973 properly migrate storage biome to new registration system"
+        "rv5-alpha-3": "9bcc120 missing sideonly fixes for ITooltipFlag\n14f1973 properly migrate storage biome to new registration system",
+        "rv5-alpha-4": "18b2c01 Fix class cast exception in slotcrafting. Closes #13\n4257333 Fix facades not rendering\ne54ac73 copy itemstack before shrinking it. Found by tyra314"
     },
     "homepage": "https://github.com/thiakil/Applied-Energistics-2/releases",
     "promos": {
         "1.11.2-latest": "rv5-alpha-3",
         "1.11.2-recommended": "rv5-alpha-3",
-        "1.12-latest": "rv5-alpha-3",
-        "1.12-recommended": "rv5-alpha-3"
+        "1.12-latest": "rv5-alpha-4",
+        "1.12-recommended": "rv5-alpha-4"
     }
 }
