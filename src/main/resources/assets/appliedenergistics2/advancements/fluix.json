@@ -1,0 +1,29 @@
+{
+	"parent": "appliedenergistics2:charged_quartz",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:material",
+			"data": 7
+		},
+		"title": {
+			"translate": "achievement.ae2.Fluix"
+		},
+		"description": {
+			"translate": "achievement.ae2.Fluix.desc"
+		}
+	},
+	"criteria": {
+		"item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:material",
+						"count": 1,
+						"data": 7
+					}
+				]
+			}
+		}
+	}
+}

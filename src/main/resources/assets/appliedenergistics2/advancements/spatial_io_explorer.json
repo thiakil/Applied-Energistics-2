@@ -1,0 +1,19 @@
+{
+	"parent": "appliedenergistics2:spatial_io",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:spatial_storage_cell_128_cubed"
+		},
+		"title": {
+			"translate": "achievement.ae2.SpatialIOExplorer"
+		},
+		"description": {
+			"translate": "achievement.ae2.SpatialIOExplorer.desc"
+		}
+	},
+	"criteria": {
+		"needs_manual_trigger": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

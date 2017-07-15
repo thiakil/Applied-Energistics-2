@@ -1,0 +1,27 @@
+{
+	"parent": "appliedenergistics2:storage_cell",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:io_port"
+		},
+		"title": {
+			"translate": "achievement.ae2.IOPort"
+		},
+		"description": {
+			"translate": "achievement.ae2.IOPort.desc"
+		}
+	},
+	"criteria": {
+		"item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:io_port",
+						"count": 1
+					}
+				]
+			}
+		}
+	}
+}

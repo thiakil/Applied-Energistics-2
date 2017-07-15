@@ -41,7 +41,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import appeng.api.config.Upgrades;
 import appeng.api.definitions.IBlocks;
@@ -61,7 +60,6 @@ import appeng.api.networking.spatial.ISpatialCache;
 import appeng.api.networking.storage.IStorageGrid;
 import appeng.api.networking.ticking.ITickManager;
 import appeng.api.parts.IPartHelper;
-import appeng.bootstrap.components.RegistryComponent;
 import appeng.capabilities.Capabilities;
 import appeng.core.features.AEFeature;
 import appeng.core.features.registries.P2PTunnelRegistry;
@@ -69,7 +67,6 @@ import appeng.core.features.registries.cell.BasicCellHandler;
 import appeng.core.features.registries.cell.CreativeCellHandler;
 import appeng.core.localization.GuiText;
 import appeng.core.localization.PlayerMessages;
-import appeng.core.stats.PlayerStatsRegistration;
 import appeng.hooks.AETrading;
 import appeng.hooks.TickHandler;
 import appeng.integration.Integrations;
@@ -106,7 +103,6 @@ import appeng.recipes.ores.OreDictionaryHandler;
 import appeng.spatial.BiomeGenStorage;
 import appeng.spatial.StorageWorldProvider;
 import appeng.tile.AEBaseTile;
-import appeng.util.Platform;
 import appeng.worldgen.MeteoriteWorldGen;
 import appeng.worldgen.QuartzWorldGen;
 
@@ -186,14 +182,12 @@ public final class Registration
 
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.ENABLE_DISASSEMBLY_CRAFTING ) )
 		{
-			//TODO recipes
 			registry.register( new DisassembleRecipe().setRegistryName( new ResourceLocation( AppEng.MOD_ID, "disassemble" ) ) );
 			//RecipeSorter.register( "appliedenergistics2:disassemble", DisassembleRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless" );
 		}
 
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.ENABLE_FACADE_CRAFTING ) )
 		{
-			//TODO recipes
 			definitions.items().facade().maybeItem().ifPresent( facadeItem -> {
 				registry.register( new FacadeRecipe( (ItemFacade) facadeItem ).setRegistryName( new ResourceLocation( AppEng.MOD_ID, "facade" ) ) );
 				//RecipeSorter.register( "appliedenergistics2:facade", FacadeRecipe.class, Category.SHAPED, "after:minecraft:shaped" );
@@ -335,11 +329,6 @@ public final class Registration
 
 			registries.matterCannon().registerAmmo( ammoStack, weight );
 		} );
-
-		final PlayerStatsRegistration registration = new PlayerStatsRegistration( MinecraftForge.EVENT_BUS, AEConfig.instance() );
-		registration.registerAchievementHandlers();
-		registration.registerAchievements();
-
 	}
 
 	void postInit( final FMLPostInitializationEvent event )

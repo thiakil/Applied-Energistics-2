@@ -1,0 +1,27 @@
+{
+	"parent": "appliedenergistics2:charger",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:quartz_growth_accelerator"
+		},
+		"title": {
+			"translate": "achievement.ae2.CrystalGrowthAccelerator"
+		},
+		"description": {
+			"translate": "achievement.ae2.CrystalGrowthAccelerator.desc"
+		}
+	},
+	"criteria": {
+		"item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:quartz_growth_accelerator",
+						"count": 1
+					}
+				]
+			}
+		}
+	}
+}

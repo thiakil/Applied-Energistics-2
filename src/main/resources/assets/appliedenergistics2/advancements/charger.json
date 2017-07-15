@@ -1,0 +1,27 @@
+{
+	"parent": "appliedenergistics2:fluix",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:charger"
+		},
+		"title": {
+			"translate": "achievement.ae2.Charger"
+		},
+		"description": {
+			"translate": "achievement.ae2.Charger.desc"
+		}
+	},
+	"criteria": {
+		"item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:charger",
+						"count": 1
+					}
+				]
+			}
+		}
+	}
+}

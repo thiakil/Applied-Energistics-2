@@ -1,0 +1,19 @@
+{
+	"parent": "appliedenergistics2:networking_1",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:interface"
+		},
+		"title": {
+			"translate": "achievement.ae2.Recursive"
+		},
+		"description": {
+			"translate": "achievement.ae2.Recursive.desc"
+		}
+	},
+	"criteria": {
+		"needs_manual_trigger": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

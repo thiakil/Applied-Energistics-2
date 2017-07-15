@@ -1,0 +1,29 @@
+{
+	"parent": "appliedenergistics2:networking_1",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:material",
+			"data": 48
+		},
+		"title": {
+			"translate": "achievement.ae2.QNB"
+		},
+		"description": {
+			"translate": "achievement.ae2.QNB.desc"
+		}
+	},
+	"criteria": {
+		"item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:material",
+						"data": 48,
+						"count": 1
+					}
+				]
+			}
+		}
+	}
+}

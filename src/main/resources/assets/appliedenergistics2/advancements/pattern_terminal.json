@@ -1,0 +1,29 @@
+{
+	"parent": "appliedenergistics2:crafting_terminal",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:part",
+			"data": 340
+		},
+		"title": {
+			"translate": "achievement.ae2.PatternTerminal"
+		},
+		"description": {
+			"translate": "achievement.ae2.PatternTerminal.desc"
+		}
+	},
+	"criteria": {
+		"item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:part",
+						"data": 340,
+						"count": 1
+					}
+				]
+			}
+		}
+	}
+}

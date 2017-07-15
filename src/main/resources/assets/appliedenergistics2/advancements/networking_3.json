@@ -1,0 +1,20 @@
+{
+	"parent": "appliedenergistics2:networking_2",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:part",
+			"data": 76
+		},
+		"title": {
+			"translate": "achievement.ae2.Networking3"
+		},
+		"description": {
+			"translate": "achievement.ae2.Networking3.desc"
+		}
+	},
+	"criteria": {
+		"needs_manual_trigger": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

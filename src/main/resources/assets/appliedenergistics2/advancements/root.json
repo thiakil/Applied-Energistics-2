@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:part",
+			"data": 380
+		},
+		"title": {
+			"translate": "advancement.ae2.root"
+		},
+		"description": {
+			"translate": "advancement.ae2.root.desc"
+		},
+		"background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+		"show_toast": false,
+		"announce_to_chat": false
+
+	},
+	"criteria": {
+		"always": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}
