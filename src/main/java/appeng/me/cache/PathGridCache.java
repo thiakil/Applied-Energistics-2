@@ -26,6 +26,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+
+import appeng.api.AEApi;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridBlock;
@@ -43,6 +47,7 @@ import appeng.api.networking.pathing.IPathingGrid;
 import appeng.api.util.AEPartLocation;
 import appeng.api.util.DimensionalCoord;
 import appeng.core.AEConfig;
+import appeng.core.AELog;
 import appeng.core.features.AEFeature;
 import appeng.core.stats.Achievements;
 import appeng.me.GridConnection;
@@ -351,11 +356,14 @@ public class PathGridCache implements IPathingGrid
 					players.add( n.getPlayerID() );
 				}
 
-				//TODO achievements
-//				for( final int id : players )
-//				{
-//					Platform.addStat( id, currentBracket.getAchievement() );
-//				}
+				for( final int id : players )
+				{
+					final EntityPlayer p = AEApi.instance().registries().players().findPlayer( id );
+					if (p instanceof EntityPlayerMP)
+					{
+						currentBracket.addToPlayer( (EntityPlayerMP)p );
+					}
+				}
 			}
 		}
 		this.lastChannels = this.getChannelsInUse();

@@ -1,0 +1,27 @@
+{
+	"parent": "appliedenergistics2:networking_1",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:network_tool"
+		},
+		"title": {
+			"translate": "achievement.ae2.NetworkTool"
+		},
+		"description": {
+			"translate": "achievement.ae2.NetworkTool.desc"
+		}
+	},
+	"criteria": {
+		"item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:network_tool",
+						"count": 1
+					}
+				]
+			}
+		}
+	}
+}

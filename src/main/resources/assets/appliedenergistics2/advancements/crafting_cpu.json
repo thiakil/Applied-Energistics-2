@@ -1,0 +1,96 @@
+{
+	"parent": "appliedenergistics2:crafting_terminal",
+	"display": {
+		"icon": {
+			"item": "appliedenergistics2:crafting_unit"
+		},
+		"title": {
+			"translate": "achievement.ae2.CraftingCPU"
+		},
+		"description": {
+			"translate": "achievement.ae2.CraftingCPU.desc"
+		}
+	},
+	"criteria": {
+		"item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:crafting_unit",
+						"count": 1
+					}
+				]
+			}
+		},
+		"item1k": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:crafting_storage_1k",
+						"count": 1
+					}
+				]
+			}
+		},
+		"item4k": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:crafting_storage_4k",
+						"count": 1
+					}
+				]
+			}
+		},
+		"item16": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:crafting_storage_16k",
+						"count": 1
+					}
+				]
+			}
+		},
+		"item64": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:crafting_storage_64k",
+						"count": 1
+					}
+				]
+			}
+		},
+		"itemmon": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:crafting_monitor",
+						"count": 1
+					}
+				]
+			}
+		},
+		"ac": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "appliedenergistics2:crafting_accelerator",
+						"count": 1
+					}
+				]
+			}
+		}
+	},
+	"requirements": [
+		["item", "item1k", "item4k", "item16", "item64", "itemmon", "ac"]
+	]
+}

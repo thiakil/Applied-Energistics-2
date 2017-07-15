@@ -113,11 +113,10 @@ public class StorageHelper
 		{
 			if( player != null )
 			{
-				//TODO achievements
-//				if( link.dim.provider instanceof StorageWorldProvider )
-//				{
-//					Achievements.SpatialIOExplorer.addToPlayer( player );
-//				}
+				if( link.dim.provider instanceof StorageWorldProvider )
+				{
+					Achievements.SpatialIOExplorer.addToPlayer( player );
+				}
 
 				player.mcServer.getPlayerList().transferPlayerToDimension( player, link.dim.provider.getDimension(), new METeleporter( newWorld, link ) );
 			}
