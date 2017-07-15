@@ -31,6 +31,9 @@ import java.util.WeakHashMap;
 
 import com.google.common.collect.HashMultimap;
 
+import org.lwjgl.input.Mouse;
+
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -39,21 +42,30 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import appeng.api.AEApi;
+import appeng.api.config.SearchBoxMode;
+import appeng.api.config.Settings;
+import appeng.api.config.TerminalStyle;
 import appeng.client.gui.AEBaseGui;
+import appeng.client.gui.widgets.GuiImgButton;
 import appeng.client.gui.widgets.GuiScrollbar;
 import appeng.client.gui.widgets.MEGuiTextField;
 import appeng.client.me.ClientDCInternalInv;
 import appeng.client.me.SlotDisconnected;
 import appeng.container.implementations.ContainerInterfaceTerminal;
+import appeng.container.slot.AppEngSlot;
+import appeng.core.AEConfig;
+import appeng.core.AELog;
 import appeng.core.localization.GuiText;
+import appeng.core.sync.network.NetworkHandler;
+import appeng.core.sync.packets.PacketValueConfig;
+import appeng.integration.Integrations;
 import appeng.parts.reporting.PartInterfaceTerminal;
 import appeng.util.Platform;
 
 
 public class GuiInterfaceTerminal extends AEBaseGui
 {
-
-	private static final int LINES_ON_PAGE = 6;
+	private static final int SECTION_HEIGHT = 18;
 
 	// TODO: copied from GuiMEMonitorable. It looks not changed, maybe unneeded?
 	private final int offsetX = 9;
@@ -68,6 +80,10 @@ public class GuiInterfaceTerminal extends AEBaseGui
 	private boolean refreshList = false;
 	private MEGuiTextField searchField;
 
+	private int rows = 6;
+	private GuiImgButton searchBoxSettings;
+	private GuiImgButton terminalStyleBox;
+
 	public GuiInterfaceTerminal( final InventoryPlayer inventoryPlayer, final PartInterfaceTerminal te )
 	{
 		super( new ContainerInterfaceTerminal( inventoryPlayer, te ) );
@@ -79,13 +95,78 @@ public class GuiInterfaceTerminal extends AEBaseGui
 	}
 
 	@Override
+	protected void actionPerformed( final GuiButton btn ) throws IOException
+	{
+		super.actionPerformed( btn );
+
+		if( btn instanceof GuiImgButton )
+		{
+			final boolean backwards = Mouse.isButtonDown( 1 );
+
+			final GuiImgButton iBtn = (GuiImgButton) btn;
+			if( iBtn.getSetting() != Settings.ACTIONS )
+			{
+				final Enum cv = iBtn.getCurrentValue();
+				final Enum next = Platform.rotateEnum( cv, backwards, iBtn.getSetting().getPossibleValues() );
+
+				if( btn == this.terminalStyleBox || btn == this.searchBoxSettings )
+				{
+					AEConfig.instance().getConfigManager().putSetting( iBtn.getSetting(), next );
+				}
+				else
+				{
+					try
+					{
+						NetworkHandler.instance().sendToServer( new PacketValueConfig( iBtn.getSetting().name(), next.name() ) );
+					}
+					catch( final IOException e )
+					{
+						AELog.debug( e );
+					}
+				}
+
+				iBtn.set( next );
+
+				if( next.getClass() == SearchBoxMode.class || next.getClass() == TerminalStyle.class )
+				{
+					this.reinitalize();
+				}
+			}
+		}
+	}
+
+	private void reinitalize()
+	{
+		this.buttonList.clear();
+		this.initGui();
+		this.refreshList();
+	}
+
+	@Override
 	public void initGui()
 	{
+		final int staticSpace = 18 + 97;
+
+		calculateRows( staticSpace );
+
 		super.initGui();
 
+		this.ySize = staticSpace + this.rows * SECTION_HEIGHT;
+		final int unusedSpace = this.height - this.ySize;
+		this.guiTop = (int) Math.floor( unusedSpace / ( unusedSpace < 0 ? 3.8f : 2.0f ) );
+		int offset = this.guiTop + 8;
+
 		this.getScrollBar().setLeft( 175 );
-		this.getScrollBar().setHeight( 106 );
+		this.getScrollBar().setHeight( this.rows * SECTION_HEIGHT - 2 );
 		this.getScrollBar().setTop( 18 );
+		this.getScrollBar().setRange( 0, this.lines.size() - rows, 2 );
+
+		this.searchBoxSettings = new GuiImgButton( this.guiLeft - 18, offset, Settings.SEARCH_MODE, AEConfig.instance().getConfigManager().getSetting( Settings.SEARCH_MODE ) );
+		this.buttonList.add( this.searchBoxSettings );
+		offset += 20;
+
+		this.terminalStyleBox = new GuiImgButton( this.guiLeft - 18, offset, Settings.TERMINAL_STYLE, AEConfig.instance().getConfigManager().getSetting( Settings.TERMINAL_STYLE ) );
+		this.buttonList.add( this.terminalStyleBox );
 
 		this.searchField = new MEGuiTextField( this.fontRenderer, this.guiLeft + Math.max( 104, this.offsetX ), this.guiTop + 4, 65, 12 );
 		this.searchField.setEnableBackgroundDrawing( false );
@@ -93,6 +174,35 @@ public class GuiInterfaceTerminal extends AEBaseGui
 		this.searchField.setTextColor( 0xFFFFFF );
 		this.searchField.setVisible( true );
 		this.searchField.setFocused( true );
+
+		final Enum setting = AEConfig.instance().getConfigManager().getSetting( Settings.SEARCH_MODE );
+		this.searchField.setFocused( SearchBoxMode.AUTOSEARCH == setting || SearchBoxMode.JEI_AUTOSEARCH == setting );
+
+		for( final Object s : this.inventorySlots.inventorySlots )
+		{
+			if( s instanceof AppEngSlot && ( (Slot) s ).xPos < 197 )
+			{
+				this.repositionSlot( (AppEngSlot) s );
+			}
+		}
+	}
+
+	private void calculateRows( final int height )
+	{
+		final int maxRows = AEConfig.instance().getConfigManager().getSetting( Settings.TERMINAL_STYLE ) == TerminalStyle.SMALL ? 6 : Integer.MAX_VALUE;
+
+		final double extraSpace = (double) this.height - height;
+
+		this.rows = (int) Math.floor( extraSpace / SECTION_HEIGHT );
+		if( this.rows > maxRows )
+		{
+			this.rows = maxRows;
+		}
+
+		if( this.rows < 6 )
+		{
+			this.rows = 6;
+		}
 	}
 
 	@Override
@@ -113,7 +223,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 		}
 
 		int offset = 17;
-		for( int x = 0; x < LINES_ON_PAGE && ex + x < this.lines.size(); x++ )
+		for( int x = 0; x < rows && ex + x < this.lines.size(); x++ )
 		{
 			final Object lineObj = this.lines.get( ex + x );
 			if( lineObj instanceof ClientDCInternalInv )
@@ -140,15 +250,20 @@ public class GuiInterfaceTerminal extends AEBaseGui
 
 				this.fontRenderer.drawString( name, 10, 6 + offset, 4210752 );
 			}
-			offset += 18;
+			offset += SECTION_HEIGHT;
 		}
 	}
 
 	@Override
 	protected void mouseClicked( final int xCoord, final int yCoord, final int btn ) throws IOException
 	{
-		this.searchField.mouseClicked( xCoord, yCoord, btn );
+		final Enum searchMode = AEConfig.instance().getConfigManager().getSetting( Settings.SEARCH_MODE );
 
+		if( searchMode != SearchBoxMode.AUTOSEARCH && searchMode != SearchBoxMode.JEI_AUTOSEARCH )
+		{
+			this.searchField.mouseClicked( xCoord, yCoord, btn );
+		}
+		
 		if( btn == 1 && this.searchField.isMouseIn( xCoord, yCoord ) )
 		{
 			this.searchField.setText( "" );
@@ -162,12 +277,19 @@ public class GuiInterfaceTerminal extends AEBaseGui
 	public void drawBG( final int offsetX, final int offsetY, final int mouseX, final int mouseY )
 	{
 		this.bindTexture( "guis/interfaceterminal.png" );
-		this.drawTexturedModalRect( offsetX, offsetY, 0, 0, this.xSize, this.ySize );
+		this.drawTexturedModalRect( offsetX, offsetY, 0, 0, this.xSize, 18 );
+
+		for( int x = 0; x < rows; x++ )
+		{
+			this.drawTexturedModalRect( offsetX, offsetY + 18 + x * SECTION_HEIGHT, 0, 18, this.xSize, SECTION_HEIGHT );
+		}
+
+		this.drawTexturedModalRect( offsetX, offsetY + 18 + rows * SECTION_HEIGHT - 2, 0, 124, this.xSize, 96 );
 
 		int offset = 17;
 		final int ex = this.getScrollBar().getCurrentScroll();
 
-		for( int x = 0; x < LINES_ON_PAGE && ex + x < this.lines.size(); x++ )
+		for( int x = 0; x < rows && ex + x < this.lines.size(); x++ )
 		{
 			final Object lineObj = this.lines.get( ex + x );
 			if( lineObj instanceof ClientDCInternalInv )
@@ -176,15 +298,20 @@ public class GuiInterfaceTerminal extends AEBaseGui
 
 				GlStateManager.color( 1, 1, 1, 1 );
 				final int width = inv.getInventory().getSizeInventory() * 18;
-				this.drawTexturedModalRect( offsetX + 7, offsetY + offset, 7, 139, width, 18 );
+				this.drawTexturedModalRect( offsetX + 7, offsetY + offset, 7, 139, width, SECTION_HEIGHT );
 			}
-			offset += 18;
+			offset += SECTION_HEIGHT;
 		}
 
 		if( this.searchField != null )
 		{
 			this.searchField.drawTextBox();
 		}
+	}
+
+	private void repositionSlot( final AppEngSlot s )
+	{
+		s.yPos = s.getY() + this.ySize - 78 - 5;
 	}
 
 	@Override
@@ -260,6 +387,14 @@ public class GuiInterfaceTerminal extends AEBaseGui
 	{
 		this.byName.clear();
 
+		// Since someone searching in an interface terminal will rarely find it useful to sync with JEI, 
+		//  should we maybe just ignore this setting? 
+		final Enum searchMode = AEConfig.instance().getConfigManager().getSetting( Settings.SEARCH_MODE );
+		if( searchMode == SearchBoxMode.JEI_AUTOSEARCH || searchMode == SearchBoxMode.JEI_MANUAL_SEARCH )
+		{
+			Integrations.jei().setSearchText( this.searchField.getText() );
+		}
+
 		final String searchFilterLowerCase = this.searchField.getText().toLowerCase();
 
 		final Set<Object> cachedSearch = this.getCacheForSearchTerm( searchFilterLowerCase );
@@ -320,7 +455,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 			this.lines.addAll( clientInventories );
 		}
 
-		this.getScrollBar().setRange( 0, this.lines.size() - LINES_ON_PAGE, 2 );
+		this.getScrollBar().setRange( 0, this.lines.size() - rows, 2 );
 	}
 
 	private boolean itemStackMatchesSearchTerm( final ItemStack itemStack, final String searchTerm )
