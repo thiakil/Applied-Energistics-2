@@ -158,6 +158,7 @@ public abstract class AEBaseGui extends GuiContainer
 	@Override
 	public void drawScreen( final int mouseX, final int mouseY, final float btn )
 	{
+		this.drawDefaultBackground();
 		super.drawScreen( mouseX, mouseY, btn );
 
 		for( final Object c : this.buttonList )
