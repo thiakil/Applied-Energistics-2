@@ -180,7 +180,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 
 		for( final Object s : this.inventorySlots.inventorySlots )
 		{
-			if( s instanceof AppEngSlot && ( (Slot) s ).xDisplayPosition < 197 )
+			if( s instanceof AppEngSlot && ( (Slot) s ).xPos < 197 )
 			{
 				this.repositionSlot( (AppEngSlot) s );
 			}
@@ -311,7 +311,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 
 	private void repositionSlot( final AppEngSlot s )
 	{
-		s.yDisplayPosition = s.getY() + this.ySize - 78 - 5;
+		s.yPos = s.getY() + this.ySize - 78 - 5;
 	}
 
 	@Override
