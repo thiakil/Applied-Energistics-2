@@ -123,7 +123,7 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 	private int minMeteoriteDistance = 707;
 	private int minMeteoriteDistanceSq = this.minMeteoriteDistance * this.minMeteoriteDistance;
 	private double meteoriteClusterChance = 0.1;
-	private int meteoriteMaximumSpawnHeight = 180;
+	private int meteoriteMaximumSpawnHeight = 256;
 	private int[] meteoriteDimensionWhitelist = { 0 };
 
 	// Wireless
