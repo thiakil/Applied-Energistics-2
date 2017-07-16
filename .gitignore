@@ -29,5 +29,7 @@
 
 !forge_update.json
 
+!libs/
+
 # Explicit ignores
 Thumbs.db
