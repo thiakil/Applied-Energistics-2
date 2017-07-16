@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -528,11 +529,15 @@ public class PartStorageBus extends PartUpgradeable implements IGridTickable, IC
 			}
 		}
 
-//		if( achievement != null && achievement.getActionableNode() != null )
-//		{
-//			//Platform.addStat( achievement.getActionableNode().getPlayerID(), Achievements.Recursive.getAchievement() );
-//			// Platform.addStat( getActionableNode().getPlayerID(), Achievements.Recursive.getAchievement() );
-//		}
+		if( achievement != null && achievement.getActionableNode() != null )
+		{
+			EntityPlayer p = AEApi.instance().registries().players().findPlayer( achievement.getActionableNode().getPlayerID() );
+			if ( p instanceof EntityPlayerMP )
+				Achievements.Recursive.addToPlayer( (EntityPlayerMP)p );
+			p = AEApi.instance().registries().players().findPlayer( getActionableNode().getPlayerID() );
+			if ( p instanceof EntityPlayerMP )
+				Achievements.Recursive.addToPlayer( (EntityPlayerMP)p );
+		}
 	}
 
 	@Override

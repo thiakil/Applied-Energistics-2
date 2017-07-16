@@ -19,50 +19,42 @@
 package appeng.core.stats;
 
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 
 import appeng.core.AppEng;
 
 
+/**
+ * Since 1.12 these are only the advancements that require custom triggering, the rest are done in JSON
+ */
 public enum Achievements
 {
 	// done
-	SpatialIOExplorer( -4, -2, AchievementType.Custom, "spatial_io_explorer" ),
+	SpatialIOExplorer( "spatial_io_explorer" ),
 
 	// done
-	Networking1( 4, -6, AchievementType.Custom, "networking_1" ),
+	Networking1( "networking_1" ),
 
 	// done
-	Networking2( 4, 0, AchievementType.Custom, "networking_2" ),
+	Networking2( "networking_2" ),
 
 	// done
-	Networking3( 4, 2, AchievementType.Custom, "networking_3" ),
+	Networking3( "networking_3" ),
+
+	Recursive( "recursive" )
 	;
 
-	private final AchievementType type;
-	private final int x;
-	private final int y;
 	private final ResourceLocation advancementName;
 
 	//private Achievement parent;
 	//private Achievement stat;
 
-	Achievements( final int x, final int y, final AchievementType type, String advancementName )
+	Achievements( String advancementName )
 	{
-		this.type = type;
-		this.x = x;
-		this.y = y;
 		this.advancementName = new ResourceLocation( AppEng.MOD_ID, advancementName );
-	}
-
-	AchievementType getType()
-	{
-		return this.type;
 	}
 
 	public void addToPlayer(EntityPlayerMP p){
