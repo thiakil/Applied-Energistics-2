@@ -19,7 +19,7 @@
 				"items": [
 					{
 						"item": "appliedenergistics2:material",
-						"count": 1,
+						"count": { "min": 1 },
 						"data": 13
 					}
 				]
@@ -31,7 +31,7 @@
 				"items": [
 					{
 						"item": "appliedenergistics2:material",
-						"count": 1,
+						"count": { "min": 1 },
 						"data": 19
 					}
 				]
@@ -43,7 +43,7 @@
 				"items": [
 					{
 						"item": "appliedenergistics2:material",
-						"count": 1,
+						"count": { "min": 1 },
 						"data": 14
 					}
 				]
@@ -55,7 +55,7 @@
 				"items": [
 					{
 						"item": "appliedenergistics2:material",
-						"count": 1,
+						"count": { "min": 1 },
 						"data": 15
 					}
 				]

@@ -20,7 +20,7 @@
 					{
 						"item": "appliedenergistics2:part",
 						"data": 220,
-						"count": 1
+						"count": { "min": 1 }
 					}
 				]
 			}
