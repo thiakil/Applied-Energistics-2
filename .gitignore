@@ -27,5 +27,8 @@
 # Github specific files and directories
 !.github/
 
+
+!libs/
+
 # Explicit ignores
 Thumbs.db

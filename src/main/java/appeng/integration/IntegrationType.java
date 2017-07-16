@@ -21,6 +21,7 @@ package appeng.integration;
 
 import appeng.integration.modules.BuildcraftModule;
 import appeng.integration.modules.CofhHammerModule;
+import appeng.integration.modules.Mekanism;
 import appeng.integration.modules.opencomputers.OpenComputers;
 import appeng.integration.modules.ic2.IC2Module;
 import appeng.integration.modules.jei.JEIModule;
@@ -113,7 +114,16 @@ public enum IntegrationType
 		{
 			return new TheOneProbeModule();
 		}
-	};
+	},
+
+	MEKANISM( IntegrationSide.BOTH, "Mekanism", "mekanism") {
+		@Override
+		public IIntegrationModule createInstance(){
+			return Integrations.setMekanism( new Mekanism() );
+		}
+	}
+
+	;
 
 	public final IntegrationSide side;
 	public final String dspName;
