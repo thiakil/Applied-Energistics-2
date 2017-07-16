@@ -171,10 +171,6 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 		// AELog.info( "ID:" + id.toString() + " : " + is.getItemDamage() );
 
 		TunnelType tt = AEApi.instance().registries().p2pTunnel().getTunnelTypeByItem( is );
-		if ( tt == null && is.hasCapability( CapabilityEnergy.ENERGY, null ))
-		{
-			tt = TunnelType.FORGE_POWER;
-		}
 		if(!is.isEmpty() && is.getItem() instanceof IMemoryCard )
 		{
 			final IMemoryCard mc = (IMemoryCard) is.getItem();
