@@ -114,14 +114,14 @@ public final class PartP2PForgeEnergy extends PartP2PTunnel<PartP2PForgeEnergy>
 	@Override
 	public boolean hasCapability( Capability<?> capabilityClass )
 	{
-		return ( this.isActive() && capabilityClass == CapabilityEnergy.ENERGY ) || super.hasCapability( capabilityClass );
+		return ( capabilityClass == CapabilityEnergy.ENERGY && this.isActive() && this.getInput() != null ) || super.hasCapability( capabilityClass );
 	}
 
 	@Override
 	@SuppressWarnings( "unchecked" )
 	public <T> T getCapability( Capability<T> capabilityClass )
 	{
-		if ( capabilityClass == CapabilityEnergy.ENERGY && this.isActive() )
+		if ( capabilityClass == CapabilityEnergy.ENERGY && this.isActive() && this.getInput() != null )
 		{
 			if (this.isOutput() && this.getInput() != null)
 			{
@@ -140,6 +140,7 @@ public final class PartP2PForgeEnergy extends PartP2PTunnel<PartP2PForgeEnergy>
 				{
 					//pass to super.
 				}
+				return (T)NULL_HANDLER;
 			}
 		}
 		return super.getCapability( capabilityClass );
