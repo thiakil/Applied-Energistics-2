@@ -19,7 +19,7 @@
 				"items": [
 					{
 						"item": "appliedenergistics2:part",
-						"count": 1,
+						"count": { "min": 1 },
 						"data": 16
 					}
 				]

@@ -18,7 +18,7 @@
 				"items": [
 					{
 						"item": "appliedenergistics2:spatial_io_port",
-						"count": 1
+						"count": { "min": 1 }
 					}
 				]
 			}
