@@ -91,7 +91,6 @@ public final class P2PTunnelRegistry implements IP2PTunnelRegistry
 		this.addNewAttunement( new ItemStack( Blocks.CHEST ), TunnelType.ITEM );
 		this.addNewAttunement( new ItemStack( Blocks.TRAPPED_CHEST ), TunnelType.ITEM );
 		//this.addNewAttunement( this.getModItem( "ExtraUtilities", "extractor_base", 0 ), TunnelType.ITEM );
-		this.addNewAttunement( this.getModItem( "mekanism", "transmitter", 3 ), TunnelType.ITEM );
 		//this.addNewAttunement( this.getModItem( "EnderIO", "itemItemConduit", OreDictionary.WILDCARD_VALUE ), TunnelType.ITEM );
 		this.addNewAttunement( this.getModItem( "thermaldynamics", "duct_32", OreDictionary.WILDCARD_VALUE ), TunnelType.ITEM );
 
@@ -102,8 +101,7 @@ public final class P2PTunnelRegistry implements IP2PTunnelRegistry
 		this.addNewAttunement( new ItemStack( Items.LAVA_BUCKET ), TunnelType.FLUID );
 		this.addNewAttunement( new ItemStack( Items.MILK_BUCKET ), TunnelType.FLUID );
 		this.addNewAttunement( new ItemStack( Items.WATER_BUCKET ), TunnelType.FLUID );
-		this.addNewAttunement( this.getModItem( "Mekanism", "machineblock2", 11 ), TunnelType.FLUID );//tank
-		this.addNewAttunement( this.getModItem( "mekanism", "transmitter", 1 ), TunnelType.FLUID );
+		this.addNewAttunement( this.getModItem( "mekanism", "machineblock2", 11 ), TunnelType.FLUID );//tank
 		//this.addNewAttunement( this.getModItem( "ExtraUtilities", "extractor_base", 6 ), TunnelType.FLUID );
 		this.addNewAttunement( this.getModItem( "extrautils2", "drum", OreDictionary.WILDCARD_VALUE ), TunnelType.FLUID );
 		//this.addNewAttunement( this.getModItem( "EnderIO", "itemLiquidConduit", OreDictionary.WILDCARD_VALUE ), TunnelType.FLUID );
@@ -116,9 +114,6 @@ public final class P2PTunnelRegistry implements IP2PTunnelRegistry
 			this.addNewAttunement( parts.cableSmart().stack( c, 1 ), TunnelType.ME );
 			this.addNewAttunement( parts.cableDense().stack( c, 1 ), TunnelType.ME );
 		}
-
-		/* FE */
-		this.addNewAttunement( this.getModItem( "mekanism", "transmitter", 0 ), TunnelType.FORGE_POWER );
 	}
 
 	@Override
