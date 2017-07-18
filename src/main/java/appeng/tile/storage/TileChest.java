@@ -114,7 +114,7 @@ public class TileChest extends AENetworkPowerTile implements IMEChest, ITerminal
 
 	public TileChest()
 	{
-		this.setInternalMaxPower( PowerMultiplier.CONFIG.multiply( 40 ) );
+		this.setInternalMaxPower( PowerMultiplier.CONFIG.multiply( 80 ) );
 		this.getProxy().setFlags( GridFlags.REQUIRE_CHANNEL );
 		this.config.registerSetting( Settings.SORT_BY, SortOrder.NAME );
 		this.config.registerSetting( Settings.VIEW_MODE, ViewItems.ALL );
