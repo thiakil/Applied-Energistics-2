@@ -83,4 +83,6 @@ dependencies {
 
     // unit test dependencies
     testCompile "junit:junit:4.12"
+
+    compile fileTree(dir: 'libs', includes: ['*.jar'])
 }

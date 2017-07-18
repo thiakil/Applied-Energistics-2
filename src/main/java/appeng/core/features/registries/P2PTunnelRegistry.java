@@ -28,6 +28,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 import appeng.api.AEApi;
@@ -87,10 +90,9 @@ public final class P2PTunnelRegistry implements IP2PTunnelRegistry
 		this.addNewAttunement( new ItemStack( Blocks.HOPPER ), TunnelType.ITEM );
 		this.addNewAttunement( new ItemStack( Blocks.CHEST ), TunnelType.ITEM );
 		this.addNewAttunement( new ItemStack( Blocks.TRAPPED_CHEST ), TunnelType.ITEM );
-		this.addNewAttunement( this.getModItem( "ExtraUtilities", "extractor_base", 0 ), TunnelType.ITEM );
-		this.addNewAttunement( this.getModItem( "Mekanism", "PartTransmitter", 9 ), TunnelType.ITEM );
-		this.addNewAttunement( this.getModItem( "EnderIO", "itemItemConduit", OreDictionary.WILDCARD_VALUE ), TunnelType.ITEM );
-		this.addNewAttunement( this.getModItem( "ThermalDynamics", "ThermalDynamics_32", 0 ), TunnelType.ITEM );
+		//this.addNewAttunement( this.getModItem( "ExtraUtilities", "extractor_base", 0 ), TunnelType.ITEM );
+		//this.addNewAttunement( this.getModItem( "EnderIO", "itemItemConduit", OreDictionary.WILDCARD_VALUE ), TunnelType.ITEM );
+		this.addNewAttunement( this.getModItem( "thermaldynamics", "duct_32", OreDictionary.WILDCARD_VALUE ), TunnelType.ITEM );
 
 		/**
 		 * attune based on lots of random item related stuff
@@ -99,12 +101,11 @@ public final class P2PTunnelRegistry implements IP2PTunnelRegistry
 		this.addNewAttunement( new ItemStack( Items.LAVA_BUCKET ), TunnelType.FLUID );
 		this.addNewAttunement( new ItemStack( Items.MILK_BUCKET ), TunnelType.FLUID );
 		this.addNewAttunement( new ItemStack( Items.WATER_BUCKET ), TunnelType.FLUID );
-		this.addNewAttunement( this.getModItem( "Mekanism", "MachineBlock2", 11 ), TunnelType.FLUID );
-		this.addNewAttunement( this.getModItem( "Mekanism", "PartTransmitter", 4 ), TunnelType.FLUID );
-		this.addNewAttunement( this.getModItem( "ExtraUtilities", "extractor_base", 6 ), TunnelType.FLUID );
-		this.addNewAttunement( this.getModItem( "ExtraUtilities", "drum", OreDictionary.WILDCARD_VALUE ), TunnelType.FLUID );
-		this.addNewAttunement( this.getModItem( "EnderIO", "itemLiquidConduit", OreDictionary.WILDCARD_VALUE ), TunnelType.FLUID );
-		this.addNewAttunement( this.getModItem( "ThermalDynamics", "ThermalDynamics_16", 0 ), TunnelType.FLUID );
+		this.addNewAttunement( this.getModItem( "mekanism", "machineblock2", 11 ), TunnelType.FLUID );//tank
+		//this.addNewAttunement( this.getModItem( "ExtraUtilities", "extractor_base", 6 ), TunnelType.FLUID );
+		this.addNewAttunement( this.getModItem( "extrautils2", "drum", OreDictionary.WILDCARD_VALUE ), TunnelType.FLUID );
+		//this.addNewAttunement( this.getModItem( "EnderIO", "itemLiquidConduit", OreDictionary.WILDCARD_VALUE ), TunnelType.FLUID );
+		this.addNewAttunement( this.getModItem( "thermaldynamics", "duct_16", OreDictionary.WILDCARD_VALUE ), TunnelType.FLUID );
 
 		for( final AEColor c : AEColor.values() )
 		{
@@ -144,6 +145,17 @@ public final class P2PTunnelRegistry implements IP2PTunnelRegistry
 				if (Platform.itemComparisons().isEqualItem(is, trigger)) {
 					return this.tunnels.get(is);
 				}
+			}
+
+			//nothing found, check caps
+			if (trigger.hasCapability( CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null )){
+				return TunnelType.ITEM;
+			}
+			if (trigger.hasCapability( CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null )){
+				return TunnelType.FLUID;
+			}
+			if (trigger.hasCapability( CapabilityEnergy.ENERGY, null )){
+				return TunnelType.FORGE_POWER;
 			}
 		}
 

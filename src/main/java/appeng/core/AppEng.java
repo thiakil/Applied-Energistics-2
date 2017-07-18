@@ -178,6 +178,7 @@ public final class AppEng
 		List<Object> injectables = Lists.newArrayList(
 				AEApi.instance() );
 		new PluginLoader().loadPlugins( injectables, event.getAsmData() );
+		IntegrationRegistry.INSTANCE.preInit();
 	}
 
 	private void startService( final String serviceName, final Thread thread )
