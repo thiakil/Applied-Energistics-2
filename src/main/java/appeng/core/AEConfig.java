@@ -88,6 +88,7 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 	private boolean disableColoredCableRecipesInJEI = true;
 	private int craftingCalculationTimePerTick = 5;
 	private PowerUnits selectedPowerUnit = PowerUnits.AE;
+	private boolean rememberTerminalSearchOnClose = false;
 
 	// GUI Buttons
 	private final int[] craftByStacks = { 1, 10, 100, 1000 };
@@ -283,6 +284,8 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 		this.enableEffects = this.get( "Client", "enableEffects", true ).getBoolean( true );
 		this.useLargeFonts = this.get( "Client", "useTerminalUseLargeFont", false ).getBoolean( false );
 		this.useColoredCraftingStatus = this.get( "Client", "useColoredCraftingStatus", true ).getBoolean( true );
+
+		this.rememberTerminalSearchOnClose = this.get("Client", "rememberTerminalSearchOnClose", this.rememberTerminalSearchOnClose, "Remember what was searched on the terminal after close").getBoolean();
 
 		// load buttons..
 		for( int btnNum = 0; btnNum < 4; btnNum++ )
@@ -775,4 +778,6 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 	{
 		this.storageProviderID = id;
 	}
+
+	public boolean getRememberTerminalSearchOnClose() { return this.rememberTerminalSearchOnClose; }
 }
