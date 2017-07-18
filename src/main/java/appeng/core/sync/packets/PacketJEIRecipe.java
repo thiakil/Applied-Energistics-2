@@ -25,6 +25,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,8 +71,8 @@ public class PacketJEIRecipe extends AppEngPacket
 	// automatic.
 	public PacketJEIRecipe( final ByteBuf stream ) throws IOException
 	{
-		final ByteArrayInputStream bytes = new ByteArrayInputStream( stream.array() );
-		bytes.skip( stream.readerIndex() );
+		final ByteBufInputStream bytes = new ByteBufInputStream( stream );
+		//bytes.skip( stream.readerIndex() );
 		final NBTTagCompound comp = CompressedStreamTools.readCompressed( bytes );
 		if( comp != null )
 		{

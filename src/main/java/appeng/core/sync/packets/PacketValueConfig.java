@@ -26,6 +26,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
 
 import net.minecraft.client.Minecraft;
@@ -66,7 +67,8 @@ public class PacketValueConfig extends AppEngPacket
 	// automatic.
 	public PacketValueConfig( final ByteBuf stream ) throws IOException
 	{
-		final DataInputStream dis = new DataInputStream( new ByteArrayInputStream( stream.array(), stream.readerIndex(), stream.readableBytes() ) );
+		//final DataInputStream dis = new DataInputStream( new ByteArrayInputStream( stream.array(), stream.readerIndex(), stream.readableBytes() ) );
+		final DataInputStream dis = new DataInputStream( new ByteBufInputStream( stream ) );
 		this.Name = dis.readUTF();
 		this.Value = dis.readUTF();
 		// dis.close();

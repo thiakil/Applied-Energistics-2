@@ -75,7 +75,7 @@ public final class AppEngServerPacketHandler extends AppEngPacketHandlerBase imp
 		}
 		catch( final InvocationTargetException e )
 		{
-			AELog.debug( e );
+			AELog.error( "packet handler errored", e );
 		}
 	}
 }
