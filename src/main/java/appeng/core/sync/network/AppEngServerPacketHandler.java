@@ -53,7 +53,12 @@ public final class AppEngServerPacketHandler extends AppEngPacketHandlerBase imp
 				@Override
 				public void call( final AppEngPacket appEngPacket )
 				{
-					appEngPacket.serverPacketData( manager, appEngPacket, player );
+					try
+					{
+						appEngPacket.serverPacketData( manager, appEngPacket, player );
+					} catch( Throwable t ){
+						AELog.error( "Packethandler threw an exception, please report!", t );
+					}
 				}
 			};
 

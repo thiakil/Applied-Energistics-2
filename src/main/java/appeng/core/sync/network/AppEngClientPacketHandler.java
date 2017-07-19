@@ -53,7 +53,11 @@ public class AppEngClientPacketHandler extends AppEngPacketHandlerBase implement
 				@Override
 				public void call( final AppEngPacket appEngPacket )
 				{
-					appEngPacket.clientPacketData( manager, appEngPacket, Minecraft.getMinecraft().player );
+					try{
+						appEngPacket.clientPacketData( manager, appEngPacket, Minecraft.getMinecraft().player );
+					} catch( Throwable t ){
+						AELog.error( "Packethandler threw an exception, please report!", t );
+					}
 				}
 			};
 
