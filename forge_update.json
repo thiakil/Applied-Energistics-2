@@ -10,13 +10,14 @@
     "1.12": {
         "rv5-alpha-3": "9bcc120 missing sideonly fixes for ITooltipFlag\n14f1973 properly migrate storage biome to new registration system",
         "rv5-alpha-4": "18b2c01 Fix class cast exception in slotcrafting. Closes #13\n4257333 Fix facades not rendering\ne54ac73 copy itemstack before shrinking it. Found by tyra314",
-        "rv5-alpha-5": "c4607e6 readme update\n9796ba4 readme update\n478cc6b sync all custom tile/part names to the client\nce0cb83 show tile/part custom names in Waila. Also returns IS.EMPTY instead of null in waila handlers\n526de10 make TOP display custom names separate from the item name like waila\nf1704c2 nerf the egg a little\nba1a165 because why not"
+        "rv5-alpha-5": "c4607e6 readme update\n9796ba4 readme update\n478cc6b sync all custom tile/part names to the client\nce0cb83 show tile/part custom names in Waila. Also returns IS.EMPTY instead of null in waila handlers\n526de10 make TOP display custom names separate from the item name like waila\nf1704c2 nerf the egg a little\nba1a165 because why not",
+        "rv5-beta-1": "5be1c53 Made Interface Terminals Tall\nf4c7b9b  Added Search Box Mode Setting to Interface Terminal\n8d52973 alpha 5\n87e4711 1.11 fixes for paperpilot's PR\nd2f938b more stupid 1.12 gui changes\n8603e5f Advancements are a go!\n8f5d96c reinstate Recursive advancement that was missing a TODO label\n28f4e0a fix obtained item condition to be min 1, not exact\n4b6e905 Set meteorites to be default spawnable anywhere\naa66d69 add safety for unconnected FE tunnel caps\n77d369a fix some attunement ids, add native ability for caps to set attunement for item/fluid/fe tunnels\n8f53444 actually run the preinit for integrations in preinit. Needed so recipe integrations load.\nf17914f readd mekanism integration\n520d92d remove explicit mekanism attunement, it adds it itself\n6a033f2 update mekanism recipes\n7dcbeb9 double the chest's internal buffer so it can accept stacks of items\nb109282 prevent npe in onItemUse in formation planes\n20af69c add option to remember the terminal search\n1c6744f Use ByteBufInputStream instead of ArrayIS on netowrk packets as they may not always be array backed. Fixes #24\n056e4aa add some extra error handling/stupid proofing\na5411ac log when itemhandler throws exception\nef79c25 try to inform the user when the crafting job throws an unhandled exception\ne8e0fc1 version bump. Beta because curse."
     },
     "homepage": "https://github.com/thiakil/Applied-Energistics-2/releases",
     "promos": {
         "1.11.2-latest": "rv5-beta-1",
         "1.11.2-recommended": "rv5-beta-1",
-        "1.12-latest": "rv5-alpha-5",
-        "1.12-recommended": "rv5-alpha-5"
+        "1.12-latest": "rv5-beta-1",
+        "1.12-recommended": "rv5-beta-1"
     }
 }
