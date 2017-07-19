@@ -26,6 +26,7 @@ import io.netty.buffer.Unpooled;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.text.TextComponentString;
 
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridHost;
@@ -117,6 +118,7 @@ public class PacketCraftRequest extends AppEngPacket
 				}
 				catch( final Throwable e )
 				{
+					player.sendMessage( new TextComponentString( "Server side error occurred while trying to start craft." ) );
 					if( futureJob != null )
 					{
 						futureJob.cancel( true );
