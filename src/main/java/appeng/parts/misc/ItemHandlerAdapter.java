@@ -121,51 +121,60 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 
 		final boolean simulate = ( mode == Actionable.SIMULATE );
 
-		for( int i = 0; i < itemHandler.getSlots(); i++ )
+		try
 		{
-			ItemStack stackInInventorySlot = itemHandler.getStackInSlot( i );
-
-			if( !Platform.itemComparisons().isSameItem( stackInInventorySlot, requestedItemStack ) )
+			for( int i = 0; i < itemHandler.getSlots(); i++ )
 			{
-				continue;
-			}
+				ItemStack stackInInventorySlot = itemHandler.getStackInSlot( i );
 
-			ItemStack extracted;
-			int stackSizeCurrentSlot = stackInInventorySlot.getCount();
-			int remainingCurrentSlot = Math.min( remainingSize, stackSizeCurrentSlot );
+				if( !Platform.itemComparisons().isSameItem( stackInInventorySlot, requestedItemStack ) )
+				{
+					continue;
+				}
 
-			// We have to loop here because according to the docs, the handler shouldn't return a stack with size >
-			// maxSize, even if we request more. So even if it returns a valid stack, it might have more stuff.
-			do
-			{
-				extracted = itemHandler.extractItem( i, remainingCurrentSlot, simulate );
-				if (!extracted.isEmpty()) {
-					if (extracted.getCount() > remainingCurrentSlot) {
-						// Something broke. It should never return more than we requested...
-						// We're going to silently eat the remainder
-						AELog.warn("Mod that provided item handler %1 is broken. Returned %2 items, even though we requested %3.",
-								itemHandler.getClass().getSimpleName(), extracted.getCount(), remainingCurrentSlot);
-						extracted.setCount(remainingCurrentSlot);
+				ItemStack extracted;
+				int stackSizeCurrentSlot = stackInInventorySlot.getCount();
+				int remainingCurrentSlot = Math.min( remainingSize, stackSizeCurrentSlot );
+
+				// We have to loop here because according to the docs, the handler shouldn't return a stack with size >
+				// maxSize, even if we request more. So even if it returns a valid stack, it might have more stuff.
+				do
+				{
+					extracted = itemHandler.extractItem( i, remainingCurrentSlot, simulate );
+					if( !extracted.isEmpty() )
+					{
+						if( extracted.getCount() > remainingCurrentSlot )
+						{
+							// Something broke. It should never return more than we requested...
+							// We're going to silently eat the remainder
+							AELog.warn( "Mod that provided item handler %1 is broken. Returned %2 items, even though we requested %3.", itemHandler.getClass().getSimpleName(), extracted.getCount(), remainingCurrentSlot );
+							extracted.setCount( remainingCurrentSlot );
+						}
+
+						// We're just gonna use the first stack we get our hands on as the template for the rest
+						if( gathered.isEmpty() )
+						{
+							gathered = extracted;
+						}
+						else
+						{
+							gathered.grow( extracted.getCount() );
+						}
+						remainingCurrentSlot -= extracted.getCount();
 					}
+				}
+				while( !extracted.isEmpty() && remainingCurrentSlot > 0 );
 
-					// We're just gonna use the first stack we get our hands on as the template for the rest
-					if (gathered.isEmpty()) {
-						gathered = extracted;
-					} else {
-						gathered.grow(extracted.getCount());
-					}
-					remainingCurrentSlot -= extracted.getCount();
+				remainingSize -= stackSizeCurrentSlot - remainingCurrentSlot;
+
+				// Done?
+				if( remainingSize <= 0 )
+				{
+					break;
 				}
 			}
-			while(!extracted.isEmpty() && remainingCurrentSlot > 0 );
-
-			remainingSize -= stackSizeCurrentSlot - remainingCurrentSlot;
-
-			// Done?
-			if( remainingSize <= 0 )
-			{
-				break;
-			}
+		} catch (Throwable t) {
+			AELog.error("ItemHandler provided by "+itemHandler.getClass().getName()+" threw an exception, please report to them!", t);
 		}
 
 		if (!gathered.isEmpty()) {
