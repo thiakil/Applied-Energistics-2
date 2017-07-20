@@ -433,7 +433,7 @@ public final class MeteoritePlacer
 	public boolean spawnMeteorite( final IMeteoriteWorld w, final int x, final int y, final int z )
 	{
 
-		if( !w.isNether() )
+		if( w.isNether() )
 		{
 			return false;
 		}
