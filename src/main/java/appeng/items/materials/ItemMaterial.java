@@ -75,6 +75,9 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 
 	private final Map<Integer, MaterialType> dmgToMaterial = new HashMap<>();
 
+	private static final Pattern sortPattern = Pattern.compile( "(\\d+)[^\\d]" );
+	private static final SlightlyBetterSort slightlyBetterSort = new SlightlyBetterSort( sortPattern );
+
 	public ItemMaterial()
 	{
 		this.setHasSubtypes( true );
@@ -129,9 +132,7 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 				}
 			}
 
-			final Pattern p = Pattern.compile( "(\\d+)[^\\d]" );
-			final SlightlyBetterSort s = new SlightlyBetterSort( p );
-			Collections.sort( textList, s );
+			Collections.sort( textList, slightlyBetterSort );
 			lines.addAll( textList );
 		}
 	}
