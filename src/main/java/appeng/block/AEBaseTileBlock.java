@@ -44,8 +44,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -140,6 +142,12 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 		return this.getTileEntity( w, new BlockPos( x, y, z ) );
 	}
 
+	/**
+	 * Gets TileEntity of AEBaseTile class, but will NOT create it.
+	 * @param w world to query
+	 * @param pos location to query
+	 * @return the TE, or null if does not exist or not the correct instance
+	 */
 	@Nullable
 	public <T extends AEBaseTile> T getTileEntity( final IBlockAccess w, final BlockPos pos )
 	{
@@ -148,10 +156,17 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 			return null;
 		}
 
-		final TileEntity te = w.getTileEntity( pos );
+		final TileEntity te;
+		if ( w instanceof ChunkCache ){
+			te = ( (ChunkCache) w ).getTileEntity( pos, Chunk.EnumCreateEntityType.CHECK);
+		} else {
+			te = w.getTileEntity( pos );
+		}
 		if( this.tileEntityType.isInstance( te ) )
 		{
-			return (T) te;
+			@SuppressWarnings( "unchecked" )
+			T teT = (T)te;
+			return teT;
 		}
 
 		return null;
