@@ -31,6 +31,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 import appeng.api.AEApi;
 import appeng.api.definitions.IMaterials;
@@ -105,6 +106,10 @@ public final class EntityChargedQuartz extends AEBaseEntityItem
 	{
 		final ItemStack item = this.getItem();
 		final IMaterials materials = AEApi.instance().definitions().materials();
+		int redstoneID = OreDictionary.getOreID("dustRedstone");
+		int quartzID = OreDictionary.getOreID("gemQuartz");
+		ItemStack baseRedstone = new ItemStack( Items.REDSTONE );
+		ItemStack baseQuartz = new ItemStack( Items.QUARTZ );
 
 		if( materials.certusQuartzCrystalCharged().isSameAs( item ) )
 		{
@@ -121,14 +126,29 @@ public final class EntityChargedQuartz extends AEBaseEntityItem
 					final ItemStack other = ( (EntityItem) e ).getItem();
 					if(!other.isEmpty() && other.getCount() > 0 )
 					{
-						if( Platform.itemComparisons().isEqualItem( other, new ItemStack( Items.REDSTONE ) ) )
+						if( Platform.itemComparisons().isEqualItem( other, baseRedstone ) )
 						{
 							redstone = (EntityItem) e;
 						}
-
-						if( Platform.itemComparisons().isEqualItem( other, new ItemStack( Items.QUARTZ ) ) )
+						else if( Platform.itemComparisons().isEqualItem( other, baseQuartz ) )
 						{
 							netherQuartz = (EntityItem) e;
+						}
+						else {
+
+							int[] otherIDs = OreDictionary.getOreIDs( other );
+
+							if (otherIDs != null){
+								for (int id : otherIDs){
+									if (id == redstoneID){
+										redstone = (EntityItem) e;
+										break;
+									} else if (id == quartzID){
+										netherQuartz = (EntityItem) e;
+										break;
+									}
+								}
+							}
 						}
 					}
 				}
