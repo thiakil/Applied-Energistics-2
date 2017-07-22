@@ -835,6 +835,9 @@ public class CableBusContainer extends CableBusStorage implements AEMultiTile, I
 		final SelectedPart p = this.selectPart( pos );
 		if( p != null && p.part != null )
 		{
+			if (player.isSneaking()){
+				return p.part.onShiftActivate( player, hand, pos );
+			}
 			return p.part.onActivate( player, hand, pos );
 		}
 		return false;

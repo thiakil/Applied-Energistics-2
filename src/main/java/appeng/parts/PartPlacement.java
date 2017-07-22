@@ -186,7 +186,7 @@ public class PartPlacement
 			}
 		}
 
-		// if ( held == null )
+		if ( held.isEmpty() )
 		{
 			//final Block block = world.getBlockState( pos ).getBlock();
 			if( host != null && player.isSneaking() && block != null )
