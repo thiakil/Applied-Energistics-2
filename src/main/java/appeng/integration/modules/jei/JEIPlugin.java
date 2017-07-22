@@ -117,6 +117,31 @@ public class JEIPlugin extends BlankModPlugin
 			addDescription( registry, materials.purifiedFluixCrystal(), GuiText.inWorldPurificationFluix.getUnlocalized() );
 		}
 
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_ME ) ){
+			addDescription( registry, definitions.parts().p2PTunnelME(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneME.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_ITEMS ) ){
+			addDescription( registry, definitions.parts().p2PTunnelItems(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneItem.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_REDSTONE ) ){
+			addDescription( registry, definitions.parts().p2PTunnelRedstone(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneRedstone.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_EU ) ){
+			addDescription( registry, definitions.parts().p2PTunnelEU(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneIC2.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_FLUIDS ) ){
+			addDescription( registry, definitions.parts().p2PTunnelFluids(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneFluid.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_LIGHT ) ){
+			addDescription( registry, definitions.parts().p2PTunnelLight(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneLight.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_OPEN_COMPUTERS ) ){
+			addDescription( registry, definitions.parts().p2PTunnelOpenComputers(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneOC.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_FE ) ){
+			addDescription( registry, definitions.parts().p2PTunnelFE(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneForgeEnergy.getUnlocalized() );
+		}
+
 	}
 
 	private void addDescription( IModRegistry registry, IItemDefinition itemDefinition, String... message )
