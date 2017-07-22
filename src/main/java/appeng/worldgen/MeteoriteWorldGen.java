@@ -39,6 +39,9 @@ import appeng.worldgen.meteorite.ChunkOnly;
 
 public final class MeteoriteWorldGen implements IWorldGenerator
 {
+
+	private int maxMeteoriteSpawnHeight = AEConfig.instance().getMeteoriteMaximumSpawnHeight();
+
 	@Override
 	public void generate( final Random r, final int chunkX, final int chunkZ, final World w, final IChunkGenerator chunkGenerator, final IChunkProvider chunkProvider )
 	{
@@ -46,7 +49,7 @@ public final class MeteoriteWorldGen implements IWorldGenerator
 		{
 			final int x = r.nextInt( 16 ) + ( chunkX << 4 );
 			final int z = r.nextInt( 16 ) + ( chunkZ << 4 );
-			final int depth = AEConfig.instance().getMeteoriteMaximumSpawnHeight() + r.nextInt( 20 );
+			final int depth = maxMeteoriteSpawnHeight - r.nextInt( maxMeteoriteSpawnHeight );
 
 			TickHandler.INSTANCE.addCallable( w, new MeteoriteSpawn( x, depth, z ) );
 		}
@@ -58,11 +61,12 @@ public final class MeteoriteWorldGen implements IWorldGenerator
 
 	private boolean tryMeteorite( final World w, int depth, final int x, final int z )
 	{
-		for( int tries = 0; tries < 20; tries++ )
+		final MeteoritePlacer mp = new MeteoritePlacer();
+		final ChunkOnly co = new ChunkOnly( w, x >> 4, z >> 4 );
+		//for( int tries = 0; tries < 20; tries++ )
+		while ( depth > 40 )
 		{
-			final MeteoritePlacer mp = new MeteoritePlacer();
-
-			if( mp.spawnMeteorite( new ChunkOnly( w, x >> 4, z >> 4 ), x, depth, z ) )
+			if( mp.spawnMeteorite( co, x, depth, z ) )
 			{
 				final int px = x >> 4;
 				final int pz = z >> 4;
@@ -90,11 +94,7 @@ public final class MeteoriteWorldGen implements IWorldGenerator
 				return true;
 			}
 
-			depth -= 15;
-			if( depth < 40 )
-			{
-				return false;
-			}
+			depth--;
 		}
 
 		return false;
