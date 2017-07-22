@@ -233,6 +233,15 @@ gui.appliedenergistics2.Fuzzy=Fuzzy
 gui.appliedenergistics2.SmallFontCraft=Craft
 gui.appliedenergistics2.LargeFontCraft=+
 gui.appliedenergistics2.Nothing=Nothing
+gui.appliedenergistics2.AttuneGeneric=Tunnel types can be changed by right clicking a tunnel in world with an attunement item.
+gui.appliedenergistics2.AttuneItem=Interfaces, Storage Busses, Export & Import Busses, Hoppers, Chests, and Item Handler items can attune to items.
+gui.appliedenergistics2.AttuneFluid=Buckets, some fluid pipes, and Fluid Handler items can attune to fluids.
+gui.appliedenergistics2.AttuneForgeEnergy=Forge Energy storing items can attune to Forge Energy.
+gui.appliedenergistics2.AttuneIC2=IC2 cables can attune to EU.
+gui.appliedenergistics2.AttuneLight=Torches and Glowstone can attune to light.
+gui.appliedenergistics2.AttuneOC=OpenComputes cables and networking items can attune to OpenComputers networking.
+gui.appliedenergistics2.AttuneME=ME Cables can attune back to ME.
+gui.appliedenergistics2.AttuneRedstone=Most Vanilla redstone items can attune to redstone.
 
 // GUI Tooltips
 gui.tooltips.appliedenergistics2.Stash=Store Items
