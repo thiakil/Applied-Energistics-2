@@ -73,6 +73,7 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 	private static int craftingGridOffsetY;
 
 	private static String memoryText = "";
+	private String localmemoryText = "";
 	private final ItemRepo repo;
 	private final int offsetX = 9;
 	private final int lowerTextureOffset = 0;
@@ -312,7 +313,13 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		final Enum setting = AEConfig.instance().getConfigManager().getSetting( Settings.SEARCH_MODE );
 		this.searchField.setFocused( SearchBoxMode.AUTOSEARCH == setting || SearchBoxMode.JEI_AUTOSEARCH == setting );
 
-		if( this.isSubGui() || !memoryText.isEmpty() )
+		if (!this.localmemoryText.isEmpty()){
+			this.searchField.setText( localmemoryText );
+			this.repo.setSearchString( localmemoryText );
+			this.repo.updateView();
+			this.setScrollBar();
+		}
+		else if( this.isSubGui() || !memoryText.isEmpty() )
 		{
 			this.searchField.setText( memoryText );
 			this.repo.setSearchString( memoryText );
@@ -381,6 +388,7 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 	{
 		super.onGuiClosed();
 		Keyboard.enableRepeatEvents( false );
+		localmemoryText = this.searchField.getText();//JEI closes us, but we should still be the same instance when we're reactivated
 		memoryText = AEConfig.instance().getRememberTerminalSearchOnClose() ? this.searchField.getText() : "";
 	}
 
