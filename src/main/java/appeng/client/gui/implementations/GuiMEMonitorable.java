@@ -214,9 +214,9 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 	private void reinitalize()
 	{
 		this.buttonList.clear();
+		this.repo.setSearchString( memoryText = "" );
 		this.initGui();
-		
-		this.repo.setSearchString( "" );
+
 		this.repo.updateView();
 		this.setScrollBar();
 	}
