@@ -26,6 +26,8 @@ package appeng.api.storage;
 
 import java.io.IOException;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.item.ItemStack;
@@ -76,6 +78,14 @@ public interface IStorageHelper
 	 * @return a new INSTANCE of {@link IItemList} for fluids
 	 */
 	IItemList<IAEFluidStack> createFluidList();
+
+	/**
+	 * Read an AE ItemStack from nbt, where saved by {@link IAEItemStack#writeToNBT(NBTTagCompound)}
+	 * @param nbt the NBT the stack saved itself to
+	 * @return Stack based on the data, null if invalid
+	 */
+	@Nullable
+	IAEItemStack readItemFromNBT( NBTTagCompound nbt );
 
 	/**
 	 * Read a AE Item Stack from a byte stream, returns a AE item stack or null.
