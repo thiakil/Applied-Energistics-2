@@ -52,7 +52,7 @@ public abstract class AEBaseMEGui extends AEBaseGui
 		final Slot s = this.getSlot( x, y );
 		if(s instanceof SlotME && !stack.isEmpty() )
 		{
-			final List<String> currentToolTip = stack.getTooltip( this.mc.player, this.mc.gameSettings.advancedItemTooltips );
+			final List<String> currentToolTip = stack.getTooltip( this.mc.player, this.mc.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL );
 			currentToolTip.set(0, stack.getRarity().rarityColor + currentToolTip.get(0));
 
 			final int BigNumber = AEConfig.instance().useTerminalUseLargeFont() ? 999 : 9999;
