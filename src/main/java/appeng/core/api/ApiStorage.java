@@ -78,6 +78,12 @@ public class ApiStorage implements IStorageHelper
 	}
 
 	@Override
+	public IAEItemStack readItemFromNBT( NBTTagCompound nbt )
+	{
+		return AEItemStack.loadItemStackFromNBT( nbt );
+	}
+
+	@Override
 	public IAEItemStack readItemFromPacket( final ByteBuf input ) throws IOException
 	{
 		return AEItemStack.loadItemStackFromPacket( input );
