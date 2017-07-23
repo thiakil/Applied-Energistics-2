@@ -84,44 +84,67 @@ public class JEIPlugin extends BlankModPlugin
 	{
 		IMaterials materials = definitions.materials();
 
-		final String message;
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.CERTUS_QUARTZ_WORLD_GEN ) )
 		{
-			message = GuiText.ChargedQuartz.getLocal() + "\n\n" + GuiText.ChargedQuartzFind.getLocal();
+			addDescription( registry, materials.certusQuartzCrystalCharged(), GuiText.ChargedQuartz.getUnlocalized(), GuiText.ChargedQuartzFind.getUnlocalized() );
 		}
 		else
 		{
-			message = GuiText.ChargedQuartzFind.getLocal();
+			addDescription( registry, materials.certusQuartzCrystalCharged(), GuiText.ChargedQuartzFind.getUnlocalized() );
 		}
-		addDescription( registry, materials.certusQuartzCrystalCharged(), message );
 
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.METEORITE_WORLD_GEN ) )
 		{
-			addDescription( registry, materials.logicProcessorPress(), GuiText.inWorldCraftingPresses.getLocal() );
-			addDescription( registry, materials.calcProcessorPress(), GuiText.inWorldCraftingPresses.getLocal() );
-			addDescription( registry, materials.engProcessorPress(), GuiText.inWorldCraftingPresses.getLocal() );
+			addDescription( registry, materials.logicProcessorPress(), GuiText.inWorldCraftingPresses.getUnlocalized() );
+			addDescription( registry, materials.calcProcessorPress(), GuiText.inWorldCraftingPresses.getUnlocalized() );
+			addDescription( registry, materials.engProcessorPress(), GuiText.inWorldCraftingPresses.getUnlocalized() );
 		}
 
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.IN_WORLD_FLUIX ) )
 		{
-			addDescription( registry, materials.fluixCrystal(), GuiText.inWorldFluix.getLocal() );
+			addDescription( registry, materials.fluixCrystal(), GuiText.inWorldFluix.getUnlocalized() );
 		}
 
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.IN_WORLD_SINGULARITY ) )
 		{
-			addDescription( registry, materials.qESingularity(), GuiText.inWorldSingularity.getLocal() );
+			addDescription( registry, materials.qESingularity(), GuiText.inWorldSingularity.getUnlocalized() );
 		}
 
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.IN_WORLD_PURIFICATION ) )
 		{
-			addDescription( registry, materials.purifiedCertusQuartzCrystal(), GuiText.inWorldPurificationCertus.getLocal() );
-			addDescription( registry, materials.purifiedNetherQuartzCrystal(), GuiText.inWorldPurificationNether.getLocal() );
-			addDescription( registry, materials.purifiedFluixCrystal(), GuiText.inWorldPurificationFluix.getLocal() );
+			addDescription( registry, materials.purifiedCertusQuartzCrystal(), GuiText.inWorldPurificationCertus.getUnlocalized() );
+			addDescription( registry, materials.purifiedNetherQuartzCrystal(), GuiText.inWorldPurificationNether.getUnlocalized() );
+			addDescription( registry, materials.purifiedFluixCrystal(), GuiText.inWorldPurificationFluix.getUnlocalized() );
+		}
+
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_ME ) ){
+			addDescription( registry, definitions.parts().p2PTunnelME(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneME.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_ITEMS ) ){
+			addDescription( registry, definitions.parts().p2PTunnelItems(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneItem.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_REDSTONE ) ){
+			addDescription( registry, definitions.parts().p2PTunnelRedstone(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneRedstone.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_EU ) ){
+			addDescription( registry, definitions.parts().p2PTunnelEU(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneIC2.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_FLUIDS ) ){
+			addDescription( registry, definitions.parts().p2PTunnelFluids(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneFluid.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_LIGHT ) ){
+			addDescription( registry, definitions.parts().p2PTunnelLight(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneLight.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_OPEN_COMPUTERS ) ){
+			addDescription( registry, definitions.parts().p2PTunnelOpenComputers(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneOC.getUnlocalized() );
+		}
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.P2P_TUNNEL_FE ) ){
+			addDescription( registry, definitions.parts().p2PTunnelFE(), GuiText.AttuneGeneric.getUnlocalized(), " ", GuiText.AttuneForgeEnergy.getUnlocalized() );
 		}
 
 	}
 
-	private void addDescription( IModRegistry registry, IItemDefinition itemDefinition, String message )
+	private void addDescription( IModRegistry registry, IItemDefinition itemDefinition, String... message )
 	{
 		itemDefinition.maybeStack( 1 ).ifPresent( itemStack -> registry.addIngredientInfo( itemStack, ItemStack.class, message ) );
 	}

@@ -184,7 +184,20 @@ public enum GuiText
 	LargeFontCraft,
 
 	// Used in a ME Interface when no appropriate TileEntity was detected near it
-	Nothing;
+	Nothing,
+
+	//Attunements for JEI
+	AttuneGeneric,
+	AttuneItem,
+	AttuneFluid,
+	AttuneForgeEnergy,
+	AttuneIC2,
+	AttuneLight,
+	AttuneOC,
+	AttuneME,
+	AttuneRedstone,
+
+	;
 
 	private final String root;
 
