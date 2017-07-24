@@ -27,6 +27,6 @@ public class RFItemModule implements IIntegrationModule
 {
 	public RFItemModule()
 	{
-		IntegrationHelper.testClassExistence( this, cofh.api.energy.IEnergyContainerItem.class );
+		IntegrationHelper.testClassExistence( this, cofh.redstoneflux.api.IEnergyContainerItem.class );
 	}
 }

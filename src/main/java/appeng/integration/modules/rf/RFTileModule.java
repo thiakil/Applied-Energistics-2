@@ -27,6 +27,6 @@ public class RFTileModule implements IIntegrationModule
 {
 	public RFTileModule()
 	{
-		IntegrationHelper.testClassExistence( this, cofh.api.energy.IEnergyReceiver.class );
+		IntegrationHelper.testClassExistence( this, cofh.redstoneflux.api.IEnergyReceiver.class );
 	}
 }

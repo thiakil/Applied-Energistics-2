@@ -78,6 +78,9 @@ dependencies {
     compileOnly "mcjty.theoneprobe:TheOneProbe-1.12:${minecraft_version}-${top_version}:api"
     provided "li.cil.oc:OpenComputers:MC1.11.2-${opencomputers_version}:api"
 
+    deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
+
+
     // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"
 

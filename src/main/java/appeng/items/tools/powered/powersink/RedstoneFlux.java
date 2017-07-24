@@ -21,7 +21,7 @@ package appeng.items.tools.powered.powersink;
 
 import net.minecraft.item.ItemStack;
 
-import cofh.api.energy.IEnergyContainerItem;
+import cofh.redstoneflux.api.IEnergyContainerItem;
 
 import appeng.api.config.PowerUnits;
 import appeng.coremod.annotations.Integration.Interface;

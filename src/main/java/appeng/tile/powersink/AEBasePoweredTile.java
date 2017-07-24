@@ -23,7 +23,7 @@ import java.util.EnumSet;
 
 import net.minecraft.util.EnumFacing;
 
-import cofh.api.energy.IEnergyReceiver;
+import cofh.redstoneflux.api.IEnergyReceiver;
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 
