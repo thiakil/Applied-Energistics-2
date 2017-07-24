@@ -92,6 +92,7 @@ public abstract class AEBaseMEGui extends AEBaseGui
 			}
 
 			this.drawHoveringText( currentToolTip, x, y );
+			return;
 		}
 		super.renderToolTip( stack, x, y );
 		// super.drawItemStackTooltip( stack, x, y );
