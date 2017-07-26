@@ -210,9 +210,10 @@ public class MENetworkEnvironment extends MENetworkEnvironmentBase {
 				count = Math.max(count, meItems.size());
 				int slot = offset;
 				for (int i = 0; i < count && slot < databaseSlots; i++) {
-					while (database.getStackInSlot(slot) != null && slot < databaseSlots) slot += 1;
-					if (database.getStackInSlot(slot) == null) {
-						database.setStackInSlot(slot, meItems.get(i));
+					while ( !database.getStackInSlot( slot ).isEmpty() && slot < databaseSlots) slot += 1;
+					if( database.getStackInSlot( slot ).isEmpty() )
+					{
+						database.setStackInSlot( slot, meItems.get( i ) );
 					}
 				}
 			}
