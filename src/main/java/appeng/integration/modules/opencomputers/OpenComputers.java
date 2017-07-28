@@ -119,10 +119,10 @@ public class OpenComputers implements IIntegrationModule
 		ItemStack mainhand = player.getHeldItem( EnumHand.MAIN_HAND);
 		ItemStack offhand = player.getHeldItem( EnumHand.OFF_HAND);
 
-		if (mainhand != null && mainhand.getItem() instanceof IAEWrench ){
+		if ( !mainhand.isEmpty() && mainhand.getItem() instanceof IAEWrench ){
 			return ((IAEWrench)mainhand.getItem()).canWrench(mainhand, player, pos);
 		}
-		if (offhand != null && offhand.getItem() instanceof IAEWrench ){
+		if ( !offhand.isEmpty() && offhand.getItem() instanceof IAEWrench ){
 			return ((IAEWrench)offhand.getItem()).canWrench(offhand, player, pos);
 		}
 
@@ -130,6 +130,6 @@ public class OpenComputers implements IIntegrationModule
 	}
 
 	public static boolean isWrench(ItemStack stack) {
-		return stack != null && !stack.isEmpty() && stack.getItem() instanceof IAEWrench;
+		return !stack.isEmpty() && !stack.isEmpty() && stack.getItem() instanceof IAEWrench;
 	}
 }

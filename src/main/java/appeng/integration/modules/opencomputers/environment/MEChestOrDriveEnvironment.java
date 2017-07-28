@@ -246,8 +246,9 @@ public class MEChestOrDriveEnvironment extends li.cil.oc.api.prefab.AbstractMana
 					ArrayList<ItemStack> formatted = new ArrayList<>();
 					for (int slot = 0; slot<formatInv.getSizeInventory(); slot++){
 						ItemStack is = formatInv.getStackInSlot(slot);
-						if (is != null){
-							formatted.add(is);
+						if( !is.isEmpty() )
+						{
+							formatted.add( is );
 						}
 					}
 					output.put("preformattedItems", formatted);
@@ -290,11 +291,13 @@ public class MEChestOrDriveEnvironment extends li.cil.oc.api.prefab.AbstractMana
 				if (tile != null && tile instanceof IChestOrDrive && tile instanceof AEBaseInvTile ) {
 					this.container = (IChestOrDrive) tile;
 					ItemStack is = ((AEBaseInvTile) tile).getStackInSlot(this.containerSlot);
-					if (is != null) {
-						IMEInventoryHandler handler = AEApi.instance().registries().cell().getCellInventory(is, this.container, StorageChannel.ITEMS);
-						if (handler == null)
-							handler = AEApi.instance().registries().cell().getCellInventory(is, this.container, StorageChannel.FLUIDS);
-						if (handler != null && handler instanceof ICellInventoryHandler ) {
+					if( !is.isEmpty() )
+					{
+						IMEInventoryHandler handler = AEApi.instance().registries().cell().getCellInventory( is, this.container, StorageChannel.ITEMS );
+						if( handler == null )
+							handler = AEApi.instance().registries().cell().getCellInventory( is, this.container, StorageChannel.FLUIDS );
+						if( handler != null && handler instanceof ICellInventoryHandler )
+						{
 							this.handler = handler;
 							/*ICellInventory cellInv = ((ICellInventoryHandler) handler).getCellInv();
 							if (cellInv != null) {
