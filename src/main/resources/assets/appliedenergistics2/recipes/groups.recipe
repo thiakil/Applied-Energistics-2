@@ -19,3 +19,5 @@ group=oredictionary:dustCertusQuartz oredictionary:dustNetherQuartz -> dustQuart
 group=oredictionary:crystalCertusQuartz ae2:material.CertusQuartzCrystalCharged ae2:material.PurifiedCertusQuartzCrystal -> certusCrystal
 group=oredictionary:crystalNetherQuartz ae2:material.PurifiedNetherQuartzCrystal -> netherCrystal
 group=oredictionary:crystalFluix ae2:material.PurifiedFluixCrystal -> fluixCrystal
+
+group=oredictionary:sand -> sand

@@ -294,7 +294,7 @@ public final class AELog
 	{
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.GRINDER_LOGGING ) )
 		{
-			log( Level.DEBUG, "grinder: " + message, params );
+			log( Level.INFO, "grinder: " + message, params );
 		}
 	}
 

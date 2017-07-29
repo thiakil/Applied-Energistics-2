@@ -18,8 +18,12 @@ ore=ae2:material.CertusQuartzCrystal -> crystalCertusQuartz
 ore=ae2:material.FluixCrystal -> crystalFluix
 ore=ae2:material.PurifiedFluixCrystal -> crystalPureFluix
 ore=ae2:material.NetherQuartzDust -> dustNetherQuartz
+ore=ae2:material.NetherQuartzDust -> dustQuartz
 ore=ae2:material.CertusQuartzDust -> dustCertusQuartz
 ore=ae2:material.FluixDust -> dustFluix
+
+#AA compat
+ore=actuallyadditions:item_dust:5 -> dustNetherQuartz
 
 # Ores of AE2
 ore=ae2:quartz_ore -> oreCertusQuartz
