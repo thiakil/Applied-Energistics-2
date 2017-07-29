@@ -29,6 +29,7 @@ import com.google.common.base.Preconditions;
 
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -170,6 +171,7 @@ public final class Registration
 
 				this.storageBiome = new BiomeGenStorage();
 				Biome.registerBiome( config.getStorageBiomeID(), "appliedenergistics2:storage_biome", this.storageBiome );
+				BiomeDictionary.addTypes(this.storageBiome, BiomeDictionary.Type.VOID);
 				config.save();
 			}
 
