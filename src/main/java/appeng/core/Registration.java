@@ -33,6 +33,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -228,6 +229,7 @@ public final class Registration
 			this.storageBiome.setRegistryName( "appliedenergistics2:storage_biome" );
 			//Biome.registerBiome( config.getStorageBiomeID(),
 			event.getRegistry().register( storageBiome );
+			BiomeDictionary.addTypes(this.storageBiome, BiomeDictionary.Type.VOID);
 
 			if (Biome.REGISTRY.getIDForObject( storageBiome ) != config.getStorageBiomeID())
 			{
