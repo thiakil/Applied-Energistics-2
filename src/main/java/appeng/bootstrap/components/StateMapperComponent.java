@@ -29,11 +29,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import appeng.bootstrap.IBootstrapComponent;
+
 
 /**
  * Registers a custom state mapper for a given block.
  */
-public class StateMapperComponent implements RegistryComponent
+public class StateMapperComponent implements IBootstrapComponent
 {
 
 	private final Block block;
@@ -47,15 +49,12 @@ public class StateMapperComponent implements RegistryComponent
 	}
 
 	@Override
-	public <T extends IForgeRegistryEntry<T>> void registryEvent( IForgeRegistry<T> registry, Class<T> clazz )
+	public void modelRegistration()
 	{
-		if ( clazz == Block.class )
+		ModelLoader.setCustomStateMapper( block, stateMapper );
+		if( stateMapper instanceof IResourceManagerReloadListener )
 		{
-			ModelLoader.setCustomStateMapper( block, stateMapper );
-			if( stateMapper instanceof IResourceManagerReloadListener )
-			{
-				( (IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager() ).registerReloadListener( (IResourceManagerReloadListener) stateMapper );
-			}
+			( (IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager() ).registerReloadListener( (IResourceManagerReloadListener) stateMapper );
 		}
 	}
 }

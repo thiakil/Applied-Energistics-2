@@ -21,17 +21,18 @@ package appeng.bootstrap.components;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.client.model.ModelLoader;
+
+import appeng.bootstrap.IBootstrapComponent;
 
 
 /**
  * Registers a custom item mesh definition that can be used to dynamically determine the item model based on
  * item stack properties.
  */
-public class ItemMeshDefinitionComponent implements InitComponent
+public class ItemMeshDefinitionComponent implements IBootstrapComponent
 {
 
 	private final Item item;
@@ -45,8 +46,8 @@ public class ItemMeshDefinitionComponent implements InitComponent
 	}
 
 	@Override
-	public void initialize( Side side )
+	public void modelRegistration()
 	{
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register( item, meshDefinition );
+		ModelLoader.setCustomMeshDefinition( item, meshDefinition );
 	}
 }

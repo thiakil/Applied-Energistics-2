@@ -24,7 +24,6 @@ import java.util.Collection;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
 
 import appeng.bootstrap.IBootstrapComponent;
 
@@ -43,7 +42,7 @@ public class ItemVariantsComponent implements IBootstrapComponent
 	}
 
 	@Override
-	public void preInitialize( Side side )
+	public void modelRegistration()
 	{
 		ResourceLocation[] resourceArr = resources.toArray( new ResourceLocation[0] );
 		ModelBakery.registerItemVariants( item, resourceArr );

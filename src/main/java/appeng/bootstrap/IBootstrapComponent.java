@@ -45,4 +45,7 @@ public interface IBootstrapComponent
 	default <T extends IForgeRegistryEntry<T>> void registryEvent( IForgeRegistry<T> registry, Class<T> clazz )
 	{
 	}
+
+	default void modelRegistration(){
+	}
 }

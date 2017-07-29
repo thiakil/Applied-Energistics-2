@@ -33,6 +33,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -40,6 +41,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import appeng.api.config.Upgrades;
@@ -60,6 +63,7 @@ import appeng.api.networking.spatial.ISpatialCache;
 import appeng.api.networking.storage.IStorageGrid;
 import appeng.api.networking.ticking.ITickManager;
 import appeng.api.parts.IPartHelper;
+import appeng.bootstrap.IBootstrapComponent;
 import appeng.capabilities.Capabilities;
 import appeng.core.features.AEFeature;
 import appeng.core.features.registries.P2PTunnelRegistry;
@@ -197,6 +201,13 @@ public final class Registration
 		final Runnable recipeLoader = new RecipeLoader( this.recipeDirectory, this.customRecipeConfig, this.recipeHandler );
 		recipeLoader.run();
 		this.recipeHandler.injectRecipes(registry);
+	}
+
+	@SubscribeEvent
+	@SideOnly( Side.CLIENT )
+	void modelRegistration( final ModelRegistryEvent r) {
+		ApiDefinitions definitions = Api.INSTANCE.definitions();
+		definitions.getRegistry().getBootstrapComponents().forEach( IBootstrapComponent::modelRegistration );
 	}
 
 	@SubscribeEvent
