@@ -59,7 +59,7 @@ public class BlockCrank extends AEBaseTileBlock
 	{
 		if( player instanceof FakePlayer || player == null )
 		{
-			this.dropCrank( w, pos );
+			//this.dropCrank( w, pos );
 			return true;
 		}
 
