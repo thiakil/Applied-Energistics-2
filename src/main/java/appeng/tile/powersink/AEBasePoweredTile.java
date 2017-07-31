@@ -35,7 +35,7 @@ import appeng.integration.abstraction.IC2PowerSink;
 
 
 @Integration.InterfaceList( value={
-		@Integration.Interface( iname = IntegrationType.RF, iface = "cofh.api.energy.IEnergyReceiver" ),
+		@Integration.Interface( iname = IntegrationType.RF, iface = "cofh.redstoneflux.api.IEnergyReceiver" ),
 		@Integration.Interface( iname = IntegrationType.IC2, iface = "ic2.api.energy.tile.IEnergySink" )
 } )
 public abstract class AEBasePoweredTile extends AERootPoweredTile implements IEnergyReceiver, IEnergySink

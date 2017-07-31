@@ -28,7 +28,7 @@ import appeng.coremod.annotations.Integration.Interface;
 import appeng.integration.IntegrationType;
 
 
-@Interface( iface = "cofh.api.energy.IEnergyContainerItem", iname = IntegrationType.RFItem )
+@Interface( iface = "cofh.redstoneflux.api.IEnergyContainerItem", iname = IntegrationType.RFItem )
 public abstract class RedstoneFlux extends AERootPoweredItem implements IEnergyContainerItem
 {
 	public RedstoneFlux( final double powerCapacity )
