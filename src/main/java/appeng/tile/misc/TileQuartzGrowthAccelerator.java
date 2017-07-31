@@ -234,6 +234,7 @@ public class TileQuartzGrowthAccelerator extends AENetworkTile implements IPower
 				if (iSlot == slot){
 					return item.getItemStack();
 				}
+				iSlot++;
 			}
 			return ItemStack.EMPTY;
 		}
@@ -276,7 +277,19 @@ public class TileQuartzGrowthAccelerator extends AENetworkTile implements IPower
 		@Nonnull
 		@Override
 		public ItemStack extractItem(int slot, int amount, boolean simulate) {
-			return null;
+			if (slot == 0){
+				return ItemStack.EMPTY;
+			}
+			IItemList<IAEItemStack> list = getItemsInBlock();
+			int iSlot = 1;
+			for (IAEItemStack item : list){
+				if (iSlot == slot){
+					//ItemStack entityItem
+					return item.getItemStack();
+				}
+				iSlot++;
+			}
+			return ItemStack.EMPTY;
 		}
 
 		/**
