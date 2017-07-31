@@ -230,7 +230,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	@Override
 	public int getInventoryStackLimit()
 	{
-		return 1;
+		return 64;
 	}
 
 	@Override
@@ -263,7 +263,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	@Override
 	public boolean canInsertItem( int slotIndex, ItemStack insertingItem, EnumFacing side )
 	{
-		return super.canInsertItem( slotIndex, insertingItem, side ) && getStackInSlot( slotIndex ).isEmpty();
+		return super.canInsertItem( slotIndex, insertingItem, side ) && getStackInSlot( slotIndex ).isEmpty() || getStackInSlot( slotIndex ).isItemEqual( insertingItem );
 	}
 
 	@Override
@@ -336,21 +336,13 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	@Nullable
 	public IInscriberRecipe getTask()
 	{
-		final ItemStack plateA = this.getStackInSlot( 0 );
-		final ItemStack plateB = this.getStackInSlot( 1 );
-		ItemStack renamedItem = this.getStackInSlot( 2 );
+		final ItemStack plateA = this.getStackInSlot( SLOT_TOP );
+		final ItemStack plateB = this.getStackInSlot( SLOT_BOTTOM );
+		ItemStack renamedItem = this.getStackInSlot( SLOT_MIDDLE );
 
-		if(!plateA.isEmpty() /*&& plateA.getCount() > 1 */)
-		{
-			return null;
-		}
 
-		if(!plateB.isEmpty()/* && plateB.getCount() > 1 */)
-		{
-			return null;
-		}
 
-		if(!renamedItem.isEmpty() /*&& renamedItem.getCount() > 1 */)
+		if(renamedItem.isEmpty() /*&& renamedItem.getCount() > 1 */)
 		{
 			return null;
 		}
@@ -418,9 +410,10 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 
 			if( matchA || matchB )
 			{
+				ItemStack middleSlot = this.getStackInSlot( SLOT_MIDDLE );
 				for( final ItemStack option : recipe.getInputs() )
 				{
-					if( Platform.itemComparisons().isSameItem( option, this.getStackInSlot( 2 ) ) )
+					if( Platform.itemComparisons().isSameItem( option, middleSlot ) )
 					{
 						return recipe;
 					}
