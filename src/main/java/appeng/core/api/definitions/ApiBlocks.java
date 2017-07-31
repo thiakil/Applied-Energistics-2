@@ -271,6 +271,7 @@ public final class ApiBlocks implements IBlocks
 		this.skyCompass = registry.block( "sky_compass", BlockSkyCompass::new )
 				.features( AEFeature.METEORITE_COMPASS )
 				.rendering( new SkyCompassRendering() )
+				.tile( TileSkyCompass.class )
 				.build();
 		this.grindstone = registry.block( "grindstone", BlockGrinder::new ).features( AEFeature.GRIND_STONE ).tile(TileGrinder.class).build();
 		this.crank = registry.block( "crank", BlockCrank::new )
