@@ -206,17 +206,21 @@ public class PacketJEIRecipe extends AppEngPacket
 											}
 										}
 
-										// if pattern term, check if it's craftable
-										if (whichItem.isEmpty() && realForFake == Actionable.SIMULATE){
-											Collection<IAEItemStack> matches = craftables.findFuzzy(AEItemStack.create(patternItem), FuzzyMode.IGNORE_ALL);
-											if (matches.size() > 0){
-												whichItem = matches.iterator().next().getDisplayItemStack();//display stack so it ensures it's not empty
-											}
-										}
-
 										// If that doesn't work, grab from the player's inventory
 										if (whichItem.isEmpty() && playerInventory != null) {
 											whichItem = this.extractItemFromPlayerInventory(player, realForFake, patternItem);
+										}
+
+										// if pattern term, check if it's craftable
+										if (whichItem.isEmpty() && realForFake == Actionable.SIMULATE){
+											for (int y = 0; y < this.recipe[x].length; y++) {
+												Collection<IAEItemStack> matches = craftables.findFuzzy(AEItemStack.create(this.recipe[x][y]), FuzzyMode.IGNORE_ALL);
+												if (matches.size() > 0){
+													whichItem = matches.iterator().next().getDisplayItemStack();//display stack so it ensures it's not empty
+													break;
+												}
+											}
+
 										}
 
 										// If all else fails, check if they want to always allow it.
