@@ -159,7 +159,8 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 		this.removeCrashingItemsOnLoad = this.get( "general", "removeCrashingItemsOnLoad", false,
 				"Will auto-remove items that crash when being loaded from storage. This will destroy those items instead of crashing the game!" ).getBoolean();
 
-		this.patternTermRequiresItems = getPatternTermRequiresItemsRaw();
+		this.patternTermRequiresItems = this.get("general", "patternTermRequiresItems", true,
+				"Whether the pattern terminal requires the items in the system to encode").getBoolean();
 
 		this.setCategoryComment( "GrindStone",
 				"Creates recipe of the following pattern automatically: '1 oreTYPE => 2 dustTYPE' and '(1 ingotTYPE or 1 crystalTYPE or 1 gemTYPE) => 1 dustTYPE'" );
@@ -785,17 +786,4 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 	public boolean getRememberTerminalSearchOnClose() { return this.rememberTerminalSearchOnClose; }
 
 	public boolean getPatternTermRequiresItems() { return this.patternTermRequiresItems; }
-
-	/** Updates the stored value with the server's config. Won't save to client's config **/
-	public void syncPatternTermRequiresItems(boolean serverVal) { this.patternTermRequiresItems = serverVal; }
-
-	/** Gets the raw value from the config file, not our cached value which is synced with the server **/
-	public boolean getPatternTermRequiresItemsRaw(){
-		return this.get("general", "patternTermRequiresItems", true,
-				"Whether the pattern terminal requires the items in the system to encode").getBoolean();
-	}
-
-	public void resetPatternTermRequiresItems(){
-		syncPatternTermRequiresItems(getPatternTermRequiresItemsRaw());
-	}
 }
