@@ -89,6 +89,7 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 	private int craftingCalculationTimePerTick = 5;
 	private PowerUnits selectedPowerUnit = PowerUnits.AE;
 	private boolean rememberTerminalSearchOnClose = false;
+	private boolean patternTermRequiresItems = true;
 
 	// GUI Buttons
 	private final int[] craftByStacks = { 1, 10, 100, 1000 };
@@ -157,6 +158,9 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 
 		this.removeCrashingItemsOnLoad = this.get( "general", "removeCrashingItemsOnLoad", false,
 				"Will auto-remove items that crash when being loaded from storage. This will destroy those items instead of crashing the game!" ).getBoolean();
+
+		this.patternTermRequiresItems = this.get("general", "patternTermRequiresItems", true,
+				"Whether the pattern terminal requires the items in the system to encode").getBoolean();
 
 		this.setCategoryComment( "GrindStone",
 				"Creates recipe of the following pattern automatically: '1 oreTYPE => 2 dustTYPE' and '(1 ingotTYPE or 1 crystalTYPE or 1 gemTYPE) => 1 dustTYPE'" );
@@ -780,4 +784,6 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 	}
 
 	public boolean getRememberTerminalSearchOnClose() { return this.rememberTerminalSearchOnClose; }
+
+	public boolean getPatternTermRequiresItems() { return this.patternTermRequiresItems; }
 }
