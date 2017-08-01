@@ -112,104 +112,99 @@ public class PacketJEIRecipe extends AppEngPacket
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final EntityPlayer player )
 	{
 		final EntityPlayerMP pmp = (EntityPlayerMP) player;
-		final Container con = pmp.openContainer;
 
-		if( con instanceof IContainerCraftingPacket )
-		{
-			final IContainerCraftingPacket cct = (IContainerCraftingPacket) con;
-			final IGridNode node = cct.getNetworkNode();
-			if( node != null )
-			{
-				final IGrid grid = node.getGrid();
-				if( grid == null )
-				{
-					return;
-				}
+		pmp.getServerWorld().addScheduledTask(()-> {
+			final Container con = pmp.openContainer;
 
-				final IStorageGrid inv = grid.getCache( IStorageGrid.class );
-				final IEnergyGrid energy = grid.getCache( IEnergyGrid.class );
-				final ISecurityGrid security = grid.getCache( ISecurityGrid.class );
-				final IInventory craftMatrix = cct.getInventoryByName( "crafting" );
-				final IInventory playerInventory = cct.getInventoryByName( "player" );
-
-				final Actionable realForFake = cct.useRealItems() ? Actionable.MODULATE : Actionable.SIMULATE;
-
-				if( inv != null && this.recipe != null && security != null )
-				{
-					final InventoryCrafting testInv = new InventoryCrafting( new ContainerNull(), 3, 3 );
-					for( int x = 0; x < 9; x++ )
-					{
-						if( this.recipe[x] != null && this.recipe[x].length > 0 )
-						{
-							testInv.setInventorySlotContents( x, this.recipe[x][0] );
-						}
+			if (con instanceof IContainerCraftingPacket) {
+				final IContainerCraftingPacket cct = (IContainerCraftingPacket) con;
+				final IGridNode node = cct.getNetworkNode();
+				if (node != null) {
+					final IGrid grid = node.getGrid();
+					if (grid == null) {
+						return;
 					}
 
-					final IRecipe r = Platform.findMatchingRecipe( testInv, pmp.world );
+					final IStorageGrid inv = grid.getCache(IStorageGrid.class);
+					final IEnergyGrid energy = grid.getCache(IEnergyGrid.class);
+					final ISecurityGrid security = grid.getCache(ISecurityGrid.class);
+					final IInventory craftMatrix = cct.getInventoryByName("crafting");
+					final IInventory playerInventory = cct.getInventoryByName("player");
 
-					if( r != null && security.hasPermission( player, SecurityPermissions.EXTRACT ) )
-					{
-						final ItemStack is = r.getCraftingResult( testInv );
+					final Actionable realForFake = cct.useRealItems() ? Actionable.MODULATE : Actionable.SIMULATE;
 
-						if (!is.isEmpty()) {
-							final IMEMonitor<IAEItemStack> storage = inv.getItemInventory();
-							final IItemList all = storage.getStorageList();
-							final IPartitionList<IAEItemStack> filter = ItemViewCell.createFilter(cct.getViewCells());
-
-							for (int x = 0; x < craftMatrix.getSizeInventory(); x++) {
-								final ItemStack patternItem = testInv.getStackInSlot(x);
-
-								ItemStack currentItem = craftMatrix.getStackInSlot(x);
-								if (!currentItem.isEmpty()) {
-									testInv.setInventorySlotContents(x, currentItem);
-									final ItemStack newItemStack = r.matches(testInv, pmp.world) ? r.getCraftingResult(testInv) : ItemStack.EMPTY;
-									testInv.setInventorySlotContents(x, patternItem);
-
-									if (newItemStack.isEmpty() || !Platform.itemComparisons().isSameItem(newItemStack, is)) {
-										final IAEItemStack in = AEItemStack.create(currentItem);
-										if (in != null) {
-											final IAEItemStack out = realForFake == Actionable.SIMULATE ? null : Platform.poweredInsert(energy, storage, in, cct.getActionSource());
-											if (out != null) {
-												craftMatrix.setInventorySlotContents(x, out.getItemStack());
-											} else {
-												craftMatrix.setInventorySlotContents(x, ItemStack.EMPTY);
-											}
-
-											currentItem = craftMatrix.getStackInSlot(x);
-										}
-									}
-								}
-
-								// True if we need to fetch an item for the recipe
-								if (!patternItem.isEmpty() && currentItem.isEmpty()) {
-									// Grab from network by recipe
-									ItemStack whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, patternItem, x, all, realForFake, filter);
-
-									// If that doesn't get it, check the other possible items from the JEI packet
-									if (whichItem.isEmpty()) {
-										for (int y = 0; y < this.recipe[x].length; y++) {
-											whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, this.recipe[x][y], x, all, realForFake, filter);
-											if ( !whichItem.isEmpty() )
-											{
-												break;
-											}
-										}
-									}
-
-									// If that doesn't work, grab from the player's inventory
-									if (whichItem.isEmpty() && playerInventory != null) {
-										whichItem = this.extractItemFromPlayerInventory(player, realForFake, patternItem);
-									}
-
-									craftMatrix.setInventorySlotContents(x, whichItem);
-								}
+					if (inv != null && this.recipe != null && security != null) {
+						final InventoryCrafting testInv = new InventoryCrafting(new ContainerNull(), 3, 3);
+						for (int x = 0; x < 9; x++) {
+							if (this.recipe[x] != null && this.recipe[x].length > 0) {
+								testInv.setInventorySlotContents(x, this.recipe[x][0]);
 							}
-							con.onCraftMatrixChanged(craftMatrix);
+						}
+
+						final IRecipe r = Platform.findMatchingRecipe(testInv, pmp.world);
+
+						if (r != null && security.hasPermission(player, SecurityPermissions.EXTRACT)) {
+							final ItemStack is = r.getCraftingResult(testInv);
+
+							if (!is.isEmpty()) {
+								final IMEMonitor<IAEItemStack> storage = inv.getItemInventory();
+								final IItemList all = storage.getStorageList();
+								final IPartitionList<IAEItemStack> filter = ItemViewCell.createFilter(cct.getViewCells());
+
+								for (int x = 0; x < craftMatrix.getSizeInventory(); x++) {
+									final ItemStack patternItem = testInv.getStackInSlot(x);
+
+									ItemStack currentItem = craftMatrix.getStackInSlot(x);
+									if (!currentItem.isEmpty()) {
+										testInv.setInventorySlotContents(x, currentItem);
+										final ItemStack newItemStack = r.matches(testInv, pmp.world) ? r.getCraftingResult(testInv) : ItemStack.EMPTY;
+										testInv.setInventorySlotContents(x, patternItem);
+
+										if (newItemStack.isEmpty() || !Platform.itemComparisons().isSameItem(newItemStack, is)) {
+											final IAEItemStack in = AEItemStack.create(currentItem);
+											if (in != null) {
+												final IAEItemStack out = realForFake == Actionable.SIMULATE ? null : Platform.poweredInsert(energy, storage, in, cct.getActionSource());
+												if (out != null) {
+													craftMatrix.setInventorySlotContents(x, out.getItemStack());
+												} else {
+													craftMatrix.setInventorySlotContents(x, ItemStack.EMPTY);
+												}
+
+												currentItem = craftMatrix.getStackInSlot(x);
+											}
+										}
+									}
+
+									// True if we need to fetch an item for the recipe
+									if (!patternItem.isEmpty() && currentItem.isEmpty()) {
+										// Grab from network by recipe
+										ItemStack whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, patternItem, x, all, realForFake, filter);
+
+										// If that doesn't get it, check the other possible items from the JEI packet
+										if (whichItem.isEmpty()) {
+											for (int y = 0; y < this.recipe[x].length; y++) {
+												whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, this.recipe[x][y], x, all, realForFake, filter);
+												if (!whichItem.isEmpty()) {
+													break;
+												}
+											}
+										}
+
+										// If that doesn't work, grab from the player's inventory
+										if (whichItem.isEmpty() && playerInventory != null) {
+											whichItem = this.extractItemFromPlayerInventory(player, realForFake, patternItem);
+										}
+
+										craftMatrix.setInventorySlotContents(x, whichItem);
+									}
+								}
+								con.onCraftMatrixChanged(craftMatrix);
+							}
 						}
 					}
 				}
 			}
-		}
+		});
 	}
 
 	/**
