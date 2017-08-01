@@ -24,6 +24,7 @@ import appeng.core.sync.packets.PacketConfigSync;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.ThreadQuickExitException;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -50,7 +51,7 @@ public class NetworkHandler
 
 	public NetworkHandler( final String channelName )
 	{
-		FMLCommonHandler.instance().bus().register( this );
+		MinecraftForge.EVENT_BUS.register( this );
 		this.ec = NetworkRegistry.INSTANCE.newEventDrivenChannel( this.myChannelName = channelName );
 		this.ec.register( this );
 
