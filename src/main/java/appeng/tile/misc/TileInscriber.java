@@ -116,7 +116,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 
 	private int getUpgradeSlots()
 	{
-		return 3;
+		return 5;
 	}
 
 	@Override
