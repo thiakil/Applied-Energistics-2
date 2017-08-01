@@ -23,7 +23,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import appeng.api.networking.crafting.ICraftingGrid;
+import appeng.core.AEConfig;
+import appeng.integration.modules.opencomputers.Craftable;
+import appeng.util.item.ItemList;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
@@ -133,6 +139,16 @@ public class PacketJEIRecipe extends AppEngPacket
 
 					final Actionable realForFake = cct.useRealItems() ? Actionable.MODULATE : Actionable.SIMULATE;
 
+					final IItemList<IAEItemStack> craftables = new ItemList();
+					if (realForFake == Actionable.SIMULATE){
+						IItemList<IAEItemStack> storageList = inv.getItemInventory().getStorageList();
+						for (IAEItemStack stack : storageList) {
+							if (stack.isCraftable()) {
+								craftables.add(stack);
+							}
+						}
+					}
+
 					if (inv != null && this.recipe != null && security != null) {
 						final InventoryCrafting testInv = new InventoryCrafting(new ContainerNull(), 3, 3);
 						for (int x = 0; x < 9; x++) {
@@ -190,9 +206,22 @@ public class PacketJEIRecipe extends AppEngPacket
 											}
 										}
 
+										// if pattern term, check if it's craftable
+										if (whichItem.isEmpty() && realForFake == Actionable.SIMULATE){
+											Collection<IAEItemStack> matches = craftables.findFuzzy(AEItemStack.create(patternItem), FuzzyMode.IGNORE_ALL);
+											if (matches.size() > 0){
+												whichItem = matches.iterator().next().getDisplayItemStack();//display stack so it ensures it's not empty
+											}
+										}
+
 										// If that doesn't work, grab from the player's inventory
 										if (whichItem.isEmpty() && playerInventory != null) {
 											whichItem = this.extractItemFromPlayerInventory(player, realForFake, patternItem);
+										}
+
+										// If all else fails, check if they want to always allow it.
+										if (whichItem.isEmpty() && realForFake == Actionable.SIMULATE && !AEConfig.instance().getPatternTermRequiresItems()){
+											whichItem = patternItem;
 										}
 
 										craftMatrix.setInventorySlotContents(x, whichItem);
