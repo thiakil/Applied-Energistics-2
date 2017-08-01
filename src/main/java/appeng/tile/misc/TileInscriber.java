@@ -278,7 +278,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 						(
 							inTheSlot.isEmpty() ||
 							(!removed.isEmpty() && !removed.isItemEqual(inTheSlot) && !ItemStack.areItemStackTagsEqual(inTheSlot, removed) ) ||
-							(!added.isEmpty() && added.isItemEqual(inTheSlot) && !ItemStack.areItemStackTagsEqual(inTheSlot, added) )
+							(!added.isEmpty() && !added.isItemEqual(inTheSlot) && !ItemStack.areItemStackTagsEqual(inTheSlot, added) )
 						)
 				)
 				{
