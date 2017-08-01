@@ -19,6 +19,8 @@
 package appeng.core.sync.network;
 
 
+import appeng.core.AEConfig;
+import appeng.core.sync.packets.PacketConfigSync;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.ThreadQuickExitException;
@@ -26,6 +28,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerConnectionFromClientEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
@@ -93,6 +96,7 @@ public class NetworkHandler
 	public void newConnection( final ServerConnectionFromClientEvent ev )
 	{
 		WorldData.instance().dimensionData().sendToPlayer( ev.getManager() );
+		ev.getManager().sendPacket(new PacketConfigSync(AEConfig.instance().getPatternTermRequiresItems()));
 	}
 
 	@SubscribeEvent
@@ -102,6 +106,11 @@ public class NetworkHandler
 		{
 			WorldData.instance().dimensionData().sendToPlayer( null );
 		}
+	}
+
+	@SubscribeEvent
+	public void disconnected(final FMLNetworkEvent.ClientDisconnectionFromServerEvent ev){
+		AEConfig.instance().resetPatternTermRequiresItems();
 	}
 
 	@SubscribeEvent
