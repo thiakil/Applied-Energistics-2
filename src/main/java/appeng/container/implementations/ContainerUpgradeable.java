@@ -112,7 +112,7 @@ public class ContainerUpgradeable extends AEBaseContainer implements IOptionalSl
 			{
 				for( int u = 0; u < 3; u++ )
 				{
-					this.addSlotToContainer( ( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.UPGRADES, this.tbInventory, u + v * 3, 186 + u * 18, this.getHeight() - 82 + v * 18, this.getInventoryPlayer() ) ).setPlayerSide() );
+					this.addSlotToContainer( ( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.UPGRADES, this.tbInventory, u + v * 3, 186 + u * 18, this.getToolboxY() + v * 18, this.getInventoryPlayer() ) ).setPlayerSide() );
 				}
 			}
 		}
@@ -120,6 +120,10 @@ public class ContainerUpgradeable extends AEBaseContainer implements IOptionalSl
 		this.setupConfig();
 
 		this.bindPlayerInventory( ip, 0, this.getHeight() - /* height of player inventory */82 );
+	}
+
+	protected int getToolboxY(){
+		return this.getHeight() - 82;
 	}
 
 	public boolean hasToolbox()

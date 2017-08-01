@@ -90,7 +90,13 @@ public class ContainerInscriber extends ContainerUpgradeable implements IProgres
 	@Override
 	public int availableUpgrades()
 	{
-		return 3;
+		return 5;
+	}
+
+	@Override
+	protected int getToolboxY()
+	{
+		return 22 + this.availableUpgrades() * 18 ;
 	}
 
 	@Override

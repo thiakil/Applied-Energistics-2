@@ -84,7 +84,7 @@ public class GuiInscriber extends AEBaseGui
 		{
 			int yPos;
 			if (this.drawUpgrades()){
-				yPos = offsetY + 14 + this.cvc.availableUpgrades() * 18 + 16;//16 below the upgrades
+				yPos = offsetY + 14 + this.cvc.availableUpgrades() * 18 ;//16 below the upgrades
 			} else {
 				yPos = offsetY;
 			}
