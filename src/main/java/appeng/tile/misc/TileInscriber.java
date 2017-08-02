@@ -83,7 +83,7 @@ import appeng.util.item.AEItemStack;
  * @version rv2
  * @since rv0
  */
-public class TileInscriber extends AENetworkPowerTile implements IGridTickable, IUpgradeableHost, IConfigManagerHost
+public class TileInscriber extends AENetworkPowerTile implements IGridTickable, IUpgradeableHost, IConfigManagerHost, IItemHandler
 {
 
 	private static final int SLOT_TOP = 0;
@@ -92,9 +92,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	private static final int SLOT_OUT = 3;
 
 	private final int maxProcessingTime = 100;
-	private final int[] top = { SLOT_TOP };
-	private final int[] bottom = { SLOT_BOTTOM };
-	private final int[] sides = { SLOT_MIDDLE, SLOT_OUT };
+	private final int[] allSlots = { SLOT_TOP, SLOT_BOTTOM, SLOT_MIDDLE, SLOT_OUT };
 	private final AppEngInternalInventory inv = new AppEngInternalInventory( this, 4 );
 	private final IConfigManager settings;
 	private final UpgradeInventory upgrades;
@@ -103,9 +101,6 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	private boolean smash;
 	private int finalStep;
 	private long clientStart;
-	private final IItemHandler topItemHandler = new ItemHandler( 0, 0 );
-	private final IItemHandler bottomItemHandler = new ItemHandler( 1, 1 );
-	private final IItemHandler sideItemHandler = new ItemHandler( 2, 3 );
 
 	@Reflected
 	public TileInscriber()
@@ -121,7 +116,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 
 	private int getUpgradeSlots()
 	{
-		return 3;
+		return 5;
 	}
 
 	@Override
@@ -235,7 +230,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	@Override
 	public int getInventoryStackLimit()
 	{
-		return 1;
+		return 64;
 	}
 
 	@Override
@@ -268,7 +263,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	@Override
 	public boolean canInsertItem( int slotIndex, ItemStack insertingItem, EnumFacing side )
 	{
-		return super.canInsertItem( slotIndex, insertingItem, side ) && getStackInSlot( slotIndex ).isEmpty();
+		return super.canInsertItem( slotIndex, insertingItem, side ) && getStackInSlot( slotIndex ).isEmpty() || getStackInSlot( slotIndex ).isItemEqual( insertingItem );
 	}
 
 	@Override
@@ -278,7 +273,14 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 		{
 			if( mc != InvOperation.markDirty )
 			{
-				if( slot != SLOT_OUT )
+				ItemStack inTheSlot = inv.getStackInSlot(slot);
+				if( slot != SLOT_OUT && // if it's not the output slot, reset the status if the slot is not empty, or items area not equal to what's already there
+						(
+							inTheSlot.isEmpty() ||
+							(!removed.isEmpty() && !removed.isItemEqual(inTheSlot) && !ItemStack.areItemStackTagsEqual(inTheSlot, removed) ) ||
+							(!added.isEmpty() && !added.isItemEqual(inTheSlot) && !ItemStack.areItemStackTagsEqual(inTheSlot, added) )
+						)
+				)
 				{
 					this.setProcessingTime( 0 );
 				}
@@ -311,17 +313,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	@Override
 	public int[] getAccessibleSlotsBySide( final EnumFacing d )
 	{
-		if( d == EnumFacing.UP )
-		{
-			return this.top;
-		}
-
-		if( d == EnumFacing.DOWN )
-		{
-			return this.bottom;
-		}
-
-		return this.sides;
+		return this.allSlots;
 	}
 
 	@Override
@@ -344,21 +336,13 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	@Nullable
 	public IInscriberRecipe getTask()
 	{
-		final ItemStack plateA = this.getStackInSlot( 0 );
-		final ItemStack plateB = this.getStackInSlot( 1 );
-		ItemStack renamedItem = this.getStackInSlot( 2 );
+		final ItemStack plateA = this.getStackInSlot( SLOT_TOP );
+		final ItemStack plateB = this.getStackInSlot( SLOT_BOTTOM );
+		ItemStack renamedItem = this.getStackInSlot( SLOT_MIDDLE );
 
-		if(!plateA.isEmpty() && plateA.getCount() > 1 )
-		{
-			return null;
-		}
 
-		if(!plateB.isEmpty() && plateB.getCount() > 1 )
-		{
-			return null;
-		}
 
-		if(!renamedItem.isEmpty() && renamedItem.getCount() > 1 )
+		if(renamedItem.isEmpty() /*&& renamedItem.getCount() > 1 */)
 		{
 			return null;
 		}
@@ -426,9 +410,10 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 
 			if( matchA || matchB )
 			{
+				ItemStack middleSlot = this.getStackInSlot( SLOT_MIDDLE );
 				for( final ItemStack option : recipe.getInputs() )
 				{
-					if( Platform.itemComparisons().isSameItem( option, this.getStackInSlot( 2 ) ) )
+					if( Platform.itemComparisons().isSameItem( option, middleSlot ) )
 					{
 						return recipe;
 					}
@@ -455,10 +440,16 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 					if (ad.addItems(outputCopy).isEmpty()) {
 						this.setProcessingTime(0);
 						if (out.getProcessType() == InscriberProcessType.PRESS) {
-							this.setInventorySlotContents(SLOT_TOP, ItemStack.EMPTY);
-							this.setInventorySlotContents(SLOT_BOTTOM, ItemStack.EMPTY);
+							ItemStack topStack = this.getStackInSlot(SLOT_TOP);
+							topStack.shrink(1);
+							this.setInventorySlotContents(SLOT_TOP, topStack);
+							ItemStack bottomStack = this.getStackInSlot(SLOT_BOTTOM);
+							bottomStack.shrink(1);
+							this.setInventorySlotContents(SLOT_BOTTOM, bottomStack);
 						}
-						this.setInventorySlotContents(SLOT_MIDDLE, ItemStack.EMPTY);
+						ItemStack middleStack = this.getStackInSlot(SLOT_MIDDLE);
+						middleStack.shrink(1);
+						this.setInventorySlotContents(SLOT_MIDDLE, middleStack);
 					}
 				}
 
@@ -568,18 +559,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	{
 		if( capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY )
 		{
-			if( facing == getUp() )
-			{
-				return (T) topItemHandler;
-			}
-			else if( facing == getUp().getOpposite() )
-			{
-				return (T) bottomItemHandler;
-			}
-			else
-			{
-				return (T) sideItemHandler;
-			}
+			CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast( this );
 		}
 
 		return super.getCapability( capability, facing );
@@ -631,100 +611,70 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 		this.processingTime = processingTime;
 	}
 
-	/**
-	 * This is an item handler that exposes the inscribers inventory while providing simulation capabilities that do not
-	 * reset the progress if there's already an item in a slot. Previously, the progress of the inscriber was reset when
-	 * another mod attempetd insertion of items when there were already items in the slot.
-	 */
-	private class ItemHandler implements IItemHandler
+	@Override
+	public int getSlots()
 	{
+		return 4;
+	}
 
-		private final int insertSlot;
-
-		private final int extractSlot;
-
-		private ItemHandler( int insertSlot, int extractSlot )
+	@Override
+	public ItemStack insertItem( int slot, ItemStack stack, boolean simulate )
+	{
+		if( stack.isEmpty() )
 		{
-			this.insertSlot = insertSlot;
-			this.extractSlot = extractSlot;
+			return stack;
 		}
 
-		@Override
-		public int getSlots()
-		{
-			return insertSlot != extractSlot ? 2 : 1;
+		ItemStack currentStack = inv.getStackInSlot(slot);
+		//empty slot, check if it's valid
+		if (currentStack.isEmpty() && !isItemValidForSlot(slot, stack)){
+			return stack;
+		} else if (!currentStack.isItemEqual(stack) || !ItemStack.areItemStackTagsEqual(currentStack, stack)){
+			return stack;
 		}
 
-		@Override
-		public ItemStack getStackInSlot( int slot )
+		// If there's already an item stack in the slot, we don't allow insertion and don't do any other checks
+		if (!inv.getStackInSlot(slot).isEmpty()) {
+			return stack;
+		}
+
+		AdaptorIInventory adapter = new AdaptorIInventory( inv );
+
+		if( simulate )
 		{
-			if( slot == 0 )
-			{
-				return inv.getStackInSlot( insertSlot );
-			}
-			else if( insertSlot != extractSlot && slot == 1 )
-			{
-				return inv.getStackInSlot( extractSlot );
-			}
+			return adapter.simulateAdd( stack );
+		}
+		else
+		{
+			return adapter.addItems( stack );
+		}
+	}
+
+	@Override
+	public ItemStack extractItem( int slot, int amount, boolean simulate )
+	{
+		if( slot != SLOT_OUT || amount == 0 )
+		{
 			return ItemStack.EMPTY;
 		}
 
-		@Override
-		public ItemStack insertItem( int slot, ItemStack stack, boolean simulate )
+		AdaptorIInventory adapter = new AdaptorIInventory( new WrapperInventoryRange( this, slot, 1, true ) );
+
+		if( simulate )
 		{
-			if(slot != 0 || stack.isEmpty() )
-			{
-				return stack;
-			}
-
-			// If there's already an item stack in the slot, we don't allow insertion and don't do any other checks
-			if (!inv.getStackInSlot(insertSlot).isEmpty()) {
-				return stack;
-			}
-
-			AdaptorIInventory adapter = new AdaptorIInventory( new WrapperInventoryRange( TileInscriber.this, insertSlot, 1, true ) );
-
-			if( simulate )
-			{
-				return adapter.simulateAdd( stack );
-			}
-			else
-			{
-				return adapter.addItems( stack );
-			}
+			return adapter.simulateRemove(amount, ItemStack.EMPTY, null);
 		}
-
-		@Override
-		public ItemStack extractItem( int slot, int amount, boolean simulate )
+		else
 		{
-			final int validExtractSlot = ( insertSlot == extractSlot ) ? 0 : 1;
-
-			if( slot != validExtractSlot || amount == 0 )
-			{
-				return ItemStack.EMPTY;
-			}
-
-			AdaptorIInventory adapter = new AdaptorIInventory( new WrapperInventoryRange( TileInscriber.this, extractSlot, 1, true ) );
-
-			if( simulate )
-			{
-				return adapter.simulateRemove(amount, ItemStack.EMPTY, null);
-			}
-			else
-			{
-				return adapter.removeItems(amount, ItemStack.EMPTY, null);
-			}
+			return adapter.removeItems(amount, ItemStack.EMPTY, null);
 		}
-
-		@Override
-		public int getSlotLimit( int slot )
-		{
-			// TODO Auto-generated method stub
-			return 1;
-		}
-
 	}
 
-
+	@Override
+	public int getSlotLimit( int slot )
+	{
+		// TODO Auto-generated method stub
+		return 64;
+	}
 
 }

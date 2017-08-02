@@ -425,7 +425,7 @@ public final class Registration
 		Upgrades.SPEED.registerItem( blocks.molecularAssembler(), 5 );
 
 		// Inscriber
-		Upgrades.SPEED.registerItem( blocks.inscriber(), 3 );
+		Upgrades.SPEED.registerItem( blocks.inscriber(), 5 );
 
 		items.wirelessTerminal().maybeItem().ifPresent( terminal -> {
 			registries.wireless().registerWirelessHandler( (IWirelessTermHandler) terminal );
