@@ -156,7 +156,7 @@ public class TileQuartzGrowthAccelerator extends AENetworkTile implements IPower
 			if (aeItems.crystalSeed().isEnabled()) {
 				ItemCrystalSeed crystalItem = (ItemCrystalSeed)aeItems.crystalSeed().maybeItem().orElseThrow(RuntimeException::new);
 				NonNullList<ItemStack> subItems = NonNullList.create();
-				crystalItem.getSubItems(crystalItem, crystalItem.getCreativeTab(), subItems);
+				crystalItem.getSubItems(crystalItem.getCreativeTab(), subItems);
 				slots += subItems.size();
 			}
 		}
