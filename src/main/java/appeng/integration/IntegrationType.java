@@ -22,6 +22,8 @@ package appeng.integration;
 import appeng.integration.modules.BuildcraftModule;
 import appeng.integration.modules.CofhHammerModule;
 import appeng.integration.modules.Mekanism;
+import appeng.integration.modules.chisel.ChiselIMC;
+import appeng.integration.modules.chisel.ChiselModule;
 import appeng.integration.modules.opencomputers.OpenComputers;
 import appeng.integration.modules.ic2.IC2Module;
 import appeng.integration.modules.jei.JEIModule;
@@ -120,6 +122,14 @@ public enum IntegrationType
 		@Override
 		public IIntegrationModule createInstance(){
 			return Integrations.setMekanism( new Mekanism() );
+		}
+	},
+
+	CHISEL( IntegrationSide.BOTH, "Chisel", ChiselIMC.CHISEL_MODID ){
+		@Override
+		public IIntegrationModule createInstance()
+		{
+			return new ChiselModule();
 		}
 	}
 
