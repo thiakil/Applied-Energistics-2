@@ -26,6 +26,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public abstract class AEBaseItem extends Item
@@ -44,6 +46,7 @@ public abstract class AEBaseItem extends Item
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	@SuppressWarnings( "unchecked" )
 	public final void addInformation( final ItemStack stack, final EntityPlayer player, final List lines, final boolean displayMoreInfo )
 	{
