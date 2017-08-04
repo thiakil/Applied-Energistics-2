@@ -725,7 +725,14 @@ public class GridNode implements IGridNode, IPathItem
 			final boolean preferredA = o1.getOtherSide( this.gn ).hasFlag( GridFlags.PREFERRED );
 			final boolean preferredB = o2.getOtherSide( this.gn ).hasFlag( GridFlags.PREFERRED );
 
-			return preferredA == preferredB ? 0 : ( preferredA ? -1 : 1 );
+			final boolean denseA = o1.getOtherSide( this.gn ).hasFlag( GridFlags.DENSE_CAPACITY );
+			final boolean denseB = o2.getOtherSide( this.gn ).hasFlag( GridFlags.DENSE_CAPACITY );
+
+			if (denseA == denseB){
+				return preferredA == preferredB ? 0 : ( preferredA ? -1 : 1 );
+			} else {
+				return denseA ? -1 : 1;
+			}
 		}
 	}
 }
