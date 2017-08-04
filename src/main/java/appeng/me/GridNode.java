@@ -722,11 +722,14 @@ public class GridNode implements IGridNode, IPathItem
 		@Override
 		public int compare( final IGridConnection o1, final IGridConnection o2 )
 		{
-			final boolean preferredA = o1.getOtherSide( this.gn ).hasFlag( GridFlags.PREFERRED );
-			final boolean preferredB = o2.getOtherSide( this.gn ).hasFlag( GridFlags.PREFERRED );
+			final IGridNode os1 = o1.getOtherSide( this.gn );
+			final IGridNode os2 = o2.getOtherSide( this.gn );
 
-			final boolean denseA = o1.getOtherSide( this.gn ).hasFlag( GridFlags.DENSE_CAPACITY );
-			final boolean denseB = o2.getOtherSide( this.gn ).hasFlag( GridFlags.DENSE_CAPACITY );
+			final boolean preferredA = os1.hasFlag( GridFlags.PREFERRED );
+			final boolean preferredB = os2.hasFlag( GridFlags.PREFERRED );
+
+			final boolean denseA = os1.hasFlag( GridFlags.DENSE_CAPACITY );
+			final boolean denseB = os2.hasFlag( GridFlags.DENSE_CAPACITY );
 
 			if (denseA == denseB){
 				return preferredA == preferredB ? 0 : ( preferredA ? -1 : 1 );
