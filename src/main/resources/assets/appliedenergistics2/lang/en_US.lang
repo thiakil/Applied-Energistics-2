@@ -242,6 +242,7 @@ gui.appliedenergistics2.AttuneLight=Torches and Glowstone can attune to light.
 gui.appliedenergistics2.AttuneOC=OpenComputes cables and networking items can attune to OpenComputers networking.
 gui.appliedenergistics2.AttuneME=ME Cables can attune back to ME.
 gui.appliedenergistics2.AttuneRedstone=Most Vanilla redstone items can attune to redstone.
+gui.appliedenergistics2.StoredDimension=Dimension ID: %d
 
 // GUI Tooltips
 gui.tooltips.appliedenergistics2.Stash=Store Items
