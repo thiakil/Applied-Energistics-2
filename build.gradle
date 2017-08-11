@@ -206,3 +206,7 @@ task addRelease() {
         new File(updaterFileName).write(JsonOutput.prettyPrint(JsonOutput.toJson(updaterFile)))
     }
 }
+
+if (System.getenv("SIGNING_SCRIPT") != null){
+    apply from: System.getenv("SIGNING_SCRIPT")
+}
