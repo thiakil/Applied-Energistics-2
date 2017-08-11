@@ -19,12 +19,7 @@
 package appeng.me.cache;
 
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.NavigableSet;
-import java.util.Set;
+import java.util.*;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -216,8 +211,8 @@ public class EnergyGridCache implements IEnergyGrid
 	@Override
 	public double extractAEPower( final double amt, final Actionable mode, final PowerMultiplier pm )
 	{
-		this.localSeen.clear();
-		return pm.divide( this.extractAEPower( pm.multiply( amt ), mode, this.localSeen ) );
+		LinkedList<IEnergyGridProvider> stack = new LinkedList<>();
+		return pm.divide( this.extractAEPower( pm.multiply( amt ), mode, stack ) );
 	}
 
 	@Override
@@ -252,12 +247,14 @@ public class EnergyGridCache implements IEnergyGrid
 	}
 
 	@Override
-	public double extractAEPower( final double amt, final Actionable mode, final Set<IEnergyGrid> seen )
+	public double extractAEPower( final double amt, final Actionable mode, final Deque<IEnergyGridProvider> seen )
 	{
-		if( !seen.add( this ) )
+		if( seen.contains( this ) )
 		{
 			return 0;
 		}
+
+		seen.add(this);
 
 		double extractedPower = this.extra;
 
@@ -308,12 +305,14 @@ public class EnergyGridCache implements IEnergyGrid
 	}
 
 	@Override
-	public double injectAEPower( double amt, final Actionable mode, final Set<IEnergyGrid> seen )
+	public double injectAEPower( double amt, final Actionable mode, final Deque<IEnergyGridProvider> seen )
 	{
-		if( !seen.add( this ) )
+		if( seen.contains( this ) )
 		{
 			return 0;
 		}
+
+		seen.add(this);
 
 		final double ignore = this.extra;
 		amt += this.extra;
@@ -354,7 +353,7 @@ public class EnergyGridCache implements IEnergyGrid
 			while( amt > 0 && i.hasNext() )
 			{
 				final IEnergyGridProvider what = i.next();
-				final Set<IEnergyGrid> listCopy = new HashSet<IEnergyGrid>();
+				final Deque<IEnergyGridProvider> listCopy = new LinkedList<>();
 				listCopy.addAll( seen );
 
 				final double cannotHold = what.injectAEPower( amt, Actionable.SIMULATE, listCopy );
@@ -370,12 +369,14 @@ public class EnergyGridCache implements IEnergyGrid
 	}
 
 	@Override
-	public double getEnergyDemand( final double maxRequired, final Set<IEnergyGrid> seen )
+	public double getEnergyDemand( final double maxRequired, final Deque<IEnergyGridProvider> seen )
 	{
-		if( !seen.add( this ) )
+		if( seen.contains( this ) )
 		{
 			return 0;
 		}
+
+		seen.add(this);
 
 		double required = this.buffer() - this.extra;
 
@@ -468,8 +469,8 @@ public class EnergyGridCache implements IEnergyGrid
 	@Override
 	public double injectPower( final double amt, final Actionable mode )
 	{
-		this.localSeen.clear();
-		return this.injectAEPower( amt, mode, this.localSeen );
+		LinkedList<IEnergyGridProvider> stack = new LinkedList<>();
+		return this.injectAEPower( amt, mode, stack );
 	}
 
 	private IAEPowerStorage getFirstRequester()
@@ -508,8 +509,8 @@ public class EnergyGridCache implements IEnergyGrid
 	@Override
 	public double getEnergyDemand( final double maxRequired )
 	{
-		this.localSeen.clear();
-		return this.getEnergyDemand( maxRequired, this.localSeen );
+		LinkedList<IEnergyGridProvider> stack = new LinkedList<>();
+		return this.getEnergyDemand( maxRequired, stack );
 	}
 
 	@Override
