@@ -62,7 +62,7 @@ import appeng.util.Platform;
 		name = AppEng.MOD_NAME,
 		version = AEConfig.VERSION,
 		dependencies = AppEng.MOD_DEPENDENCIES,
-		certificateFingerprint = "471969E66A70AFA721905D87E393AE397574EBF7",
+		certificateFingerprint = "471969e66a70afa721905d87e393ae397574ebf7",
 		guiFactory = "appeng.client.gui.config.AEConfigGuiFactory",
 		updateJSON = "https://raw.githubusercontent.com/thiakil/Applied-Energistics-2/rv5-1.12/forge_update.json"
 )
@@ -266,5 +266,9 @@ public final class AppEng
 	@EventHandler
 	void fingerprintError(final FMLFingerprintViolationEvent ev){
 		AELog.error("Fingerprint did not match. En Garde! Be wary of where you got this mod from!");
+		AELog.info( "Found signatures:" );
+		for (String s : ev.getFingerprints()){
+			AELog.info( s );
+		}
 	}
 }
