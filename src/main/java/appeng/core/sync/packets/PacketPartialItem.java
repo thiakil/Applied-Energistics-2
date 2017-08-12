@@ -62,14 +62,7 @@ public class PacketPartialItem extends AppEngPacket
 	{
 		if( player.openContainer instanceof AEBaseContainer )
 		{
-			Runnable postPartial = ()->{
-				( (AEBaseContainer) player.openContainer ).postPartial( this );
-			};
-			if (player.getServer() != null) {//shouldn't really happen
-				player.getServer().addScheduledTask(postPartial);
-			} else {
-				postPartial.run();
-			}
+			( (AEBaseContainer) player.openContainer ).postPartial( this );
 		}
 	}
 

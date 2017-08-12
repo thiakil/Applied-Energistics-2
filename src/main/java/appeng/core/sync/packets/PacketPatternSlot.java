@@ -111,12 +111,10 @@ public class PacketPatternSlot extends AppEngPacket
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final EntityPlayer player )
 	{
 		final EntityPlayerMP sender = (EntityPlayerMP) player;
-		sender.getServerWorld().addScheduledTask(()->{
-			if( sender.openContainer instanceof ContainerPatternTerm )
-			{
-				final ContainerPatternTerm patternTerminal = (ContainerPatternTerm) sender.openContainer;
-				patternTerminal.craftOrGetItem( this );
-			}
-		});
+		if( sender.openContainer instanceof ContainerPatternTerm )
+		{
+			final ContainerPatternTerm patternTerminal = (ContainerPatternTerm) sender.openContainer;
+			patternTerminal.craftOrGetItem( this );
+		}
 	}
 }
