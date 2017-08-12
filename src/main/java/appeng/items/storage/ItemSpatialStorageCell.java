@@ -21,6 +21,8 @@ package appeng.items.storage;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -55,6 +57,10 @@ public class ItemSpatialStorageCell extends AEBaseItem implements ISpatialStorag
 		{
 			lines.add( GuiText.StoredSize.getLocal() + ": " + wc.x + " x " + wc.y + " x " + wc.z );
 		}
+		int dim = getDimensionID(stack);
+		if (dim > 0){
+			lines.add(I18n.format(GuiText.StoredDimension.getUnlocalized(), dim));
+		}
 	}
 
 	@Override
@@ -67,6 +73,20 @@ public class ItemSpatialStorageCell extends AEBaseItem implements ISpatialStorag
 	public int getMaxStoredDim( final ItemStack is )
 	{
 		return this.maxRegion;
+	}
+
+	/**
+	 * Get the Dimension ID stored in the storage cell
+	 * @param is the storage cell ItemStack
+	 * @return the dimension ID, or 0 if invalid.
+	 */
+	public int getDimensionID(final ItemStack is){
+		if( is.getItem() == this && is.hasTagCompound() ) {
+			final NBTTagCompound c = is.getTagCompound();
+			final int dim = c.getInteger("StorageDim");
+			return dim;
+		}
+		return 0;
 	}
 
 	@Override

@@ -34,14 +34,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import appeng.api.AEApi;
@@ -69,6 +62,7 @@ import appeng.util.Platform;
 		name = AppEng.MOD_NAME,
 		version = AEConfig.VERSION,
 		dependencies = AppEng.MOD_DEPENDENCIES,
+		certificateFingerprint = "471969E66A70AFA721905D87E393AE397574EBF7",
 		guiFactory = "appeng.client.gui.config.AEConfigGuiFactory",
 		updateJSON = "https://raw.githubusercontent.com/thiakil/Applied-Energistics-2/rv5-1.12/forge_update.json"
 )
@@ -267,5 +261,10 @@ public final class AppEng
 	private void serverStarting( final FMLServerStartingEvent evt )
 	{
 		evt.registerServerCommand( new AECommand( evt.getServer() ) );
+	}
+
+	@EventHandler
+	void fingerprintError(final FMLFingerprintViolationEvent ev){
+		AELog.error("Fingerprint did not match. En Garde! Be wary of where you got this mod from!");
 	}
 }

@@ -24,6 +24,7 @@
 package appeng.api.networking.energy;
 
 
+import java.util.Deque;
 import java.util.Set;
 
 import appeng.api.config.Actionable;
@@ -37,15 +38,15 @@ public interface IEnergyGridProvider
 	/**
 	 * internal use only
 	 */
-	double extractAEPower( double amt, Actionable mode, Set<IEnergyGrid> seen );
+	double extractAEPower(double amt, Actionable mode, Deque<IEnergyGridProvider> seen );
 
 	/**
 	 * internal use only
 	 */
-	double injectAEPower( double amt, Actionable mode, Set<IEnergyGrid> seen );
+	double injectAEPower(double amt, Actionable mode, Deque<IEnergyGridProvider> seen );
 
 	/**
 	 * internal use only
 	 */
-	double getEnergyDemand( double d, Set<IEnergyGrid> seen );
+	double getEnergyDemand(double d, Deque<IEnergyGridProvider> seen );
 }

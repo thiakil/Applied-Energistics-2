@@ -29,6 +29,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 
@@ -64,10 +65,7 @@ public class TileCharger extends AENetworkPowerTile implements ICrankable, IGrid
 
 	private final int[] sides = { 0 };
 	private final AppEngInternalInventory inv = new AppEngInternalInventory( this, 1 );
-	private int tickTickTimer = 0;
-
-	private int lastUpdate = 0;
-	private boolean requiresUpdate = false;
+	private int ticksWaited = 0;
 
 	public TileCharger()
 	{
@@ -107,6 +105,18 @@ public class TileCharger extends AENetworkPowerTile implements ICrankable, IGrid
 		{
 			is.writeToPacket( data );
 		}
+	}
+
+	@TileEvent( TileEventType.WORLD_NBT_READ )
+	public void readFromNBT_TileCharger( final NBTTagCompound data )
+	{
+		data.setInteger("ticksWaited", this.ticksWaited);
+	}
+
+	@TileEvent( TileEventType.WORLD_NBT_WRITE )
+	public void writeToNBT_TileCharger( final NBTTagCompound data )
+	{
+		this.ticksWaited = data.getInteger("ticksWaited");
 	}
 
 	@Override
@@ -177,6 +187,7 @@ public class TileCharger extends AENetworkPowerTile implements ICrankable, IGrid
 	@Override
 	public void onChangeInventory( final IInventory inv, final int slot, final InvOperation mc, final ItemStack removed, final ItemStack added )
 	{
+		this.ticksWaited = 0;
 		try
 		{
 			this.getProxy().getTick().wakeDevice( this.getProxy().getNode() );
@@ -240,12 +251,12 @@ public class TileCharger extends AENetworkPowerTile implements ICrankable, IGrid
 	}
 
 	@Override
-	public TickRateModulation tickingRequest( IGridNode node, int TicksSinceLastCall )
+	public TickRateModulation tickingRequest( IGridNode node, int ticksSinceLastCall )
 	{
-		return doWork() ? TickRateModulation.FASTER : TickRateModulation.SLEEP;
+		return doWork(ticksSinceLastCall) ? TickRateModulation.FASTER : TickRateModulation.SLEEP;
 	}
 
-	private boolean doWork()
+	private boolean doWork(int ticksSinceLastCall)
 	{
 		final ItemStack myItem = this.getStackInSlot( 0 );
 
@@ -254,7 +265,7 @@ public class TileCharger extends AENetworkPowerTile implements ICrankable, IGrid
 		{
 			try
 			{
-				this.injectExternalPower( PowerUnits.AE, this.getProxy().getEnergy().extractAEPower( Math.min( 500.0, 1500.0 - this.getInternalCurrentPower() ), Actionable.MODULATE, PowerMultiplier.ONE ) );
+				this.injectExternalPower( PowerUnits.AE, this.getProxy().getEnergy().extractAEPower( Math.min( 150, 1500.0 - this.getInternalCurrentPower() ), Actionable.MODULATE, PowerMultiplier.ONE ) );
 			}
 			catch( final GridAccessException e )
 			{
@@ -277,7 +288,7 @@ public class TileCharger extends AENetworkPowerTile implements ICrankable, IGrid
 			{
 				final double oldPower = this.getInternalCurrentPower();
 
-				final double adjustment = ps.injectAEPower( myItem, this.extractAEPower( 150.0, Actionable.MODULATE, PowerMultiplier.CONFIG ) );
+				final double adjustment = ps.injectAEPower( myItem, this.extractAEPower( 150.0 * ticksSinceLastCall, Actionable.MODULATE, PowerMultiplier.CONFIG ) );
 				this.setInternalCurrentPower( this.getInternalCurrentPower() + adjustment );
 
 				if( oldPower > this.getInternalCurrentPower() )
@@ -288,8 +299,10 @@ public class TileCharger extends AENetworkPowerTile implements ICrankable, IGrid
 		}
 		else if( this.getInternalCurrentPower() > 1499 && materials.certusQuartzCrystal().isSameAs( myItem ) )
 		{
-			if( Platform.getRandomFloat() > 0.8f ) // simulate wait
+			this.ticksWaited += ticksSinceLastCall;
+			if( this.ticksWaited >= 10 )
 			{
+				this.ticksWaited = 0;
 				this.extractAEPower( this.getInternalMaxPower(), Actionable.MODULATE, PowerMultiplier.CONFIG );// 1500
 
 				materials.certusQuartzCrystalCharged().maybeStack( myItem.getCount() ).ifPresent( charged -> this.setInventorySlotContents( 0, charged ) );

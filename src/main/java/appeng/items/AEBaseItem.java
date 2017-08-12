@@ -47,8 +47,8 @@ public abstract class AEBaseItem extends Item
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	@SuppressWarnings( "unchecked" )
-	@SideOnly( Side.CLIENT )
 	public final void addInformation( final ItemStack stack, final World world, final List lines, final ITooltipFlag displayMoreInfo )
 	{
 		this.addCheckedInformation( stack, world, lines, displayMoreInfo == ITooltipFlag.TooltipFlags.ADVANCED );

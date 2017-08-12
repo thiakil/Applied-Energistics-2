@@ -197,6 +197,8 @@ public enum GuiText
 	AttuneME,
 	AttuneRedstone,
 
+	StoredDimension,
+
 	;
 
 	private final String root;

@@ -38,12 +38,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import appeng.api.AEApi;
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
 import appeng.api.config.Upgrades;
 import appeng.api.definitions.IComparableDefinition;
+import appeng.api.definitions.IItemDefinition;
 import appeng.api.definitions.ITileDefinition;
 import appeng.api.features.IInscriberRecipe;
 import appeng.api.features.IInscriberRecipeBuilder;
@@ -72,7 +74,6 @@ import appeng.util.ConfigManager;
 import appeng.util.IConfigManagerHost;
 import appeng.util.InventoryAdaptor;
 import appeng.util.Platform;
-import appeng.util.inv.AdaptorIInventory;
 import appeng.util.inv.WrapperInventoryRange;
 import appeng.util.item.AEItemStack;
 
@@ -83,7 +84,7 @@ import appeng.util.item.AEItemStack;
  * @version rv2
  * @since rv0
  */
-public class TileInscriber extends AENetworkPowerTile implements IGridTickable, IUpgradeableHost, IConfigManagerHost, IItemHandler
+public class TileInscriber extends AENetworkPowerTile implements IGridTickable, IUpgradeableHost, IConfigManagerHost
 {
 
 	private static final int SLOT_TOP = 0;
@@ -102,6 +103,8 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	private int finalStep;
 	private long clientStart;
 
+	private final IItemHandler itemHandler;
+
 	@Reflected
 	public TileInscriber()
 	{
@@ -112,6 +115,8 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 
 		final ITileDefinition inscriberDefinition = AEApi.instance().definitions().blocks().inscriber();
 		this.upgrades = new DefinitionUpgradeInventory( inscriberDefinition, this, this.getUpgradeSlots() );
+
+		itemHandler = new InscriberItemHandler();
 	}
 
 	private int getUpgradeSlots()
@@ -236,28 +241,91 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	@Override
 	public boolean isItemValidForSlot( final int i, final ItemStack itemstack )
 	{
-		if( this.isSmash() )
+		if( this.isSmash() || i == SLOT_OUT )
 		{
 			return false;
 		}
 
-		if( i == SLOT_TOP || i == SLOT_BOTTOM )
+		final ItemStack top = this.getStackInSlot( 0 );
+		final ItemStack bot = this.getStackInSlot( 1 );
+
+		if( i == SLOT_MIDDLE )
 		{
-			if( AEApi.instance().definitions().materials().namePress().isSameAs( itemstack ) )
+			for( final ItemStack optional : AEApi.instance().registries().inscriber().getOptionals() )
 			{
-				return true;
+				if( Platform.itemComparisons().isSameItem( optional, itemstack ) )
+				{
+					return false;
+				}
 			}
 
-			for( final ItemStack optionals : AEApi.instance().registries().inscriber().getOptionals() )
+			boolean matches = false;
+			boolean found = false;
+
+			for( final IInscriberRecipe recipe : AEApi.instance().registries().inscriber().getRecipes() )
 			{
-				if( Platform.itemComparisons().isSameItem( optionals, itemstack ) )
+				final boolean matchA = (top.isEmpty() && !recipe.getTopOptional().isPresent() ) || ( Platform.itemComparisons().isSameItem( top, recipe.getTopOptional().orElse(ItemStack.EMPTY) ) ) && // and...
+						(bot.isEmpty() && !recipe.getBottomOptional().isPresent() ) | ( Platform.itemComparisons().isSameItem( bot, recipe.getBottomOptional().orElse(ItemStack.EMPTY) ) );
+
+				final boolean matchB = (bot.isEmpty() && !recipe.getTopOptional().isPresent() ) || ( Platform.itemComparisons().isSameItem( bot, recipe.getTopOptional().orElse(ItemStack.EMPTY) ) ) && // and...
+						(top.isEmpty() && !recipe.getBottomOptional().isPresent() ) | ( Platform.itemComparisons().isSameItem( top, recipe.getBottomOptional().orElse(ItemStack.EMPTY) ) );
+
+				if( matchA || matchB )
 				{
-					return true;
+					matches = true;
+					for( final ItemStack option : recipe.getInputs() )
+					{
+						if( Platform.itemComparisons().isSameItem( itemstack, option ) )
+						{
+							found = true;
+						}
+					}
 				}
+			}
+
+			if( matches && !found )
+			{
+				return false;
 			}
 		}
 
-		return i == SLOT_MIDDLE;
+		if( (i == SLOT_TOP && !bot.isEmpty() ) || (i == SLOT_BOTTOM && !top.isEmpty() ) )
+		{
+			ItemStack otherSlot = getStackInSlot( i == SLOT_TOP ? SLOT_BOTTOM : SLOT_TOP );
+
+			// name presses
+			final IItemDefinition namePress = AEApi.instance().definitions().materials().namePress();
+			if( namePress.isSameAs( otherSlot ) )
+			{
+				return namePress.isSameAs( itemstack );
+			}
+
+			// everything else
+			boolean isValid = false;
+			for( final IInscriberRecipe recipe : AEApi.instance().registries().inscriber().getRecipes() )
+			{
+				if( Platform.itemComparisons().isSameItem( recipe.getTopOptional().orElse(ItemStack.EMPTY), otherSlot ) )
+				{
+					isValid = Platform.itemComparisons().isSameItem( itemstack, recipe.getBottomOptional().orElse(ItemStack.EMPTY) );
+				}
+				else if( Platform.itemComparisons().isSameItem( recipe.getBottomOptional().orElse(ItemStack.EMPTY), otherSlot ) )
+				{
+					isValid = Platform.itemComparisons().isSameItem( itemstack, recipe.getTopOptional().orElse(ItemStack.EMPTY) );
+				}
+
+				if( isValid )
+				{
+					break;
+				}
+			}
+
+			if( !isValid )
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	@Override
@@ -559,7 +627,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	{
 		if( capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY )
 		{
-			CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast( this );
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast( itemHandler );
 		}
 
 		return super.getCapability( capability, facing );
@@ -611,70 +679,60 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 		this.processingTime = processingTime;
 	}
 
-	@Override
-	public int getSlots()
+	private class InscriberItemHandler extends InvWrapper
 	{
-		return 4;
-	}
+		InscriberItemHandler(){
+			super(TileInscriber.this);
+		}
 
-	@Override
-	public ItemStack insertItem( int slot, ItemStack stack, boolean simulate )
-	{
-		if( stack.isEmpty() )
+		@Override
+		public int getSlots()
 		{
-			return stack;
+			return 4;
 		}
 
-		ItemStack currentStack = inv.getStackInSlot(slot);
-		//empty slot, check if it's valid
-		if (currentStack.isEmpty() && !isItemValidForSlot(slot, stack)){
-			return stack;
-		} else if (!currentStack.isItemEqual(stack) || !ItemStack.areItemStackTagsEqual(currentStack, stack)){
-			return stack;
-		}
-
-		// If there's already an item stack in the slot, we don't allow insertion and don't do any other checks
-		if (!inv.getStackInSlot(slot).isEmpty()) {
-			return stack;
-		}
-
-		AdaptorIInventory adapter = new AdaptorIInventory( inv );
-
-		if( simulate )
+		@Override
+		public ItemStack insertItem( int slot, ItemStack stack, boolean simulate )
 		{
-			return adapter.simulateAdd( stack );
-		}
-		else
-		{
-			return adapter.addItems( stack );
-		}
-	}
+			if( stack.isEmpty() || slot == SLOT_OUT )
+			{
+				return stack;
+			}
 
-	@Override
-	public ItemStack extractItem( int slot, int amount, boolean simulate )
-	{
-		if( slot != SLOT_OUT || amount == 0 )
-		{
-			return ItemStack.EMPTY;
+			ItemStack currentStack = inv.getStackInSlot( slot );
+			//empty slot, check if it's valid
+			if( currentStack.isEmpty() )
+			{
+				if( !isItemValidForSlot( slot, stack ) )
+				{
+					return stack;
+				}
+			}
+			else if( !currentStack.isItemEqual( stack ) || !ItemStack.areItemStackTagsEqual( currentStack, stack ) )
+			{
+				return stack;
+			}
+
+			return super.insertItem( slot, stack, simulate );
 		}
 
-		AdaptorIInventory adapter = new AdaptorIInventory( new WrapperInventoryRange( this, slot, 1, true ) );
-
-		if( simulate )
+		@Override
+		public ItemStack extractItem( int slot, int amount, boolean simulate )
 		{
-			return adapter.simulateRemove(amount, ItemStack.EMPTY, null);
-		}
-		else
-		{
-			return adapter.removeItems(amount, ItemStack.EMPTY, null);
-		}
-	}
+			if( slot != SLOT_OUT || amount == 0 )
+			{
+				return ItemStack.EMPTY;
+			}
 
-	@Override
-	public int getSlotLimit( int slot )
-	{
-		// TODO Auto-generated method stub
-		return 64;
+			return super.extractItem( slot, amount, simulate );
+		}
+
+	/*	@Override
+		public int getSlotLimit( int slot )
+		{
+			// TODO Auto-generated method stub
+			return 64;
+		}*/
 	}
 
 }

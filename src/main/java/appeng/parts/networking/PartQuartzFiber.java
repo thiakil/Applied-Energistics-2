@@ -19,8 +19,8 @@
 package appeng.parts.networking;
 
 
+import java.util.Deque;
 import java.util.EnumSet;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -131,7 +131,7 @@ public class PartQuartzFiber extends AEBasePart implements IEnergyGridProvider
 	}
 
 	@Override
-	public double extractAEPower( final double amt, final Actionable mode, final Set<IEnergyGrid> seen )
+	public double extractAEPower( final double amt, final Actionable mode, final Deque<IEnergyGridProvider> seen )
 	{
 		double acquiredPower = 0;
 
@@ -159,7 +159,7 @@ public class PartQuartzFiber extends AEBasePart implements IEnergyGridProvider
 	}
 
 	@Override
-	public double injectAEPower( final double amt, final Actionable mode, final Set<IEnergyGrid> seen )
+	public double injectAEPower( final double amt, final Actionable mode, final Deque<IEnergyGridProvider> seen )
 	{
 
 		try
@@ -192,7 +192,7 @@ public class PartQuartzFiber extends AEBasePart implements IEnergyGridProvider
 	}
 
 	@Override
-	public double getEnergyDemand( final double amt, final Set<IEnergyGrid> seen )
+	public double getEnergyDemand( final double amt, final Deque<IEnergyGridProvider> seen )
 	{
 		double demand = 0;
 
