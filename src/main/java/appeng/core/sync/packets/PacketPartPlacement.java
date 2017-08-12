@@ -75,11 +75,9 @@ public class PacketPartPlacement extends AppEngPacket
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final EntityPlayer player )
 	{
 		final EntityPlayerMP sender = (EntityPlayerMP) player;
-		sender.getServerWorld().addScheduledTask(()-> {
-			AppEng.proxy.updateRenderMode(sender);
-			PartPlacement.setEyeHeight(this.eyeHeight);
-			PartPlacement.place(sender.getHeldItem(hand), new BlockPos(this.x, this.y, this.z), EnumFacing.VALUES[this.face], sender, hand, sender.world, PartPlacement.PlaceType.INTERACT_FIRST_PASS, 0);
-			AppEng.proxy.updateRenderMode(null);
-		});
+		AppEng.proxy.updateRenderMode( sender );
+		PartPlacement.setEyeHeight( this.eyeHeight );
+		PartPlacement.place( sender.getHeldItem( hand ), new BlockPos( this.x, this.y, this.z ), EnumFacing.VALUES[this.face], sender, hand, sender.world, PartPlacement.PlaceType.INTERACT_FIRST_PASS, 0 );
+		AppEng.proxy.updateRenderMode( null );
 	}
 }

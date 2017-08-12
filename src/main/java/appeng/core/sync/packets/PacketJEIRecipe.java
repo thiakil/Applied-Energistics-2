@@ -119,125 +119,124 @@ public class PacketJEIRecipe extends AppEngPacket
 	{
 		final EntityPlayerMP pmp = (EntityPlayerMP) player;
 
-		pmp.getServerWorld().addScheduledTask(()-> {
-			final Container con = pmp.openContainer;
 
-			if (con instanceof IContainerCraftingPacket) {
-				final IContainerCraftingPacket cct = (IContainerCraftingPacket) con;
-				final IGridNode node = cct.getNetworkNode();
-				if (node != null) {
-					final IGrid grid = node.getGrid();
-					if (grid == null) {
-						return;
+		final Container con = pmp.openContainer;
+
+		if (con instanceof IContainerCraftingPacket) {
+			final IContainerCraftingPacket cct = (IContainerCraftingPacket) con;
+			final IGridNode node = cct.getNetworkNode();
+			if (node != null) {
+				final IGrid grid = node.getGrid();
+				if (grid == null) {
+					return;
+				}
+
+				final IStorageGrid inv = grid.getCache(IStorageGrid.class);
+				final IEnergyGrid energy = grid.getCache(IEnergyGrid.class);
+				final ISecurityGrid security = grid.getCache(ISecurityGrid.class);
+				final IInventory craftMatrix = cct.getInventoryByName("crafting");
+				final IInventory playerInventory = cct.getInventoryByName("player");
+
+				final Actionable realForFake = cct.useRealItems() ? Actionable.MODULATE : Actionable.SIMULATE;
+
+				final IItemList<IAEItemStack> craftables = new ItemList();
+				if (realForFake == Actionable.SIMULATE){
+					IItemList<IAEItemStack> storageList = inv.getItemInventory().getStorageList();
+					for (IAEItemStack stack : storageList) {
+						if (stack.isCraftable()) {
+							craftables.add(stack);
+						}
 					}
+				}
 
-					final IStorageGrid inv = grid.getCache(IStorageGrid.class);
-					final IEnergyGrid energy = grid.getCache(IEnergyGrid.class);
-					final ISecurityGrid security = grid.getCache(ISecurityGrid.class);
-					final IInventory craftMatrix = cct.getInventoryByName("crafting");
-					final IInventory playerInventory = cct.getInventoryByName("player");
-
-					final Actionable realForFake = cct.useRealItems() ? Actionable.MODULATE : Actionable.SIMULATE;
-
-					final IItemList<IAEItemStack> craftables = new ItemList();
-					if (realForFake == Actionable.SIMULATE){
-						IItemList<IAEItemStack> storageList = inv.getItemInventory().getStorageList();
-						for (IAEItemStack stack : storageList) {
-							if (stack.isCraftable()) {
-								craftables.add(stack);
-							}
+				if (inv != null && this.recipe != null && security != null) {
+					final InventoryCrafting testInv = new InventoryCrafting(new ContainerNull(), 3, 3);
+					for (int x = 0; x < 9; x++) {
+						if (this.recipe[x] != null && this.recipe[x].length > 0) {
+							testInv.setInventorySlotContents(x, this.recipe[x][0]);
 						}
 					}
 
-					if (inv != null && this.recipe != null && security != null) {
-						final InventoryCrafting testInv = new InventoryCrafting(new ContainerNull(), 3, 3);
-						for (int x = 0; x < 9; x++) {
-							if (this.recipe[x] != null && this.recipe[x].length > 0) {
-								testInv.setInventorySlotContents(x, this.recipe[x][0]);
-							}
-						}
+					final IRecipe r = Platform.findMatchingRecipe(testInv, pmp.world);
 
-						final IRecipe r = Platform.findMatchingRecipe(testInv, pmp.world);
+					if (r != null && security.hasPermission(player, SecurityPermissions.EXTRACT)) {
+						final ItemStack is = r.getCraftingResult(testInv);
 
-						if (r != null && security.hasPermission(player, SecurityPermissions.EXTRACT)) {
-							final ItemStack is = r.getCraftingResult(testInv);
+						if (!is.isEmpty()) {
+							final IMEMonitor<IAEItemStack> storage = inv.getItemInventory();
+							final IItemList all = storage.getStorageList();
+							final IPartitionList<IAEItemStack> filter = ItemViewCell.createFilter(cct.getViewCells());
 
-							if (!is.isEmpty()) {
-								final IMEMonitor<IAEItemStack> storage = inv.getItemInventory();
-								final IItemList all = storage.getStorageList();
-								final IPartitionList<IAEItemStack> filter = ItemViewCell.createFilter(cct.getViewCells());
+							for (int x = 0; x < craftMatrix.getSizeInventory(); x++) {
+								final ItemStack patternItem = testInv.getStackInSlot(x);
 
-								for (int x = 0; x < craftMatrix.getSizeInventory(); x++) {
-									final ItemStack patternItem = testInv.getStackInSlot(x);
+								ItemStack currentItem = craftMatrix.getStackInSlot(x);
+								if (!currentItem.isEmpty()) {
+									testInv.setInventorySlotContents(x, currentItem);
+									final ItemStack newItemStack = r.matches(testInv, pmp.world) ? r.getCraftingResult(testInv) : ItemStack.EMPTY;
+									testInv.setInventorySlotContents(x, patternItem);
 
-									ItemStack currentItem = craftMatrix.getStackInSlot(x);
-									if (!currentItem.isEmpty()) {
-										testInv.setInventorySlotContents(x, currentItem);
-										final ItemStack newItemStack = r.matches(testInv, pmp.world) ? r.getCraftingResult(testInv) : ItemStack.EMPTY;
-										testInv.setInventorySlotContents(x, patternItem);
-
-										if (newItemStack.isEmpty() || !Platform.itemComparisons().isSameItem(newItemStack, is)) {
-											final IAEItemStack in = AEItemStack.create(currentItem);
-											if (in != null) {
-												final IAEItemStack out = realForFake == Actionable.SIMULATE ? null : Platform.poweredInsert(energy, storage, in, cct.getActionSource());
-												if (out != null) {
-													craftMatrix.setInventorySlotContents(x, out.getItemStack());
-												} else {
-													craftMatrix.setInventorySlotContents(x, ItemStack.EMPTY);
-												}
-
-												currentItem = craftMatrix.getStackInSlot(x);
-											}
-										}
-									}
-
-									// True if we need to fetch an item for the recipe
-									if (!patternItem.isEmpty() && currentItem.isEmpty()) {
-										// Grab from network by recipe
-										ItemStack whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, patternItem, x, all, realForFake, filter);
-
-										// If that doesn't get it, check the other possible items from the JEI packet
-										if (whichItem.isEmpty()) {
-											for (int y = 0; y < this.recipe[x].length; y++) {
-												whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, this.recipe[x][y], x, all, realForFake, filter);
-												if (!whichItem.isEmpty()) {
-													break;
-												}
-											}
-										}
-
-										// If that doesn't work, grab from the player's inventory
-										if (whichItem.isEmpty() && playerInventory != null) {
-											whichItem = this.extractItemFromPlayerInventory(player, realForFake, patternItem);
-										}
-
-										// if pattern term, check if it's craftable
-										if (whichItem.isEmpty() && realForFake == Actionable.SIMULATE){
-											for (int y = 0; y < this.recipe[x].length; y++) {
-												Collection<IAEItemStack> matches = craftables.findFuzzy(AEItemStack.create(this.recipe[x][y]), FuzzyMode.IGNORE_ALL);
-												if (matches.size() > 0){
-													whichItem = matches.iterator().next().getDisplayItemStack();//display stack so it ensures it's not empty
-													break;
-												}
+									if (newItemStack.isEmpty() || !Platform.itemComparisons().isSameItem(newItemStack, is)) {
+										final IAEItemStack in = AEItemStack.create(currentItem);
+										if (in != null) {
+											final IAEItemStack out = realForFake == Actionable.SIMULATE ? null : Platform.poweredInsert(energy, storage, in, cct.getActionSource());
+											if (out != null) {
+												craftMatrix.setInventorySlotContents(x, out.getItemStack());
+											} else {
+												craftMatrix.setInventorySlotContents(x, ItemStack.EMPTY);
 											}
 
+											currentItem = craftMatrix.getStackInSlot(x);
 										}
-
-										// If all else fails, check if they want to always allow it.
-										if (whichItem.isEmpty() && realForFake == Actionable.SIMULATE && !AEConfig.instance().getPatternTermRequiresItems()){
-											whichItem = patternItem;
-										}
-
-										craftMatrix.setInventorySlotContents(x, whichItem);
 									}
 								}
-								con.onCraftMatrixChanged(craftMatrix);
+
+								// True if we need to fetch an item for the recipe
+								if (!patternItem.isEmpty() && currentItem.isEmpty()) {
+									// Grab from network by recipe
+									ItemStack whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, patternItem, x, all, realForFake, filter);
+
+									// If that doesn't get it, check the other possible items from the JEI packet
+									if (whichItem.isEmpty()) {
+										for (int y = 0; y < this.recipe[x].length; y++) {
+											whichItem = Platform.extractItemsByRecipe(energy, cct.getActionSource(), storage, player.world, r, is, testInv, this.recipe[x][y], x, all, realForFake, filter);
+											if (!whichItem.isEmpty()) {
+												break;
+											}
+										}
+									}
+
+									// If that doesn't work, grab from the player's inventory
+									if (whichItem.isEmpty() && playerInventory != null) {
+										whichItem = this.extractItemFromPlayerInventory(player, realForFake, patternItem);
+									}
+
+									// if pattern term, check if it's craftable
+									if (whichItem.isEmpty() && realForFake == Actionable.SIMULATE){
+										for (int y = 0; y < this.recipe[x].length; y++) {
+											Collection<IAEItemStack> matches = craftables.findFuzzy(AEItemStack.create(this.recipe[x][y]), FuzzyMode.IGNORE_ALL);
+											if (matches.size() > 0){
+												whichItem = matches.iterator().next().getDisplayItemStack();//display stack so it ensures it's not empty
+												break;
+											}
+										}
+
+									}
+
+									// If all else fails, check if they want to always allow it.
+									if (whichItem.isEmpty() && realForFake == Actionable.SIMULATE && !AEConfig.instance().getPatternTermRequiresItems()){
+										whichItem = patternItem;
+									}
+
+									craftMatrix.setInventorySlotContents(x, whichItem);
+								}
 							}
+							con.onCraftMatrixChanged(craftMatrix);
 						}
 					}
 				}
 			}
-		});
+		}
 	}
 
 	/**

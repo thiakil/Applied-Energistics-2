@@ -155,9 +155,7 @@ public class PacketInventoryAction extends AppEngPacket
 			}
 			else
 			{
-				sender.getServerWorld().addScheduledTask(()->{
-					baseContainer.doAction( sender, this.action, this.slot, this.id );
-				});
+				baseContainer.doAction( sender, this.action, this.slot, this.id );
 			}
 		}
 	}
