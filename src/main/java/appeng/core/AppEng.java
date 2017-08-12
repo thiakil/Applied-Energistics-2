@@ -58,7 +58,7 @@ import appeng.util.Platform;
 
 @Mod(
 		modid = AppEng.MOD_ID,
-		acceptedMinecraftVersions = "[1.12,]",
+		acceptedMinecraftVersions = "[1.12,1.13)",
 		name = AppEng.MOD_NAME,
 		version = AEConfig.VERSION,
 		dependencies = AppEng.MOD_DEPENDENCIES,
