@@ -36,6 +36,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import appeng.block.storage.BlockDrive;
 import appeng.block.storage.DriveSlotState;
 import appeng.block.storage.DriveSlotsState;
+import appeng.core.AELog;
 
 
 public class DriveBakedModel extends BaseBakedModel
@@ -63,34 +64,40 @@ public class DriveBakedModel extends BaseBakedModel
 			IExtendedBlockState extState = (IExtendedBlockState) state;
 			DriveSlotsState slotsState = extState.getValue( BlockDrive.SLOTS_STATE );
 
-			for( int row = 0; row < 5; row++ )
+			if (slotsState != null)
 			{
-				for( int col = 0; col < 2; col++ )
+				for( int row = 0; row < 5; row++ )
 				{
-					DriveSlotState slotState = slotsState.getState( row * 2 + col );
-
-					IBakedModel bakedCell = bakedCells.get( slotState );
-
-					Matrix4f transform = new Matrix4f();
-					transform.setIdentity();
-
-					// Position this drive model copy at the correct slot. The transform is based on the
-					// cell-model being in slot 0,0 at the top left of the drive.
-					float xOffset = -col * 7 / 16.0f;
-					float yOffset = -row * 3 / 16.0f;
-
-					transform.setTranslation( new Vector3f( xOffset, yOffset, 0 ) );
-
-					MatrixVertexTransformer transformer = new MatrixVertexTransformer( transform );
-					for( BakedQuad bakedQuad : bakedCell.getQuads( state, null, rand ) )
+					for( int col = 0; col < 2; col++ )
 					{
-						UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder( bakedQuad.getFormat() );
-						transformer.setParent( builder );
-						transformer.setVertexFormat( builder.getVertexFormat() );
-						bakedQuad.pipe( transformer );
-						result.add( builder.build() );
+						DriveSlotState slotState = slotsState.getState( row * 2 + col );
+
+						IBakedModel bakedCell = bakedCells.get( slotState );
+
+						Matrix4f transform = new Matrix4f();
+						transform.setIdentity();
+
+						// Position this drive model copy at the correct slot. The transform is based on the
+						// cell-model being in slot 0,0 at the top left of the drive.
+						float xOffset = -col * 7 / 16.0f;
+						float yOffset = -row * 3 / 16.0f;
+
+						transform.setTranslation( new Vector3f( xOffset, yOffset, 0 ) );
+
+						MatrixVertexTransformer transformer = new MatrixVertexTransformer( transform );
+						for( BakedQuad bakedQuad : bakedCell.getQuads( state, null, rand ) )
+						{
+							UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder( bakedQuad.getFormat() );
+							transformer.setParent( builder );
+							transformer.setVertexFormat( builder.getVertexFormat() );
+							bakedQuad.pipe( transformer );
+							result.add( builder.build() );
+						}
 					}
 				}
+			} else {
+				AELog.error( "BlockState does not contain DriveSlotsState. THIS IS NOT NORMAL. BlockState supplied is of type {}.", state.getClass().getName() );
+				AELog.error( state.toString() );
 			}
 		}
 
