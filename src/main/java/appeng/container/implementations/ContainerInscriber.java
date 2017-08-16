@@ -114,7 +114,11 @@ public class ContainerInscriber extends ContainerUpgradeable implements IProgres
 	@Override
 	public boolean isValidForSlot( final Slot s, final ItemStack is )
 	{
-		return this.ti.isItemValidForSlot( s.getSlotIndex(), is );
+		if (s.inventory == this.ti)
+		{
+			return this.ti.isItemValidForSlot( s.getSlotIndex(), is );
+		}
+		return super.isValidForSlot( s, is );
 	}
 
 	@Override

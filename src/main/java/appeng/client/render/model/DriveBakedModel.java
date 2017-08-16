@@ -96,7 +96,7 @@ public class DriveBakedModel extends BaseBakedModel
 					}
 				}
 			} else {
-				AELog.error( "BlockState does not contain DriveSlotsState. THIS IS NOT NORMAL. BlockState supplied is of type {}.", state.getClass().getName() );
+				AELog.error( "BlockState does not contain DriveSlotsState. THIS IS NOT NORMAL. BlockState supplied is of type %s.", state.getClass().getName() );
 				AELog.error( state.toString() );
 			}
 		}

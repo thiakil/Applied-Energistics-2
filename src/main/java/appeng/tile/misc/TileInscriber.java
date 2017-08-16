@@ -241,10 +241,12 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	@Override
 	public boolean isItemValidForSlot( final int i, final ItemStack itemstack )
 	{
-		if( this.isSmash() || i == SLOT_OUT )
+		if( this.isSmash() || i == SLOT_OUT || itemstack.isEmpty() )
 		{
 			return false;
 		}
+
+		final IItemDefinition namePress = AEApi.instance().definitions().materials().namePress();
 
 		final ItemStack top = this.getStackInSlot( 0 );
 		final ItemStack bot = this.getStackInSlot( 1 );
@@ -259,70 +261,71 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 				}
 			}
 
-			boolean matches = false;
-			boolean found = false;
+			//accept any item if have name presses
+			if ((!top.isEmpty() && namePress.isSameAs( top )) || (!bot.isEmpty() && namePress.isSameAs( bot ))){
+				return true;
+			}
 
 			for( final IInscriberRecipe recipe : AEApi.instance().registries().inscriber().getRecipes() )
 			{
-				final boolean matchA = (top.isEmpty() && !recipe.getTopOptional().isPresent() ) || ( Platform.itemComparisons().isSameItem( top, recipe.getTopOptional().orElse(ItemStack.EMPTY) ) ) && // and...
-						(bot.isEmpty() && !recipe.getBottomOptional().isPresent() ) | ( Platform.itemComparisons().isSameItem( bot, recipe.getBottomOptional().orElse(ItemStack.EMPTY) ) );
-
-				final boolean matchB = (bot.isEmpty() && !recipe.getTopOptional().isPresent() ) || ( Platform.itemComparisons().isSameItem( bot, recipe.getTopOptional().orElse(ItemStack.EMPTY) ) ) && // and...
-						(top.isEmpty() && !recipe.getBottomOptional().isPresent() ) | ( Platform.itemComparisons().isSameItem( top, recipe.getBottomOptional().orElse(ItemStack.EMPTY) ) );
-
-				if( matchA || matchB )
+				for( final ItemStack option : recipe.getInputs() )
 				{
-					matches = true;
-					for( final ItemStack option : recipe.getInputs() )
+					if( Platform.itemComparisons().isSameItem( itemstack, option ) )
 					{
-						if( Platform.itemComparisons().isSameItem( itemstack, option ) )
-						{
-							found = true;
+						if (!top.isEmpty() && !((recipe.getTopOptional().isPresent() && Platform.itemComparisons().isSameItem( top, recipe.getTopOptional().get())) || (recipe.getBottomOptional().isPresent() && Platform.itemComparisons().isSameItem( top, recipe.getBottomOptional().get())))){
+							break;
 						}
+						if (!bot.isEmpty() && !((recipe.getTopOptional().isPresent() && Platform.itemComparisons().isSameItem( bot, recipe.getTopOptional().get())) || (recipe.getBottomOptional().isPresent() && Platform.itemComparisons().isSameItem( bot, recipe.getBottomOptional().get())))){
+							break;
+						}
+						return true;//top & bottom are either empty or match
 					}
 				}
 			}
 
-			if( matches && !found )
-			{
-				return false;
-			}
+			return false;
 		}
 
-		if( (i == SLOT_TOP && !bot.isEmpty() ) || (i == SLOT_BOTTOM && !top.isEmpty() ) )
+		if( (i == SLOT_TOP ) || (i == SLOT_BOTTOM ) )
 		{
-			ItemStack otherSlot = getStackInSlot( i == SLOT_TOP ? SLOT_BOTTOM : SLOT_TOP );
+			ItemStack otherSlot = (i == SLOT_TOP) ? bot : top;
 
 			// name presses
-			final IItemDefinition namePress = AEApi.instance().definitions().materials().namePress();
-			if( namePress.isSameAs( otherSlot ) )
+			if( namePress.isSameAs( itemstack ) )
 			{
-				return namePress.isSameAs( itemstack );
+				return otherSlot.isEmpty() || namePress.isSameAs( otherSlot );
 			}
 
-			// everything else
-			boolean isValid = false;
-			for( final IInscriberRecipe recipe : AEApi.instance().registries().inscriber().getRecipes() )
-			{
-				if( Platform.itemComparisons().isSameItem( recipe.getTopOptional().orElse(ItemStack.EMPTY), otherSlot ) )
+			if (otherSlot.isEmpty()){
+				for( final ItemStack optional : AEApi.instance().registries().inscriber().getOptionals() )
 				{
-					isValid = Platform.itemComparisons().isSameItem( itemstack, recipe.getBottomOptional().orElse(ItemStack.EMPTY) );
+					if( Platform.itemComparisons().isSameItem( optional, itemstack ) )
+					{
+						return true;
+					}
 				}
-				else if( Platform.itemComparisons().isSameItem( recipe.getBottomOptional().orElse(ItemStack.EMPTY), otherSlot ) )
-				{
-					isValid = Platform.itemComparisons().isSameItem( itemstack, recipe.getTopOptional().orElse(ItemStack.EMPTY) );
-				}
-
-				if( isValid )
-				{
-					break;
+			} else {
+				/*if (Platform.itemComparisons().isSameItem( otherSlot, itemstack )){
+					return false;
+				}*/
+				for( final IInscriberRecipe recipe : AEApi.instance().registries().inscriber().getRecipes() ){
+					if (recipe.getBottomOptional().isPresent() && recipe.getTopOptional().isPresent()){
+						if (
+								(
+										Platform.itemComparisons().isSameItem(recipe.getBottomOptional().get(), otherSlot) &&
+										Platform.itemComparisons().isSameItem(recipe.getTopOptional().get(), itemstack)
+								) ||
+								(
+										Platform.itemComparisons().isSameItem(recipe.getBottomOptional().get(), itemstack) &&
+										Platform.itemComparisons().isSameItem(recipe.getTopOptional().get(), otherSlot)
+								)
+						){
+							return true;
+						}
+					}
 				}
 			}
-
-			if( !isValid )
-			{
-				return false;
-			}
+			return false;
 		}
 
 		return true;
