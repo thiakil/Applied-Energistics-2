@@ -163,7 +163,7 @@ public class ContainerUpgradeable extends AEBaseContainer implements IOptionalSl
 	{
 		final IInventory upgrades = this.getUpgradeable().getInventoryByName( "upgrades" );
 		for (int i = 0; i<this.availableUpgrades(); i++){
-			this.addSlotToContainer( ( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.UPGRADES, upgrades, i, 187, 8 + 18 * i, this.getInventoryPlayer() ) ).setNotDraggable() );
+			this.addSlotToContainer( ( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.UPGRADES, upgrades, i, 187, 8 + 18 * i, this.getInventoryPlayer() ) )/*.setNotDraggable()*/ );
 		}
 	}
 
