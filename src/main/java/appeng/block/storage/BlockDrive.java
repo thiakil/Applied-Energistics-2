@@ -43,6 +43,7 @@ import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
 import appeng.client.UnlistedProperty;
 import appeng.client.render.FacingToRotation;
+import appeng.core.AELog;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.storage.TileDrive;
 import appeng.util.Platform;
@@ -81,6 +82,7 @@ public class BlockDrive extends AEBaseTileBlock
 		TileDrive te = getTileEntity( world, pos );
 		if( te == null )
 		{
+			AELog.warn( "Could not get TE for drive at %s, world is %s", pos.toString(), world.getClass().getName() );
 			return super.getExtendedState( state, world, pos );
 		}
 
