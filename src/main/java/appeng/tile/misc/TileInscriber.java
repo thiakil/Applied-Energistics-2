@@ -241,7 +241,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 	@Override
 	public boolean isItemValidForSlot( final int i, final ItemStack itemstack )
 	{
-		if( this.isSmash() || i == SLOT_OUT )
+		if( this.isSmash() || i == SLOT_OUT || itemstack.isEmpty() )
 		{
 			return false;
 		}
@@ -288,7 +288,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 
 		if( (i == SLOT_TOP ) || (i == SLOT_BOTTOM ) )
 		{
-			ItemStack otherSlot = getStackInSlot( i == SLOT_TOP ? SLOT_BOTTOM : SLOT_TOP );
+			ItemStack otherSlot = (i == SLOT_TOP) ? bot : top;
 
 			// name presses
 			if( namePress.isSameAs( itemstack ) )
@@ -296,11 +296,33 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 				return otherSlot.isEmpty() || namePress.isSameAs( otherSlot );
 			}
 
-			for( final ItemStack optional : AEApi.instance().registries().inscriber().getOptionals() )
-			{
-				if( Platform.itemComparisons().isSameItem( optional, itemstack ) )
+			if (otherSlot.isEmpty()){
+				for( final ItemStack optional : AEApi.instance().registries().inscriber().getOptionals() )
 				{
-					return !Platform.itemComparisons().isSameItem( otherSlot, itemstack );
+					if( Platform.itemComparisons().isSameItem( optional, itemstack ) )
+					{
+						return true;
+					}
+				}
+			} else {
+				/*if (Platform.itemComparisons().isSameItem( otherSlot, itemstack )){
+					return false;
+				}*/
+				for( final IInscriberRecipe recipe : AEApi.instance().registries().inscriber().getRecipes() ){
+					if (recipe.getBottomOptional().isPresent() && recipe.getTopOptional().isPresent()){
+						if (
+								(
+										Platform.itemComparisons().isSameItem(recipe.getBottomOptional().get(), otherSlot) &&
+										Platform.itemComparisons().isSameItem(recipe.getTopOptional().get(), itemstack)
+								) ||
+								(
+										Platform.itemComparisons().isSameItem(recipe.getBottomOptional().get(), itemstack) &&
+										Platform.itemComparisons().isSameItem(recipe.getTopOptional().get(), otherSlot)
+								)
+						){
+							return true;
+						}
+					}
 				}
 			}
 			return false;
