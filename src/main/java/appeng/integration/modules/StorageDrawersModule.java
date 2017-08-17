@@ -68,12 +68,22 @@ public class StorageDrawersModule implements IIntegrationModule {
 
 		@Override
 		public IAEItemStack injectItems(IAEItemStack input, Actionable type, BaseActionSource src) {
-			return AEItemStack.create(repo.insertItem(input.getItemStack(), type == Actionable.SIMULATE));
+			IAEItemStack res =  AEItemStack.create(repo.insertItem(input.getItemStack(), type == Actionable.SIMULATE));
+			if( type == Actionable.MODULATE )
+			{
+				this.onTick( input.getItemStack() );
+			}
+			return res;
 		}
 
 		@Override
 		public IAEItemStack extractItems(IAEItemStack request, Actionable type, BaseActionSource src) {
-			return AEItemStack.create(repo.extractItem(request.getItemStack(), (int)request.getStackSize(), type == Actionable.SIMULATE));
+			IAEItemStack res =   AEItemStack.create(repo.extractItem(request.getItemStack(), (int)request.getStackSize(), type == Actionable.SIMULATE));
+			if( type == Actionable.MODULATE )
+			{
+				this.onTick( request.getItemStack() );
+			}
+			return res;
 		}
 
 		@Override
