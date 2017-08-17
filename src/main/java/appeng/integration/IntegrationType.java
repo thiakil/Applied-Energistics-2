@@ -134,7 +134,7 @@ public enum IntegrationType
 		}
 	},
 
-	STORAGE_DRAWERS(IntegrationSide.SERVER, "Storage Drawers", "storagedrawers") {
+	STORAGE_DRAWERS(IntegrationSide.BOTH, "Storage Drawers", "storagedrawers") {
 		@Override
 		public IIntegrationModule createInstance() {
 			return new StorageDrawersModule();
