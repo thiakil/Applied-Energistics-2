@@ -499,4 +499,9 @@ public abstract class AEBaseBlock extends Block
 		this.isInventory = isInventory;
 	}
 
+	@Override
+	public boolean isFullCube( IBlockState state )
+	{
+		return isFullSize;
+	}
 }
