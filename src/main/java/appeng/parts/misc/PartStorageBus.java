@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import appeng.integration.IntegrationRegistry;
+import appeng.integration.IntegrationType;
+import appeng.integration.modules.StorageDrawersModule;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -387,6 +390,15 @@ public class PartStorageBus extends PartUpgradeable implements IGridTickable, IC
 			// IItemHandler's, as that might circumvent the security setings, and might also cause
 			// performance issues.
 			return null;
+		}
+
+		if (IntegrationRegistry.INSTANCE.isEnabled(IntegrationType.STORAGE_DRAWERS)){
+			if (StorageDrawersModule.canHandle(target, targetSide)){
+				IMEInventory<IAEItemStack> h = StorageDrawersModule.getHandler(target, targetSide);
+				if (h != null) {
+					return h;
+				}
+			}
 		}
 
 		// Check via cap for IItemHandler

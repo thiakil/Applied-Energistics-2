@@ -58,6 +58,11 @@ repositories {
         name = "CoFH Maven"
         url = "http://maven.covers1624.net"
     }
+
+    maven {
+        name = "storagedrawers"
+        url = "https://dl.bintray.com/jaquadro/dev/"
+    }
 }
 
 configurations {
@@ -79,6 +84,8 @@ dependencies {
     provided "li.cil.oc:OpenComputers:MC1.11.2-${opencomputers_version}:api"
 
     deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
+
+    deobfCompile "com.jaquadro.minecraft.storagedrawers:StorageDrawers:1.12-5.2.9:api"
 
 
     // at runtime, use the full JEI jar

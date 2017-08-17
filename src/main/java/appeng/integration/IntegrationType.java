@@ -22,6 +22,7 @@ package appeng.integration;
 import appeng.integration.modules.BuildcraftModule;
 import appeng.integration.modules.CofhHammerModule;
 import appeng.integration.modules.Mekanism;
+import appeng.integration.modules.StorageDrawersModule;
 import appeng.integration.modules.chisel.ChiselIMC;
 import appeng.integration.modules.chisel.ChiselModule;
 import appeng.integration.modules.opencomputers.OpenComputers;
@@ -130,6 +131,13 @@ public enum IntegrationType
 		public IIntegrationModule createInstance()
 		{
 			return new ChiselModule();
+		}
+	},
+
+	STORAGE_DRAWERS(IntegrationSide.SERVER, "Storage Drawers", "storagedrawers") {
+		@Override
+		public IIntegrationModule createInstance() {
+			return new StorageDrawersModule();
 		}
 	}
 
