@@ -91,7 +91,6 @@ public enum UVLModelLoader implements ICustomModelLoader
 	private static final Gson gson = new Gson();
 
 	private static final Constructor<? extends IModel> vanillaModelWrapper;
-	private static final Field faceBakery;
 	private static final Object vanillaLoader;
 	private static final MethodHandle loaderGetter;
 
@@ -101,9 +100,6 @@ public enum UVLModelLoader implements ICustomModelLoader
 		{
 			Field modifiers = Field.class.getDeclaredField( "modifiers" );
 			modifiers.setAccessible( true );
-
-			faceBakery = ReflectionHelper.findField( ModelBakery.class, "faceBakery", "field_177607_l" );
-			modifiers.set( faceBakery, faceBakery.getModifiers() & ( ~Modifier.FINAL ) );
 
 			Class clas = Class.forName( ModelLoader.class.getName() + "$VanillaModelWrapper" );
 			vanillaModelWrapper = clas.getDeclaredConstructor( ModelLoader.class, ResourceLocation.class, ModelBlock.class, boolean.class, ModelBlockAnimation.class );
@@ -123,26 +119,11 @@ public enum UVLModelLoader implements ICustomModelLoader
 		}
 	}
 
-	private static Object deserializer( Class clas )
+	private static IModel vanillaModelWrapper( ModelLoader loader, ResourceLocation location, ModelBlock model, boolean uvlock, ModelBlockAnimation animation )
 	{
 		try
 		{
-			clas = Class.forName( clas.getName() + "$Deserializer" );
-			Constructor constr = clas.getDeclaredConstructor();
-			constr.setAccessible( true );
-			return constr.newInstance();
-		}
-		catch( Exception e )
-		{
-			throw Throwables.propagate( e );
-		}
-	}
-
-	private static <M extends IModel> M vanillaModelWrapper( ModelLoader loader, ResourceLocation location, ModelBlock model, boolean uvlock, ModelBlockAnimation animation )
-	{
-		try
-		{
-			return (M) vanillaModelWrapper.newInstance( loader, location, model, uvlock, animation );
+			return vanillaModelWrapper.newInstance( loader, location, model, uvlock, animation );
 		}
 		catch( Exception e )
 		{
@@ -154,7 +135,7 @@ public enum UVLModelLoader implements ICustomModelLoader
 	{
 		try
 		{
-			UVLModelLoader.faceBakery.set( modelBakery, faceBakery );
+			modelBakery.faceBakery = faceBakery;
 		}
 		catch( Exception e )
 		{
@@ -209,7 +190,15 @@ public enum UVLModelLoader implements ICustomModelLoader
 
 	public class UVLModelWrapper implements IModel
 	{
-		final Gson UVLSERIALIZER = ( new GsonBuilder() ).registerTypeAdapter( ModelBlock.class, deserializer( ModelBlock.class ) ).registerTypeAdapter( BlockPart.class, deserializer( BlockPart.class ) ).registerTypeAdapter( BlockPartFace.class, new BlockPartFaceOverrideSerializer() ).registerTypeAdapter( BlockFaceUV.class, deserializer( BlockFaceUV.class ) ).registerTypeAdapter( ItemTransformVec3f.class, deserializer( ItemTransformVec3f.class ) ).registerTypeAdapter( ItemCameraTransforms.class, deserializer( ItemCameraTransforms.class ) ).registerTypeAdapter( ItemOverride.class, deserializer( ItemOverride.class ) ).create();
+		final Gson UVLSERIALIZER = ( new GsonBuilder() ).
+				registerTypeAdapter( ModelBlock.class, new ModelBlock.Deserializer() ).
+				registerTypeAdapter( BlockPart.class, new BlockPart.Deserializer() ).
+				registerTypeAdapter( BlockPartFace.class, new BlockPartFaceOverrideSerializer() ).
+				registerTypeAdapter( BlockFaceUV.class, new BlockFaceUV.Deserializer() ).
+				registerTypeAdapter( ItemTransformVec3f.class, new ItemTransformVec3f.Deserializer() ).
+				registerTypeAdapter( ItemCameraTransforms.class, new ItemCameraTransforms.Deserializer() ).
+				registerTypeAdapter( ItemOverride.class, new ItemOverride.Deserializer() ).
+				create();
 
 		private Map<BlockPartFace, Pair<Float, Float>> uvlightmap = new HashMap<>();
 
