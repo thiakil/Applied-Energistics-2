@@ -227,7 +227,7 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
 			ItemStack newIS = itemHandler.getStackInSlot( slot );
 
 			// if we're expecting a change, make sure it's the expected one, else we leave it til the next onTick
-			if ( expectedChange == null || newIS.isItemEqual( expectedChange ) || oldIS.isItemEqual( expectedChange ))
+			if ( expectedChange == null || Platform.itemComparisons().isSameItem( newIS, expectedChange ) || Platform.itemComparisons().isSameItem(oldIS, expectedChange ))
 			{
 				if( this.isDifferent( newIS, oldIS ) )
 				{
