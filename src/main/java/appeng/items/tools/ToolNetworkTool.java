@@ -19,7 +19,13 @@
 package appeng.items.tools;
 
 
+import appeng.coremod.annotations.Integration;
+import appeng.integration.IntegrationType;
+import buildcraft.api.tools.IToolWrench;
+import cofh.api.item.IToolHammer;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -54,10 +60,11 @@ import appeng.items.AEBaseItem;
 import appeng.items.contents.NetworkToolViewer;
 import appeng.util.Platform;
 
-
-// TODO BC Integration
-//@Interface( iface = "buildcraft.api.tools.IToolWrench", iname = IntegrationType.BuildCraftCore )
-public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench /* , IToolWrench */
+@Integration.InterfaceList( value = {
+		@Integration.Interface( iface = "buildcraft.api.tools.IToolWrench", iname = IntegrationType.BUILDCRAFT ),
+		@Integration.Interface( iface = "cofh.api.item.IToolHammer", iname = IntegrationType.COFH_HAMMER ),
+})
+public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench, IToolWrench, IToolHammer
 {
 
 	public ToolNetworkTool()
@@ -205,6 +212,36 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench /
 		return true;
 	}
 
-	// TODO: BC WRENCH INTEGRATION
+	//BC
+	@Override
+	public boolean canWrench(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
+		return true;
+	}
+
+	@Override
+	public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
+
+	}
+
+	//COFH
+	@Override
+	public boolean isUsable(ItemStack var1, EntityLivingBase var2, BlockPos var3) {
+		return true;
+	}
+
+	@Override
+	public boolean isUsable(ItemStack var1, EntityLivingBase var2, Entity var3) {
+		return true;
+	}
+
+	@Override
+	public void toolUsed(ItemStack var1, EntityLivingBase var2, BlockPos var3) {
+
+	}
+
+	@Override
+	public void toolUsed(ItemStack var1, EntityLivingBase var2, Entity var3) {
+
+	}
 
 }
