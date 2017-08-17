@@ -89,9 +89,6 @@ public abstract class AEBaseBlock extends Block
 		this.setLightLevel( 0 );
 		this.setHardness( 2.2F );
 		this.setHarvestLevel( "pickaxe", 0 );
-
-		// Workaround as vanilla sets it way too early.
-		this.fullBlock = this.isFullSize();
 	}
 
 	@Override
@@ -490,6 +487,7 @@ public abstract class AEBaseBlock extends Block
 	protected boolean setFullSize( final boolean isFullSize )
 	{
 		this.isFullSize = isFullSize;
+		this.fullBlock = isFullSize;
 		return isFullSize;
 	}
 

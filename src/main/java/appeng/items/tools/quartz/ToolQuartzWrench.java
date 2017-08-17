@@ -19,13 +19,20 @@
 package appeng.items.tools.quartz;
 
 
+import appeng.coremod.annotations.Integration;
+import appeng.integration.IntegrationType;
+import buildcraft.api.tools.IToolWrench;
+import cofh.api.item.IToolHammer;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -34,10 +41,11 @@ import appeng.api.util.DimensionalCoord;
 import appeng.items.AEBaseItem;
 import appeng.util.Platform;
 
-
-// TODO BC Integration
-//@Interface( iface = "buildcraft.api.tools.IToolWrench", iname = IntegrationType.BuildCraftCore )
-public class ToolQuartzWrench extends AEBaseItem implements IAEWrench /* , IToolWrench */
+@Integration.InterfaceList( value = {
+	@Integration.Interface( iface = "buildcraft.api.tools.IToolWrench", iname = IntegrationType.BUILDCRAFT ),
+	@Integration.Interface( iface = "cofh.api.item.IToolHammer", iname = IntegrationType.COFH_HAMMER ),
+})
+public class ToolQuartzWrench extends AEBaseItem implements IAEWrench, IToolWrench, IToolHammer
 {
 
 	public ToolQuartzWrench()
@@ -79,17 +87,35 @@ public class ToolQuartzWrench extends AEBaseItem implements IAEWrench /* , ITool
 		return true;
 	}
 
-	// TODO: BC Wrench Integration
-	/*
-	 * @Override
-	 * public boolean canWrench( EntityPlayer player, int x, int y, int z )
-	 * {
-	 * return true;
-	 * }
-	 * @Override
-	 * public void wrenchUsed( EntityPlayer player, int x, int y, int z )
-	 * {
-	 * player.swingItem();
-	 * }
-	 */
+	//BC
+	@Override
+	public boolean canWrench(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
+		return true;
+	}
+
+	@Override
+	public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
+
+	}
+
+	//COFH
+	@Override
+	public boolean isUsable(ItemStack var1, EntityLivingBase var2, BlockPos var3) {
+		return true;
+	}
+
+	@Override
+	public boolean isUsable(ItemStack var1, EntityLivingBase var2, Entity var3) {
+		return true;
+	}
+
+	@Override
+	public void toolUsed(ItemStack var1, EntityLivingBase var2, BlockPos var3) {
+
+	}
+
+	@Override
+	public void toolUsed(ItemStack var1, EntityLivingBase var2, Entity var3) {
+
+	}
 }
