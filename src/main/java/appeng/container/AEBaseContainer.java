@@ -68,6 +68,7 @@ import appeng.container.slot.SlotDisabled;
 import appeng.container.slot.SlotFake;
 import appeng.container.slot.SlotInaccessible;
 import appeng.container.slot.SlotPlayerHotBar;
+import appeng.container.slot.SlotPatternTerm;
 import appeng.container.slot.SlotPlayerInv;
 import appeng.core.AELog;
 import appeng.core.sync.network.NetworkHandler;
@@ -779,6 +780,9 @@ public abstract class AEBaseContainer extends Container
 
 			if( action == InventoryAction.MOVE_REGION )
 			{
+             			if( s instanceof SlotPatternTerm )
+         				return;
+				
 				final List<Slot> from = new LinkedList<Slot>();
 
 				for( final Object j : this.inventorySlots )

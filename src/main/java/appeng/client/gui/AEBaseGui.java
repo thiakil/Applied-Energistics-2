@@ -387,7 +387,7 @@ public abstract class AEBaseGui extends GuiContainer
 
 		if( Keyboard.isKeyDown( Keyboard.KEY_SPACE ) )
 		{
-			if( this.enableSpaceClicking() )
+			if( this.enableSpaceClicking() && !( slot instanceof SlotPatternTerm ) )
 			{
 				IAEItemStack stack = null;
 				if( slot instanceof SlotME )
