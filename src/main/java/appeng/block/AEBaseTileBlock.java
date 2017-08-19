@@ -143,7 +143,7 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 	}
 
 	/**
-	 * Gets TileEntity of AEBaseTile class, but will NOT create it.
+	 * Gets TileEntity of AEBaseTile class, but will NOT create it immediately if w is a ChunkCache.
 	 * @param w world to query
 	 * @param pos location to query
 	 * @return the TE, or null if does not exist or not the correct instance
@@ -158,7 +158,7 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 
 		final TileEntity te;
 		if ( w instanceof ChunkCache ){
-			te = ( (ChunkCache) w ).getTileEntity( pos, Chunk.EnumCreateEntityType.CHECK);
+			te = ( (ChunkCache) w ).getTileEntity( pos, Chunk.EnumCreateEntityType.QUEUED);
 		} else {
 			te = w.getTileEntity( pos );
 		}
