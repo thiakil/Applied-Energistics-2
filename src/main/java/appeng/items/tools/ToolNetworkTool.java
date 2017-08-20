@@ -106,33 +106,42 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench, 
 	@Override
 	public EnumActionResult onItemUseFirst( final EntityPlayer player, final World world, final BlockPos pos, final EnumFacing side, final float hitX, final float hitY, final float hitZ, final EnumHand hand )
 	{
-		Vec3d hitVec = new Vec3d(hitX,hitY,hitZ);
-		PlayerInteractEvent.RightClickBlock event = new PlayerInteractEvent.RightClickBlock(player, hand, pos, side, hitVec);
-		if ( MinecraftForge.EVENT_BUS.post(event) || event.getResult() == Event.Result.DENY || event.getUseBlock() == Event.Result.DENY || event.getUseItem() == Event.Result.DENY) {
-			return EnumActionResult.PASS;
-		}
-		final RayTraceResult mop = new RayTraceResult( hitVec, side, pos );
-		final TileEntity te = world.getTileEntity( pos );
 
-		if( te instanceof IPartHost )
+		if (side != null)
 		{
-			final SelectedPart part = ( (IPartHost) te ).selectPart( mop.hitVec );
-
-			if( part.part != null || part.facade != null )
+			if( world.isAirBlock( pos ) )
 			{
-				if( part.part instanceof INetworkToolAgent && !( (INetworkToolAgent) part.part ).showNetworkInfo( mop ) )
+				return EnumActionResult.PASS;
+			}
+			Vec3d hitVec = new Vec3d( hitX, hitY, hitZ );
+			PlayerInteractEvent.RightClickBlock event = new PlayerInteractEvent.RightClickBlock( player, hand, pos, side, hitVec );
+			if( MinecraftForge.EVENT_BUS.post( event ) || event.getResult() == Event.Result.DENY || event.getUseBlock() == Event.Result.DENY || event.getUseItem() == Event.Result.DENY )
+			{
+				return EnumActionResult.PASS;
+			}
+			final RayTraceResult mop = new RayTraceResult( hitVec, side, pos );
+			final TileEntity te = world.getTileEntity( pos );
+
+			if( te instanceof IPartHost )
+			{
+				final SelectedPart part = ( (IPartHost) te ).selectPart( mop.hitVec );
+
+				if( part.part != null || part.facade != null )
 				{
-					return EnumActionResult.PASS;
-				}
-				else if( player.isSneaking() )
-				{
-					return EnumActionResult.PASS;
+					if( part.part instanceof INetworkToolAgent && !( (INetworkToolAgent) part.part ).showNetworkInfo( mop ) )
+					{
+						return EnumActionResult.PASS;
+					}
+					else if( player.isSneaking() )
+					{
+						return EnumActionResult.PASS;
+					}
 				}
 			}
-		}
-		else if( te instanceof INetworkToolAgent && !( (INetworkToolAgent) te ).showNetworkInfo( mop ) )
-		{
-			return EnumActionResult.PASS;
+			else if( te instanceof INetworkToolAgent && !( (INetworkToolAgent) te ).showNetworkInfo( mop ) )
+			{
+				return EnumActionResult.PASS;
+			}
 		}
 
 		if( Platform.isClient() )
