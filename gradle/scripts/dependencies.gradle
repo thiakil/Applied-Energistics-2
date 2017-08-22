@@ -80,7 +80,7 @@ dependencies {
     compileOnly "mcp.mobius.waila:Hwyla:${hwyla_version}:api"
     compileOnly "net.darkhax.tesla:Tesla-1.12:${tesla_version}"
     provided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
-    compileOnly "mcjty.theoneprobe:TheOneProbe-1.12:${minecraft_version}-${top_version}:api"
+    compileOnly "mcjty.theoneprobe:TheOneProbe-1.12:1.12-${top_version}:api"
     provided "li.cil.oc:OpenComputers:MC1.11.2-${opencomputers_version}:api"
 
     deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
