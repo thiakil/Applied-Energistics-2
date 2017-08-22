@@ -25,15 +25,18 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
 import appeng.api.implementations.TransitionResult;
 import appeng.api.implementations.items.ISpatialStorageCell;
 import appeng.api.util.WorldCoord;
+import appeng.core.AppEng;
 import appeng.core.localization.GuiText;
 import appeng.core.worlddata.WorldData;
 import appeng.items.AEBaseItem;
+import appeng.spatial.BiomeGenStorage;
 import appeng.spatial.StorageHelper;
 import appeng.spatial.StorageWorldProvider;
 import appeng.util.Platform;
@@ -103,9 +106,9 @@ public class ItemSpatialStorageCell extends AEBaseItem implements ISpatialStorag
 				w = DimensionManager.getWorld( dim );
 			}
 
-			if( w != null )
+			if( w != null && w.provider != null )
 			{
-				if( w.provider instanceof StorageWorldProvider )
+				if( w.provider.getDimensionType() == AppEng.instance().getRegistration().getStorageDimensionType() )
 				{
 					return w;
 				}
