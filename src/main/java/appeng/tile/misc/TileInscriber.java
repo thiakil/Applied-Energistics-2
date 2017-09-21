@@ -442,6 +442,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 
 				final ItemStack startingItem = renamedItem.copy();
 				renamedItem = renamedItem.copy();
+				renamedItem.setCount( 1 );
 				final NBTTagCompound tag = Platform.openNbtData(renamedItem);
 
 				final NBTTagCompound display = tag.getCompoundTag("display");

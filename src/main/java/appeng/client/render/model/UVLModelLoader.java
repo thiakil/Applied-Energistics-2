@@ -64,6 +64,7 @@ import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelBlock;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.IResource;
@@ -82,6 +83,7 @@ import net.minecraftforge.common.model.ITransformation;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import appeng.client.render.VertexFormats;
+import appeng.core.AppEng;
 
 
 public enum UVLModelLoader implements ICustomModelLoader
@@ -166,6 +168,9 @@ public enum UVLModelLoader implements ICustomModelLoader
 	@Override
 	public boolean accepts( ResourceLocation modelLocation )
 	{
+		if (!modelLocation.getResourceDomain().equals( AppEng.MOD_ID ) || modelLocation instanceof ModelResourceLocation ){
+			return false;
+		}
 		String modelPath = modelLocation.getResourcePath();
 		if( modelLocation.getResourcePath().startsWith( "models/" ) )
 		{
@@ -175,7 +180,7 @@ public enum UVLModelLoader implements ICustomModelLoader
 		{
 			return gson.fromJson( io, UVLMarker.class ).uvlMarker;
 		}
-		catch( IOException e )
+		catch( Exception e )
 		{
 
 		}
