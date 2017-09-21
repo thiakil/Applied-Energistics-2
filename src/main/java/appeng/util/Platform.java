@@ -160,7 +160,6 @@ public class Platform
 	 * random source, use it for item drop locations...
 	 */
 	private static final Random RANDOM_GENERATOR = new Random();
-	private static final WeakHashMap<World, EntityPlayer> FAKE_PLAYERS = new WeakHashMap<World, EntityPlayer>();
 	// private static Method getEntry;
 
 	private static final ItemComparisonHelper ITEM_COMPARISON_HELPER = new ItemComparisonHelper();
@@ -910,15 +909,7 @@ public class Platform
 			throw new InvalidParameterException( "World is null." );
 		}
 
-		final EntityPlayer wrp = FAKE_PLAYERS.get( w );
-		if( wrp != null )
-		{
-			return wrp;
-		}
-
-		final EntityPlayer p = FakePlayerFactory.getMinecraft( w );
-		FAKE_PLAYERS.put( w, p );
-		return p;
+		return FakePlayerFactory.getMinecraft( w );
 	}
 
 	public static int MC2MEColor( final int color )
