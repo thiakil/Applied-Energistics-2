@@ -60,6 +60,7 @@ import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketSwitchGuis;
 import appeng.core.sync.packets.PacketValueConfig;
 import appeng.helpers.WirelessTerminalGuiObject;
+import appeng.integration.Integrations;
 import appeng.parts.reporting.AbstractPartTerminal;
 import appeng.tile.misc.TileSecurityStation;
 import appeng.util.IConfigManagerHost;
@@ -477,6 +478,17 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 	public void updateScreen()
 	{
 		this.repo.setPower( this.monitorableContainer.isPowered() );
+		final Enum searchMode = AEConfig.instance().getConfigManager().getSetting( Settings.SEARCH_MODE );
+		if( searchMode == SearchBoxMode.JEI_AUTOSEARCH || searchMode == SearchBoxMode.JEI_MANUAL_SEARCH )
+		{
+			String jeiText = Integrations.jei().getSearchText();
+			if( !jeiText.equals( this.repo.getSearchString() ) )
+			{
+				this.repo.setSearchString(jeiText);
+				this.searchField.setText( jeiText );
+				this.repo.updateView();
+			}
+		}
 		super.updateScreen();
 	}
 
