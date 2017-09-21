@@ -458,9 +458,6 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 					.getItemFromBlock(
 							Blocks.REEDS ) ) )
 			{
-				final EntityPlayer player = Platform.getPlayer( (WorldServer) w );
-				Platform.configurePlayer( player, side, this.getTile() );
-
 				// TODO: LIMIT FIREWORKS
 				/*
 				 * if( i instanceof ItemFirework )
@@ -482,6 +479,10 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 				worked = true;
 				if( type == Actionable.MODULATE )
 				{
+					final EntityPlayer player = Platform.getPlayer( (WorldServer) w );
+					Platform.configurePlayer( player, side, this.getTile() );
+					player.setHeldItem( EnumHand.MAIN_HAND, is );
+
 					if( i instanceof IPlantable || i instanceof ItemSkull || i == Item.getItemFromBlock( Blocks.REEDS ) )
 					{
 						boolean Worked = false;
@@ -516,6 +517,7 @@ public class PartFormationPlane extends PartUpgradeable implements ICellContaine
 						i.onItemUse( player, w, tePos, EnumHand.MAIN_HAND, side.getFacing().getOpposite(), side.xOffset, side.yOffset, side.zOffset );
 						maxStorage -= is.getCount();
 					}
+					player.setHeldItem( EnumHand.MAIN_HAND, ItemStack.EMPTY );
 				}
 				else
 				{
