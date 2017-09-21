@@ -180,7 +180,7 @@ public enum UVLModelLoader implements ICustomModelLoader
 		{
 			return gson.fromJson( io, UVLMarker.class ).uvlMarker;
 		}
-		catch( IOException e )
+		catch( Exception e )
 		{
 
 		}
