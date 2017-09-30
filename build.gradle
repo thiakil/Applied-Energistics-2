@@ -252,6 +252,9 @@ if (System.getenv("CURSEFORGE_KEY") != null) {
             id = '271174'
             changelog = getCurrentChanges() // A file can also be set using: changelog = file('changelog.txt')
             releaseType = 'beta'
+            addGameVersion '1.12'
+            addGameVersion '1.12.1'
+            addGameVersion '1.12.2'
         }
     }
 }
