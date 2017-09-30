@@ -25,12 +25,18 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.9"
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'signing'
 
 repositories {
     mavenLocal()
@@ -136,6 +142,9 @@ uploadArchives {
     if(System.getenv("LOCAL_MAVEN") != null) {
         repositories {
             mavenDeployer {
+                if (System.getenv("SIGN_KEYSTORE") != null){
+                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                }
                 repository(url: "file://"+System.getenv("LOCAL_MAVEN"))
                 pom {
                     groupId = project.group
@@ -207,6 +216,39 @@ task addRelease() {
     }
 }
 
-if (System.getenv("SIGNING_SCRIPT") != null){
-    apply from: System.getenv("SIGNING_SCRIPT")
+ext.getCurrentChanges = { ->
+    def updaterFileName = "forge_update.json"
+    def updaterFile = (Map)(new JsonSlurper().parse(new File(updaterFileName)))
+    return updaterFile.get(project.minecraft.version).get(project.version.toString())
+}
+
+//signing {
+//      sign configurations.archives
+//}
+
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    onlyIf{
+        System.getenv("SIGN_KEYSTORE") != null
+    }
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+
+    keyStore=System.getenv("SIGN_KEYSTORE")
+    alias="signFiles"
+    storePass=System.getenv("SIGN_KEYSTORE_PASS")
+    keyPass=System.getenv("SIGN_KEY_PASS")
+}
+
+build.dependsOn signJar
+uploadArchives.dependsOn signJar
+
+if (System.getenv("CURSEFORGE_KEY") != null) {
+    curseforge {
+        apiKey = System.getenv("CURSEFORGE_KEY")
+        project {
+            id = '271174'
+            changelog = getCurrentChanges() // A file can also be set using: changelog = file('changelog.txt')
+            releaseType = 'beta'
+        }
+    }
 }

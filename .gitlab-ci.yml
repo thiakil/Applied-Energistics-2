@@ -1,0 +1,49 @@
+# This is the Gradle build system for JVM applications
+# https://gradle.org/
+# https://github.com/gradle/gradle
+image: java:8
+
+# Disable the Gradle daemon for Continuous Integration servers as correctness
+# is usually a priority over speed in CI environments. Using a fresh
+# runtime for each build is more reliable since the runtime is completely
+# isolated from any previous builds.
+variables:
+    GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+# Make the gradle wrapper executable. This essentially downloads a copy of
+# Gradle to build the project with.
+# https://docs.gradle.org/current/userguide/gradle_wrapper.html
+# It is expected that any modern gradle project has a wrapper
+before_script:
+    - chmod +x gradlew
+
+# We redirect the gradle user home using -g so that it caches the
+# wrapper and dependencies.
+# https://docs.gradle.org/current/userguide/gradle_command_line.html
+#
+# Unfortunately it also caches the build output so
+# cleaning removes reminants of any cached builds.
+# The assemble task actually builds the project.
+# If it fails here, the tests can't run.
+build:
+  stage: build
+  script:
+    - ./gradlew -g /home/gitlab-runner/.gradle setupCIWorkspace
+    - ./gradlew -g /home/gitlab-runner/.gradle clean build
+  allow_failure: false
+
+# Use the generated build output to run the tests.
+#test:
+#  stage: test
+#  script:
+#    - ./gradlew -g /cache/.gradle check
+
+deploy:
+  stage: deploy
+  script:
+    - ./gradlew -g /home/gitlab-runner/.gradle uploadArchives
+  environment:
+    name: localmaven
+    url: http://maven.thiakil.com
+  only:
+    - tags
