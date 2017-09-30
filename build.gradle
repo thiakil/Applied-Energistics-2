@@ -142,9 +142,9 @@ uploadArchives {
     if(System.getenv("LOCAL_MAVEN") != null) {
         repositories {
             mavenDeployer {
-                if (System.getenv("SIGN_KEYSTORE") != null){
+                /*if (System.getenv("SIGN_KEYSTORE") != null){
                     beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-                }
+                }*/
                 repository(url: "file://"+System.getenv("LOCAL_MAVEN"))
                 pom {
                     groupId = project.group
@@ -241,6 +241,7 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
 
 build.dependsOn signJar
 uploadArchives.dependsOn signJar
+tasks.curseforge.dependsOn signJar
 
 if (System.getenv("CURSEFORGE_KEY") != null) {
     curseforge {

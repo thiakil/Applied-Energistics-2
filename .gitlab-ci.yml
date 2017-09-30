@@ -41,7 +41,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - ./gradlew -g /home/gitlab-runner/.gradle uploadArchives
+    - ./gradlew -g /home/gitlab-runner/.gradle uploadArchives curseforge
   environment:
     name: localmaven
     url: http://maven.thiakil.com
