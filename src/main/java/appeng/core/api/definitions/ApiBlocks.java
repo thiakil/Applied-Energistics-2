@@ -224,6 +224,7 @@ public final class ApiBlocks implements IBlocks
 				{
 					OreDictionary.registerOre( "oreCertusQuartz", new ItemStack( block ) );
 				} )
+				.useCustomItemModel()
 				.build();
 		this.matrixFrame = registry.block( "matrix_frame", BlockMatrixFrame::new ).features( AEFeature.SPATIAL_IO ).build();
 
