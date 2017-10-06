@@ -66,8 +66,10 @@ import appeng.core.AELog;
 import appeng.core.stats.Achievements;
 import appeng.helpers.IInterfaceHost;
 import appeng.helpers.IPriorityHost;
+import appeng.helpers.WirelessCraftingTerminalGuiObject;
 import appeng.helpers.WirelessTerminalGuiObject;
 import appeng.items.contents.QuartzKnifeObj;
+import appeng.items.tools.powered.WirelessCraftingTerminal;
 import appeng.parts.automation.PartFormationPlane;
 import appeng.parts.automation.PartLevelEmitter;
 import appeng.parts.misc.PartStorageBus;
@@ -284,6 +286,9 @@ public enum GuiBridge implements IGuiHandler
 
 			final IWirelessTermHandler wh = AEApi.instance().registries().wireless().getWirelessTerminalHandler(it);
 			if (wh != null) {
+				if (wh instanceof WirelessCraftingTerminal){
+					return new WirelessCraftingTerminalGuiObject( wh, it, player, w, x );
+				}
 				return new WirelessTerminalGuiObject(wh, it, player, w, x);//x == slot!
 			}
 		}

@@ -411,14 +411,19 @@ public class ContainerMEMonitorable extends AEBaseContainer implements IConfigMa
 
 	public ItemStack[] getViewCells()
 	{
-		final ItemStack[] list = new ItemStack[this.cellView.length];
-
-		for( int x = 0; x < this.cellView.length; x++ )
+		if( host instanceof IViewCellStorage )
 		{
-			list[x] = this.cellView[x].getStack();
-		}
+			final ItemStack[] list = new ItemStack[this.cellView.length];
 
-		return list;
+			for( int x = 0; x < this.cellView.length; x++ )
+			{
+				list[x] = this.cellView[x].getStack();
+			}
+
+			return list;
+		} else {
+			return new ItemStack[0];
+		}
 	}
 
 	public SlotRestrictedInput getCellViewSlot( final int index )

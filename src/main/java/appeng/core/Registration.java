@@ -404,6 +404,10 @@ public final class Registration
 			registries.wireless().registerWirelessHandler( (IWirelessTermHandler) terminal );
 		} );
 
+		items.wirelessCraftingTerminal().maybeItem().ifPresent( terminal -> {
+			registries.wireless().registerWirelessHandler( (IWirelessTermHandler) terminal );
+		} );
+
 		// add villager trading to black smiths for a few basic materials
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.VILLAGER_TRADING ) )
 		{

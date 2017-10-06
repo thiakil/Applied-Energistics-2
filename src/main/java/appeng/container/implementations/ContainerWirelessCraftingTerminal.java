@@ -10,6 +10,13 @@ import appeng.util.Platform;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Created by Thiakil on 6/10/2017.
+ *
+ * An amalgamation of the portable cell container and the wireless terminal's, in order to extend crafting term
+ *
+ */
+
 public class ContainerWirelessCraftingTerminal extends ContainerCraftingTerm {
 	private final WirelessTerminalGuiObject wirelessTerminalGUIObject;
 
@@ -37,25 +44,7 @@ public class ContainerWirelessCraftingTerminal extends ContainerCraftingTerm {
 	@Override
 	public void detectAndSendChanges()
 	{
-		detectAndSendChanges_MEPortableCell();
-
-		if( !this.wirelessTerminalGUIObject.rangeCheck() )
-		{
-			if( Platform.isServer() && this.isValidContainer() )
-			{
-				this.getPlayerInv().player.sendMessage( PlayerMessages.OutOfRange.get() );
-			}
-
-			this.setValidContainer( false );
-		}
-		else
-		{
-			this.setPowerMultiplier( AEConfig.instance().wireless_getDrainRate( this.wirelessTerminalGUIObject.getRange() ) );
-		}
-	}
-
-	private void detectAndSendChanges_MEPortableCell()
-	{
+		//from portable cell
 		final ItemStack currentItem = this.slot < 0 ? this.getPlayerInv().getCurrentItem() : this.getPlayerInv().getStackInSlot( this.slot );
 
 		if( this.wirelessTerminalGUIObject != null )
@@ -87,6 +76,21 @@ public class ContainerWirelessCraftingTerminal extends ContainerCraftingTerm {
 			this.ticks = 0;
 		}
 		super.detectAndSendChanges();
+		//end from pirtable cell
+
+		if( !this.wirelessTerminalGUIObject.rangeCheck() )
+		{
+			if( Platform.isServer() && this.isValidContainer() )
+			{
+				this.getPlayerInv().player.sendMessage( PlayerMessages.OutOfRange.get() );
+			}
+
+			this.setValidContainer( false );
+		}
+		else
+		{
+			this.setPowerMultiplier( AEConfig.instance().wireless_getDrainRate( this.wirelessTerminalGUIObject.getRange() ) );
+		}
 	}
 
 	//from ContainerMEPortableCell
