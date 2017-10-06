@@ -115,7 +115,10 @@ public enum MaterialType
 	QESingularity( 48, "material_qesingularity", EnumSet.of( AEFeature.QUANTUM_NETWORK_BRIDGE ), EntitySingularity.class ),
 
 	BlankPattern( 52, "material_blank_pattern", EnumSet.of( AEFeature.PATTERNS ) ),
-	CardCrafting( 53, "material_card_crafting", EnumSet.of( AEFeature.ADVANCED_CARDS, AEFeature.CRAFTING_CPU ) );
+	CardCrafting( 53, "material_card_crafting", EnumSet.of( AEFeature.ADVANCED_CARDS, AEFeature.CRAFTING_CPU ) ),
+
+	QuantumDragonEgg( 99, "quantum_dragon_egg", EnumSet.of( AEFeature.QUANTUM_NETWORK_BRIDGE, AEFeature.WIRELESS_ACCESS_TERMINAL )),
+	;
 
 	private final Set<AEFeature> features;
 	private final ModelResourceLocation model;

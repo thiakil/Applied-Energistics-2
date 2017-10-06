@@ -50,6 +50,8 @@ import appeng.util.Platform;
 public class ToolWirelessTerminal extends AEBasePoweredItem implements IWirelessTermHandler
 {
 
+	private static String EGG_KEY = "hasQuantumEgg";
+
 	public ToolWirelessTerminal()
 	{
 		super( AEConfig.instance().getWirelessTerminalBattery() );
@@ -88,6 +90,10 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 				else
 				{
 					lines.add( GuiText.Linked.getLocal() );
+				}
+
+				if (getHasQuantumEgg( stack )){
+					lines.add( net.minecraft.client.resources.I18n.format( "gui.tooltips.appliedenergistics2.egg_upgrade" ));
 				}
 			}
 		}
@@ -156,4 +162,18 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 	{
         return slotChanged;
     }
+
+	public static void setHasQuantumEgg(ItemStack is, boolean val){
+		if (is.getTagCompound() == null){
+			is.setTagCompound( new NBTTagCompound() );
+		}
+		is.getTagCompound().setBoolean( EGG_KEY, val );
+	}
+
+	public static boolean getHasQuantumEgg(ItemStack is){
+		if (is.getTagCompound() != null && is.getTagCompound().hasKey( EGG_KEY )){
+			return is.getTagCompound().getBoolean( EGG_KEY );
+		}
+		return false;
+	}
 }

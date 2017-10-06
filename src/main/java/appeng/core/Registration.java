@@ -86,6 +86,7 @@ import appeng.recipes.game.DisassembleRecipe;
 import appeng.recipes.game.FacadeRecipe;
 import appeng.recipes.game.ShapedRecipe;
 import appeng.recipes.game.ShapelessRecipe;
+import appeng.recipes.game.WirelessTerminalUpgradeRecipe;
 import appeng.recipes.handlers.Crusher;
 import appeng.recipes.handlers.Grind;
 import appeng.recipes.handlers.HCCrusher;
@@ -312,6 +313,12 @@ public final class Registration
 				GameRegistry.addRecipe( new FacadeRecipe( (ItemFacade) facadeItem ) );
 				RecipeSorter.register( "appliedenergistics2:facade", FacadeRecipe.class, Category.SHAPED, "after:minecraft:shaped" );
 			} );
+		}
+
+		if (AEConfig.instance().isFeatureEnabled( AEFeature.WIRELESS_ACCESS_TERMINAL ) && AEConfig.instance().isFeatureEnabled( AEFeature.QUANTUM_NETWORK_BRIDGE )){
+			GameRegistry.addRecipe( new WirelessTerminalUpgradeRecipe( definitions.items().wirelessTerminal() ) );
+			GameRegistry.addRecipe( new WirelessTerminalUpgradeRecipe( definitions.items().wirelessCraftingTerminal() ) );
+			RecipeSorter.register( "appliedenergistics2:terminal_upgrade", WirelessTerminalUpgradeRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless" );
 		}
 	}
 

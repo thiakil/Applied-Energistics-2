@@ -17,6 +17,22 @@ shaped=
     -> ae2:wireless_terminal
 
 shaped=
+    ae2:material.Wireless,
+    ae2:part.CraftingTerminal,
+    ae2:dense_energy_cell
+    -> ae2:wireless_crafting_terminal
+
+shapeless=
+    ae2:wireless_terminal ae2:part.CraftingTerminal
+    -> ae2:wireless_crafting_terminal
+
+shaped=
     oredictionary:dustFluix certusCrystal dustEnder,
     oredictionary:ingotIron oredictionary:ingotIron oredictionary:ingotIron,
     -> 2 ae2:material.WirelessBooster
+
+shaped=
+    oredictionary:dustRedstone mc:ender_pearl oredictionary:dustRedstone,
+    ae2:material.QESingularity mc:dragon_egg ae2:material.QESingularity,
+    oredictionary:dustRedstone mc:ender_pearl oredictionary:dustRedstone
+    -> ae2:material.QuantumDragonEgg

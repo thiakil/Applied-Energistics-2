@@ -112,6 +112,8 @@ public final class ApiMaterials implements IMaterials
 	private final IItemDefinition qESingularity;
 	private final IItemDefinition blankPattern;
 
+	private final IItemDefinition quantumDragonEgg;
+
 	public ApiMaterials( FeatureFactory registry )
 	{
 		final ItemMaterial materials = new ItemMaterial();
@@ -200,6 +202,8 @@ public final class ApiMaterials implements IMaterials
 		this.singularity = new DamagedItemDefinition( "material.singularity", materials.createMaterial( MaterialType.Singularity ) );
 		this.qESingularity = new DamagedItemDefinition( "material.singularity.entangled.quantum", materials.createMaterial( MaterialType.QESingularity ) );
 		this.blankPattern = new DamagedItemDefinition( "material.pattern.blank", materials.createMaterial( MaterialType.BlankPattern ) );
+
+		this.quantumDragonEgg = new DamagedItemDefinition( "material.entangled.egg", materials.createMaterial( MaterialType.QuantumDragonEgg ) );
 	}
 
 	@Override
@@ -524,5 +528,11 @@ public final class ApiMaterials implements IMaterials
 	public IItemDefinition blankPattern()
 	{
 		return this.blankPattern;
+	}
+
+	@Override
+	public IItemDefinition quantumDragonEgg()
+	{
+		return this.quantumDragonEgg;
 	}
 }
