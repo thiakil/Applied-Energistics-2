@@ -64,6 +64,8 @@ public interface IItems
 
 	IItemDefinition wirelessTerminal();
 
+	IItemDefinition wirelessCraftingTerminal();
+
 	IItemDefinition biometricCard();
 
 	IItemDefinition chargedStaff();

@@ -48,13 +48,7 @@ import appeng.items.tools.ToolBiometricCard;
 import appeng.items.tools.ToolBiometricCardRendering;
 import appeng.items.tools.ToolMemoryCard;
 import appeng.items.tools.ToolNetworkTool;
-import appeng.items.tools.powered.ToolChargedStaff;
-import appeng.items.tools.powered.ToolColorApplicator;
-import appeng.items.tools.powered.ToolColorApplicatorRendering;
-import appeng.items.tools.powered.ToolEntropyManipulator;
-import appeng.items.tools.powered.ToolMatterCannon;
-import appeng.items.tools.powered.ToolPortableCell;
-import appeng.items.tools.powered.ToolWirelessTerminal;
+import appeng.items.tools.powered.*;
 import appeng.items.tools.quartz.ToolQuartzAxe;
 import appeng.items.tools.quartz.ToolQuartzCuttingKnife;
 import appeng.items.tools.quartz.ToolQuartzHoe;
@@ -87,6 +81,7 @@ public final class ApiItems implements IItems
 
 	private final IItemDefinition entropyManipulator;
 	private final IItemDefinition wirelessTerminal;
+	private final IItemDefinition wirelessCraftingTerminal;
 	private final IItemDefinition biometricCard;
 	private final IItemDefinition chargedStaff;
 	private final IItemDefinition massCannon;
@@ -173,6 +168,7 @@ public final class ApiItems implements IItems
 				.dispenserBehavior( DispenserBlockTool::new )
 				.build();
 		this.wirelessTerminal = powerTools.item( "wireless_terminal", ToolWirelessTerminal::new ).addFeatures( AEFeature.WIRELESS_ACCESS_TERMINAL ).build();
+		this.wirelessCraftingTerminal = powerTools.item( "wireless_crafting_terminal", WirelessCraftingTerminal::new ).addFeatures( AEFeature.WIRELESS_ACCESS_TERMINAL ).build();
 		this.chargedStaff = powerTools.item( "charged_staff", ToolChargedStaff::new ).addFeatures( AEFeature.CHARGED_STAFF ).build();
 		this.massCannon = powerTools.item( "matter_cannon", ToolMatterCannon::new )
 				.addFeatures( AEFeature.MATTER_CANNON )
@@ -332,6 +328,12 @@ public final class ApiItems implements IItems
 	public IItemDefinition wirelessTerminal()
 	{
 		return this.wirelessTerminal;
+	}
+
+	@Override
+	public IItemDefinition wirelessCraftingTerminal()
+	{
+		return this.wirelessCraftingTerminal;
 	}
 
 	@Override
