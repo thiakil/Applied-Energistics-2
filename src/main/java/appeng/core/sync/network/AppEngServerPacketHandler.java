@@ -57,7 +57,8 @@ public final class AppEngServerPacketHandler extends AppEngPacketHandlerBase imp
 					{
 						appEngPacket.serverPacketData( manager, appEngPacket, player );
 					} catch( Throwable t ){
-						AELog.error( "Packethandler threw an exception, please report!", t );
+						AELog.error( "Packethandler threw an exception, please report!");
+						AELog.error( t );
 					}
 				}
 			};
