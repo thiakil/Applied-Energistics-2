@@ -210,10 +210,7 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 		if (type == RenderType.HEAD)
 		{
 			IRenderBauble.Helper.translateToHeadLevel( player );
-			if( player.isSneaking() )
-			{
-				IRenderBauble.Helper.rotateIfSneaking( player );
-			}
+			IRenderBauble.Helper.rotateIfSneaking( player );
 			Minecraft.getMinecraft().getRenderItem().renderItem( stack, ItemCameraTransforms.TransformType.HEAD );
 		}
 	}
