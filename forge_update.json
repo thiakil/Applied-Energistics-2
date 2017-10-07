@@ -28,15 +28,16 @@
         "rv5-beta-7": "4ffe339 add SD integration for using the IItemRepository cap\n776ba40 add BC & COFH wrench support back to the wrench and network tool\n04936f1 fix setting `Block.fullBlock`. Calling `isFullSize` in the AEBaseBlock constructor will _always_ return true as it is never overridden.\nb7515e1 mo' access transformery\n36eaa60 eat the expected item change notification in SD handler\n37641e2 compare NBT for SB expected change eating\n7f4be7d compare NBT for SB expected change eating\n1b207d7 let isFullSize override isFullCube() - fixes tiny tnt shadow\n30400a8 change TE creation to Queued if cache"
     },
     "1.12.1": {
-        "rv5-beta-8": "05d8cdf fire block related code only if side is not null (ie when called from outside forces)\n5a6b684 fixed ME Pattern Terminal Dupe with MOVE_REGION\n2a87a71 update dev to 1.12.1\nf70175f check dimension type instead of the provider class to work around provider hijacking\n840aa20 only accept AE2 assets and non MRL model paths\n9340329 prevent any catchable error from failing the entire model loading process\n1e8539a fix formation plane block placement, move fake player creating to modulate block\n3329cea remove useless cache of fake players, Forge already caches them\n71ad19c allow JEI search box to change AL search when in synced mode\n83ed75c fix name press dupe (#66)\n7eca369 version bump"
+        "rv5-beta-8": "05d8cdf fire block related code only if side is not null (ie when called from outside forces)\n5a6b684 fixed ME Pattern Terminal Dupe with MOVE_REGION\n2a87a71 update dev to 1.12.1\nf70175f check dimension type instead of the provider class to work around provider hijacking\n840aa20 only accept AE2 assets and non MRL model paths\n9340329 prevent any catchable error from failing the entire model loading process\n1e8539a fix formation plane block placement, move fake player creating to modulate block\n3329cea remove useless cache of fake players, Forge already caches them\n71ad19c allow JEI search box to change AL search when in synced mode\n83ed75c fix name press dupe (#66)\n7eca369 version bump",
+        "rv5-beta-9": "231b6e1 Added SCS size to the Spatial IO Port. (#3045)\nb32c67d fix forgotten lang file entry still bearing parent project's name\nd86ec37 Update it_it.lang (#3041)\n8d93ad8 Making charged certus ore glow again (#3035)\n61e630f fix mek recipes to give the crystal, not the dust, as dust -> crystal is disabled by default\nf3d1142 WCT base\n64e1f72 actually log the packet exzception\n9ad58c0 WCT works\n52f2cf6 infinite range support for terminals with upgrade\n287218a baubles api\n187765a baubles for wireless teminals\n6f80071 centralise cap injection to prevent premature classloading\n1d9a562 bauble rendering\n0f84e79 update baubles dep to 1.12 version\na6379ce fix recipe for 1.12\n64ce8df fix slot locking fail\ne313547 localisation for keybind\n9d52911 version bump. WCT Edition"
     },
     "homepage": "https://github.com/thiakil/Applied-Energistics-2/releases",
     "promos": {
         "1.11.2-latest": "rv5-beta-9",
         "1.11.2-recommended": "rv5-beta-9",
-        "1.12-latest": "rv5-beta-7",
-        "1.12-recommended": "rv5-beta-7",
-        "1.12.1-latest": "rv5-beta-8",
-        "1.12.1-recommended": "rv5-beta-8"
+        "1.12-latest": "rv5-beta-9",
+        "1.12-recommended": "rv5-beta-9",
+        "1.12.1-latest": "rv5-beta-9",
+        "1.12.1-recommended": "rv5-beta-9"
     }
 }
