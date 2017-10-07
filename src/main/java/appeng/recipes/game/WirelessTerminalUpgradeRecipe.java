@@ -26,11 +26,11 @@ public class WirelessTerminalUpgradeRecipe extends ShapelessRecipes{
 
 	public WirelessTerminalUpgradeRecipe(IItemDefinition termType){
 		super("",
-				termType.maybeStack( 1 ).orElseThrow( RuntimeException::new ),
+				withUpgrade(termType),
 				NonNullList.create()
 		);
 		this.termDef = termType;
-		this.recipeItems.add( Ingredient.fromStacks( withUpgrade(termType) ));
+		this.recipeItems.add( Ingredient.fromStacks( termType.maybeStack( 1 ).orElseThrow( RuntimeException::new ) ));
 		this.recipeItems.add( Ingredient.fromStacks( AEApi.instance().definitions().materials().quantumDragonEgg()
 				.maybeStack( 1 ).orElseThrow( RuntimeException::new ) ));
 	}
