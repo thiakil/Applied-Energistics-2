@@ -92,6 +92,7 @@ import appeng.recipes.CustomRecipeConfig;
 import appeng.recipes.RecipeHandler;
 import appeng.recipes.game.DisassembleRecipe;
 import appeng.recipes.game.FacadeRecipe;
+import appeng.recipes.game.WirelessTerminalUpgradeRecipe;
 import appeng.recipes.handlers.Crusher;
 import appeng.recipes.handlers.Grind;
 import appeng.recipes.handlers.HCCrusher;
@@ -197,6 +198,11 @@ public final class Registration
 				registry.register( new FacadeRecipe( (ItemFacade) facadeItem ).setRegistryName( new ResourceLocation( AppEng.MOD_ID, "facade" ) ) );
 				//RecipeSorter.register( "appliedenergistics2:facade", FacadeRecipe.class, Category.SHAPED, "after:minecraft:shaped" );
 			} );
+		}
+
+		if (AEConfig.instance().isFeatureEnabled( AEFeature.WIRELESS_ACCESS_TERMINAL ) && AEConfig.instance().isFeatureEnabled( AEFeature.QUANTUM_NETWORK_BRIDGE )){
+			GameRegistry.addRecipe( new WirelessTerminalUpgradeRecipe( definitions.items().wirelessTerminal() ) );
+			GameRegistry.addRecipe( new WirelessTerminalUpgradeRecipe( definitions.items().wirelessCraftingTerminal() ) );
 		}
 
 		final Runnable recipeLoader = new RecipeLoader( this.recipeDirectory, this.customRecipeConfig, this.recipeHandler );
@@ -428,6 +434,10 @@ public final class Registration
 		Upgrades.SPEED.registerItem( blocks.inscriber(), 5 );
 
 		items.wirelessTerminal().maybeItem().ifPresent( terminal -> {
+			registries.wireless().registerWirelessHandler( (IWirelessTermHandler) terminal );
+		} );
+
+		items.wirelessCraftingTerminal().maybeItem().ifPresent( terminal -> {
 			registries.wireless().registerWirelessHandler( (IWirelessTermHandler) terminal );
 		} );
 

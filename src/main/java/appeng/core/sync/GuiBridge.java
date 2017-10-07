@@ -22,6 +22,8 @@ package appeng.core.sync;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
+import appeng.capabilities.Capabilities;
+import appeng.container.implementations.*;
 import com.google.common.collect.Lists;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,10 +33,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+
+import baubles.api.cap.IBaublesItemHandler;
 
 import appeng.api.AEApi;
 import appeng.api.config.SecurityPermissions;
@@ -61,45 +67,14 @@ import appeng.client.gui.GuiNull;
 import appeng.container.AEBaseContainer;
 import appeng.container.ContainerNull;
 import appeng.container.ContainerOpenContext;
-import appeng.container.implementations.ContainerCellWorkbench;
-import appeng.container.implementations.ContainerChest;
-import appeng.container.implementations.ContainerCondenser;
-import appeng.container.implementations.ContainerCraftAmount;
-import appeng.container.implementations.ContainerCraftConfirm;
-import appeng.container.implementations.ContainerCraftingCPU;
-import appeng.container.implementations.ContainerCraftingStatus;
-import appeng.container.implementations.ContainerCraftingTerm;
-import appeng.container.implementations.ContainerDrive;
-import appeng.container.implementations.ContainerFormationPlane;
-import appeng.container.implementations.ContainerGrinder;
-import appeng.container.implementations.ContainerIOPort;
-import appeng.container.implementations.ContainerInscriber;
-import appeng.container.implementations.ContainerInterface;
-import appeng.container.implementations.ContainerInterfaceTerminal;
-import appeng.container.implementations.ContainerLevelEmitter;
-import appeng.container.implementations.ContainerMAC;
-import appeng.container.implementations.ContainerMEMonitorable;
-import appeng.container.implementations.ContainerMEPortableCell;
-import appeng.container.implementations.ContainerNetworkStatus;
-import appeng.container.implementations.ContainerNetworkTool;
-import appeng.container.implementations.ContainerPatternTerm;
-import appeng.container.implementations.ContainerPriority;
-import appeng.container.implementations.ContainerQNB;
-import appeng.container.implementations.ContainerQuartzKnife;
-import appeng.container.implementations.ContainerSecurityStation;
-import appeng.container.implementations.ContainerSkyChest;
-import appeng.container.implementations.ContainerSpatialIOPort;
-import appeng.container.implementations.ContainerStorageBus;
-import appeng.container.implementations.ContainerUpgradeable;
-import appeng.container.implementations.ContainerVibrationChamber;
-import appeng.container.implementations.ContainerWireless;
-import appeng.container.implementations.ContainerWirelessTerm;
 import appeng.core.AELog;
 import appeng.core.stats.Achievements;
 import appeng.helpers.IInterfaceHost;
 import appeng.helpers.IPriorityHost;
+import appeng.helpers.WirelessCraftingTerminalGuiObject;
 import appeng.helpers.WirelessTerminalGuiObject;
 import appeng.items.contents.QuartzKnifeObj;
+import appeng.items.tools.powered.WirelessCraftingTerminal;
 import appeng.parts.automation.PartFormationPlane;
 import appeng.parts.automation.PartLevelEmitter;
 import appeng.parts.misc.PartStorageBus;
@@ -193,7 +168,11 @@ public enum GuiBridge implements IGuiHandler
 
 	GUI_INTERFACE_TERMINAL( ContainerInterfaceTerminal.class, PartInterfaceTerminal.class, GuiHostType.WORLD, SecurityPermissions.BUILD ),
 
-	GUI_CRAFTING_STATUS( ContainerCraftingStatus.class, ITerminalHost.class, GuiHostType.ITEM_OR_WORLD, SecurityPermissions.CRAFT );
+	GUI_CRAFTING_STATUS( ContainerCraftingStatus.class, ITerminalHost.class, GuiHostType.ITEM_OR_WORLD, SecurityPermissions.CRAFT ),
+
+	GUI_WIRELESS_CRAFTING_TERM( ContainerWirelessCraftingTerminal.class, WirelessTerminalGuiObject.class, GuiHostType.ITEM, null ),
+
+	;
 
 	private final Class tileClass;
 	private final Class containerClass;
@@ -256,7 +235,7 @@ public enum GuiBridge implements IGuiHandler
 		final GuiBridge ID = decodeModGuiType( modGuiID );
 		if( ID.type.isItem() )
 		{
-			final short invSlot = decodeModGui2( modGuiID );
+			int invSlot = decodeModGui2( modGuiID );
 			ItemStack it = ItemStack.EMPTY;
 			IItemHandler playerInv = player.getCapability( CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null );//combined inv handler
 			if ( playerInv == null )
@@ -272,6 +251,12 @@ public enum GuiBridge implements IGuiHandler
 			else if( invSlot >= 0 && invSlot < playerInv.getSlots() )
 			{
 				it = playerInv.getStackInSlot( invSlot );
+			} else if ( Capabilities.CAPABILITY_BAUBLES != null){
+				IBaublesItemHandler handler = player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
+				if (handler != null)
+				{
+					it = handler.getStackInSlot( invSlot - playerInv.getSlots() );
+				}
 			}
 			final Object myItem = this.getGuiObject( it, player, w, (it.getItem() instanceof IGuiItem) ? x : invSlot, y, z );
 			if( myItem != null && ID.CorrectTileOrPart( myItem ) )
@@ -312,6 +297,9 @@ public enum GuiBridge implements IGuiHandler
 
 			final IWirelessTermHandler wh = AEApi.instance().registries().wireless().getWirelessTerminalHandler(it);
 			if (wh != null) {
+				if (wh instanceof WirelessCraftingTerminal){
+					return new WirelessCraftingTerminalGuiObject( wh, it, player, w, x );
+				}
 				return new WirelessTerminalGuiObject(wh, it, player, w, x);//x == slot!
 			}
 		}
@@ -443,7 +431,7 @@ public enum GuiBridge implements IGuiHandler
 		final GuiBridge ID = decodeModGuiType( modGuiID );
 		if( ID.type.isItem() )
 		{
-			final short invSlot = decodeModGui2( modGuiID );
+			int invSlot = decodeModGui2( modGuiID );
 			ItemStack it = ItemStack.EMPTY;
 			IItemHandler playerInv = player.getCapability( CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null );//combined inv handler
 			if ( playerInv == null )
@@ -459,6 +447,12 @@ public enum GuiBridge implements IGuiHandler
 			else if( invSlot >= 0 && invSlot < playerInv.getSlots() )
 			{
 				it = playerInv.getStackInSlot( invSlot );
+			} else if (Capabilities.CAPABILITY_BAUBLES != null){
+				IBaublesItemHandler handler = player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
+				if (handler != null)
+				{
+					it = handler.getStackInSlot( invSlot - playerInv.getSlots() );
+				}
 			}
 			final Object myItem = this.getGuiObject( it, player, w, (it.getItem() instanceof IGuiItem) ? x : invSlot, y, z );
 			if( myItem != null && ID.CorrectTileOrPart( myItem ) )

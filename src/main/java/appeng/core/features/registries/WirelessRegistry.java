@@ -22,6 +22,7 @@ package appeng.core.features.registries;
 import java.util.ArrayList;
 import java.util.List;
 
+import appeng.items.tools.powered.WirelessCraftingTerminal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -111,7 +112,11 @@ public final class WirelessRegistry implements IWirelessTermRegistry
 
 		if( handler.hasPower( player, 0.5, item ) )
 		{
-			Platform.openGUI( player, GuiBridge.GUI_WIRELESS_TERM, item );
+			if (item.getItem() instanceof WirelessCraftingTerminal){
+				Platform.openGUI( player, GuiBridge.GUI_WIRELESS_CRAFTING_TERM, item );
+			} else {
+				Platform.openGUI( player, GuiBridge.GUI_WIRELESS_TERM, item );
+			}
 		}
 		else
 		{

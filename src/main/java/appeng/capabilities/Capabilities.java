@@ -27,6 +27,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
+import baubles.api.IBauble;
+import baubles.api.cap.IBaublesItemHandler;
+
 import appeng.api.storage.IStorageMonitorableAccessor;
 
 
@@ -48,6 +51,12 @@ public final class Capabilities
 
 	@CapabilityInject( ITeslaHolder.class )
 	public static Capability<ITeslaHolder> TESLA_HOLDER;
+
+	@CapabilityInject(IBaublesItemHandler.class)
+	public static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
+
+	@CapabilityInject(IBauble.class)
+	public static Capability<IBauble> CAPABILITY_ITEM_BAUBLE = null;
 
 	/**
 	 * Register AE2 provided capabilities.

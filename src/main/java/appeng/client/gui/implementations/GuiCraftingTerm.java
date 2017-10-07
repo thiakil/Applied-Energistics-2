@@ -19,6 +19,7 @@
 package appeng.client.gui.implementations;
 
 
+import appeng.container.implementations.ContainerMEMonitorable;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -44,6 +45,11 @@ public class GuiCraftingTerm extends GuiMEMonitorable
 	public GuiCraftingTerm( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
 	{
 		super( inventoryPlayer, te, new ContainerCraftingTerm( inventoryPlayer, te ) );
+		this.setReservedSpace( 73 );
+	}
+
+	public GuiCraftingTerm( final InventoryPlayer inventoryPlayer, final ITerminalHost te, final ContainerMEMonitorable c ){
+		super(inventoryPlayer, te, c);
 		this.setReservedSpace( 73 );
 	}
 

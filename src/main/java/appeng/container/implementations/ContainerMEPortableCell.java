@@ -21,10 +21,15 @@ package appeng.container.implementations;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+
+import baubles.api.cap.IBaublesItemHandler;
 
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
 import appeng.api.implementations.guiobjects.IPortableCell;
+import appeng.capabilities.Capabilities;
 import appeng.container.interfaces.IInventorySlotAware;
 import appeng.util.Platform;
 
@@ -56,10 +61,28 @@ public class ContainerMEPortableCell extends ContainerMEMonitorable
 		this.bindPlayerInventory( ip, 0, 0 );
 	}
 
+	private ItemStack getTerminalFromSlot(int slot){
+		if (slot < 0){
+			return this.getPlayerInv().getCurrentItem();
+		}
+		if (slot < this.getPlayerInv().getSizeInventory())
+		{
+			return this.getPlayerInv().getStackInSlot( slot );
+		}
+		if ( Capabilities.CAPABILITY_BAUBLES != null){
+			IBaublesItemHandler handler = this.getPlayerInv().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
+			if (handler != null)
+			{
+				return handler.getStackInSlot( slot - this.getPlayerInv().getSizeInventory() );
+			}
+		}
+		return ItemStack.EMPTY;
+	}
+
 	@Override
 	public void detectAndSendChanges()
 	{
-		final ItemStack currentItem = this.slot < 0 ? this.getPlayerInv().getCurrentItem() : this.getPlayerInv().getStackInSlot( this.slot );
+		final ItemStack currentItem = getTerminalFromSlot(this.slot);
 
 		if( this.civ != null )
 		{

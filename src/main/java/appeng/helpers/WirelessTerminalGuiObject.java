@@ -49,13 +49,15 @@ import appeng.api.util.AEPartLocation;
 import appeng.api.util.DimensionalCoord;
 import appeng.api.util.IConfigManager;
 import appeng.container.interfaces.IInventorySlotAware;
+import appeng.core.AEConfig;
+import appeng.items.tools.powered.ToolWirelessTerminal;
 import appeng.tile.networking.TileWireless;
 
 
 public class WirelessTerminalGuiObject implements IPortableCell, IActionHost, IInventorySlotAware
 {
 
-	private final ItemStack effectiveItem;
+	protected final ItemStack effectiveItem;
 	private final IWirelessTermHandler wth;
 	private final String encryptionKey;
 	private final EntityPlayer myPlayer;
@@ -315,12 +317,20 @@ public class WirelessTerminalGuiObject implements IPortableCell, IActionHost, II
 
 		if( this.targetGrid != null && this.itemStorage != null )
 		{
-			if( this.myWap != null )
+			if( this.myWap != null && this.myWap.isActive() )
 			{
 				if( this.myWap.getGrid() == this.targetGrid )
 				{
-					if( this.testWap( this.myWap ) )
+					if( this.testWap( this.myWap ))
 					{
+						return true;
+					} else if (ToolWirelessTerminal.getHasQuantumEgg( this.effectiveItem )){
+						if (this.myWap.getLocation().getWorld() == this.myPlayer.world){
+							this.sqRange = getWapRange( this.myWap );
+							this.myRange = Math.sqrt( this.sqRange );
+						} else {
+							setMaxRange();
+						}
 						return true;
 					}
 				}
@@ -334,15 +344,70 @@ public class WirelessTerminalGuiObject implements IPortableCell, IActionHost, II
 			for( final IGridNode n : tw )
 			{
 				final IWirelessAccessPoint wap = (IWirelessAccessPoint) n.getMachine();
-				if( this.testWap( wap ) )
+				if( wap.isActive() )
 				{
-					this.myWap = wap;
+					if( this.testWap( wap ) )
+					{
+						this.myWap = wap;
+					}
+				}
+			}
+
+			if (this.myWap == null && ToolWirelessTerminal.getHasQuantumEgg( this.effectiveItem )){
+				boolean hasAnActiveWap = false;
+				for( final IGridNode n : tw )
+				{
+					final IWirelessAccessPoint wap = (IWirelessAccessPoint) n.getMachine();
+					if( wap.isActive() )
+					{
+						hasAnActiveWap = true;
+
+						double r = getWapRange( wap );
+						if (r >= 0 && this.sqRange > r){
+							this.myWap = wap;
+							this.sqRange = r;
+							this.myRange = Math.sqrt( r );
+						}
+					}
+				}
+
+				if (this.myWap == null && hasAnActiveWap){//none in this dimension, but does have an active one.
+					for( final IGridNode n : tw )
+					{
+						final IWirelessAccessPoint wap = (IWirelessAccessPoint) n.getMachine();
+						if( wap.isActive() )
+						{
+							this.myWap = wap;
+							break;
+						}
+					}
+					setMaxRange();
 				}
 			}
 
 			return this.myWap != null;
 		}
 		return false;
+	}
+
+	private void setMaxRange(){
+		this.sqRange = AEConfig.instance().wireless_getMaxRange(64);
+		this.myRange = Math.sqrt( this.sqRange );
+	}
+
+	private double getWapRange( final IWirelessAccessPoint wap )
+	{
+		final DimensionalCoord dc = wap.getLocation();
+
+		if( dc.getWorld() == this.myPlayer.world )
+		{
+			final double offX = dc.x - this.myPlayer.posX;
+			final double offY = dc.y - this.myPlayer.posY;
+			final double offZ = dc.z - this.myPlayer.posZ;
+
+			return offX * offX + offY * offY + offZ * offZ;
+		}
+		return -1;
 	}
 
 	private boolean testWap( final IWirelessAccessPoint wap )
@@ -361,12 +426,9 @@ public class WirelessTerminalGuiObject implements IPortableCell, IActionHost, II
 			final double r = offX * offX + offY * offY + offZ * offZ;
 			if( r < rangeLimit && this.sqRange > r )
 			{
-				if( wap.isActive() )
-				{
-					this.sqRange = r;
-					this.myRange = Math.sqrt( r );
-					return true;
-				}
+				this.sqRange = r;
+				this.myRange = Math.sqrt( r );
+				return true;
 			}
 		}
 		return false;

@@ -21,16 +21,32 @@ package appeng.items.tools.powered;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
+import baubles.api.cap.BaubleItem;
+import baubles.api.render.IRenderBauble;
 
 import appeng.api.AEApi;
 import appeng.api.config.Settings;
@@ -39,6 +55,7 @@ import appeng.api.config.SortOrder;
 import appeng.api.config.ViewItems;
 import appeng.api.features.IWirelessTermHandler;
 import appeng.api.util.IConfigManager;
+import appeng.capabilities.Capabilities;
 import appeng.core.AEConfig;
 import appeng.core.localization.GuiText;
 import appeng.items.tools.powered.powersink.AEBasePoweredItem;
@@ -46,9 +63,11 @@ import appeng.util.ConfigManager;
 import appeng.util.IConfigManagerHost;
 import appeng.util.Platform;
 
-
-public class ToolWirelessTerminal extends AEBasePoweredItem implements IWirelessTermHandler
+@Optional.Interface( iface = "baubles.api.render.IRenderBauble", modid = "baubles" )
+public class ToolWirelessTerminal extends AEBasePoweredItem implements IWirelessTermHandler, IRenderBauble
 {
+
+	private static String EGG_KEY = "hasQuantumEgg";
 
 	public ToolWirelessTerminal()
 	{
@@ -88,6 +107,10 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 				else
 				{
 					lines.add( GuiText.Linked.getLocal() );
+				}
+
+				if (getHasQuantumEgg( stack )){
+					lines.add( net.minecraft.client.resources.I18n.format( "gui.tooltips.appliedenergistics2.egg_upgrade" ));
 				}
 			}
 		}
@@ -151,9 +174,87 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 		tag.setString( "name", name );
 	}
 
-        @Override
-        public boolean shouldCauseReequipAnimation( ItemStack oldStack, ItemStack newStack, boolean slotChanged ) 
+    @Override
+    public boolean shouldCauseReequipAnimation( ItemStack oldStack, ItemStack newStack, boolean slotChanged )
 	{
-	        return slotChanged;
-        }
+        return slotChanged;
+    }
+
+	public static void setHasQuantumEgg(ItemStack is, boolean val){
+		if (is.getTagCompound() == null){
+			is.setTagCompound( new NBTTagCompound() );
+		}
+		is.getTagCompound().setBoolean( EGG_KEY, val );
+	}
+
+	public static boolean getHasQuantumEgg(ItemStack is){
+		if (is.getTagCompound() != null && is.getTagCompound().hasKey( EGG_KEY )){
+			return is.getTagCompound().getBoolean( EGG_KEY );
+		}
+		return false;
+	}
+
+	@Override
+	public ICapabilityProvider initCapabilities( ItemStack stack, NBTTagCompound nbt )
+	{
+		ICapabilityProvider parent = super.initCapabilities( stack, nbt );
+
+		return Capabilities.CAPABILITY_ITEM_BAUBLE != null ? new BaubleHandler(parent) : parent;
+	}
+
+	@SideOnly( Side.CLIENT )
+	@Optional.Method( modid = "baubles" )
+	@Override
+	public void onPlayerBaubleRender( ItemStack stack, EntityPlayer player, RenderType type, float partialTicks )
+	{
+		if (type == RenderType.HEAD)
+		{
+			IRenderBauble.Helper.translateToHeadLevel( player );
+			if( player.isSneaking() )
+			{
+				IRenderBauble.Helper.rotateIfSneaking( player );
+			}
+			Minecraft.getMinecraft().getRenderItem().renderItem( stack, ItemCameraTransforms.TransformType.HEAD );
+		}
+	}
+
+	private static class BaubleHandler implements ICapabilityProvider {
+
+		private final @Nullable ICapabilityProvider parent;
+
+		private final BaubleItem bauble = new BaubleItem( BaubleType.HEAD ) {
+			@Override
+			public boolean willAutoSync( ItemStack itemstack, EntityLivingBase player )
+			{
+				return true;
+			}
+		};
+
+		public BaubleHandler(ICapabilityProvider p){
+			parent = p;
+		}
+
+		@Override
+		public boolean hasCapability( @Nonnull Capability<?> capability, @Nullable EnumFacing facing )
+		{
+			return capability == Capabilities.CAPABILITY_ITEM_BAUBLE || parent != null && parent.hasCapability( capability, facing );
+		}
+
+		@Nullable
+		@Override
+		public <T> T getCapability( @Nonnull Capability<T> capability, @Nullable EnumFacing facing )
+		{
+			if (capability == Capabilities.CAPABILITY_ITEM_BAUBLE){
+				return Capabilities.CAPABILITY_ITEM_BAUBLE.cast(bauble);
+			}
+			return parent != null ? parent.getCapability( capability, facing ) : null;
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean hasEffect( ItemStack stack )
+	{
+		return getHasQuantumEgg( stack );
+	}
 }
