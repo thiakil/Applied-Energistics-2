@@ -28,7 +28,7 @@ public class ContainerWirelessCraftingTerminal extends ContainerCraftingTerm {
 
 	public ContainerWirelessCraftingTerminal( final InventoryPlayer ip, final WirelessTerminalGuiObject gui )
 	{
-		super( ip, gui );
+		super( ip, gui, false );
 		this.wirelessTerminalGUIObject = gui;
 
 		//from MEPortableCell
