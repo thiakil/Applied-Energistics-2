@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
@@ -24,15 +25,14 @@ public class WirelessTerminalUpgradeRecipe extends ShapelessRecipes{
 	private final IItemDefinition termDef;
 
 	public WirelessTerminalUpgradeRecipe(IItemDefinition termType){
-		super(
+		super("",
 				termType.maybeStack( 1 ).orElseThrow( RuntimeException::new ),
-				Lists.newArrayList(
-						withUpgrade(termType),
-						AEApi.instance().definitions().materials().quantumDragonEgg()
-							.maybeStack( 1 ).orElseThrow( RuntimeException::new )
-				)
+				NonNullList.create()
 		);
 		this.termDef = termType;
+		this.recipeItems.add( Ingredient.fromStacks( withUpgrade(termType) ));
+		this.recipeItems.add( Ingredient.fromStacks( AEApi.instance().definitions().materials().quantumDragonEgg()
+				.maybeStack( 1 ).orElseThrow( RuntimeException::new ) ));
 	}
 
 	private static ItemStack withUpgrade(IItemDefinition t){
@@ -75,7 +75,7 @@ public class WirelessTerminalUpgradeRecipe extends ShapelessRecipes{
 
 	public boolean matches(InventoryCrafting inv, World worldIn)
 	{
-		List<ItemStack> list = Lists.newArrayList(this.recipeItems);
+		List<Ingredient> list = Lists.newArrayList(this.recipeItems);
 
 		for (int i = 0; i < inv.getHeight(); ++i)
 		{
@@ -87,14 +87,14 @@ public class WirelessTerminalUpgradeRecipe extends ShapelessRecipes{
 				{
 					boolean flag = false;
 
-					for (ItemStack itemstack1 : list)
+					for (Ingredient ingredient : list)
 					{
-						if (itemstack.getItem() == itemstack1.getItem() && (itemstack1.getMetadata() == 32767 || itemstack.getMetadata() == itemstack1.getMetadata()))
+						if (ingredient.apply(itemstack))
 						{
-							if (!termDef.isSameAs(itemstack1) || !ToolWirelessTerminal.getHasQuantumEgg( itemstack ))
+							if (!termDef.isSameAs(itemstack) || !ToolWirelessTerminal.getHasQuantumEgg( itemstack ))
 							{
 								flag = true;
-								list.remove( itemstack1 );
+								list.remove( ingredient );
 								break;
 							}
 						}
