@@ -24,6 +24,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -37,12 +39,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.api.cap.BaubleItem;
+import baubles.api.render.IRenderBauble;
 
 import appeng.api.AEApi;
 import appeng.api.config.Settings;
@@ -59,8 +63,8 @@ import appeng.util.ConfigManager;
 import appeng.util.IConfigManagerHost;
 import appeng.util.Platform;
 
-
-public class ToolWirelessTerminal extends AEBasePoweredItem implements IWirelessTermHandler
+@Optional.Interface( iface = "baubles.api.render.IRenderBauble", modid = "baubles" )
+public class ToolWirelessTerminal extends AEBasePoweredItem implements IWirelessTermHandler, IRenderBauble
 {
 
 	private static String EGG_KEY = "hasQuantumEgg";
@@ -196,6 +200,22 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 		ICapabilityProvider parent = super.initCapabilities( stack, nbt );
 
 		return Capabilities.CAPABILITY_ITEM_BAUBLE != null ? new BaubleHandler(parent) : parent;
+	}
+
+	@SideOnly( Side.CLIENT )
+	@Optional.Method( modid = "baubles" )
+	@Override
+	public void onPlayerBaubleRender( ItemStack stack, EntityPlayer player, RenderType type, float partialTicks )
+	{
+		if (type == RenderType.HEAD)
+		{
+			IRenderBauble.Helper.translateToHeadLevel( player );
+			if( player.isSneaking() )
+			{
+				IRenderBauble.Helper.rotateIfSneaking( player );
+			}
+			Minecraft.getMinecraft().getRenderItem().renderItem( stack, ItemCameraTransforms.TransformType.HEAD );
+		}
 	}
 
 	private static class BaubleHandler implements ICapabilityProvider {

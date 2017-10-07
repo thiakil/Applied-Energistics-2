@@ -2,5 +2,12 @@
     "parent": "item/generated",
     "textures": {
         "layer0": "appliedenergistics2:items/wireless_terminal"
+    },
+    "display":{
+        "head": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 18.5, 4.3],
+            "scale":[ 0.5, -0.5, 0.5]
+        }
     }
 }
