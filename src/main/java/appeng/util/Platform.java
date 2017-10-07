@@ -450,9 +450,6 @@ public class Platform
 		}
 	}
 
-	@CapabilityInject(IBaublesItemHandler.class)
-	private static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
-
 	/**
 	 * Open a GUI for an Item, which must exist in the player's inventory
 	 * @param p the player to open the gui for, and inventory to scan
@@ -482,8 +479,8 @@ public class Platform
 					break;
 				}
 			}
-			if (invSlot == -1 && CAPABILITY_BAUBLES != null){
-				IBaublesItemHandler handler = p.getCapability( CAPABILITY_BAUBLES, null );
+			if (invSlot == -1 && Capabilities.CAPABILITY_BAUBLES != null){
+				IBaublesItemHandler handler = p.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 				if (handler != null)
 				{
 					int slots = handler.getSlots();

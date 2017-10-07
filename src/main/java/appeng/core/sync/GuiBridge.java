@@ -22,6 +22,7 @@ package appeng.core.sync;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
+import appeng.capabilities.Capabilities;
 import appeng.container.implementations.*;
 import com.google.common.collect.Lists;
 
@@ -228,9 +229,6 @@ public enum GuiBridge implements IGuiHandler
 		this.getGui();
 	}
 
-	@CapabilityInject(IBaublesItemHandler.class)
-	private static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
-
 	@Override
 	public Object getServerGuiElement( final int modGuiID, final EntityPlayer player, final World w, final int x, final int y, final int z )
 	{
@@ -253,8 +251,8 @@ public enum GuiBridge implements IGuiHandler
 			else if( invSlot >= 0 && invSlot < playerInv.getSlots() )
 			{
 				it = playerInv.getStackInSlot( invSlot );
-			} else if (CAPABILITY_BAUBLES != null){
-				IBaublesItemHandler handler = player.getCapability( CAPABILITY_BAUBLES, null );
+			} else if ( Capabilities.CAPABILITY_BAUBLES != null){
+				IBaublesItemHandler handler = player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 				if (handler != null)
 				{
 					it = handler.getStackInSlot( invSlot - playerInv.getSlots() );
@@ -448,8 +446,8 @@ public enum GuiBridge implements IGuiHandler
 			else if( invSlot >= 0 && invSlot < playerInv.getSlots() )
 			{
 				it = playerInv.getStackInSlot( invSlot );
-			} else if (CAPABILITY_BAUBLES != null){
-				IBaublesItemHandler handler = player.getCapability( CAPABILITY_BAUBLES, null );
+			} else if (Capabilities.CAPABILITY_BAUBLES != null){
+				IBaublesItemHandler handler = player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 				if (handler != null)
 				{
 					it = handler.getStackInSlot( invSlot - playerInv.getSlots() );

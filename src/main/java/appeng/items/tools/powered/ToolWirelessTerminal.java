@@ -51,6 +51,7 @@ import appeng.api.config.SortOrder;
 import appeng.api.config.ViewItems;
 import appeng.api.features.IWirelessTermHandler;
 import appeng.api.util.IConfigManager;
+import appeng.capabilities.Capabilities;
 import appeng.core.AEConfig;
 import appeng.core.localization.GuiText;
 import appeng.items.tools.powered.powersink.AEBasePoweredItem;
@@ -189,15 +190,12 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 		return false;
 	}
 
-	@CapabilityInject(IBauble.class)
-	public static Capability<IBauble> CAPABILITY_ITEM_BAUBLE = null;
-
 	@Override
 	public ICapabilityProvider initCapabilities( ItemStack stack, NBTTagCompound nbt )
 	{
 		ICapabilityProvider parent = super.initCapabilities( stack, nbt );
 
-		return CAPABILITY_ITEM_BAUBLE != null ? new BaubleHandler(parent) : parent;
+		return Capabilities.CAPABILITY_ITEM_BAUBLE != null ? new BaubleHandler(parent) : parent;
 	}
 
 	private static class BaubleHandler implements ICapabilityProvider {
@@ -219,15 +217,15 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 		@Override
 		public boolean hasCapability( @Nonnull Capability<?> capability, @Nullable EnumFacing facing )
 		{
-			return capability == CAPABILITY_ITEM_BAUBLE || parent != null && parent.hasCapability( capability, facing );
+			return capability == Capabilities.CAPABILITY_ITEM_BAUBLE || parent != null && parent.hasCapability( capability, facing );
 		}
 
 		@Nullable
 		@Override
 		public <T> T getCapability( @Nonnull Capability<T> capability, @Nullable EnumFacing facing )
 		{
-			if (capability == CAPABILITY_ITEM_BAUBLE){
-				return CAPABILITY_ITEM_BAUBLE.cast(bauble);
+			if (capability == Capabilities.CAPABILITY_ITEM_BAUBLE){
+				return Capabilities.CAPABILITY_ITEM_BAUBLE.cast(bauble);
 			}
 			return parent != null ? parent.getCapability( capability, facing ) : null;
 		}

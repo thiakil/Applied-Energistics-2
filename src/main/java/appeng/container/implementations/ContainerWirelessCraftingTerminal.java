@@ -2,6 +2,7 @@ package appeng.container.implementations;
 
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
+import appeng.capabilities.Capabilities;
 import appeng.container.interfaces.IInventorySlotAware;
 import appeng.core.AEConfig;
 import appeng.core.localization.PlayerMessages;
@@ -46,10 +47,6 @@ public class ContainerWirelessCraftingTerminal extends ContainerCraftingTerm {
 		//end from MEPortableCell
 	}
 
-
-	@CapabilityInject(IBaublesItemHandler.class)
-	private static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
-
 	private ItemStack getTerminalFromSlot(int slot){
 		if (slot < 0){
 			return this.getPlayerInv().getCurrentItem();
@@ -58,8 +55,8 @@ public class ContainerWirelessCraftingTerminal extends ContainerCraftingTerm {
 		{
 			return this.getPlayerInv().getStackInSlot( slot );
 		}
-		if (CAPABILITY_BAUBLES != null){
-			IBaublesItemHandler handler = this.getPlayerInv().player.getCapability( CAPABILITY_BAUBLES, null );
+		if ( Capabilities.CAPABILITY_BAUBLES != null){
+			IBaublesItemHandler handler = this.getPlayerInv().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 			if (handler != null)
 			{
 				return handler.getStackInSlot( slot - this.getPlayerInv().getSizeInventory() );

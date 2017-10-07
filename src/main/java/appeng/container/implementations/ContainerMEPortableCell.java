@@ -29,6 +29,7 @@ import baubles.api.cap.IBaublesItemHandler;
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
 import appeng.api.implementations.guiobjects.IPortableCell;
+import appeng.capabilities.Capabilities;
 import appeng.container.interfaces.IInventorySlotAware;
 import appeng.util.Platform;
 
@@ -60,9 +61,6 @@ public class ContainerMEPortableCell extends ContainerMEMonitorable
 		this.bindPlayerInventory( ip, 0, 0 );
 	}
 
-	@CapabilityInject(IBaublesItemHandler.class)
-	private static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
-
 	private ItemStack getTerminalFromSlot(int slot){
 		if (slot < 0){
 			return this.getPlayerInv().getCurrentItem();
@@ -71,8 +69,8 @@ public class ContainerMEPortableCell extends ContainerMEMonitorable
 		{
 			return this.getPlayerInv().getStackInSlot( slot );
 		}
-		if (CAPABILITY_BAUBLES != null){
-			IBaublesItemHandler handler = this.getPlayerInv().player.getCapability( CAPABILITY_BAUBLES, null );
+		if ( Capabilities.CAPABILITY_BAUBLES != null){
+			IBaublesItemHandler handler = this.getPlayerInv().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 			if (handler != null)
 			{
 				return handler.getStackInSlot( slot - this.getPlayerInv().getSizeInventory() );

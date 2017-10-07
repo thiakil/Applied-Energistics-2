@@ -13,6 +13,7 @@ import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 
 import appeng.api.AEApi;
+import appeng.capabilities.Capabilities;
 import appeng.core.sync.AppEngPacket;
 import appeng.core.sync.network.INetworkInfo;
 import appeng.items.tools.powered.ToolWirelessTerminal;
@@ -23,10 +24,6 @@ import appeng.items.tools.powered.ToolWirelessTerminal;
  */
 public class PacketBaubleTerminalKey extends AppEngPacket
 {
-	@CapabilityInject(IBaublesItemHandler.class)
-	private static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
-	@CapabilityInject(IBauble.class)
-	private static Capability<IBauble> CAPABILITY_ITEM_BAUBLE = null;
 
 	public PacketBaubleTerminalKey( final ByteBuf stream ){
 		//we store nothing
@@ -42,9 +39,9 @@ public class PacketBaubleTerminalKey extends AppEngPacket
 	@Override
 	public void serverPacketData( INetworkInfo manager, AppEngPacket packet, EntityPlayer player )
 	{
-		if (CAPABILITY_BAUBLES != null && CAPABILITY_ITEM_BAUBLE != null) {
+		if ( Capabilities.CAPABILITY_BAUBLES != null ) {
 			// Someone pressed our terminalKey. We send a message
-			IBaublesItemHandler handler = player.getCapability( CAPABILITY_BAUBLES, null );
+			IBaublesItemHandler handler = player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 			if (handler != null){
 				int slots = handler.getSlots();
 				ItemStack term = ItemStack.EMPTY;

@@ -58,6 +58,7 @@ import baubles.api.cap.IBaublesItemHandler;
 import appeng.api.parts.CableRenderMode;
 import appeng.api.util.AEColor;
 import appeng.block.AEBaseBlock;
+import appeng.capabilities.Capabilities;
 import appeng.client.render.effects.AssemblerFX;
 import appeng.client.render.effects.CraftingFx;
 import appeng.client.render.effects.EnergyFx;
@@ -91,11 +92,6 @@ public class ClientHelper extends ServerHelper
 {
 
 	private static KeyBinding terminalKey;
-
-	@CapabilityInject(IBaublesItemHandler.class)
-	private static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
-	@CapabilityInject(IBauble.class)
-	private static Capability<IBauble> CAPABILITY_ITEM_BAUBLE = null;
 
 	@Override
 	public void preinit()
@@ -379,9 +375,9 @@ public class ClientHelper extends ServerHelper
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		if (CAPABILITY_BAUBLES != null && CAPABILITY_ITEM_BAUBLE != null && terminalKey.isPressed()) {
+		if ( Capabilities.CAPABILITY_BAUBLES != null && terminalKey.isPressed()) {
 			// Someone pressed our terminalKey. We send a message
-			IBaublesItemHandler handler = Minecraft.getMinecraft().player.getCapability( CAPABILITY_BAUBLES, null );
+			IBaublesItemHandler handler = Minecraft.getMinecraft().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 			if (handler != null){
 				int slots = handler.getSlots();
 				ItemStack term = ItemStack.EMPTY;
