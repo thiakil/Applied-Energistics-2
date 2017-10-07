@@ -109,7 +109,7 @@ public class ClientHelper extends ServerHelper
 	{
 		if ( Loader.isModLoaded( "baubles" ) )
 		{
-			terminalKey = new KeyBinding( "key.appliedenergistics2.terminal", Keyboard.CHAR_NONE, "key.categories.appliedenergistics2" );
+			terminalKey = new KeyBinding( "key.appliedenergistics2.terminal", Keyboard.CHAR_NONE, "itemGroup.appliedenergistics2" );
 			ClientRegistry.registerKeyBinding( terminalKey );
 		}
 	}
