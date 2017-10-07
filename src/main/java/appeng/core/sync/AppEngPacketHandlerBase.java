@@ -27,6 +27,7 @@ import java.util.Map;
 import io.netty.buffer.ByteBuf;
 
 import appeng.core.sync.packets.PacketAssemblerAnimation;
+import appeng.core.sync.packets.PacketBaubleTerminalKey;
 import appeng.core.sync.packets.PacketClick;
 import appeng.core.sync.packets.PacketCompassRequest;
 import appeng.core.sync.packets.PacketCompassResponse;
@@ -101,7 +102,10 @@ public class AppEngPacketHandlerBase
 
 		PACKET_COMPRESSED_NBT( PacketCompressedNBT.class ),
 
-		PACKET_PAINTED_ENTITY( PacketPaintedEntity.class );
+		PACKET_PAINTED_ENTITY( PacketPaintedEntity.class ),
+
+		PACKET_BAUBLE_KEY( PacketBaubleTerminalKey.class )
+		;
 
 		private final Class<? extends AppEngPacket> packetClass;
 		private final Constructor<? extends AppEngPacket> packetConstructor;

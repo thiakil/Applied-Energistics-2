@@ -32,10 +32,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+
+import baubles.api.cap.IBaublesItemHandler;
 
 import appeng.api.AEApi;
 import appeng.api.config.SecurityPermissions;
@@ -224,13 +228,16 @@ public enum GuiBridge implements IGuiHandler
 		this.getGui();
 	}
 
+	@CapabilityInject(IBaublesItemHandler.class)
+	private static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
+
 	@Override
 	public Object getServerGuiElement( final int modGuiID, final EntityPlayer player, final World w, final int x, final int y, final int z )
 	{
 		final GuiBridge ID = decodeModGuiType( modGuiID );
 		if( ID.type.isItem() )
 		{
-			final short invSlot = decodeModGui2( modGuiID );
+			int invSlot = decodeModGui2( modGuiID );
 			ItemStack it = ItemStack.EMPTY;
 			IItemHandler playerInv = player.getCapability( CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null );//combined inv handler
 			if ( playerInv == null )
@@ -246,6 +253,12 @@ public enum GuiBridge implements IGuiHandler
 			else if( invSlot >= 0 && invSlot < playerInv.getSlots() )
 			{
 				it = playerInv.getStackInSlot( invSlot );
+			} else if (CAPABILITY_BAUBLES != null){
+				IBaublesItemHandler handler = player.getCapability( CAPABILITY_BAUBLES, null );
+				if (handler != null)
+				{
+					it = handler.getStackInSlot( invSlot - playerInv.getSlots() );
+				}
 			}
 			final Object myItem = this.getGuiObject( it, player, w, (it.getItem() instanceof IGuiItem) ? x : invSlot, y, z );
 			if( myItem != null && ID.CorrectTileOrPart( myItem ) )
@@ -419,7 +432,7 @@ public enum GuiBridge implements IGuiHandler
 		final GuiBridge ID = decodeModGuiType( modGuiID );
 		if( ID.type.isItem() )
 		{
-			final short invSlot = decodeModGui2( modGuiID );
+			int invSlot = decodeModGui2( modGuiID );
 			ItemStack it = ItemStack.EMPTY;
 			IItemHandler playerInv = player.getCapability( CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null );//combined inv handler
 			if ( playerInv == null )
@@ -435,6 +448,12 @@ public enum GuiBridge implements IGuiHandler
 			else if( invSlot >= 0 && invSlot < playerInv.getSlots() )
 			{
 				it = playerInv.getStackInSlot( invSlot );
+			} else if (CAPABILITY_BAUBLES != null){
+				IBaublesItemHandler handler = player.getCapability( CAPABILITY_BAUBLES, null );
+				if (handler != null)
+				{
+					it = handler.getStackInSlot( invSlot - playerInv.getSlots() );
+				}
 			}
 			final Object myItem = this.getGuiObject( it, player, w, (it.getItem() instanceof IGuiItem) ? x : invSlot, y, z );
 			if( myItem != null && ID.CorrectTileOrPart( myItem ) )

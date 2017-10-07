@@ -24,9 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -41,8 +44,16 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
+
+import baubles.api.IBauble;
+import baubles.api.cap.IBaublesItemHandler;
 
 import appeng.api.parts.CableRenderMode;
 import appeng.api.util.AEColor;
@@ -61,6 +72,7 @@ import appeng.core.AELog;
 import appeng.core.AppEng;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketAssemblerAnimation;
+import appeng.core.sync.packets.PacketBaubleTerminalKey;
 import appeng.core.sync.packets.PacketValueConfig;
 import appeng.coremod.MissingCoreMod;
 import appeng.entity.EntityFloatingItem;
@@ -70,12 +82,20 @@ import appeng.entity.RenderTinyTNTPrimed;
 import appeng.helpers.IMouseWheelItem;
 import appeng.hooks.TickHandler;
 import appeng.hooks.TickHandler.PlayerColor;
+import appeng.items.tools.powered.ToolWirelessTerminal;
 import appeng.server.ServerHelper;
 import appeng.util.Platform;
 
 
 public class ClientHelper extends ServerHelper
 {
+
+	private static KeyBinding terminalKey;
+
+	@CapabilityInject(IBaublesItemHandler.class)
+	private static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
+	@CapabilityInject(IBauble.class)
+	private static Capability<IBauble> CAPABILITY_ITEM_BAUBLE = null;
 
 	@Override
 	public void preinit()
@@ -91,25 +111,11 @@ public class ClientHelper extends ServerHelper
 	@Override
 	public void init()
 	{
-		// final Block fluixBlock = GameRegistry.findBlock( "appliedenergistics2", "fluix" );
-		// Item fluixItem = Item.getItemFromBlock( fluixBlock );
-		// ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation( "appliedenergistics2:fluix",
-		// "inventory" );
-		// final int DEFAULT_ITEM_SUBTYPE = 0;
-		// final ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-		// // mesher.register( fluixItem, DEFAULT_ITEM_SUBTYPE, itemModelResourceLocation );
-		//
-		// final ResourceLocation resource = new ResourceLocation( "appliedenergistics2", "stair.fluix" );
-		// final ModelResourceLocation fluixStairModel = new ModelResourceLocation( resource, "inventory" );
-		// AELog.info( "FluixStairModel: " + fluixStairModel );
-		//
-		// final Set<Item> items = AEApi.instance().definitions().blocks().fluixStairs().maybeItem().asSet();
-		// for( Item item : items )
-		// {
-		// AELog.info( "Registering with %s with unlocalized %s", item, item.getUnlocalizedName() );
-		// mesher.register( item, DEFAULT_ITEM_SUBTYPE, fluixStairModel );
-		// }
-
+		if ( Loader.isModLoaded( "baubles" ) )
+		{
+			terminalKey = new KeyBinding( "key.appliedenergistics2.terminal", Keyboard.CHAR_NONE, "key.categories.appliedenergistics2" );
+			ClientRegistry.registerKeyBinding( terminalKey );
+		}
 	}
 
 	@Override
@@ -369,5 +375,27 @@ public class ClientHelper extends ServerHelper
 	{
 		ParticleTextures.registerSprite( event );
 		InscriberTESR.registerTexture( event );
+	}
+
+	@SubscribeEvent
+	public void onKeyInput(InputEvent.KeyInputEvent event) {
+		if (CAPABILITY_BAUBLES != null && CAPABILITY_ITEM_BAUBLE != null && terminalKey.isPressed()) {
+			// Someone pressed our terminalKey. We send a message
+			IBaublesItemHandler handler = Minecraft.getMinecraft().player.getCapability( CAPABILITY_BAUBLES, null );
+			if (handler != null){
+				int slots = handler.getSlots();
+				ItemStack term = ItemStack.EMPTY;
+				for (int slot = 0; slot < slots; slot++){
+					ItemStack stack = handler.getStackInSlot( slot );
+					if (!stack.isEmpty() && stack.getItem() instanceof ToolWirelessTerminal){
+						term = stack;
+						break;
+					}
+				}
+				if (!term.isEmpty()){
+					NetworkHandler.instance().sendToServer( new PacketBaubleTerminalKey() );
+				}
+			}
+		}
 	}
 }

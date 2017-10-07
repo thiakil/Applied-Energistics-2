@@ -21,16 +21,28 @@ package appeng.items.tools.powered;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
+import baubles.api.cap.BaubleItem;
 
 import appeng.api.AEApi;
 import appeng.api.config.Settings;
@@ -175,5 +187,56 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 			return is.getTagCompound().getBoolean( EGG_KEY );
 		}
 		return false;
+	}
+
+	@CapabilityInject(IBauble.class)
+	public static Capability<IBauble> CAPABILITY_ITEM_BAUBLE = null;
+
+	@Override
+	public ICapabilityProvider initCapabilities( ItemStack stack, NBTTagCompound nbt )
+	{
+		ICapabilityProvider parent = super.initCapabilities( stack, nbt );
+
+		return CAPABILITY_ITEM_BAUBLE != null ? new BaubleHandler(parent) : parent;
+	}
+
+	private static class BaubleHandler implements ICapabilityProvider {
+
+		private final @Nullable ICapabilityProvider parent;
+
+		private final BaubleItem bauble = new BaubleItem( BaubleType.HEAD ) {
+			@Override
+			public boolean willAutoSync( ItemStack itemstack, EntityLivingBase player )
+			{
+				return true;
+			}
+		};
+
+		public BaubleHandler(ICapabilityProvider p){
+			parent = p;
+		}
+
+		@Override
+		public boolean hasCapability( @Nonnull Capability<?> capability, @Nullable EnumFacing facing )
+		{
+			return capability == CAPABILITY_ITEM_BAUBLE || parent != null && parent.hasCapability( capability, facing );
+		}
+
+		@Nullable
+		@Override
+		public <T> T getCapability( @Nonnull Capability<T> capability, @Nullable EnumFacing facing )
+		{
+			if (capability == CAPABILITY_ITEM_BAUBLE){
+				return CAPABILITY_ITEM_BAUBLE.cast(bauble);
+			}
+			return parent != null ? parent.getCapability( capability, facing ) : null;
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean hasEffect( ItemStack stack )
+	{
+		return getHasQuantumEgg( stack );
 	}
 }

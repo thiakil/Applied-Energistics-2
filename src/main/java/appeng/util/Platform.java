@@ -77,6 +77,8 @@ import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -86,6 +88,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
+
+import baubles.api.cap.IBaublesItemHandler;
 
 import appeng.api.AEApi;
 import appeng.api.config.AccessRestriction;
@@ -446,6 +450,9 @@ public class Platform
 		}
 	}
 
+	@CapabilityInject(IBaublesItemHandler.class)
+	private static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
+
 	/**
 	 * Open a GUI for an Item, which must exist in the player's inventory
 	 * @param p the player to open the gui for, and inventory to scan
@@ -473,6 +480,20 @@ public class Platform
 				{
 					invSlot = i;
 					break;
+				}
+			}
+			if (invSlot == -1 && CAPABILITY_BAUBLES != null){
+				IBaublesItemHandler handler = p.getCapability( CAPABILITY_BAUBLES, null );
+				if (handler != null)
+				{
+					int slots = handler.getSlots();
+					for (int slot = 0; slot < slots; slot++)
+					{
+						ItemStack stack = handler.getStackInSlot( slot );
+						if (stack.equals( is )){
+							invSlot = (short) (playerInv.getSlots() + slot);
+						}
+					}
 				}
 			}
 			p.openGui( AppEng.instance(), GuiBridge.encodeModGui( type, invSlot ), p.getEntityWorld(), x, y, z );
