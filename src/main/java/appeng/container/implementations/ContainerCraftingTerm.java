@@ -45,7 +45,11 @@ public class ContainerCraftingTerm extends ContainerMEMonitorable implements IAE
 	private final SlotCraftingMatrix[] craftingSlots = new SlotCraftingMatrix[9];
 	private final SlotCraftingTerm outputSlot;
 
-	public ContainerCraftingTerm( final InventoryPlayer ip, final ITerminalHost monitorable )
+	public ContainerCraftingTerm( final InventoryPlayer ip, final ITerminalHost monitorable){
+		this(ip, monitorable, true);
+	}
+
+	public ContainerCraftingTerm( final InventoryPlayer ip, final ITerminalHost monitorable, boolean bindInventory )
 	{
 		super( ip, monitorable, false );
 		this.ct = (ISegmentedInventory) monitorable;
@@ -62,7 +66,10 @@ public class ContainerCraftingTerm extends ContainerMEMonitorable implements IAE
 
 		this.addSlotToContainer( this.outputSlot = new SlotCraftingTerm( this.getPlayerInv().player, this.getActionSource(), this.getPowerSource(), monitorable, crafting, crafting, this.output, 131, -72 + 18, this ) );
 
-		this.bindPlayerInventory( ip, 0, 0 );
+		if (bindInventory)
+		{
+			this.bindPlayerInventory( ip, 0, 0 );
+		}
 
 		this.onCraftMatrixChanged( crafting );
 	}
