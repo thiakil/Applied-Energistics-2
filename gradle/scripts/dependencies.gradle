@@ -62,6 +62,7 @@ repositories {
     maven {
         name = "storagedrawers"
         url = "https://dl.bintray.com/jaquadro/dev/"
+    }
     maven {
         name "Thiakil"
         url = "https://maven.thiakil.com"
