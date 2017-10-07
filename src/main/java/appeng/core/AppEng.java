@@ -80,7 +80,7 @@ public final class AppEng
 			// a few mods, AE should load after, probably.
 			// required-after:AppliedEnergistics2API|all;
 			"after:gregtech_addon;after:mekanism;after:ic2;after:thermalexpansion;after:buildcraft;after:opencomputers@[1.7.0,];" +
-			"after:baubles@[1.4.3,];" +
+			"after:baubles@[1.5.1,];" +
 			// depend on version of forge used for build.
 			"required-after:appliedenergistics2-core;";// + "required-after:Forge@[" // require forge.
 					//+ net.minecraftforge.common.ForgeVersion.majorVersion + '.' // majorVersion
