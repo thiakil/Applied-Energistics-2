@@ -532,7 +532,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Override
 	public ItemStack getItemStack()
 	{
-		final ItemStack is = new ItemStack( this.getDefinition().getItem(), (int) Math.min( Integer.MAX_VALUE, this.getStackSize() ), this.getDefinition().getDamageValue(), this.getDefinition().getCapsTag() );
+		final ItemStack is = new ItemStack( this.getDefinition().getItem(), (int) Math.min( Byte.MAX_VALUE, this.getStackSize() ), this.getDefinition().getDamageValue(), this.getDefinition().getCapsTag() );
 		if( this.getDefinition().getTagCompound() != null )
 		{
 			is.setTagCompound( this.getDefinition().getTagCompound().getNBTTagCompoundCopy() );
@@ -543,7 +543,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 
 	public ItemStack getDisplayItemStack()
 	{
-		final ItemStack is = new ItemStack( this.getDefinition().getItem(), (int) Math.max(1, Math.min( Integer.MAX_VALUE, this.getStackSize() )), this.getDefinition().getDamageValue(), this.getDefinition().getCapsTag() );
+		final ItemStack is = new ItemStack( this.getDefinition().getItem(), (int) Math.max(1, Math.min( Byte.MAX_VALUE, this.getStackSize() )), this.getDefinition().getDamageValue(), this.getDefinition().getCapsTag() );
 		if( this.getDefinition().getTagCompound() != null )
 		{
 			is.setTagCompound( this.getDefinition().getTagCompound().getNBTTagCompoundCopy() );
