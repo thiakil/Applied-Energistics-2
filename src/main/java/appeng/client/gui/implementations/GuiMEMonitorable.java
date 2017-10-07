@@ -462,8 +462,13 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 	@Override
 	protected void keyTyped( final char character, final int key ) throws IOException
 	{
-		if( !this.checkHotbarKeys( key ) )
+		if( this.searchField.isFocused() || !this.checkHotbarKeys( key ) )
 		{
+			if (key == Keyboard.KEY_TAB){
+				this.searchField.setFocused( true );
+				return;
+			}
+
 			if( character == ' ' && this.searchField.getText().isEmpty() )
 			{
 				return;

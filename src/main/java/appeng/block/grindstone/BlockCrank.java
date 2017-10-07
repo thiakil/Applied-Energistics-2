@@ -36,6 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 
 import appeng.api.implementations.tiles.ICrankable;
+import appeng.api.util.IOrientable;
 import appeng.block.AEBaseTileBlock;
 import appeng.core.stats.Stats;
 import appeng.tile.AEBaseTile;
@@ -120,6 +121,18 @@ public class BlockCrank extends AEBaseTileBlock
 		return null;
 	}
 
+	private EnumFacing findCrankableExcept( final World world, final BlockPos pos, EnumFacing notThis )
+	{
+		for( final EnumFacing dir : EnumFacing.VALUES )
+		{
+			if( dir != notThis && this.isCrankable( world, pos, dir ) )
+			{
+				return dir;
+			}
+		}
+		return null;
+	}
+
 	private boolean isCrankable( final World world, final BlockPos pos, final EnumFacing offset )
 	{
 		final BlockPos o = pos.offset( offset );
@@ -164,4 +177,25 @@ public class BlockCrank extends AEBaseTileBlock
 		return false;
 	}
 
+	@Override
+	protected boolean hasCustomRotation()
+	{
+		return true;
+	}
+
+	@Override
+	protected void customRotateBlock( IOrientable rotatable, EnumFacing axis )
+	{
+		TileEntity te = ((TileEntity)rotatable);
+		final EnumFacing mnt = this.findCrankableExcept( te.getWorld(), te.getPos(), rotatable.getUp().getOpposite() );
+		if (mnt != null)
+		{
+			EnumFacing forward = EnumFacing.UP;
+			if( mnt == EnumFacing.UP || mnt == EnumFacing.DOWN )
+			{
+				forward = EnumFacing.SOUTH;
+			}
+			rotatable.setOrientation( forward, mnt.getOpposite() );
+		}
+	}
 }
