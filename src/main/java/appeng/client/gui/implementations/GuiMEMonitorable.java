@@ -110,12 +110,12 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		this.setScrollBar( scrollbar );
 		this.repo = new ItemRepo( scrollbar, this );
 
-		this.xSize = 185;
+		this.xSize = 195;
 		this.ySize = 204;
 
 		if( te instanceof IViewCellStorage )
 		{
-			this.xSize += 33;
+			this.xSize += 35;
 		}
 
 		this.standardSize = this.xSize;
