@@ -44,6 +44,7 @@ import appeng.api.features.IGrinderRecipe;
 import appeng.api.features.IInscriberRecipe;
 import appeng.container.implementations.ContainerCraftingTerm;
 import appeng.container.implementations.ContainerPatternTerm;
+import appeng.container.implementations.ContainerWirelessCraftingTerminal;
 import appeng.core.AEConfig;
 import appeng.core.features.AEFeature;
 import appeng.core.localization.GuiText;
@@ -77,6 +78,8 @@ public class JEIPlugin extends BlankModPlugin
 		registry.getRecipeTransferRegistry().addRecipeTransferHandler( new RecipeTransferHandler<>( ContainerCraftingTerm.class ),
 				VanillaRecipeCategoryUid.CRAFTING );
 		registry.getRecipeTransferRegistry().addRecipeTransferHandler( new RecipeTransferHandler<>( ContainerPatternTerm.class ),
+				VanillaRecipeCategoryUid.CRAFTING );
+		registry.getRecipeTransferRegistry().addRecipeTransferHandler( new RecipeTransferHandler<>( ContainerWirelessCraftingTerminal.class ),
 				VanillaRecipeCategoryUid.CRAFTING );
 	}
 
