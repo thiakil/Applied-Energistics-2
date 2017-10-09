@@ -77,8 +77,6 @@ import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -487,8 +485,9 @@ public class Platform
 					for (int slot = 0; slot < slots; slot++)
 					{
 						ItemStack stack = handler.getStackInSlot( slot );
-						if (stack.equals( is )){
+						if (stack== is ){
 							invSlot = (short) (playerInv.getSlots() + slot);
+							break;
 						}
 					}
 				}

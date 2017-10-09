@@ -52,6 +52,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 
+import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 
@@ -73,6 +74,7 @@ import appeng.core.AELog;
 import appeng.core.AppEng;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketAssemblerAnimation;
+import appeng.core.sync.packets.PacketBaublePortableCellKey;
 import appeng.core.sync.packets.PacketBaubleTerminalKey;
 import appeng.core.sync.packets.PacketValueConfig;
 import appeng.coremod.MissingCoreMod;
@@ -83,6 +85,7 @@ import appeng.entity.RenderTinyTNTPrimed;
 import appeng.helpers.IMouseWheelItem;
 import appeng.hooks.TickHandler;
 import appeng.hooks.TickHandler.PlayerColor;
+import appeng.items.tools.powered.ToolPortableCell;
 import appeng.items.tools.powered.ToolWirelessTerminal;
 import appeng.server.ServerHelper;
 import appeng.util.Platform;
@@ -92,6 +95,7 @@ public class ClientHelper extends ServerHelper
 {
 
 	private static KeyBinding terminalKey;
+	private static KeyBinding portableCellKey;
 
 	@Override
 	public void preinit()
@@ -111,6 +115,8 @@ public class ClientHelper extends ServerHelper
 		{
 			terminalKey = new KeyBinding( "key.appliedenergistics2.terminal", Keyboard.CHAR_NONE, "itemGroup.appliedenergistics2" );
 			ClientRegistry.registerKeyBinding( terminalKey );
+			portableCellKey = new KeyBinding( "key.appliedenergistics2.portableCell", Keyboard.CHAR_NONE, "itemGroup.appliedenergistics2" );
+			ClientRegistry.registerKeyBinding( portableCellKey );
 		}
 	}
 
@@ -375,21 +381,37 @@ public class ClientHelper extends ServerHelper
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		if ( Capabilities.CAPABILITY_BAUBLES != null && terminalKey.isPressed()) {
-			// Someone pressed our terminalKey. We send a message
-			IBaublesItemHandler handler = Minecraft.getMinecraft().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
-			if (handler != null){
-				int slots = handler.getSlots();
-				ItemStack term = ItemStack.EMPTY;
-				for (int slot = 0; slot < slots; slot++){
-					ItemStack stack = handler.getStackInSlot( slot );
-					if (!stack.isEmpty() && stack.getItem() instanceof ToolWirelessTerminal){
-						term = stack;
-						break;
+		if ( Capabilities.CAPABILITY_BAUBLES != null){
+			if (terminalKey.isPressed()) {
+				// Someone pressed our terminalKey. We send a message
+				IBaublesItemHandler handler = Minecraft.getMinecraft().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
+				if (handler != null){
+					ItemStack term = ItemStack.EMPTY;
+					for (int slot : BaubleType.HEAD.getValidSlots()){
+						ItemStack stack = handler.getStackInSlot( slot );
+						if (!stack.isEmpty() && stack.getItem() instanceof ToolWirelessTerminal){
+							term = stack;
+							break;
+						}
+					}
+					if (!term.isEmpty()){
+						NetworkHandler.instance().sendToServer( new PacketBaubleTerminalKey() );
 					}
 				}
-				if (!term.isEmpty()){
-					NetworkHandler.instance().sendToServer( new PacketBaubleTerminalKey() );
+			} else if (portableCellKey.isPressed()){
+				IBaublesItemHandler handler = Minecraft.getMinecraft().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
+				if (handler != null){
+					ItemStack portableCell = ItemStack.EMPTY;
+					for (int slot : BaubleType.BELT.getValidSlots()){
+						ItemStack stack = handler.getStackInSlot( slot );
+						if (!stack.isEmpty() && stack.getItem() instanceof ToolPortableCell){
+							portableCell = stack;
+							break;
+						}
+					}
+					if (!portableCell.isEmpty()){
+						NetworkHandler.instance().sendToServer( new PacketBaublePortableCellKey() );
+					}
 				}
 			}
 		}
