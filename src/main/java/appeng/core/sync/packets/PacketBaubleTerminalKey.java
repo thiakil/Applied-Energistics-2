@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
+import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 
@@ -43,9 +44,8 @@ public class PacketBaubleTerminalKey extends AppEngPacket
 			// Someone pressed our terminalKey. We send a message
 			IBaublesItemHandler handler = player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 			if (handler != null){
-				int slots = handler.getSlots();
 				ItemStack term = ItemStack.EMPTY;
-				for (int slot = 0; slot < slots; slot++){
+				for (int slot : BaubleType.HEAD.getValidSlots()){
 					ItemStack stack = handler.getStackInSlot( slot );
 					if (!stack.isEmpty() && stack.getItem() instanceof ToolWirelessTerminal ){
 						term = stack;
