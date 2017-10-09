@@ -31,6 +31,8 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import baubles.api.cap.IBaublesItemHandler;
+
 import appeng.api.AEApi;
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
@@ -58,14 +60,17 @@ import appeng.api.storage.data.IItemList;
 import appeng.api.util.AEPartLocation;
 import appeng.api.util.IConfigManager;
 import appeng.api.util.IConfigurableObject;
+import appeng.capabilities.Capabilities;
 import appeng.container.AEBaseContainer;
 import appeng.container.guisync.GuiSync;
+import appeng.container.slot.SlotBauble;
 import appeng.container.slot.SlotRestrictedInput;
 import appeng.core.AELog;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketMEInventoryUpdate;
 import appeng.core.sync.packets.PacketValueConfig;
 import appeng.me.helpers.ChannelPowerSrc;
+import appeng.util.BaublesSlots;
 import appeng.util.ConfigManager;
 import appeng.util.IConfigManagerHost;
 import appeng.util.Platform;
@@ -449,5 +454,35 @@ public class ContainerMEMonitorable extends AEBaseContainer implements IConfigMa
 	public void setGui( @Nonnull final IConfigManagerHost gui )
 	{
 		this.gui = gui;
+	}
+
+
+	public int baubleOffsetX;
+	public int baubleOffsetY;
+	@Override
+	protected void bindPlayerInventory( InventoryPlayer inventoryPlayer, int offsetX, int offsetY )
+	{
+		super.bindPlayerInventory( inventoryPlayer, offsetX, offsetY );
+
+		//Baubles
+		if (this.shouldShowBaubles()){
+			baubleOffsetX = offsetX - BaublesSlots.BG_X_OFFSET;
+			baubleOffsetY = offsetY - BaublesSlots.BG_Y_OFFSET;
+			IBaublesItemHandler handler = inventoryPlayer.player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
+			if (handler != null){
+				for ( BaublesSlots bSlot : BaublesSlots.values()){
+					//baubles slots are referred to with slot ids higher than player inv
+					if (this.locked.contains( bSlot.slotNum+inventoryPlayer.getSizeInventory() )){
+						this.addSlotToContainer( new SlotBauble.Disabled( inventoryPlayer.player, handler, bSlot.slotNum, baubleOffsetX+bSlot.offsetX, baubleOffsetY+bSlot.offsetY ) );
+					} else {
+						this.addSlotToContainer( new SlotBauble( inventoryPlayer.player, handler, bSlot.slotNum, baubleOffsetX+bSlot.offsetX, baubleOffsetY+bSlot.offsetY ) );
+					}
+				}
+			}
+		}
+	}
+
+	public boolean shouldShowBaubles(){
+		return Capabilities.CAPABILITY_BAUBLES != null;
 	}
 }

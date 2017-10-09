@@ -24,7 +24,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 
-public class SlotDisabled extends AppEngSlot
+public class SlotDisabled extends AppEngSlot implements IUnclickableSlot
 {
 
 	public SlotDisabled( final IInventory par1iInventory, final int slotIndex, final int x, final int y )

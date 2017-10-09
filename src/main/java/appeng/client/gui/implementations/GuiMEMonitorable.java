@@ -63,6 +63,7 @@ import appeng.helpers.WirelessTerminalGuiObject;
 import appeng.integration.Integrations;
 import appeng.parts.reporting.AbstractPartTerminal;
 import appeng.tile.misc.TileSecurityStation;
+import appeng.util.BaublesSlots;
 import appeng.util.IConfigManagerHost;
 import appeng.util.Platform;
 
@@ -428,6 +429,15 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		{
 			this.searchField.drawTextBox();
 		}
+
+		if (monitorableContainer.shouldShowBaubles()){
+			this.bindTexture( "guis/baubles.png" );
+			this.drawTexturedModalRect( this.guiLeft-BaublesSlots.BG_X_OFFSET-1, getBaublesY( offsetY ), 0, 0, BaublesSlots.BG_WIDTH, BaublesSlots.BG_HEIGHT );
+		}
+	}
+
+	protected int getBaublesY(int offsetY){
+		return offsetY + 16 + this.rows * 18 + this.lowerTextureOffset + BaublesSlots.BG_Y_OFFSET + 1 + this.reservedSpace;
 	}
 
 	protected String getBackground()
