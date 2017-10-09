@@ -2,6 +2,7 @@ package appeng.container.implementations;
 
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
+import appeng.api.networking.IGridNode;
 import appeng.capabilities.Capabilities;
 import appeng.container.interfaces.IInventorySlotAware;
 import appeng.core.AEConfig;
@@ -115,6 +116,12 @@ public class ContainerWirelessCraftingTerminal extends ContainerCraftingTerm {
 		{
 			this.setPowerMultiplier( AEConfig.instance().wireless_getDrainRate( this.wirelessTerminalGUIObject.getRange() ) );
 		}
+	}
+
+	@Override
+	public IGridNode getNetworkNode()
+	{
+		return this.wirelessTerminalGUIObject.getActionableNode();
 	}
 
 	//from ContainerMEPortableCell
