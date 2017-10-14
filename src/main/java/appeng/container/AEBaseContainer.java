@@ -32,6 +32,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
@@ -41,6 +42,8 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
+import baubles.api.cap.IBaublesItemHandler;
 
 import appeng.api.AEApi;
 import appeng.api.config.Actionable;
@@ -57,11 +60,14 @@ import appeng.api.networking.security.PlayerSource;
 import appeng.api.parts.IPart;
 import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.data.IAEItemStack;
+import appeng.capabilities.Capabilities;
 import appeng.client.me.InternalSlotME;
 import appeng.client.me.SlotME;
 import appeng.container.guisync.GuiSync;
 import appeng.container.guisync.SyncData;
 import appeng.container.slot.AppEngSlot;
+import appeng.container.slot.IUnclickableSlot;
+import appeng.container.slot.SlotBauble;
 import appeng.container.slot.SlotCraftingMatrix;
 import appeng.container.slot.SlotCraftingTerm;
 import appeng.container.slot.SlotDisabled;
@@ -77,6 +83,7 @@ import appeng.core.sync.packets.PacketPartialItem;
 import appeng.core.sync.packets.PacketValueConfig;
 import appeng.helpers.ICustomNameObject;
 import appeng.helpers.InventoryAction;
+import appeng.util.BaublesSlots;
 import appeng.util.InventoryAdaptor;
 import appeng.util.Platform;
 import appeng.util.inv.AdaptorPlayerHand;
@@ -88,7 +95,7 @@ public abstract class AEBaseContainer extends Container
 
 	private final InventoryPlayer invPlayer;
 	private final BaseActionSource mySrc;
-	private final HashSet<Integer> locked = new HashSet<Integer>();
+	protected final HashSet<Integer> locked = new HashSet<Integer>();
 	private final TileEntity tileEntity;
 	private final IPart part;
 	private final IGuiItemObject obj;
@@ -415,6 +422,18 @@ public abstract class AEBaseContainer extends Container
 				this.addSlotToContainer( new SlotPlayerHotBar( inventoryPlayer, i, 8 + i * 18 + offsetX, 58 + offsetY ) );
 			}
 		}
+
+		if (hasOffhandSlot()){
+			Slot offhandSlot;
+			if (this.locked.contains( 40 )){
+				this.addSlotToContainer( offhandSlot = new SlotDisabled( inventoryPlayer, 40, 174 + offsetX, 58 + offsetY ) );
+			}
+			else
+			{
+				this.addSlotToContainer( offhandSlot = new SlotPlayerHotBar( inventoryPlayer, 40, 174 + offsetX, 58 + offsetY ) );
+			}
+			offhandSlot.setBackgroundName( "minecraft:items/empty_armor_slot_shield" );
+		}
 	}
 
 	@Override
@@ -452,6 +471,20 @@ public abstract class AEBaseContainer extends Container
 	}
 
 	@Override
+	public ItemStack slotClick( int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player )
+	{
+		if (slotId > 0 && slotId < this.inventorySlots.size())
+		{
+			Slot clickSlot = this.inventorySlots.get( slotId );
+			if( clickSlot instanceof IUnclickableSlot )
+			{
+				return ItemStack.EMPTY;
+			}
+		}
+		return super.slotClick( slotId, dragType, clickTypeIn, player );
+	}
+
+	@Override
 	public ItemStack transferStackInSlot( final EntityPlayer p, final int idx )
 	{
 		if( Platform.isClient() )
@@ -476,7 +509,7 @@ public abstract class AEBaseContainer extends Container
 
 		final AppEngSlot clickSlot = (AppEngSlot) this.inventorySlots.get( idx ); // require AE SLots!
 
-		if( clickSlot instanceof SlotDisabled || clickSlot instanceof SlotInaccessible )
+		if( clickSlot instanceof IUnclickableSlot )
 		{
 			return ItemStack.EMPTY;
 		}
@@ -1266,5 +1299,9 @@ public abstract class AEBaseContainer extends Container
 	public void setPowerSource( final IEnergySource powerSrc )
 	{
 		this.powerSrc = powerSrc;
+	}
+
+	protected boolean hasOffhandSlot(){
+		return false;
 	}
 }

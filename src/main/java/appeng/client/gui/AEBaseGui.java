@@ -66,6 +66,7 @@ import appeng.container.AEBaseContainer;
 import appeng.container.slot.AppEngCraftingSlot;
 import appeng.container.slot.AppEngSlot;
 import appeng.container.slot.AppEngSlot.hasCalculatedValidness;
+import appeng.container.slot.IUnclickableSlot;
 import appeng.container.slot.OptionalSlotFake;
 import appeng.container.slot.SlotCraftingTerm;
 import appeng.container.slot.SlotDisabled;
@@ -384,6 +385,12 @@ public abstract class AEBaseGui extends GuiContainer
 
 			return;
 		}
+
+		if( slot instanceof IUnclickableSlot )
+		{
+			return;
+		}
+
 
 		if( Keyboard.isKeyDown( Keyboard.KEY_SPACE ) )
 		{

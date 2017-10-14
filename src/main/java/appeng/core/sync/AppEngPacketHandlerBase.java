@@ -27,6 +27,7 @@ import java.util.Map;
 import io.netty.buffer.ByteBuf;
 
 import appeng.core.sync.packets.PacketAssemblerAnimation;
+import appeng.core.sync.packets.PacketBaublePortableCellKey;
 import appeng.core.sync.packets.PacketBaubleTerminalKey;
 import appeng.core.sync.packets.PacketClick;
 import appeng.core.sync.packets.PacketCompassRequest;
@@ -104,7 +105,9 @@ public class AppEngPacketHandlerBase
 
 		PACKET_PAINTED_ENTITY( PacketPaintedEntity.class ),
 
-		PACKET_BAUBLE_KEY( PacketBaubleTerminalKey.class )
+		PACKET_BAUBLE_KEY( PacketBaubleTerminalKey.class ),
+
+		PACKET_PORTABLE_CELL_KEY( PacketBaublePortableCellKey.class ),
 		;
 
 		private final Class<? extends AppEngPacket> packetClass;

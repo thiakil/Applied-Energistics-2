@@ -57,7 +57,11 @@ public enum Settings
 
 	STORAGE_FILTER( EnumSet.allOf( StorageFilter.class ) ), PLACE_BLOCK( EnumSet.of( YesNo.YES, YesNo.NO ) ),
 
-	SCHEDULING_MODE( EnumSet.allOf( SchedulingMode.class ) );
+	SCHEDULING_MODE( EnumSet.allOf( SchedulingMode.class ) ),
+
+	PORTABLE_CELL_AUTOPICKUP ( EnumSet.of( YesNo.YES, YesNo.NO ) ),
+
+	;
 
 	private final EnumSet<? extends Enum<?>> values;
 

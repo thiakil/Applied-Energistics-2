@@ -33,8 +33,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -74,6 +72,7 @@ import appeng.helpers.IPriorityHost;
 import appeng.helpers.WirelessCraftingTerminalGuiObject;
 import appeng.helpers.WirelessTerminalGuiObject;
 import appeng.items.contents.QuartzKnifeObj;
+import appeng.items.tools.ToolNetworkTool;
 import appeng.items.tools.powered.WirelessCraftingTerminal;
 import appeng.parts.automation.PartFormationPlane;
 import appeng.parts.automation.PartLevelEmitter;
@@ -258,7 +257,7 @@ public enum GuiBridge implements IGuiHandler
 					it = handler.getStackInSlot( invSlot - playerInv.getSlots() );
 				}
 			}
-			final Object myItem = this.getGuiObject( it, player, w, (it.getItem() instanceof IGuiItem) ? x : invSlot, y, z );
+			final Object myItem = this.getGuiObject( it, player, w, (it.getItem() instanceof ToolNetworkTool ) ? x : invSlot, y, z );
 			if( myItem != null && ID.CorrectTileOrPart( myItem ) )
 			{
 				return this.updateGui( ID.ConstructContainer( player.inventory, AEPartLocation.INTERNAL, myItem ), w, x, y, z, AEPartLocation.INTERNAL, myItem );
@@ -454,7 +453,7 @@ public enum GuiBridge implements IGuiHandler
 					it = handler.getStackInSlot( invSlot - playerInv.getSlots() );
 				}
 			}
-			final Object myItem = this.getGuiObject( it, player, w, (it.getItem() instanceof IGuiItem) ? x : invSlot, y, z );
+			final Object myItem = this.getGuiObject( it, player, w, (it.getItem() instanceof ToolNetworkTool ) ? x : invSlot, y, z );
 			if( myItem != null && ID.CorrectTileOrPart( myItem ) )
 			{
 				return ID.ConstructGui( player.inventory, AEPartLocation.INTERNAL, myItem );

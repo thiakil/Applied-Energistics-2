@@ -132,6 +132,10 @@ public enum ButtonToolTips
 	ItemsStored,
 	ItemsRequestable,
 
+	AutoPickup,
+	AutoPickupOn,
+	AutoPickupOff,
+
 	SchedulingMode,
 	SchedulingModeDefault,
 	SchedulingModeRoundRobin,

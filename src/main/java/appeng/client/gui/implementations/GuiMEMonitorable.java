@@ -63,6 +63,7 @@ import appeng.helpers.WirelessTerminalGuiObject;
 import appeng.integration.Integrations;
 import appeng.parts.reporting.AbstractPartTerminal;
 import appeng.tile.misc.TileSecurityStation;
+import appeng.util.BaublesSlots;
 import appeng.util.IConfigManagerHost;
 import appeng.util.Platform;
 
@@ -111,12 +112,12 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		this.setScrollBar( scrollbar );
 		this.repo = new ItemRepo( scrollbar, this );
 
-		this.xSize = 185;
+		this.xSize = 198;
 		this.ySize = 204;
 
 		if( te instanceof IViewCellStorage )
 		{
-			this.xSize += 33;
+			this.xSize += 35;
 		}
 
 		this.standardSize = this.xSize;
@@ -398,7 +399,7 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 	{
 
 		this.bindTexture( this.getBackground() );
-		final int x_width = 197;
+		final int x_width = 198;
 		this.drawTexturedModalRect( offsetX, offsetY, 0, 0, x_width, 18 );
 
 		if( this.viewCell || ( this instanceof GuiSecurityStation ) )
@@ -436,6 +437,15 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		{
 			this.searchField.drawTextBox();
 		}
+
+		if (monitorableContainer.shouldShowBaubles()){
+			this.bindTexture( "guis/baubles.png" );
+			this.drawTexturedModalRect( this.guiLeft-BaublesSlots.BG_X_OFFSET-1, getBaublesY( offsetY ), 0, 0, BaublesSlots.BG_WIDTH, BaublesSlots.BG_HEIGHT );
+		}
+	}
+
+	protected int getBaublesY(int offsetY){
+		return offsetY + 16 + this.rows * 18 + this.lowerTextureOffset + BaublesSlots.BG_Y_OFFSET + 1 + this.reservedSpace;
 	}
 
 	protected String getBackground()

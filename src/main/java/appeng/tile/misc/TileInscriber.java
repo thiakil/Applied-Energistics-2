@@ -378,7 +378,7 @@ public class TileInscriber extends AENetworkPowerTile implements IGridTickable, 
 			return false;
 		}
 
-		return slotIndex == SLOT_TOP || slotIndex == SLOT_BOTTOM || slotIndex == SLOT_OUT;
+		return /*slotIndex == SLOT_TOP || slotIndex == SLOT_BOTTOM || */slotIndex == SLOT_OUT;
 	}
 
 	@Override
