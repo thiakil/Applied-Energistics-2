@@ -133,7 +133,7 @@ public class ToolPortableCell extends AEBasePoweredItem implements IStorageCell,
 	@Override
 	public int getBytes( final ItemStack cellItem )
 	{
-		return 512;
+		return 1024;
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class ToolPortableCell extends AEBasePoweredItem implements IStorageCell,
 	@Override
 	public int getTotalTypes( final ItemStack cellItem )
 	{
-		return 27;
+		return 64;
 	}
 
 	@Override
