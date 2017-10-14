@@ -28,6 +28,7 @@ import appeng.api.config.Settings;
 import appeng.api.config.SortDir;
 import appeng.api.config.SortOrder;
 import appeng.api.config.ViewItems;
+import appeng.api.config.YesNo;
 import appeng.api.implementations.guiobjects.IPortableCell;
 import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.storage.IMEMonitor;
@@ -110,6 +111,7 @@ public class PortableCellViewer extends MEMonitorHandler<IAEItemStack> implement
 		out.registerSetting( Settings.SORT_BY, SortOrder.NAME );
 		out.registerSetting( Settings.VIEW_MODE, ViewItems.ALL );
 		out.registerSetting( Settings.SORT_DIRECTION, SortDir.ASCENDING );
+		out.registerSetting( Settings.PORTABLE_CELL_AUTOPICKUP, YesNo.NO );
 
 		out.readFromNBT( (NBTTagCompound) Platform.openNbtData( this.target ).copy() );
 		return out;

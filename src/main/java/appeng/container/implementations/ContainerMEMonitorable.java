@@ -82,7 +82,7 @@ public class ContainerMEMonitorable extends AEBaseContainer implements IConfigMa
 	private final SlotRestrictedInput[] cellView = new SlotRestrictedInput[5];
 	private final IMEMonitor<IAEItemStack> monitor;
 	private final IItemList<IAEItemStack> items = AEApi.instance().storage().createItemList();
-	private final IConfigManager clientCM;
+	protected final IConfigManager clientCM;
 	private final ITerminalHost host;
 	@GuiSync( 99 )
 	public boolean canAccessViewCells = false;

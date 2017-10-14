@@ -21,16 +21,37 @@ package appeng.client.gui.implementations;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
+import appeng.api.config.Settings;
 import appeng.api.implementations.guiobjects.IPortableCell;
+import appeng.api.util.IConfigManager;
+import appeng.api.util.IConfigurableObject;
+import appeng.client.gui.widgets.GuiImgButton;
 import appeng.container.implementations.ContainerMEPortableCell;
+import appeng.helpers.WirelessTerminalGuiObject;
 
 
 public class GuiMEPortableCell extends GuiMEMonitorable
 {
 
+	private GuiImgButton pickupMode;
+	private final IConfigManager configSrc;
+	private final IPortableCell cell;
+
 	public GuiMEPortableCell( final InventoryPlayer inventoryPlayer, final IPortableCell te )
 	{
 		super( inventoryPlayer, te, new ContainerMEPortableCell( inventoryPlayer, te ) );
+		this.configSrc = ( (IConfigurableObject) this.inventorySlots ).getConfigManager();
+		this.cell = te;
+	}
+
+	@Override
+	public void initGui()
+	{
+		super.initGui();
+		if (!(cell instanceof WirelessTerminalGuiObject ))
+		{
+			this.buttonList.add( this.pickupMode = new GuiImgButton( this.guiLeft - 18 * 2, this.guiTop + 8, Settings.PORTABLE_CELL_AUTOPICKUP, this.configSrc.getSetting( Settings.PORTABLE_CELL_AUTOPICKUP ) ) );
+		}
 	}
 
 	int defaultGetMaxRows()

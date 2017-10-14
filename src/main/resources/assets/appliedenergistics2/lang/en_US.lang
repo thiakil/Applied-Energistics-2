@@ -339,6 +339,9 @@ gui.tooltips.appliedenergistics2.SchedulingModeRandom=Export items in random mod
 gui.tooltips.appliedenergistics2.ItemsStored=Items Stored: %s
 gui.tooltips.appliedenergistics2.ItemsRequestable=Items Requestable: %s
 gui.tooltips.appliedenergistics2.egg_upgrade=Has Infinite Range
+gui.tooltips.appliedenergistics2.AutoPickup=Auto Pick Up
+gui.tooltips.appliedenergistics2.AutoPickupOn=When Item already stored or inventory is full
+gui.tooltips.appliedenergistics2.AutoPickupOff=Never
 
 // Units
 gui.appliedenergistics2.units.appliedenergstics=AE

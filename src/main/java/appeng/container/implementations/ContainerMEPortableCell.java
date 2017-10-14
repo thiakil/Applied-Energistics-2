@@ -28,6 +28,8 @@ import baubles.api.cap.IBaublesItemHandler;
 
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
+import appeng.api.config.Settings;
+import appeng.api.config.YesNo;
 import appeng.api.implementations.guiobjects.IPortableCell;
 import appeng.capabilities.Capabilities;
 import appeng.container.interfaces.IInventorySlotAware;
@@ -58,6 +60,7 @@ public class ContainerMEPortableCell extends ContainerMEMonitorable
 			this.lockPlayerInventorySlot( ip.currentItem );
 		}
 		this.civ = monitorable;
+		this.clientCM.registerSetting( Settings.PORTABLE_CELL_AUTOPICKUP, YesNo.NO );
 		this.bindPlayerInventory( ip, 0, 0 );
 	}
 
@@ -122,5 +125,10 @@ public class ContainerMEPortableCell extends ContainerMEMonitorable
 	void setPowerMultiplier( final double powerMultiplier )
 	{
 		this.powerMultiplier = powerMultiplier;
+	}
+
+	public IPortableCell getPortableCell()
+	{
+		return civ;
 	}
 }
