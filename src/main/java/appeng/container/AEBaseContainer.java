@@ -422,6 +422,18 @@ public abstract class AEBaseContainer extends Container
 				this.addSlotToContainer( new SlotPlayerHotBar( inventoryPlayer, i, 8 + i * 18 + offsetX, 58 + offsetY ) );
 			}
 		}
+
+		if (hasOffhandSlot()){
+			Slot offhandSlot;
+			if (this.locked.contains( 40 )){
+				this.addSlotToContainer( offhandSlot = new SlotDisabled( inventoryPlayer, 40, 174 + offsetX, 58 + offsetY ) );
+			}
+			else
+			{
+				this.addSlotToContainer( offhandSlot = new SlotPlayerHotBar( inventoryPlayer, 40, 174 + offsetX, 58 + offsetY ) );
+			}
+			offhandSlot.setBackgroundName( "minecraft:items/empty_armor_slot_shield" );
+		}
 	}
 
 	@Override
@@ -1287,5 +1299,9 @@ public abstract class AEBaseContainer extends Container
 	public void setPowerSource( final IEnergySource powerSrc )
 	{
 		this.powerSrc = powerSrc;
+	}
+
+	protected boolean hasOffhandSlot(){
+		return false;
 	}
 }

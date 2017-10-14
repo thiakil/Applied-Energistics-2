@@ -111,7 +111,7 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		this.setScrollBar( scrollbar );
 		this.repo = new ItemRepo( scrollbar, this );
 
-		this.xSize = 195;
+		this.xSize = 198;
 		this.ySize = 204;
 
 		if( te instanceof IViewCellStorage )
@@ -391,7 +391,7 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 	{
 
 		this.bindTexture( this.getBackground() );
-		final int x_width = 197;
+		final int x_width = 198;
 		this.drawTexturedModalRect( offsetX, offsetY, 0, 0, x_width, 18 );
 
 		if( this.viewCell || ( this instanceof GuiSecurityStation ) )

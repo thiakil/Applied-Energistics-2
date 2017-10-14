@@ -485,4 +485,10 @@ public class ContainerMEMonitorable extends AEBaseContainer implements IConfigMa
 	public boolean shouldShowBaubles(){
 		return Capabilities.CAPABILITY_BAUBLES != null;
 	}
+
+	@Override
+	protected boolean hasOffhandSlot()
+	{
+		return true;
+	}
 }
