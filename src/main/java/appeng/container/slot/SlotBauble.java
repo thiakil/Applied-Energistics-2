@@ -21,6 +21,7 @@ public class SlotBauble extends SlotItemHandler
 		super(itemHandler, slot, xPosition, yPosition);
 		this.baubleSlot = slot;
 		this.player = player;
+		setPlayerSide();
 	}
 
 	/**

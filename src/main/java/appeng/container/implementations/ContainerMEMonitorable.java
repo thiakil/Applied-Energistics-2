@@ -457,8 +457,6 @@ public class ContainerMEMonitorable extends AEBaseContainer implements IConfigMa
 	}
 
 
-	public int baubleOffsetX;
-	public int baubleOffsetY;
 	@Override
 	protected void bindPlayerInventory( InventoryPlayer inventoryPlayer, int offsetX, int offsetY )
 	{
@@ -466,16 +464,15 @@ public class ContainerMEMonitorable extends AEBaseContainer implements IConfigMa
 
 		//Baubles
 		if (this.shouldShowBaubles()){
-			baubleOffsetX = offsetX - BaublesSlots.BG_X_OFFSET;
-			baubleOffsetY = offsetY - BaublesSlots.BG_Y_OFFSET;
+			int baubleOffsetX = offsetX - BaublesSlots.BG_X_OFFSET;
 			IBaublesItemHandler handler = inventoryPlayer.player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 			if (handler != null){
 				for ( BaublesSlots bSlot : BaublesSlots.values()){
 					//baubles slots are referred to with slot ids higher than player inv
 					if (this.locked.contains( bSlot.slotNum+inventoryPlayer.getSizeInventory() )){
-						this.addSlotToContainer( new SlotBauble.Disabled( inventoryPlayer.player, handler, bSlot.slotNum, baubleOffsetX+bSlot.offsetX, baubleOffsetY+bSlot.offsetY ) );
+						this.addSlotToContainer( new SlotBauble.Disabled( inventoryPlayer.player, handler, bSlot.slotNum, baubleOffsetX+bSlot.offsetX, offsetY +bSlot.offsetY ) );
 					} else {
-						this.addSlotToContainer( new SlotBauble( inventoryPlayer.player, handler, bSlot.slotNum, baubleOffsetX+bSlot.offsetX, baubleOffsetY+bSlot.offsetY ) );
+						this.addSlotToContainer( new SlotBauble( inventoryPlayer.player, handler, bSlot.slotNum, baubleOffsetX+bSlot.offsetX, offsetY +bSlot.offsetY ) );
 					}
 				}
 			}

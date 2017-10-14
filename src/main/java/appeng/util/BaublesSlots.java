@@ -32,6 +32,6 @@ public enum BaublesSlots
 	BaublesSlots(int slotNum, int offsetX, int offsetY){
 		this.slotNum = slotNum;
 		this.offsetX = SLOT_START_X + (offsetX * (SLOT_SIZE+X_GAP));
-		this.offsetY = SLOT_START_Y + offsetY * SLOT_SIZE;
+		this.offsetY = /*SLOT_START_Y + */offsetY * SLOT_SIZE;
 	}
 }
