@@ -315,7 +315,7 @@ public final class Registration
 			} );
 		}
 
-		if (AEConfig.instance().isFeatureEnabled( AEFeature.WIRELESS_ACCESS_TERMINAL ) && AEConfig.instance().isFeatureEnabled( AEFeature.QUANTUM_NETWORK_BRIDGE )){
+		if (AEConfig.instance().isFeatureEnabled( AEFeature.INFINITE_WIRELESS_UPGRADE ) && AEConfig.instance().isFeatureEnabled( AEFeature.WIRELESS_ACCESS_TERMINAL ) && AEConfig.instance().isFeatureEnabled( AEFeature.QUANTUM_NETWORK_BRIDGE )){
 			GameRegistry.addRecipe( new WirelessTerminalUpgradeRecipe( definitions.items().wirelessTerminal() ) );
 			GameRegistry.addRecipe( new WirelessTerminalUpgradeRecipe( definitions.items().wirelessCraftingTerminal() ) );
 			RecipeSorter.register( "appliedenergistics2:terminal_upgrade", WirelessTerminalUpgradeRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless" );

@@ -117,7 +117,7 @@ public enum MaterialType
 	BlankPattern( 52, "material_blank_pattern", EnumSet.of( AEFeature.PATTERNS ) ),
 	CardCrafting( 53, "material_card_crafting", EnumSet.of( AEFeature.ADVANCED_CARDS, AEFeature.CRAFTING_CPU ) ),
 
-	QuantumDragonEgg( 99, "quantum_dragon_egg", EnumSet.of( AEFeature.QUANTUM_NETWORK_BRIDGE, AEFeature.WIRELESS_ACCESS_TERMINAL )),
+	QuantumDragonEgg( 99, "quantum_dragon_egg", EnumSet.of( AEFeature.QUANTUM_NETWORK_BRIDGE, AEFeature.WIRELESS_ACCESS_TERMINAL, AEFeature.INFINITE_WIRELESS_UPGRADE )),
 	;
 
 	private final Set<AEFeature> features;
