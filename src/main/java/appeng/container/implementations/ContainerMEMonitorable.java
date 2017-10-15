@@ -456,36 +456,4 @@ public class ContainerMEMonitorable extends AEBaseContainer implements IConfigMa
 		this.gui = gui;
 	}
 
-
-	@Override
-	protected void bindPlayerInventory( InventoryPlayer inventoryPlayer, int offsetX, int offsetY )
-	{
-		super.bindPlayerInventory( inventoryPlayer, offsetX, offsetY );
-
-		//Baubles
-		if (this.shouldShowBaubles()){
-			int baubleOffsetX = offsetX - BaublesSlots.BG_X_OFFSET;
-			IBaublesItemHandler handler = inventoryPlayer.player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
-			if (handler != null){
-				for ( BaublesSlots bSlot : BaublesSlots.values()){
-					//baubles slots are referred to with slot ids higher than player inv
-					if (this.locked.contains( bSlot.slotNum+inventoryPlayer.getSizeInventory() )){
-						this.addSlotToContainer( new SlotBauble.Disabled( inventoryPlayer.player, handler, bSlot.slotNum, baubleOffsetX+bSlot.offsetX, offsetY +bSlot.offsetY ) );
-					} else {
-						this.addSlotToContainer( new SlotBauble( inventoryPlayer.player, handler, bSlot.slotNum, baubleOffsetX+bSlot.offsetX, offsetY +bSlot.offsetY ) );
-					}
-				}
-			}
-		}
-	}
-
-	public boolean shouldShowBaubles(){
-		return Capabilities.CAPABILITY_BAUBLES != null;
-	}
-
-	@Override
-	protected boolean hasOffhandSlot()
-	{
-		return true;
-	}
 }

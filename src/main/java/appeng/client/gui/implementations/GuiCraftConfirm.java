@@ -577,4 +577,10 @@ public class GuiCraftConfirm extends AEBaseGui
 			}
 		}
 	}
+
+	@Override
+	protected boolean hasPlayerInv()
+	{
+		return false;
+	}
 }

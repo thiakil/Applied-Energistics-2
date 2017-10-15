@@ -231,8 +231,8 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		this.maxRows = this.getMaxRows();
 		this.perRow = AEConfig.instance().getConfigManager().getSetting( Settings.TERMINAL_STYLE ) != TerminalStyle.FULL ? 9 : 9 + ( ( this.width - this.standardSize ) / 18 );
 
-		final int magicNumber = 114 + 1;
-		final int extraSpace = this.height - magicNumber - this.reservedSpace;
+		final int magicNumber = 114;
+		final int extraSpace = this.height - magicNumber - this.reservedSpace - 1;
 
 		this.rows = (int) Math.floor( extraSpace / 18 );
 		if( this.rows > this.maxRows )
@@ -348,6 +348,8 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 
 		craftingGridOffsetX -= 25;
 		craftingGridOffsetY -= 6;
+
+		//this.ySize -= 1;
 	}
 
 	@Override
@@ -429,16 +431,11 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		{
 			this.searchField.drawTextBox();
 		}
-
-		if (monitorableContainer.shouldShowBaubles()){
-			this.bindTexture( "guis/baubles.png" );
-			this.drawTexturedModalRect( this.guiLeft-BaublesSlots.BG_X_OFFSET-1, getBaublesY( offsetY ), 0, 0, BaublesSlots.BG_WIDTH, BaublesSlots.BG_HEIGHT );
-		}
 	}
 
-	protected int getBaublesY(int offsetY){
+	/*protected int getBaublesY(int offsetY){
 		return offsetY + 16 + this.rows * 18 + this.lowerTextureOffset + BaublesSlots.BG_Y_OFFSET + 1 + this.reservedSpace;
-	}
+	}*/
 
 	protected String getBackground()
 	{
@@ -458,7 +455,7 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 
 	protected void repositionSlot( final AppEngSlot s )
 	{
-		s.yPos = s.getY() + this.ySize - 78 - 5;
+		s.yPos = s.getY() + this.ySize - 78 - 4;
 	}
 
 	@Override

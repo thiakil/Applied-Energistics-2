@@ -269,4 +269,10 @@ public class GuiPriority extends AEBaseGui
 	{
 		return "guis/priority.png";
 	}
+
+	@Override
+	protected boolean hasPlayerInv()
+	{
+		return false;
+	}
 }

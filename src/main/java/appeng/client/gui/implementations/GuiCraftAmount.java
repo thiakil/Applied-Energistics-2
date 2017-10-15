@@ -297,4 +297,10 @@ public class GuiCraftAmount extends AEBaseGui
 	{
 		return "guis/craft_amt.png";
 	}
+
+	@Override
+	protected boolean hasPlayerInv()
+	{
+		return false;
+	}
 }

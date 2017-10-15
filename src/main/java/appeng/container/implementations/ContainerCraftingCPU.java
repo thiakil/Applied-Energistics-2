@@ -295,4 +295,10 @@ public class ContainerCraftingCPU extends AEBaseContainer implements IMEMonitorH
 	{
 		this.network = network;
 	}
+
+	@Override
+	public boolean hasPlayerInv()
+	{
+		return false;
+	}
 }

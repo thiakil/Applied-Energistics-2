@@ -484,4 +484,10 @@ public class ContainerCraftConfirm extends AEBaseContainer
 	{
 		this.job = job;
 	}
+
+	@Override
+	public boolean hasPlayerInv()
+	{
+		return false;
+	}
 }

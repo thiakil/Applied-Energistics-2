@@ -188,4 +188,10 @@ public class ContainerNetworkStatus extends AEBaseContainer
 	{
 		this.powerUsage = powerUsage;
 	}
+
+	@Override
+	public boolean hasPlayerInv()
+	{
+		return false;
+	}
 }

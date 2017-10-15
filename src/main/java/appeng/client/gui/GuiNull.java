@@ -19,25 +19,17 @@
 package appeng.client.gui;
 
 
+import net.minecraft.client.gui.Gui;
 import net.minecraft.inventory.Container;
 
 
-public class GuiNull extends AEBaseGui
+public class GuiNull extends Gui
 {
 
 	public GuiNull( final Container container )
 	{
-		super( container );
+		super();
 	}
 
-	@Override
-	public void drawFG( final int offsetX, final int offsetY, final int mouseX, final int mouseY )
-	{
-	}
 
-	@Override
-	public void drawBG( final int offsetX, final int offsetY, final int mouseX, final int mouseY )
-	{
-
-	}
 }
