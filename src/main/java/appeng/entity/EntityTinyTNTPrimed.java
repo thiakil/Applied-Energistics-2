@@ -128,25 +128,29 @@ public final class EntityTinyTNTPrimed extends EntityTNTPrimed implements IEntit
 	void explode()
 	{
 		this.world.playSound( null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, ( 1.0F + ( this.world.rand.nextFloat() - this.world.rand.nextFloat() ) * 0.2F ) * 32.9F );
-
+		
 		if( this.isInWater() )
 		{
 			return;
-		}
-
-		for( final Object e : this.world.getEntitiesWithinAABBExcludingEntity( this, new AxisAlignedBB( this.posX - 1.5, this.posY - 1.5f, this.posZ - 1.5, this.posX + 1.5, this.posY + 1.5, this.posZ + 1.5 ) ) )
-		{
-			if( e instanceof Entity )
-			{
-				( (Entity) e ).attackEntityFrom( DamageSource.causeExplosionDamage( (Explosion) null ), 6 );
-			}
 		}
 
 		if( AEConfig.instance().isFeatureEnabled( AEFeature.TINY_TNT_BLOCK_DAMAGE ) )
 		{
 			this.posY -= 0.25;
 			final Explosion ex = new Explosion( this.world, this, this.posX, this.posY, this.posZ, 0.2f, false, false );
-
+			
+			// Notify Forge of the explosion event
+			net.minecraftforge.event.ForgeEventFactory.onExplosionStart(this.world, ex);
+			
+			// Only damage objects if Tiny TNT damage is enabled, and provide a proper explosion source.
+			for( final Object e : this.world.getEntitiesWithinAABBExcludingEntity( this, new AxisAlignedBB( this.posX - 1.5, this.posY - 1.5f, this.posZ - 1.5, this.posX + 1.5, this.posY + 1.5, this.posZ + 1.5 ) ) )
+			{
+				if( e instanceof Entity )
+				{
+					( (Entity) e ).attackEntityFrom( DamageSource.causeExplosionDamage(ex), 6 );
+				}
+			}
+				
 			for( int x = (int) ( this.posX - 2 ); x <= this.posX + 2; x++ )
 			{
 				for( int y = (int) ( this.posY - 2 ); y <= this.posY + 2; y++ )
