@@ -177,4 +177,10 @@ public class ContainerCraftingStatus extends ContainerCraftingCPU
 			this.setCPU( this.cpus.get( this.selectedCpu ).getCpu() );
 		}
 	}
+
+	@Override
+	public boolean hasPlayerInv()
+	{
+		return false;
+	}
 }

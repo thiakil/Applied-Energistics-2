@@ -145,7 +145,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 	@Override
 	public void initGui()
 	{
-		final int staticSpace = 18 + 97;
+		final int staticSpace = 18 + 96;
 
 		calculateRows( staticSpace );
 
@@ -284,7 +284,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 			this.drawTexturedModalRect( offsetX, offsetY + 18 + x * SECTION_HEIGHT, 0, 18, this.xSize, SECTION_HEIGHT );
 		}
 
-		this.drawTexturedModalRect( offsetX, offsetY + 18 + rows * SECTION_HEIGHT - 2, 0, 124, this.xSize, 96 );
+		this.drawTexturedModalRect( offsetX, offsetY + 18 + rows * SECTION_HEIGHT - 2, 0, 124, this.xSize, 98 );
 
 		int offset = 17;
 		final int ex = this.getScrollBar().getCurrentScroll();
@@ -311,7 +311,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 
 	private void repositionSlot( final AppEngSlot s )
 	{
-		s.yPos = s.getY() + this.ySize - 78 - 5;
+		s.yPos = s.getY() + this.ySize - 78 - 4;
 	}
 
 	@Override

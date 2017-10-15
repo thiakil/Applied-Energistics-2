@@ -88,4 +88,10 @@ public class ContainerCraftAmount extends AEBaseContainer
 	{
 		this.itemToCreate = itemToCreate;
 	}
+
+	@Override
+	public boolean hasPlayerInv()
+	{
+		return false;
+	}
 }

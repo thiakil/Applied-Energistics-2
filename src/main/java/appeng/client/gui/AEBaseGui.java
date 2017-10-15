@@ -56,6 +56,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
 import appeng.api.storage.data.IAEItemStack;
+import appeng.capabilities.Capabilities;
 import appeng.client.gui.widgets.GuiScrollbar;
 import appeng.client.gui.widgets.ITooltip;
 import appeng.client.me.InternalSlotME;
@@ -81,6 +82,7 @@ import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketInventoryAction;
 import appeng.core.sync.packets.PacketSwapSlots;
 import appeng.helpers.InventoryAction;
+import appeng.util.BaublesSlots;
 
 
 public abstract class AEBaseGui extends GuiContainer
@@ -96,12 +98,14 @@ public abstract class AEBaseGui extends GuiContainer
 	private ItemStack dbl_whichItem = ItemStack.EMPTY;
 	private Slot bl_clicked;
 	private boolean subGui;
+	private final AEBaseContainer aeBaseContainer;
 
-	public AEBaseGui( final Container container )
+	public AEBaseGui( final AEBaseContainer container )
 	{
 		super( container );
 		this.subGui = switchingGuis;
 		switchingGuis = false;
+		aeBaseContainer = container;
 	}
 
 	protected static String join( final Collection<String> toolTip, final String delimiter )
@@ -236,12 +240,28 @@ public abstract class AEBaseGui extends GuiContainer
 
 	public abstract void drawFG( int offsetX, int offsetY, int mouseX, int mouseY );
 
+	protected int getBaublesY(int offsetY){
+		return this.ySize-BaublesSlots.BG_HEIGHT + offsetY;// offsetY + 5 + BaublesSlots.BG_Y_OFFSET + 1;
+	}
+
 	@Override
 	protected final void drawGuiContainerBackgroundLayer( final float f, final int x, final int y )
 	{
 		final int ox = this.guiLeft; // (width - xSize) / 2;
 		final int oy = this.guiTop; // (height - ySize) / 2;
 		GlStateManager.color( 1.0F, 1.0F, 1.0F, 1.0F );
+
+		//draw baubles bg if we have baubles, otherwise show just the offhand slot
+		if (this.hasPlayerInv())
+		{
+			if ( Capabilities.CAPABILITY_BAUBLES != null){
+				this.bindTexture( "guis/baubles.png" );
+			} else {
+				this.bindTexture( "guis/offhand_nobaubles.png" );
+			}
+			this.drawTexturedModalRect( this.guiLeft- BaublesSlots.BG_X_OFFSET-1, getBaublesY( oy ), 0, 0, BaublesSlots.BG_WIDTH, BaublesSlots.BG_HEIGHT );
+		}
+
 		this.drawBG( ox, oy, x, y );
 
 		final List<Slot> slots = this.getInventorySlots();
@@ -871,5 +891,9 @@ public abstract class AEBaseGui extends GuiContainer
 	public static final synchronized void setSwitchingGuis( final boolean switchingGuis )
 	{
 		AEBaseGui.switchingGuis = switchingGuis;
+	}
+
+	protected boolean hasPlayerInv(){
+		return aeBaseContainer.hasPlayerInv();
 	}
 }

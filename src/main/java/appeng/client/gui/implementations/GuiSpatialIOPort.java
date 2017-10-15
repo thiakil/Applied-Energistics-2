@@ -45,7 +45,7 @@ public class GuiSpatialIOPort extends AEBaseGui
 	public GuiSpatialIOPort( final InventoryPlayer inventoryPlayer, final TileSpatialIOPort te )
 	{
 		super( new ContainerSpatialIOPort( inventoryPlayer, te ) );
-		this.ySize = 199;
+		this.ySize = 197;
 		this.container = (ContainerSpatialIOPort) this.inventorySlots;
 	}
 

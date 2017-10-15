@@ -27,13 +27,13 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
 import appeng.api.storage.data.IAEItemStack;
 import appeng.client.me.SlotME;
+import appeng.container.AEBaseContainer;
 import appeng.core.AEConfig;
 import appeng.core.localization.ButtonToolTips;
 
@@ -41,7 +41,7 @@ import appeng.core.localization.ButtonToolTips;
 public abstract class AEBaseMEGui extends AEBaseGui
 {
 
-	public AEBaseMEGui( final Container container )
+	public AEBaseMEGui( final AEBaseContainer container )
 	{
 		super( container );
 	}

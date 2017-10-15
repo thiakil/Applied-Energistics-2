@@ -423,17 +423,35 @@ public abstract class AEBaseContainer extends Container
 			}
 		}
 
-		if (hasOffhandSlot()){
-			Slot offhandSlot;
-			if (this.locked.contains( 40 )){
-				this.addSlotToContainer( offhandSlot = new SlotDisabled( inventoryPlayer, 40, 174 + offsetX, 58 + offsetY ) );
-			}
-			else
-			{
-				this.addSlotToContainer( offhandSlot = new SlotPlayerHotBar( inventoryPlayer, 40, 174 + offsetX, 58 + offsetY ) );
-			}
-			offhandSlot.setBackgroundName( "minecraft:items/empty_armor_slot_shield" );
+
+		Slot offhandSlot;
+		if (this.locked.contains( 40 )){
+			this.addSlotToContainer( offhandSlot = new SlotDisabled( inventoryPlayer, 40, offsetX - BaublesSlots.BG_X_OFFSET + BaublesSlots.SLOT_START_X+ BaublesSlots.SLOT_SIZE + 1, 58 + offsetY ) );
 		}
+		else
+		{
+			this.addSlotToContainer( offhandSlot = new SlotPlayerHotBar( inventoryPlayer, 40, offsetX - BaublesSlots.BG_X_OFFSET + BaublesSlots.SLOT_START_X+ BaublesSlots.SLOT_SIZE + 1, 58 + offsetY ) );
+		}
+		offhandSlot.setBackgroundName( "minecraft:items/empty_armor_slot_shield" );
+
+		if (Capabilities.CAPABILITY_BAUBLES != null){
+			int baubleOffsetX = offsetX - BaublesSlots.BG_X_OFFSET;
+			IBaublesItemHandler handler = inventoryPlayer.player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
+			if (handler != null){
+				for ( BaublesSlots bSlot : BaublesSlots.values()){
+					//baubles slots are referred to with slot ids higher than player inv
+					if (this.locked.contains( bSlot.slotNum+inventoryPlayer.getSizeInventory() )){
+						this.addSlotToContainer( new SlotBauble.Disabled( inventoryPlayer.player, handler, bSlot.slotNum, baubleOffsetX+bSlot.offsetX, 4+offsetY +bSlot.offsetY ) );
+					} else {
+						this.addSlotToContainer( new SlotBauble( inventoryPlayer.player, handler, bSlot.slotNum, baubleOffsetX+bSlot.offsetX, 4+offsetY +bSlot.offsetY ) );
+					}
+				}
+			}
+		}
+	}
+
+	public boolean hasPlayerInv(){
+		return true;
 	}
 
 	@Override

@@ -88,4 +88,10 @@ public class ContainerPriority extends AEBaseContainer
 
 		super.onUpdate( field, oldValue, newValue );
 	}
+
+	@Override
+	public boolean hasPlayerInv()
+	{
+		return false;
+	}
 }

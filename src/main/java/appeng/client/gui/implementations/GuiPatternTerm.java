@@ -157,7 +157,7 @@ public class GuiPatternTerm extends GuiMEMonitorable
 		}
 
 		super.drawFG( offsetX, offsetY, mouseX, mouseY );
-		this.fontRenderer.drawString( GuiText.PatternTerminal.getLocal(), 8, this.ySize - 96 + 2 - this.getReservedSpace(), 4210752 );
+		this.fontRenderer.drawString( GuiText.PatternTerminal.getLocal(), 8, this.ySize - 96 + 3 - this.getReservedSpace(), 4210752 );
 	}
 
 	@Override
@@ -174,7 +174,7 @@ public class GuiPatternTerm extends GuiMEMonitorable
 	@Override
 	protected void repositionSlot( final AppEngSlot s )
 	{
-		final int offsetPlayerSide = s.isPlayerSide() ? 5 : 3;
+		final int offsetPlayerSide = s.isPlayerSide() ? 4 : 2;
 
 		s.yPos = s.getY() + this.ySize - 78 - offsetPlayerSide;
 	}
