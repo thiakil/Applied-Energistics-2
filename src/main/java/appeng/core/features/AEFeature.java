@@ -98,6 +98,7 @@ public enum AEFeature
 	PORTABLE_CELL( "PortableCell", Constants.CATEGORY_PORTABLE_CELL ),
 
 	STORAGE_CELLS( "StorageCells", Constants.CATEGORY_STORAGE ),
+	BIG_STORAGE_CELLS( "BigStorageCells", Constants.CATEGORY_HIGHER_CAPACITY ),
 	ME_CHEST( "MEChest", Constants.CATEGORY_STORAGE ),
 	ME_DRIVE( "MEDrive", Constants.CATEGORY_STORAGE ),
 	IO_PORT( "IOPort", Constants.CATEGORY_STORAGE ),

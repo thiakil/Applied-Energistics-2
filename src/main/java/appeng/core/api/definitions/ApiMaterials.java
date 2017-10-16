@@ -77,6 +77,11 @@ public final class ApiMaterials implements IMaterials
 	private final IItemDefinition cell64kPart;
 	private final IItemDefinition emptyStorageCell;
 
+	private final IItemDefinition cell256kPart;
+	private final IItemDefinition cell1mPart;
+	private final IItemDefinition cell4mPart;
+	private final IItemDefinition cell16mPart;
+
 	private final IItemDefinition cardRedstone;
 	private final IItemDefinition cardSpeed;
 	private final IItemDefinition cardCapacity;
@@ -167,6 +172,11 @@ public final class ApiMaterials implements IMaterials
 		this.cell16kPart = new DamagedItemDefinition( "material.cell.storage.16k", materials.createMaterial( MaterialType.Cell16kPart ) );
 		this.cell64kPart = new DamagedItemDefinition( "material.cell.storage.64k", materials.createMaterial( MaterialType.Cell64kPart ) );
 		this.emptyStorageCell = new DamagedItemDefinition( "material.cell.storage.empty", materials.createMaterial( MaterialType.EmptyStorageCell ) );
+
+		this.cell256kPart = new DamagedItemDefinition( "material.cell.storage.256k", materials.createMaterial( MaterialType.Cell256kPart ) );
+		this.cell1mPart = new DamagedItemDefinition( "material.cell.storage.1m", materials.createMaterial( MaterialType.Cell1mPart ) );
+		this.cell4mPart = new DamagedItemDefinition( "material.cell.storage.4m", materials.createMaterial( MaterialType.Cell4mPart ) );
+		this.cell16mPart = new DamagedItemDefinition( "material.cell.storage.16m", materials.createMaterial( MaterialType.Cell16mPart ) );
 
 		this.cardRedstone = new DamagedItemDefinition( "material.card.redstone", materials.createMaterial( MaterialType.CardRedstone ) );
 		this.cardSpeed = new DamagedItemDefinition( "material.card.acceleration", materials.createMaterial( MaterialType.CardSpeed ) );
@@ -360,6 +370,30 @@ public final class ApiMaterials implements IMaterials
 	public IItemDefinition cell64kPart()
 	{
 		return this.cell64kPart;
+	}
+
+	@Override
+	public IItemDefinition cell256kPart()
+	{
+		return this.cell256kPart;
+	}
+
+	@Override
+	public IItemDefinition cell1mPart()
+	{
+		return this.cell1mPart;
+	}
+
+	@Override
+	public IItemDefinition cell4mPart()
+	{
+		return this.cell4mPart;
+	}
+
+	@Override
+	public IItemDefinition cell16mPart()
+	{
+		return this.cell16mPart;
 	}
 
 	@Override
