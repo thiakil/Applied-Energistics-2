@@ -44,8 +44,6 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
@@ -53,7 +51,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 
 import baubles.api.BaubleType;
-import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 
 import appeng.api.parts.CableRenderMode;
@@ -74,8 +71,7 @@ import appeng.core.AELog;
 import appeng.core.AppEng;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketAssemblerAnimation;
-import appeng.core.sync.packets.PacketBaublePortableCellKey;
-import appeng.core.sync.packets.PacketBaubleTerminalKey;
+import appeng.core.sync.packets.PacketBaubleKey;
 import appeng.core.sync.packets.PacketValueConfig;
 import appeng.coremod.MissingCoreMod;
 import appeng.entity.EntityFloatingItem;
@@ -395,7 +391,7 @@ public class ClientHelper extends ServerHelper
 						}
 					}
 					if (!term.isEmpty()){
-						NetworkHandler.instance().sendToServer( new PacketBaubleTerminalKey() );
+						NetworkHandler.instance().sendToServer( new PacketBaubleKey( PacketBaubleKey.KeyType.TERMINAL ) );
 					}
 				}
 			} else if (portableCellKey.isPressed()){
@@ -410,7 +406,7 @@ public class ClientHelper extends ServerHelper
 						}
 					}
 					if (!portableCell.isEmpty()){
-						NetworkHandler.instance().sendToServer( new PacketBaublePortableCellKey() );
+						NetworkHandler.instance().sendToServer( new PacketBaubleKey( PacketBaubleKey.KeyType.PORTABLE_CELL) );
 					}
 				}
 			}
