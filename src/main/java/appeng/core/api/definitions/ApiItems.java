@@ -355,7 +355,7 @@ public final class ApiItems implements IItems
 	@Override
 	public IItemDefinition chargedStaff()
 	{
-		return this.memoryCard;
+		return this.chargedStaff;
 	}
 
 	@Override
