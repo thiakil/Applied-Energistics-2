@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.StringJoiner;
 import java.util.WeakHashMap;
 
 import javax.annotation.Nonnull;
@@ -44,6 +45,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,6 +61,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.server.management.PlayerChunkMapEntry;
@@ -835,6 +838,32 @@ public class Platform
 		else
 		{
 			return "**Invalid Object";
+		}
+
+		if (itemStack.getItem() == Items.ENCHANTED_BOOK){
+			List<String> enchants = Lists.newLinkedList();
+			NBTTagList nbttaglist = Items.ENCHANTED_BOOK.getEnchantments(itemStack);
+
+			if (nbttaglist != null)
+			{
+				for (int i = 0; i < nbttaglist.tagCount(); ++i)
+				{
+					int j = nbttaglist.getCompoundTagAt(i).getShort("id");
+					int k = nbttaglist.getCompoundTagAt(i).getShort("lvl");
+
+					Enchantment ench = Enchantment.getEnchantmentByID(j);
+					if ( ench != null)
+					{
+						enchants.add(ench.getTranslatedName(k));
+					}
+				}
+			}
+			if (enchants.size() > 0){
+				enchants.sort( String::compareToIgnoreCase );
+				StringJoiner sj = new StringJoiner(", ", itemStack.getDisplayName() + " (", ")");
+				enchants.forEach( sj::add );
+				return sj.toString();
+			}
 		}
 
 		try
