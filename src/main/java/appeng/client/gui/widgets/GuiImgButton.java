@@ -23,11 +23,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import appeng.core.AppEng;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 
 import appeng.api.config.AccessRestriction;
 import appeng.api.config.ActionItems;
@@ -289,8 +289,8 @@ public class GuiImgButton extends GuiButton implements ITooltip
 
 		if( displayName != null )
 		{
-			String name = I18n.translateToLocal( displayName );
-			String value = I18n.translateToLocal( displayValue );
+			String name = AppEng.proxy.translateFormatted( displayName );
+			String value = AppEng.proxy.translateFormatted( displayValue );
 
 			if( name == null || name.isEmpty() )
 			{

@@ -341,6 +341,7 @@ public class CableBusBakedModel implements IBakedModel
 	}
 
 	@Override
+	@Deprecated
 	public ItemCameraTransforms getItemCameraTransforms()
 	{
 		return ItemCameraTransforms.DEFAULT;

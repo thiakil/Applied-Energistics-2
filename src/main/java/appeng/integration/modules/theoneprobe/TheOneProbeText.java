@@ -19,9 +19,9 @@
 package appeng.integration.modules.theoneprobe;
 
 
-import java.util.Locale;
+import appeng.core.AppEng;
 
-import net.minecraft.util.text.translation.I18n;
+import java.util.Locale;
 
 
 public enum TheOneProbeText
@@ -55,7 +55,7 @@ public enum TheOneProbeText
 
 	public String getLocal()
 	{
-		return I18n.translateToLocal( this.getUnlocalized() );
+		return AppEng.proxy.translateFormatted( this.getUnlocalized() );
 	}
 
 	public String getUnlocalized()

@@ -98,6 +98,7 @@ public class BlockController extends AEBaseTileBlock
 	 * get a rudimentary connected texture feel for the controller based on how it is placed.
 	 */
 	@Override
+	@Deprecated
 	public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
 	{
 
@@ -157,6 +158,7 @@ public class BlockController extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getStateFromMeta( final int meta )
 	{
 		ControllerBlockState state = ControllerBlockState.values()[meta];
@@ -170,6 +172,7 @@ public class BlockController extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public void neighborChanged( IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
 		final TileController tc = this.getTileEntity( world, pos );

@@ -58,6 +58,7 @@ class CondenserItemInventory implements IMEMonitor<IAEItemStack>
 	}
 
 	@Override
+	@Deprecated
 	public IItemList<IAEItemStack> getAvailableItems( final IItemList out )
 	{
 		return out;

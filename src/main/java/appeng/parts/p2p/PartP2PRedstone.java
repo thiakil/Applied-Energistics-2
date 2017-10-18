@@ -148,6 +148,7 @@ public class PartP2PRedstone extends PartP2PTunnel<PartP2PRedstone>
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onNeighborChanged()
 	{
 		if( !this.isOutput() )

@@ -23,6 +23,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.player.EntityPlayer;
@@ -108,9 +110,12 @@ public class PacketTransitionEffect extends AppEngPacket
 
 		if( this.mode )
 		{
-			final Block block = world.getBlockState( new BlockPos( (int) this.x, (int) this.y, (int) this.z ) ).getBlock();
+			final BlockPos pos = new BlockPos( (int) this.x, (int) this.y, (int) this.z );
+			final IBlockState state = world.getBlockState( pos );
+			final Block block = state.getBlock();
+			final SoundType sndType = block.getSoundType(state, world, pos, player);
 
-			Minecraft.getMinecraft().getSoundHandler().playSound( new PositionedSoundRecord( block.getSoundType().getBreakSound(), SoundCategory.BLOCKS, ( block.getSoundType().getVolume() + 1.0F ) / 2.0F, block.getSoundType().getPitch() * 0.8F, (float) this.x + 0.5F, (float) this.y + 0.5F, (float) this.z + 0.5F ) );
+			Minecraft.getMinecraft().getSoundHandler().playSound( new PositionedSoundRecord( sndType.getBreakSound(), SoundCategory.BLOCKS, ( sndType.getVolume() + 1.0F ) / 2.0F, sndType.getPitch() * 0.8F, (float) this.x + 0.5F, (float) this.y + 0.5F, (float) this.z + 0.5F ) );
 		}
 	}
 }

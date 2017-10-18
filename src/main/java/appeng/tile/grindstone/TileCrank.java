@@ -104,6 +104,7 @@ public class TileCrank extends AEBaseTile implements ICustomCollision, ITickable
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void setOrientation( final EnumFacing inForward, final EnumFacing inUp )
 	{
 		super.setOrientation( inForward, inUp );

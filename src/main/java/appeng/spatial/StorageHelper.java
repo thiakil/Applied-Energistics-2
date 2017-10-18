@@ -241,6 +241,7 @@ public class StorageHelper
 		}
 
 		@Override
+		@SuppressWarnings("deprecation")
 		public void visit( final BlockPos pos )
 		{
 			final Block blk = this.dst.getBlockState( pos ).getBlock();

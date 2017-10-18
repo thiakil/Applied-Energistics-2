@@ -224,6 +224,7 @@ class QnbFormedBakedModel implements IBakedModel
 	}
 
 	@Override
+	@Deprecated
 	public ItemCameraTransforms getItemCameraTransforms()
 	{
 		return baseModel.getItemCameraTransforms();

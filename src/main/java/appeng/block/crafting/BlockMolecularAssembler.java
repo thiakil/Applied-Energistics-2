@@ -61,6 +61,7 @@ public class BlockMolecularAssembler extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getActualState( IBlockState state, IBlockAccess worldIn, BlockPos pos )
 	{
 		boolean powered = false;
@@ -91,6 +92,8 @@ public class BlockMolecularAssembler extends AEBaseTileBlock
 		return layer == BlockRenderLayer.TRANSLUCENT;
 	}
 
+	@Override
+	@Deprecated
 	public boolean isFullCube( IBlockState state )
 	{
 		return false;

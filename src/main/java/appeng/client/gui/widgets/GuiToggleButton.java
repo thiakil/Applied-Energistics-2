@@ -21,11 +21,11 @@ package appeng.client.gui.widgets;
 
 import java.util.regex.Pattern;
 
+import appeng.core.AppEng;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 
 
 public class GuiToggleButton extends GuiButton implements ITooltip
@@ -87,8 +87,8 @@ public class GuiToggleButton extends GuiButton implements ITooltip
 	{
 		if( this.displayName != null )
 		{
-			String name = I18n.translateToLocal( this.displayName );
-			String value = I18n.translateToLocal( this.displayHint );
+			String name = AppEng.proxy.translateFormatted( this.displayName );
+			String value = AppEng.proxy.translateFormatted( this.displayHint );
 
 			if( name == null || name.isEmpty() )
 			{

@@ -46,6 +46,7 @@ public class AEConfigGuiFactory implements IModGuiFactory
 	}
 
 	@Override
+	@Deprecated
 	public Class<? extends GuiScreen> mainConfigGuiClass()
 	{
 		return AEConfigGui.class;
@@ -58,6 +59,7 @@ public class AEConfigGuiFactory implements IModGuiFactory
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public RuntimeOptionGuiHandler getHandlerFor( final RuntimeOptionCategoryElement element )
 	{
 		return null;

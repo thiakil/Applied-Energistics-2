@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
@@ -413,5 +414,10 @@ public class ClientHelper extends ServerHelper
 				}
 			}
 		}
+	}
+
+	@Override
+	public String translateFormatted(String langKey, Object... params) {
+		return I18n.format(langKey, params);
 	}
 }

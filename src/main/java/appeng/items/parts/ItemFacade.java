@@ -149,6 +149,7 @@ public class ItemFacade extends AEBaseItem implements IFacadeItem, IAlphaPassIte
 		return blockState.isFullCube();
 	}
 
+	@SuppressWarnings("deprecation")
 	public ItemStack createFacadeForItem( final ItemStack l, final boolean returnItem )
 	{
 		if (l.isEmpty()) {
@@ -256,6 +257,7 @@ public class ItemFacade extends AEBaseItem implements IFacadeItem, IAlphaPassIte
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getTextureBlockState( ItemStack is )
 	{
 

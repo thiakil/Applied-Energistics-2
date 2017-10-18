@@ -158,6 +158,7 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench, 
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean serverSideToolLogic( final ItemStack is, final EntityPlayer p, final EnumHand hand, final World w, final BlockPos pos, final EnumFacing side, final float hitX, final float hitY, final float hitZ )
 	{
 		if( side != null )

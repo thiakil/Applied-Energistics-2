@@ -80,6 +80,7 @@ public class BlockWireless extends AEBaseTileBlock implements ICustomCollision
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getActualState( IBlockState state, IBlockAccess worldIn, BlockPos pos )
 	{
 		State teState = State.OFF;
@@ -252,6 +253,7 @@ public class BlockWireless extends AEBaseTileBlock implements ICustomCollision
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullCube( IBlockState state )
 	{
 		return false;

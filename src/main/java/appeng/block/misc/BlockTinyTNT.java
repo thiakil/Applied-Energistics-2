@@ -93,6 +93,7 @@ public class BlockTinyTNT extends AEBaseBlock implements ICustomCollision
 	}
 
 	@Override
+	@Deprecated
 	public void neighborChanged( IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
 		if( world.isBlockIndirectlyGettingPowered( pos ) > 0 )

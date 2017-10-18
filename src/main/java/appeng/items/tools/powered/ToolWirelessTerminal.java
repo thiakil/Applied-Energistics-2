@@ -21,6 +21,7 @@ package appeng.items.tools.powered;
 
 import java.util.List;
 
+import appeng.core.AppEng;
 import baubles.api.BaubleType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -30,7 +31,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.Optional;
@@ -107,7 +107,7 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 		}
 		else
 		{
-			lines.add( I18n.translateToLocal( "AppEng.GuiITooltip.Unlinked" ) );
+			lines.add( AppEng.proxy.translateFormatted( "AppEng.GuiITooltip.Unlinked" ) );
 		}
 	}
 

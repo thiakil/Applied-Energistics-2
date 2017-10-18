@@ -23,10 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import appeng.core.AELog;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
@@ -48,6 +50,8 @@ public class ServerHelper extends CommonHelper
 {
 
 	private EntityPlayer renderModeBased;
+
+	protected boolean isDeobf = (Boolean)Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
 	@Override
 	public void preinit()
@@ -188,5 +192,14 @@ public class ServerHelper extends CommonHelper
 		}
 
 		return CableRenderMode.STANDARD;
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public String translateFormatted(String langKey, Object... params) {
+		if (isDeobf){
+			AELog.error("translation on server side?!");
+		}
+		return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(langKey, params);
 	}
 }

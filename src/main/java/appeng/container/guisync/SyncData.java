@@ -160,6 +160,7 @@ public class SyncData
 		{
 			if( this.field.getType().isEnum() )
 			{
+				@SuppressWarnings("unchecked")
 				final EnumSet<? extends Enum> valList = EnumSet.allOf( (Class<? extends Enum>) this.field.getType() );
 				for( final Enum e : valList )
 				{

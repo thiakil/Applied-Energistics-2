@@ -21,8 +21,7 @@ package appeng.client.me;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.util.text.translation.I18n;
-
+import appeng.core.AppEng;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.util.ItemSorters;
 
@@ -46,10 +45,10 @@ public class ClientDCInternalInv implements Comparable<ClientDCInternalInv>
 
 	public String getName()
 	{
-		final String s = I18n.translateToLocal( this.unlocalizedName + ".name" );
+		final String s = AppEng.proxy.translateFormatted( this.unlocalizedName + ".name" );
 		if( s.equals( this.unlocalizedName + ".name" ) )
 		{
-			return I18n.translateToLocal( this.unlocalizedName );
+			return AppEng.proxy.translateFormatted( this.unlocalizedName );
 		}
 		return s;
 	}

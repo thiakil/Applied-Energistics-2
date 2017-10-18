@@ -245,6 +245,7 @@ class SpatialPylonBakedModel implements IPerspectiveAwareModel
 	}
 
 	@Override
+	@Deprecated
 	public ItemCameraTransforms getItemCameraTransforms()
 	{
 		return ItemCameraTransforms.DEFAULT;

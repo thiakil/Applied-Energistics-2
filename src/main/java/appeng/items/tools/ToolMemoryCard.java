@@ -21,6 +21,7 @@ package appeng.items.tools;
 
 import java.util.List;
 
+import appeng.core.AppEng;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +29,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -55,7 +55,7 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 		final NBTTagCompound data = this.getData( stack );
 		if( data.hasKey( "tooltip" ) )
 		{
-			lines.add( I18n.translateToLocal( this.getLocalizedName( data.getString( "tooltip" ) + ".name", data.getString( "tooltip" ) ) ) );
+			lines.add( AppEng.proxy.translateFormatted( this.getLocalizedName( data.getString( "tooltip" ) + ".name", data.getString( "tooltip" ) ) ) );
 		}
 	}
 
@@ -70,7 +70,7 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	{
 		for( final String n : name )
 		{
-			final String l = I18n.translateToLocal( n );
+			final String l = AppEng.proxy.translateFormatted( n );
 			if( !l.equals( n ) )
 			{
 				return l;

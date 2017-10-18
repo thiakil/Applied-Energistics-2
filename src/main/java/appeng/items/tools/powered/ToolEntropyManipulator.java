@@ -122,6 +122,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void heat( final IBlockState state, final World w, final BlockPos pos )
 	{
 		InWorldToolOperationResult r = this.heatUp.get( new InWorldToolOperationIngredient( state ) );
@@ -156,6 +157,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 		return r != null;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void cool( final IBlockState state, final World w, final BlockPos pos )
 	{
 		InWorldToolOperationResult r = this.coolDown.get( new InWorldToolOperationIngredient( state ) );
@@ -230,6 +232,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public EnumActionResult onItemUse( EntityPlayer p, World w, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ )
 	{
 		ItemStack item = p.getHeldItem( hand );

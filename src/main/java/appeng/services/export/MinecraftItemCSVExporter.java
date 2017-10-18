@@ -31,11 +31,13 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import appeng.core.AppEng;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import org.apache.commons.io.FileUtils;
 
 import net.minecraft.block.Block;
@@ -44,7 +46,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 
 import appeng.core.AELog;
@@ -68,7 +69,7 @@ final class MinecraftItemCSVExporter implements Exporter
 	@Nonnull
 	private final File exportDirectory;
 	@Nonnull
-	private final FMLControlledNamespacedRegistry<Item> itemRegistry;
+	private final IForgeRegistry<Item> itemRegistry;
 	@Nonnull
 	private final ExportMode mode;
 
@@ -79,7 +80,7 @@ final class MinecraftItemCSVExporter implements Exporter
 	 * phase when all items are determined)
 	 * @param mode mode in which the export should be operated. Resulting CSV will change depending on this.
 	 */
-	MinecraftItemCSVExporter( @Nonnull final File exportDirectory, @Nonnull final FMLControlledNamespacedRegistry<Item> itemRegistry, @Nonnull final ExportMode mode )
+	MinecraftItemCSVExporter(@Nonnull final File exportDirectory, @Nonnull final IForgeRegistry<Item> itemRegistry, @Nonnull final ExportMode mode )
 	{
 		this.exportDirectory = Preconditions.checkNotNull( exportDirectory );
 		Preconditions.checkArgument( !exportDirectory.isFile() );
@@ -90,7 +91,7 @@ final class MinecraftItemCSVExporter implements Exporter
 	@Override
 	public void export()
 	{
-		final Iterable<Item> items = this.itemRegistry.typeSafeIterable();
+		final Iterable<Item> items = this.itemRegistry;
 		final List<Item> itemList = Lists.newArrayList( items );
 
 		final List<String> lines = Lists.transform( itemList, new ItemRowExtractFunction( this.itemRegistry, this.mode ) );
@@ -191,7 +192,7 @@ final class MinecraftItemCSVExporter implements Exporter
 	private static final class ItemRowExtractFunction implements Function<Item, String>
 	{
 		/**
-		 * this extension is required to apply the {@link I18n}
+		 * this extension is required to apply the I18n
 		 */
 		private static final String LOCALIZATION_NAME_EXTENSION = ".name";
 		private static final String EXPORTING_NOTHING_MESSAGE = "Exporting nothing";
@@ -199,7 +200,7 @@ final class MinecraftItemCSVExporter implements Exporter
 		private static final String EXPORTING_SUBTYPES_FAILED_MESSAGE = "Could not export subtypes of: %s";
 
 		@Nonnull
-		private final FMLControlledNamespacedRegistry<Item> itemRegistry;
+		private final IForgeRegistry<Item> itemRegistry;
 		@Nonnull
 		private final ExportMode mode;
 
@@ -207,7 +208,7 @@ final class MinecraftItemCSVExporter implements Exporter
 		 * @param itemRegistry used to retrieve the name of the item
 		 * @param mode extracts more or less information from item depending on mode
 		 */
-		ItemRowExtractFunction( @Nonnull final FMLControlledNamespacedRegistry<Item> itemRegistry, @Nonnull final ExportMode mode )
+		ItemRowExtractFunction( @Nonnull final IForgeRegistry<Item> itemRegistry, @Nonnull final ExportMode mode )
 		{
 			this.itemRegistry = Preconditions.checkNotNull( itemRegistry );
 			this.mode = Preconditions.checkNotNull( mode );
@@ -228,7 +229,7 @@ final class MinecraftItemCSVExporter implements Exporter
 				AELog.debug( EXPORTING_SUBTYPES_MESSAGE, input.getUnlocalizedName(), input.getHasSubtypes() );
 			}
 
-			final String itemName = this.itemRegistry.getNameForObject( input ).toString();
+			final String itemName = this.itemRegistry.getKey( input ).toString();
 			final boolean hasSubtypes = input.getHasSubtypes();
 			if( hasSubtypes )
 			{
@@ -264,7 +265,7 @@ final class MinecraftItemCSVExporter implements Exporter
 
 			final List<String> joinedBlockAttributes = Lists.newArrayListWithCapacity( 5 );
 			final String unlocalizedItem = input.getUnlocalizedName();
-			final String localization = I18n.translateToLocal( unlocalizedItem + LOCALIZATION_NAME_EXTENSION );
+			final String localization = AppEng.proxy.translateFormatted( unlocalizedItem + LOCALIZATION_NAME_EXTENSION );
 
 			joinedBlockAttributes.add( itemName );
 			joinedBlockAttributes.add( localization );

@@ -47,6 +47,7 @@ public class TileGrinder extends AEBaseInvTile implements ICrankable
 	private int points;
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void setOrientation( final EnumFacing inForward, final EnumFacing inUp )
 	{
 		super.setOrientation( inForward, inUp );

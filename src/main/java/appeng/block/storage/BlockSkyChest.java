@@ -70,6 +70,7 @@ public class BlockSkyChest extends AEBaseTileBlock implements ICustomCollision
 	}
 
 	@Override
+	@Deprecated
 	public EnumBlockRenderType getRenderType( IBlockState state )
 	{
 		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;

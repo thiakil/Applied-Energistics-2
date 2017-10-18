@@ -142,12 +142,14 @@ public class BlockCrank extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public EnumBlockRenderType getRenderType( IBlockState state )
 	{
 		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
+	@Deprecated
 	public void neighborChanged( IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
 
@@ -172,6 +174,7 @@ public class BlockCrank extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullCube( IBlockState state )
 	{
 		return false;
