@@ -19,6 +19,8 @@
 package appeng.core.api.definitions;
 
 
+import net.minecraftforge.fml.common.Loader;
+
 import appeng.api.definitions.IItemDefinition;
 import appeng.api.definitions.IItems;
 import appeng.api.util.AEColoredItemDefinition;
@@ -26,6 +28,7 @@ import appeng.bootstrap.FeatureFactory;
 import appeng.client.render.crafting.ItemEncodedPatternRendering;
 import appeng.core.CreativeTabFacade;
 import appeng.core.features.AEFeature;
+import appeng.core.features.ItemDefinition;
 import appeng.debug.ToolDebugCard;
 import appeng.debug.ToolEraser;
 import appeng.debug.ToolMeteoritePlacer;
@@ -116,6 +119,8 @@ public final class ApiItems implements IItems
 	private final AEColoredItemDefinition coloredPaintBall;
 	private final AEColoredItemDefinition coloredLumenPaintBall;
 
+	private final IItemDefinition toolbelt;
+
 	// unsupported dev tools
 	private final IItemDefinition toolEraser;
 	private final IItemDefinition toolMeteoritePlacer;
@@ -184,6 +189,12 @@ public final class ApiItems implements IItems
 				.dispenserBehavior( DispenserBlockTool::new )
 				.rendering( new ToolColorApplicatorRendering() )
 				.build();
+
+		if ( Loader.isModLoaded( "baubles" )){
+			this.toolbelt = powerTools.item( "toolbelt", ToolMEToolbelt::new ).build();
+		} else {
+			this.toolbelt = new ItemDefinition( "toolbelt", null );
+		}
 
 		this.biometricCard = registry.item( "biometric_card", ToolBiometricCard::new )
 				.rendering( new ToolBiometricCardRendering() )

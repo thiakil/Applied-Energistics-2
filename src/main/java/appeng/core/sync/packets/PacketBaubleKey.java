@@ -18,6 +18,7 @@ import appeng.capabilities.Capabilities;
 import appeng.core.sync.AppEngPacket;
 import appeng.core.sync.GuiBridge;
 import appeng.core.sync.network.INetworkInfo;
+import appeng.items.tools.powered.ToolMEToolbelt;
 import appeng.items.tools.powered.ToolPortableCell;
 import appeng.items.tools.powered.ToolWirelessTerminal;
 import appeng.util.Platform;
@@ -80,6 +81,20 @@ public class PacketBaubleKey extends AppEngPacket
 						}
 						if (!term.isEmpty()){
 							Platform.openGUI( player, GuiBridge.GUI_PORTABLE_CELL, term );
+						}
+						break;
+					}
+					case TOOLBELT: {
+						ItemStack belt = ItemStack.EMPTY;
+						for (int slot : BaubleType.BELT.getValidSlots()){
+							ItemStack stack = handler.getStackInSlot( slot );
+							if (!stack.isEmpty() && stack.getItem() instanceof ToolMEToolbelt ){
+								belt = stack;
+								break;
+							}
+						}
+						if (!belt.isEmpty()){
+							ToolMEToolbelt.cycleHotbars( player, belt );
 						}
 						break;
 					}

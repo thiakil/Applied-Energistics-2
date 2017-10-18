@@ -82,6 +82,7 @@ import appeng.entity.RenderTinyTNTPrimed;
 import appeng.helpers.IMouseWheelItem;
 import appeng.hooks.TickHandler;
 import appeng.hooks.TickHandler.PlayerColor;
+import appeng.items.tools.powered.ToolMEToolbelt;
 import appeng.items.tools.powered.ToolPortableCell;
 import appeng.items.tools.powered.ToolWirelessTerminal;
 import appeng.server.ServerHelper;
@@ -410,6 +411,21 @@ public class ClientHelper extends ServerHelper
 					}
 					if (!portableCell.isEmpty()){
 						NetworkHandler.instance().sendToServer( new PacketBaubleKey( PacketBaubleKey.KeyType.PORTABLE_CELL) );
+					}
+				}
+			} else if (beltKey.isPressed()){
+				IBaublesItemHandler handler = Minecraft.getMinecraft().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
+				if (handler != null){
+					ItemStack belt = ItemStack.EMPTY;
+					for (int slot : BaubleType.BELT.getValidSlots()){
+						ItemStack stack = handler.getStackInSlot( slot );
+						if (!stack.isEmpty() && stack.getItem() instanceof ToolMEToolbelt){
+							belt = stack;
+							break;
+						}
+					}
+					if (!belt.isEmpty()){
+						NetworkHandler.instance().sendToServer( new PacketBaubleKey( PacketBaubleKey.KeyType.TOOLBELT) );
 					}
 				}
 			}
