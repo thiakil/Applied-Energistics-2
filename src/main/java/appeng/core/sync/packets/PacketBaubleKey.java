@@ -71,7 +71,7 @@ public class PacketBaubleKey extends AppEngPacket
 					}
 					case PORTABLE_CELL: {
 						ItemStack term = ItemStack.EMPTY;
-						for (int slot : BaubleType.BELT.getValidSlots()){
+						for (int slot : BaubleType.AMULET.getValidSlots()){
 							ItemStack stack = handler.getStackInSlot( slot );
 							if (!stack.isEmpty() && stack.getItem() instanceof ToolPortableCell ){
 								term = stack;
