@@ -90,8 +90,8 @@ import appeng.util.Platform;
 public class ClientHelper extends ServerHelper
 {
 
-	private static KeyBinding terminalKey;
-	private static KeyBinding portableCellKey;
+	private static KeyBinding headKey;
+	private static KeyBinding beltKey;
 
 	@Override
 	public void preinit()
@@ -109,10 +109,10 @@ public class ClientHelper extends ServerHelper
 	{
 		if ( Loader.isModLoaded( "baubles" ) )
 		{
-			terminalKey = new KeyBinding( "key.appliedenergistics2.terminal", Keyboard.CHAR_NONE, "itemGroup.appliedenergistics2" );
-			ClientRegistry.registerKeyBinding( terminalKey );
-			portableCellKey = new KeyBinding( "key.appliedenergistics2.portableCell", Keyboard.CHAR_NONE, "itemGroup.appliedenergistics2" );
-			ClientRegistry.registerKeyBinding( portableCellKey );
+			headKey = new KeyBinding( "key.appliedenergistics2.head", Keyboard.CHAR_NONE, "itemGroup.appliedenergistics2" );
+			ClientRegistry.registerKeyBinding(headKey);
+			beltKey = new KeyBinding( "key.appliedenergistics2.belt", Keyboard.CHAR_NONE, "itemGroup.appliedenergistics2" );
+			ClientRegistry.registerKeyBinding(beltKey);
 		}
 	}
 
@@ -378,8 +378,7 @@ public class ClientHelper extends ServerHelper
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		if ( Capabilities.CAPABILITY_BAUBLES != null){
-			if (terminalKey.isPressed()) {
-				// Someone pressed our terminalKey. We send a message
+			if (headKey.isPressed()) {
 				IBaublesItemHandler handler = Minecraft.getMinecraft().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 				if (handler != null){
 					ItemStack term = ItemStack.EMPTY;
@@ -394,7 +393,7 @@ public class ClientHelper extends ServerHelper
 						NetworkHandler.instance().sendToServer( new PacketBaubleKey( PacketBaubleKey.KeyType.TERMINAL ) );
 					}
 				}
-			} else if (portableCellKey.isPressed()){
+			} else if (beltKey.isPressed()){
 				IBaublesItemHandler handler = Minecraft.getMinecraft().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 				if (handler != null){
 					ItemStack portableCell = ItemStack.EMPTY;
