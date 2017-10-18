@@ -92,6 +92,7 @@ public class ClientHelper extends ServerHelper
 
 	private static KeyBinding headKey;
 	private static KeyBinding beltKey;
+	private static KeyBinding amuletKey;
 
 	@Override
 	public void preinit()
@@ -113,6 +114,8 @@ public class ClientHelper extends ServerHelper
 			ClientRegistry.registerKeyBinding(headKey);
 			beltKey = new KeyBinding( "key.appliedenergistics2.belt", Keyboard.CHAR_NONE, "itemGroup.appliedenergistics2" );
 			ClientRegistry.registerKeyBinding(beltKey);
+			amuletKey = new KeyBinding( "key.appliedenergistics2.amulet", Keyboard.CHAR_NONE, "itemGroup.appliedenergistics2" );
+			ClientRegistry.registerKeyBinding(amuletKey);
 		}
 	}
 
@@ -393,11 +396,11 @@ public class ClientHelper extends ServerHelper
 						NetworkHandler.instance().sendToServer( new PacketBaubleKey( PacketBaubleKey.KeyType.TERMINAL ) );
 					}
 				}
-			} else if (beltKey.isPressed()){
+			} else if (amuletKey.isPressed()){
 				IBaublesItemHandler handler = Minecraft.getMinecraft().player.getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 				if (handler != null){
 					ItemStack portableCell = ItemStack.EMPTY;
-					for (int slot : BaubleType.BELT.getValidSlots()){
+					for (int slot : BaubleType.AMULET.getValidSlots()){
 						ItemStack stack = handler.getStackInSlot( slot );
 						if (!stack.isEmpty() && stack.getItem() instanceof ToolPortableCell){
 							portableCell = stack;

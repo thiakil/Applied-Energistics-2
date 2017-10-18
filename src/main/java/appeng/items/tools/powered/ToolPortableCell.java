@@ -315,42 +315,7 @@ public class ToolPortableCell extends AEBasePoweredItem implements IStorageCell,
 	{
 		ICapabilityProvider parent = super.initCapabilities( stack, nbt );
 
-		return Capabilities.CAPABILITY_ITEM_BAUBLE != null ? new BaubleHandler(parent) : parent;
-	}
-
-	private static class BaubleHandler implements ICapabilityProvider
-	{
-
-		private final @Nullable
-		ICapabilityProvider parent;
-
-		private final BaubleItem bauble = new BaubleItem( BaubleType.BELT ) {
-			@Override
-			public boolean willAutoSync( ItemStack itemstack, EntityLivingBase player )
-			{
-				return true;
-			}
-		};
-
-		public BaubleHandler(ICapabilityProvider p){
-			parent = p;
-		}
-
-		@Override
-		public boolean hasCapability( @Nonnull Capability<?> capability, @Nullable EnumFacing facing )
-		{
-			return capability == Capabilities.CAPABILITY_ITEM_BAUBLE || parent != null && parent.hasCapability( capability, facing );
-		}
-
-		@Nullable
-		@Override
-		public <T> T getCapability( @Nonnull Capability<T> capability, @Nullable EnumFacing facing )
-		{
-			if (capability == Capabilities.CAPABILITY_ITEM_BAUBLE){
-				return Capabilities.CAPABILITY_ITEM_BAUBLE.cast(bauble);
-			}
-			return parent != null ? parent.getCapability( capability, facing ) : null;
-		}
+		return Capabilities.CAPABILITY_ITEM_BAUBLE != null ? new BaubleHandler(parent, BaubleType.AMULET) : parent;
 	}
 
 	private static class PowerHandler implements IEnergySource{
