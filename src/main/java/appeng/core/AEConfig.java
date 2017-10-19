@@ -112,6 +112,7 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 	private int entropyManipulatorBattery = 200000;
 	private int matterCannonBattery = 200000;
 	private int portableCellBattery = 20000;
+	private int toolbeltBattery = 20000;
 	private int colorApplicatorBattery = 20000;
 	private int chargedStaffBattery = 8000;
 
@@ -209,6 +210,7 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 		this.chargedStaffBattery = this.get( "battery", "chargedStaff", this.chargedStaffBattery ).getInt( this.chargedStaffBattery );
 		this.entropyManipulatorBattery = this.get( "battery", "entropyManipulator", this.entropyManipulatorBattery ).getInt( this.entropyManipulatorBattery );
 		this.portableCellBattery = this.get( "battery", "portableCell", this.portableCellBattery ).getInt( this.portableCellBattery );
+		this.toolbeltBattery = this.get( "battery", "toolbelt", this.toolbeltBattery ).getInt( this.toolbeltBattery );
 		this.colorApplicatorBattery = this.get( "battery", "colorApplicator", this.colorApplicatorBattery ).getInt( this.colorApplicatorBattery );
 		this.matterCannonBattery = this.get( "battery", "matterCannon", this.matterCannonBattery ).getInt( this.matterCannonBattery );
 
@@ -679,6 +681,10 @@ public final class AEConfig extends Configuration implements IConfigurableObject
 	public int getPortableCellBattery()
 	{
 		return portableCellBattery;
+	}
+
+	public int getToolbeltBattery(){
+		return toolbeltBattery;
 	}
 
 	public int getColorApplicatorBattery()
