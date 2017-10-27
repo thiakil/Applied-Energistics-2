@@ -27,10 +27,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AnnotationNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -38,6 +37,9 @@ import appeng.coremod.annotations.Integration;
 import appeng.helpers.Reflected;
 import appeng.integration.IntegrationRegistry;
 import appeng.integration.IntegrationType;
+
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 
 
 @Reflected
@@ -98,6 +100,24 @@ public final class ASMIntegration implements IClassTransformer
 			catch( final Throwable t )
 			{
 				t.printStackTrace();
+			}
+		} else if (transformedName.equals("net.minecraft.tileentity.TileEntity")){
+			final ClassNode classNode = new ClassNode();
+			final ClassReader classReader = new ClassReader( basicClass );
+			classReader.accept( classNode, 0 );
+			boolean foundMethod = false;
+			for (MethodNode methodNode : classNode.methods){
+				if (methodNode.name.equals("create") && methodNode.desc != null && methodNode.desc.equals("(Lnet/minecraft/world/World;Lnet/minecraft/nbt/NBTTagCompound;)Lnet/minecraft/tileentity/TileEntity;")){
+					logger.info("Patching TileEntity.create to allow legacy name remapping.");
+					patchTileEntityCreate(methodNode);
+					foundMethod = true;
+					break;
+				}
+			}
+			if (foundMethod){
+				final ClassWriter writer = new ClassWriter( ClassWriter.COMPUTE_MAXS );
+				classNode.accept( writer );
+				return writer.toByteArray();
 			}
 		}
 		return basicClass;
@@ -248,6 +268,20 @@ public final class ASMIntegration implements IClassTransformer
 		}
 
 		return false;
+	}
+
+	private void patchTileEntityCreate( MethodNode mn ){
+		InsnList insertList = new InsnList();
+		LabelNode l0 = new LabelNode(new Label());
+		//mv.visitLabel(l0);
+		insertList.add(l0);
+		//mv.visitLineNumber(14, l0);
+		insertList.add(new LineNumberNode(0xdeadbeef, l0));
+		//mv.visitVarInsn(ALOAD, 1);
+		insertList.add(new VarInsnNode(ALOAD, 1));
+		//mv.visitMethodInsn(INVOKESTATIC, "appeng/tester", "replaceOldIDs", "(Lnet/minecraft/nbt/NBTTagCompound;)V", false);
+		insertList.add(new MethodInsnNode(INVOKESTATIC, "appeng/util/TileEntityMappingFixer", "replaceOldIDs", "(Lnet/minecraft/nbt/NBTTagCompound;)V", false));
+		mn.instructions.insert(insertList);
 	}
 
 }
