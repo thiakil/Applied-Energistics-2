@@ -44,9 +44,9 @@ public enum WailaText
 		this.root = r;
 	}
 
-	public String getLocal()
+	public String getLocal(Object... params)
 	{
-		return AppEng.proxy.translateFormatted( this.getUnlocalized() );
+		return AppEng.proxy.translateFormatted( this.getUnlocalized(), params );
 	}
 
 	public String getUnlocalized()

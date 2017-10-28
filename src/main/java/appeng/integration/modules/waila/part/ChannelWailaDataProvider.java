@@ -85,7 +85,7 @@ public final class ChannelWailaDataProvider extends BasePartWailaDataProvider
 			{
 				final byte maxChannels = (byte) ( ( part instanceof PartDenseCable ) ? 32 : 8 );
 
-				final String formattedToolTip = String.format( WailaText.Channels.getLocal(), usedChannels, maxChannels );
+				final String formattedToolTip = WailaText.Channels.getLocal( usedChannels, maxChannels );
 				currentToolTip.add( formattedToolTip );
 			}
 		}

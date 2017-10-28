@@ -108,7 +108,7 @@ public class P2PStateInfoProvider implements IPartProbInfoProvider
 		}
 		else
 		{
-			return String.format( TheOneProbeText.P2P_INPUT_MANY_OUTPUTS.getLocal(), outputs );
+			return TheOneProbeText.P2P_INPUT_MANY_OUTPUTS.getLocal( outputs );
 		}
 	}
 

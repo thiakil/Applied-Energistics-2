@@ -56,7 +56,7 @@ public class ChannelInfoProvider implements IPartProbInfoProvider
 				usedChannels = 0;
 			}
 
-			final String formattedChannelString = String.format( TheOneProbeText.CHANNELS.getLocal(), usedChannels, maxChannels );
+			final String formattedChannelString = TheOneProbeText.CHANNELS.getLocal( usedChannels, maxChannels );
 
 			probeInfo.text( formattedChannelString );
 		}
