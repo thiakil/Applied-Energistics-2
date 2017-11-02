@@ -304,7 +304,7 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		this.searchField.setTextColor( 0xFFFFFF );
 		this.searchField.setVisible( true );
 
-		if( this.viewCell || this instanceof GuiWirelessTerm )
+		if( this.viewCell || this instanceof GuiWirelessTerm || this instanceof GuiWirelessCraftingTerminal )
 		{
 			this.buttonList.add( this.craftingStatusBtn = new GuiTabButton( this.guiLeft + 170, this.guiTop - 4, 2 + 11 * 16, GuiText.CraftingStatus.getLocal(), this.itemRender ) );
 			this.craftingStatusBtn.setHideEdge( 13 );

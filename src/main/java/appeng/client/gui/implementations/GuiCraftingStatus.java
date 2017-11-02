@@ -25,6 +25,7 @@ package appeng.client.gui.implementations;
 
 import java.io.IOException;
 
+import appeng.helpers.WirelessCraftingTerminalGuiObject;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiButton;
@@ -68,28 +69,31 @@ public class GuiCraftingStatus extends GuiCraftingCPU
 		final IDefinitions definitions = AEApi.instance().definitions();
 		final IParts parts = definitions.parts();
 
-		if( target instanceof WirelessTerminalGuiObject )
+		if( target instanceof WirelessCraftingTerminalGuiObject)
+		{
+			myIcon = definitions.items().wirelessCraftingTerminal().maybeStack( 1 ).orElse(ItemStack.EMPTY);
+
+			this.originalGui = GuiBridge.GUI_WIRELESS_CRAFTING_TERM;
+		}
+		else if( target instanceof WirelessTerminalGuiObject )
 		{
 			myIcon = definitions.items().wirelessTerminal().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 
 			this.originalGui = GuiBridge.GUI_WIRELESS_TERM;
 		}
-
-		if( target instanceof PartTerminal )
+		else if( target instanceof PartTerminal )
 		{
 			myIcon = parts.terminal().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 
 			this.originalGui = GuiBridge.GUI_ME;
 		}
-
-		if( target instanceof PartCraftingTerminal )
+		else if( target instanceof PartCraftingTerminal )
 		{
 			myIcon = parts.craftingTerminal().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 
 			this.originalGui = GuiBridge.GUI_CRAFTING_TERMINAL;
 		}
-
-		if( target instanceof PartPatternTerminal )
+		else if( target instanceof PartPatternTerminal )
 		{
 			myIcon = parts.patternTerminal().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 

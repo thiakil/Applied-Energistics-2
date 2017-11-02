@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import appeng.helpers.WirelessCraftingTerminalGuiObject;
 import com.google.common.base.Joiner;
 
 import org.lwjgl.input.Mouse;
@@ -85,22 +86,23 @@ public class GuiCraftConfirm extends AEBaseGui
 
 		this.ccc = (ContainerCraftConfirm) this.inventorySlots;
 
-		if( te instanceof WirelessTerminalGuiObject )
+		if( te instanceof WirelessCraftingTerminalGuiObject)
+		{
+			this.OriginalGui = GuiBridge.GUI_WIRELESS_CRAFTING_TERM;
+		}
+		else if( te instanceof WirelessTerminalGuiObject )
 		{
 			this.OriginalGui = GuiBridge.GUI_WIRELESS_TERM;
 		}
-
-		if( te instanceof PartTerminal )
+		else if( te instanceof PartTerminal )
 		{
 			this.OriginalGui = GuiBridge.GUI_ME;
 		}
-
-		if( te instanceof PartCraftingTerminal )
+		else if( te instanceof PartCraftingTerminal )
 		{
 			this.OriginalGui = GuiBridge.GUI_CRAFTING_TERMINAL;
 		}
-
-		if( te instanceof PartPatternTerminal )
+		else if( te instanceof PartPatternTerminal )
 		{
 			this.OriginalGui = GuiBridge.GUI_PATTERN_TERMINAL;
 		}
