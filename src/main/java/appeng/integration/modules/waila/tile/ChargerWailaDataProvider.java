@@ -63,7 +63,7 @@ public final class ChargerWailaDataProvider extends BaseWailaDataProvider
 			final IInventory chargerInventory = charger.getInternalInventory();
 			final ItemStack chargingItem = chargerInventory.getStackInSlot( 0 );
 
-			if( chargingItem != null )
+			if( !chargingItem.isEmpty() )
 			{
 				final String currentInventory = chargingItem.getDisplayName();
 				final EntityPlayer player = accessor.getPlayer();
