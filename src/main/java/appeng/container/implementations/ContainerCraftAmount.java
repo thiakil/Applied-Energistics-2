@@ -33,15 +33,17 @@ import appeng.api.networking.security.PlayerSource;
 import appeng.api.storage.ITerminalHost;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.container.AEBaseContainer;
+import appeng.container.interfaces.IInventorySlotAware;
 import appeng.container.slot.SlotInaccessible;
 import appeng.tile.inventory.AppEngInternalInventory;
 
 
-public class ContainerCraftAmount extends AEBaseContainer
+public class ContainerCraftAmount extends AEBaseContainer implements IInventorySlotAware
 {
 
 	private final Slot craftingItem;
 	private IAEItemStack itemToCreate;
+	private int invSlot = -1;
 
 	public ContainerCraftAmount( final InventoryPlayer ip, final ITerminalHost te )
 	{
@@ -49,6 +51,9 @@ public class ContainerCraftAmount extends AEBaseContainer
 
 		this.craftingItem = new SlotInaccessible( new AppEngInternalInventory( null, 1 ), 0, 34, 53 );
 		this.addSlotToContainer( this.getCraftingItem() );
+		if (te instanceof IInventorySlotAware){
+			this.invSlot = ( (IInventorySlotAware) te ).getInventorySlot();
+		}
 	}
 
 	@Override
@@ -93,5 +98,11 @@ public class ContainerCraftAmount extends AEBaseContainer
 	public boolean hasPlayerInv()
 	{
 		return false;
+	}
+
+	@Override
+	public int getInventorySlot()
+	{
+		return this.invSlot;
 	}
 }

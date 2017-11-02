@@ -39,17 +39,27 @@ public class PacketSwitchGuis extends AppEngPacket
 {
 
 	private final GuiBridge newGui;
+	private final int invSlot;
 
 	// automatic.
 	public PacketSwitchGuis( final ByteBuf stream )
 	{
 		this.newGui = GuiBridge.values()[stream.readInt()];
+		if (stream.readBoolean()){
+			this.invSlot = stream.readInt();
+		} else {
+			this.invSlot = -1;
+		}
 	}
 
+	public PacketSwitchGuis( final GuiBridge newGui ){
+		this(newGui, -1);
+	}
 	// api
-	public PacketSwitchGuis( final GuiBridge newGui )
+	public PacketSwitchGuis( final GuiBridge newGui, int invSlot )
 	{
 		this.newGui = newGui;
+		this.invSlot = invSlot;
 
 		if( Platform.isClient() )
 		{
@@ -60,6 +70,12 @@ public class PacketSwitchGuis extends AppEngPacket
 
 		data.writeInt( this.getPacketID() );
 		data.writeInt( newGui.ordinal() );
+		if (invSlot != -1) {
+			data.writeBoolean( true );
+			data.writeInt( invSlot );
+		} else {
+			data.writeBoolean( false );
+		}
 
 		this.configureWrite( data );
 	}
@@ -75,7 +91,13 @@ public class PacketSwitchGuis extends AppEngPacket
 			if( context != null )
 			{
 				final TileEntity te = context.getTile();
-				Platform.openGUI( player, te, context.getSide(), this.newGui );
+				if ( te != null || this.invSlot == -1 )
+				{
+					Platform.openGUI( player, te, context.getSide(), this.newGui );
+				} else {
+					Platform.openGUI( player, this.newGui, this.invSlot );
+				}
+
 			}
 		}
 	}

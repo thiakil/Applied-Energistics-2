@@ -59,6 +59,7 @@ import appeng.core.sync.GuiBridge;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketMEInventoryUpdate;
 import appeng.core.sync.packets.PacketSwitchGuis;
+import appeng.helpers.WirelessCraftingTerminalGuiObject;
 import appeng.helpers.WirelessTerminalGuiObject;
 import appeng.parts.reporting.PartCraftingTerminal;
 import appeng.parts.reporting.PartPatternTerminal;
@@ -88,10 +89,14 @@ public class ContainerCraftConfirm extends AEBaseContainer
 	public boolean noCPU = true;
 	@GuiSync( 7 )
 	public String myName = "";
+	private int invSlot = -1;
 
 	public ContainerCraftConfirm( final InventoryPlayer ip, final ITerminalHost te )
 	{
 		super( ip, te );
+		if (te instanceof WirelessTerminalGuiObject){
+			invSlot = ( (WirelessTerminalGuiObject) te ).getInventorySlot();
+		}
 	}
 
 	public void cycleCpu( final boolean next )
@@ -326,24 +331,28 @@ public class ContainerCraftConfirm extends AEBaseContainer
 	public void startJob()
 	{
 		GuiBridge originalGui = null;
+		int invSlot = -1;
 
 		final IActionHost ah = this.getActionHost();
-		if( ah instanceof WirelessTerminalGuiObject )
+		if( ah instanceof WirelessCraftingTerminalGuiObject )
+		{
+			originalGui = GuiBridge.GUI_WIRELESS_CRAFTING_TERM;
+			invSlot = ( (WirelessCraftingTerminalGuiObject) ah ).getInventorySlot();
+		}
+		else if( ah instanceof WirelessTerminalGuiObject )
 		{
 			originalGui = GuiBridge.GUI_WIRELESS_TERM;
+			invSlot = ( (WirelessTerminalGuiObject) ah ).getInventorySlot();
 		}
-
-		if( ah instanceof PartTerminal )
+		else if( ah instanceof PartTerminal )
 		{
 			originalGui = GuiBridge.GUI_ME;
 		}
-
-		if( ah instanceof PartCraftingTerminal )
+		else if( ah instanceof PartCraftingTerminal )
 		{
 			originalGui = GuiBridge.GUI_CRAFTING_TERMINAL;
 		}
-
-		if( ah instanceof PartPatternTerminal )
+		else if( ah instanceof PartPatternTerminal )
 		{
 			originalGui = GuiBridge.GUI_PATTERN_TERMINAL;
 		}
@@ -355,10 +364,17 @@ public class ContainerCraftConfirm extends AEBaseContainer
 			this.setAutoStart( false );
 			if( g != null && originalGui != null && this.getOpenContext() != null )
 			{
-				NetworkHandler.instance().sendTo( new PacketSwitchGuis( originalGui ), (EntityPlayerMP) this.getInventoryPlayer().player );
+				NetworkHandler.instance().sendTo( new PacketSwitchGuis( originalGui, invSlot ), (EntityPlayerMP) this.getInventoryPlayer().player );
 
 				final TileEntity te = this.getOpenContext().getTile();
-				Platform.openGUI( this.getInventoryPlayer().player, te, this.getOpenContext().getSide(), originalGui );
+				if (te != null || this.invSlot == -1)
+				{
+					Platform.openGUI( this.getInventoryPlayer().player, te, this.getOpenContext().getSide(), originalGui );
+				}
+				else
+				{
+					Platform.openGUI( this.getInventoryPlayer().player, originalGui, this.invSlot );
+				}
 			}
 		}
 	}

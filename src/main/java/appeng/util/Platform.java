@@ -499,6 +499,21 @@ public class Platform
 		}
 	}
 
+	public static void openGUI( @Nonnull final EntityPlayer p, @Nonnull final GuiBridge type, final int invSlot ){
+		if( isClient() )
+		{
+			return;
+		}
+
+		int x = (int) p.posX;
+		int y = (int) p.posY;
+		int z = (int) p.posZ;
+
+		if( type.getType().isItem() ) {
+			p.openGui( AppEng.instance(), GuiBridge.encodeModGui( type, (short)invSlot ), p.getEntityWorld(), x, y, z );
+		}
+	}
+
 	/*
 	 * returns true if the code is on the client.
 	 */

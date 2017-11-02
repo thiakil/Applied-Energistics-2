@@ -65,6 +65,7 @@ public class GuiCraftAmount extends AEBaseGui
 	private GuiButton minus1000;
 
 	private GuiBridge originalGui;
+	private int invSlot = -1;
 
 	@Reflected
 	public GuiCraftAmount( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
@@ -104,12 +105,14 @@ public class GuiCraftAmount extends AEBaseGui
 			myIcon = definitions.items().wirelessCraftingTerminal().maybeStack( 1 ).orElse( myIcon );
 
 			this.originalGui = GuiBridge.GUI_WIRELESS_CRAFTING_TERM;
+			this.invSlot = ( (WirelessCraftingTerminalGuiObject) target ).getInventorySlot();
 		}
 		else if( target instanceof WirelessTerminalGuiObject )
 		{
 			myIcon = definitions.items().wirelessTerminal().maybeStack( 1 ).orElse( myIcon );
 
 			this.originalGui = GuiBridge.GUI_WIRELESS_TERM;
+			this.invSlot = ( (WirelessTerminalGuiObject) target ).getInventorySlot();
 		}
 		else if( target instanceof PartTerminal )
 		{
@@ -228,12 +231,12 @@ public class GuiCraftAmount extends AEBaseGui
 
 			if( btn == this.originalGuiBtn )
 			{
-				NetworkHandler.instance().sendToServer( new PacketSwitchGuis( this.originalGui ) );
+				NetworkHandler.instance().sendToServer( new PacketSwitchGuis( this.originalGui, this.invSlot ) );
 			}
 
 			if( btn == this.next )
 			{
-				NetworkHandler.instance().sendToServer( new PacketCraftRequest( Integer.parseInt( this.amountToCraft.getText() ), isShiftKeyDown() ) );
+				NetworkHandler.instance().sendToServer( new PacketCraftRequest( Integer.parseInt( this.amountToCraft.getText() ), isShiftKeyDown(), this.invSlot ) );
 			}
 		}
 		catch( final NumberFormatException e )

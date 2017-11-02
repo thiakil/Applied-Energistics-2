@@ -33,6 +33,7 @@ import appeng.api.storage.data.IAEItemStack;
 import appeng.container.AEBaseContainer;
 import appeng.container.ContainerOpenContext;
 import appeng.container.implementations.ContainerCraftAmount;
+import appeng.container.interfaces.IInventorySlotAware;
 import appeng.core.AppEng;
 import appeng.core.sync.AppEngPacket;
 import appeng.core.sync.GuiBridge;
@@ -133,7 +134,11 @@ public class PacketInventoryAction extends AppEngPacket
 				if( context != null )
 				{
 					final TileEntity te = context.getTile();
-					Platform.openGUI( sender, te, baseContainer.getOpenContext().getSide(), GuiBridge.GUI_CRAFTING_AMOUNT );
+					if (te != null) {
+						Platform.openGUI( sender, te, baseContainer.getOpenContext().getSide(), GuiBridge.GUI_CRAFTING_AMOUNT );
+					} else if (baseContainer instanceof IInventorySlotAware){
+						Platform.openGUI( sender, GuiBridge.GUI_CRAFTING_AMOUNT, ( (IInventorySlotAware) baseContainer ).getInventorySlot() );
+					}
 
 					if( sender.openContainer instanceof ContainerCraftAmount )
 					{

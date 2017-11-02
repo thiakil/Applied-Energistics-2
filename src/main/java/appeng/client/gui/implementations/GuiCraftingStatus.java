@@ -59,6 +59,7 @@ public class GuiCraftingStatus extends GuiCraftingCPU
 	private GuiTabButton originalGuiBtn;
 	private GuiBridge originalGui;
 	private ItemStack myIcon = ItemStack.EMPTY;
+	private int invSlot = -1;
 
 	public GuiCraftingStatus( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
 	{
@@ -74,12 +75,14 @@ public class GuiCraftingStatus extends GuiCraftingCPU
 			myIcon = definitions.items().wirelessCraftingTerminal().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 
 			this.originalGui = GuiBridge.GUI_WIRELESS_CRAFTING_TERM;
+			this.invSlot = ( (WirelessCraftingTerminalGuiObject) target ).getInventorySlot();
 		}
 		else if( target instanceof WirelessTerminalGuiObject )
 		{
 			myIcon = definitions.items().wirelessTerminal().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 
 			this.originalGui = GuiBridge.GUI_WIRELESS_TERM;
+			this.invSlot = ( (WirelessTerminalGuiObject) target ).getInventorySlot();
 		}
 		else if( target instanceof PartTerminal )
 		{
@@ -122,7 +125,7 @@ public class GuiCraftingStatus extends GuiCraftingCPU
 
 		if( btn == this.originalGuiBtn )
 		{
-			NetworkHandler.instance().sendToServer( new PacketSwitchGuis( this.originalGui ) );
+			NetworkHandler.instance().sendToServer( new PacketSwitchGuis( this.originalGui, this.invSlot ) );
 		}
 	}
 
