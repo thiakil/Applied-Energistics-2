@@ -64,4 +64,14 @@ public class GuiMEPortableCell extends GuiMEMonitorable
 	{
 		return 3;
 	}
+
+	@Override
+	public void updateSetting( IConfigManager manager, Enum settingName, Enum newValue )
+	{
+		super.updateSetting( manager, settingName, newValue );
+
+		if (settingName == Settings.PORTABLE_CELL_AUTOPICKUP && this.pickupMode != null) {
+			this.pickupMode.set( newValue );
+		}
+	}
 }

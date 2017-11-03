@@ -33,9 +33,12 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -426,6 +429,7 @@ public class ClientHelper extends ServerHelper
 					}
 					if (!belt.isEmpty()){
 						NetworkHandler.instance().sendToServer( new PacketBaubleKey( PacketBaubleKey.KeyType.TOOLBELT) );
+						Minecraft.getMinecraft().player.playSound( SoundEvents.ENTITY_ITEM_PICKUP, 0.2F, ((Minecraft.getMinecraft().player.getRNG().nextFloat() - Minecraft.getMinecraft().player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
 					}
 				}
 			}

@@ -111,10 +111,10 @@ public class OreHelper
 		return this.references.get( ir );
 	}
 
-	boolean sameOre( final AEItemStack aeItemStack, final IAEItemStack is )
+	boolean sameOre( final AEItemStack aeItemStack, final AEItemStack is )
 	{
 		final OreReference a = aeItemStack.getDefinition().getIsOre();
-		final OreReference b = aeItemStack.getDefinition().getIsOre();
+		final OreReference b = is.getDefinition().getIsOre();
 
 		return this.sameOre( a, b );
 	}
