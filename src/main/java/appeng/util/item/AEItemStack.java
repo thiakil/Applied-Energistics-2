@@ -567,7 +567,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Override
 	public boolean sameOre( final IAEItemStack is )
 	{
-		return OreHelper.INSTANCE.sameOre( this, is );
+		return OreHelper.INSTANCE.sameOre( this, (AEItemStack)is );
 	}
 
 	@Override
