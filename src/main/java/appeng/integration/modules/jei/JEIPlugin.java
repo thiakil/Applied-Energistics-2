@@ -26,10 +26,10 @@ import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import mezz.jei.api.IModPlugin;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
@@ -53,7 +53,7 @@ import appeng.items.parts.ItemFacade;
 
 
 @mezz.jei.api.JEIPlugin
-public class JEIPlugin extends BlankModPlugin
+public class JEIPlugin implements IModPlugin
 {
 
 	@Override
