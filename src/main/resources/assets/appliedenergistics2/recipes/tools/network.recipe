@@ -1,7 +1,11 @@
 shaped=
     ae2:chest ae2:material.Cell1kPart ae2:energy_cell
     -> ae2:portable_cell
-    
+
+shaped=
+    mc:string ae2:portable_cell mc:string
+    -> ae2:toolbelt
+
 shapeless=
     wrench monitor ae2:material.CalcProcessor oredictionary:chestWood
     -> ae2:network_tool
