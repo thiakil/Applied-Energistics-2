@@ -49,8 +49,8 @@ public class GuiPatternTerm extends GuiMEMonitorable
 	private static final String SUBSITUTION_DISABLE = "0";
 	private static final String SUBSITUTION_ENABLE = "1";
 
-	private static final String CRAFTMODE_CRFTING = "1";
-	private static final String CRAFTMODE_PROCESSING = "0";
+	public static final String CRAFTMODE_CRFTING = "1";
+	public static final String CRAFTMODE_PROCESSING = "0";
 
 	private final ContainerPatternTerm container;
 

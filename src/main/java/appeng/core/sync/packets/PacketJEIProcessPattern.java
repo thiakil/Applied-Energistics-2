@@ -13,6 +13,7 @@ import appeng.api.storage.IMEMonitor;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IItemList;
 import appeng.container.implementations.ContainerPatternTerm;
+import appeng.core.AEConfig;
 import appeng.core.sync.AppEngPacket;
 import appeng.core.sync.network.INetworkInfo;
 import appeng.helpers.IContainerCraftingPacket;
@@ -39,6 +40,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class PacketJEIProcessPattern extends AppEngPacket {
@@ -52,8 +54,8 @@ public class PacketJEIProcessPattern extends AppEngPacket {
 		outputs = new ArrayList<>(3);
 
 		if (recipe != null && recipe.hasKey("input", Constants.NBT.TAG_LIST) && recipe.hasKey("output", Constants.NBT.TAG_LIST)){
-			NBTTagList inputTagList = recipe.getTagList("input", Constants.NBT.TAG_COMPOUND);
-			int numInputs = Math.max(inputTagList.tagCount(), 9);//is capped to 9 in the JEI module, but safety first!
+			NBTTagList inputTagList = recipe.getTagList("input", Constants.NBT.TAG_LIST);
+			int numInputs = Math.min(inputTagList.tagCount(), 9);//is capped to 9 in the JEI module, but safety first!
 			for (int i =0; i < numInputs; i++) {
 				NBTBase t = inputTagList.get(i);
 				if (t instanceof NBTTagList) {
@@ -70,8 +72,8 @@ public class PacketJEIProcessPattern extends AppEngPacket {
 					}
 				}
 			}
-			NBTTagList outputTagList = recipe.getTagList("input", Constants.NBT.TAG_COMPOUND);
-			int numOutputs = Math.max(outputTagList.tagCount(), 9);//is capped to 9 in the JEI module, but safety first!
+			NBTTagList outputTagList = recipe.getTagList("output", Constants.NBT.TAG_LIST);
+			int numOutputs = Math.min(outputTagList.tagCount(), 3);//is capped to 9 in the JEI module, but safety first!
 			for (int i =0; i < numOutputs; i++) {
 				NBTBase t = outputTagList.get(i);
 				if (t instanceof NBTTagList) {
@@ -94,6 +96,8 @@ public class PacketJEIProcessPattern extends AppEngPacket {
 	public PacketJEIProcessPattern( List<List<ItemStack>> in, List<List<ItemStack>> out ) throws IOException
 	{
 		final ByteBuf data = Unpooled.buffer();
+
+		data.writeInt( this.getPacketID() );
 
 		/*
 		 * Construct a NBT compound that has a list (slots) of lists (possible itemstacks) for inputs and outputs
@@ -141,48 +145,72 @@ public class PacketJEIProcessPattern extends AppEngPacket {
 					return;
 				}
 
-				final IStorageGrid inv = grid.getCache(IStorageGrid.class);
-				final IEnergyGrid energy = grid.getCache(IEnergyGrid.class);
+				final IStorageGrid storageGrid = grid.getCache(IStorageGrid.class);
 				final ISecurityGrid security = grid.getCache(ISecurityGrid.class);
 				final IInventory craftMatrix = cct.getInventoryByName("crafting");
-				final IInventory playerInventory = cct.getInventoryByName("player");
 				final IInventory outputSlots = cct.getInventoryByName("output");
 
-				final Actionable realForFake = Actionable.SIMULATE;//is pattern term, always fake
+				if (storageGrid == null || outputSlots == null || this.inputs == null || this.outputs == null || security == null || !security.hasPermission(player, SecurityPermissions.EXTRACT)) {
+					return;
+				}
+
+				if (!AEConfig.instance().getPatternTermRequiresItems()) {
+					for (int x = 0; x < craftMatrix.getSizeInventory(); x++){
+						if (inputs.get(x) != null){
+							craftMatrix.setInventorySlotContents( x, inputs.get( x ).get( 0 ) );
+						} else {
+							craftMatrix.setInventorySlotContents( x, ItemStack.EMPTY );
+						}
+					}
+					for (int x = 0; x < outputSlots.getSizeInventory(); x++){
+						if (outputs.get(x) != null){
+							outputSlots.setInventorySlotContents( x, outputs.get( x ).get( 0 ) );
+						} else {
+							outputSlots.setInventorySlotContents( x, ItemStack.EMPTY );
+						}
+					}
+					return;
+				}
 
 				final IItemList<IAEItemStack> craftables = new ItemList();
-				IItemList<IAEItemStack> storageList = inv.getItemInventory().getStorageList();
+				IItemList<IAEItemStack> storageList = storageGrid.getItemInventory().getStorageList();
 				for (IAEItemStack stack : storageList) {
 					if (stack.isCraftable()) {
 						craftables.add(stack);
 					}
 				}
 
-				if (inv == null || outputSlots == null || this.inputs == null || this.outputs == null || security == null || !security.hasPermission(player, SecurityPermissions.EXTRACT)) {
-					return;
-				}
-
 				final IPartitionList<IAEItemStack> filter = ItemViewCell.createFilter(cct.getViewCells());
 
-				for (int x = 0; x < craftMatrix.getSizeInventory(); x++){
-					if (inputs.get(x) != null){
-						for (ItemStack is : inputs.get(x)){
-							ItemStack found = hasStoredItem(is, filter, inv.getItemInventory(), cct.getActionSource(), storageList);
-							if (!found.isEmpty()){
-								craftMatrix.setInventorySlotContents(x, found);
-								break;
-							}
-							found = this.extractItemFromPlayerInventory(player, realForFake, is);
-							if (!found.isEmpty()){
-								craftMatrix.setInventorySlotContents(x, found);
-								break;
-							}
-						}
-					} else {
-						craftMatrix.setInventorySlotContents(x, ItemStack.EMPTY);
+				attemptTransfer( craftMatrix, this.inputs, craftables, filter, storageGrid.getItemInventory(), cct.getActionSource(), player, storageList );
+				attemptTransfer( outputSlots, this.outputs, craftables, filter, storageGrid.getItemInventory(), cct.getActionSource(), player, storageList );
+
+			}
+		}
+	}
+
+	private static void attemptTransfer(IInventory matrix, List<List<ItemStack>> source, final IItemList<IAEItemStack> craftables, final IPartitionList<IAEItemStack> filter, IMEMonitor<IAEItemStack> itemInv, final BaseActionSource actionSrc, final EntityPlayer player, IItemList<IAEItemStack> storageList){
+		for (int x = 0; x < matrix.getSizeInventory(); x++){
+			if (source.size() > x){
+				ItemStack found = ItemStack.EMPTY;
+				for (ItemStack is : source.get(x)){
+					found = hasStoredItem(is, filter, itemInv, actionSrc, storageList);
+					if (!found.isEmpty()){
+						break;
+					}
+					found = extractItemFromPlayerInventory(player, Actionable.SIMULATE, is);
+					if (!found.isEmpty()){
+						break;
+					}
+					Collection<IAEItemStack> matches = craftables.findFuzzy(AEItemStack.create(is), FuzzyMode.IGNORE_ALL);
+					if (matches.size() > 0){
+						found = matches.iterator().next().getDisplayItemStack();//display stack so it ensures it's not empty
+						break;
 					}
 				}
-
+				matrix.setInventorySlotContents(x, found);
+			} else {
+				matrix.setInventorySlotContents(x, ItemStack.EMPTY);
 			}
 		}
 	}
@@ -217,7 +245,7 @@ public class PacketJEIProcessPattern extends AppEngPacket {
 		return ItemStack.EMPTY;
 	}
 
-	private ItemStack extractItemFromPlayerInventory( final EntityPlayer player, final Actionable mode, final ItemStack patternItem )
+	private static ItemStack extractItemFromPlayerInventory( final EntityPlayer player, final Actionable mode, final ItemStack patternItem )
 	{
 		final InventoryAdaptor ia = InventoryAdaptor.getAdaptor( player, EnumFacing.UP );
 		final AEItemStack request = AEItemStack.create( patternItem );

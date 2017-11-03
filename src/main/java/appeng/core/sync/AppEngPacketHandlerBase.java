@@ -35,6 +35,7 @@ import appeng.core.sync.packets.PacketCompressedNBT;
 import appeng.core.sync.packets.PacketConfigButton;
 import appeng.core.sync.packets.PacketCraftRequest;
 import appeng.core.sync.packets.PacketInventoryAction;
+import appeng.core.sync.packets.PacketJEIProcessPattern;
 import appeng.core.sync.packets.PacketJEIRecipe;
 import appeng.core.sync.packets.PacketLightning;
 import appeng.core.sync.packets.PacketMEInventoryUpdate;
@@ -105,6 +106,8 @@ public class AppEngPacketHandlerBase
 		PACKET_PAINTED_ENTITY( PacketPaintedEntity.class ),
 
 		PACKET_BAUBLE_KEY( PacketBaubleKey.class ),
+
+		PACKET_UNIVERSAL_JEI_TRANSFER( PacketJEIProcessPattern.class ),
 
 		;
 
