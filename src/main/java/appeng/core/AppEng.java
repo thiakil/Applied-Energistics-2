@@ -81,6 +81,7 @@ public final class AppEng
 			// required-after:AppliedEnergistics2API|all;
 			"after:gregtech_addon;after:mekanism;after:ic2;after:thermalexpansion;after:buildcraft;after:opencomputers@[1.7.0,];" +
 			"after:baubles@[1.5.1,];" +
+			"after:jei@[4.7.6,];" +//needed for the universal transfer handler
 			// depend on version of forge used for build.
 			"required-after:appliedenergistics2-core;";// + "required-after:Forge@[" // require forge.
 					//+ net.minecraftforge.common.ForgeVersion.majorVersion + '.' // majorVersion

@@ -77,10 +77,10 @@ public class JEIPlugin implements IModPlugin
 		// Allow recipe transfer from JEI to crafting and pattern terminal
 		registry.getRecipeTransferRegistry().addRecipeTransferHandler( new RecipeTransferHandler<>( ContainerCraftingTerm.class ),
 				VanillaRecipeCategoryUid.CRAFTING );
-		registry.getRecipeTransferRegistry().addRecipeTransferHandler( new RecipeTransferHandler<>( ContainerPatternTerm.class ),
-				VanillaRecipeCategoryUid.CRAFTING );
 		registry.getRecipeTransferRegistry().addRecipeTransferHandler( new RecipeTransferHandler<>( ContainerWirelessCraftingTerminal.class ),
 				VanillaRecipeCategoryUid.CRAFTING );
+
+		registry.getRecipeTransferRegistry().addUniversalRecipeTransferHandler( new UniversalPatternTransferHandler() );
 	}
 
 	private void registerDescriptions( IDefinitions definitions, IModRegistry registry )
