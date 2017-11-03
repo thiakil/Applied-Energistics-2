@@ -54,7 +54,7 @@ public class PowerStorageInfoProvider implements ITileProbInfoProvider
 
 					final String formatCurrentPower = Platform.formatPowerLong( internalCurrentPower, false );
 					final String formatMaxPower = Platform.formatPowerLong( internalMaxPower, false );
-					final String formattedString = String.format( TheOneProbeText.STORED_ENERGY.getLocal(), formatCurrentPower, formatMaxPower );
+					final String formattedString = TheOneProbeText.STORED_ENERGY.getLocal( formatCurrentPower, formatMaxPower );
 
 					probeInfo.text( formattedString );
 				}

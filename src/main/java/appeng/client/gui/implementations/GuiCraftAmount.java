@@ -21,6 +21,7 @@ package appeng.client.gui.implementations;
 
 import java.io.IOException;
 
+import appeng.helpers.WirelessCraftingTerminalGuiObject;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -64,6 +65,7 @@ public class GuiCraftAmount extends AEBaseGui
 	private GuiButton minus1000;
 
 	private GuiBridge originalGui;
+	private int invSlot = -1;
 
 	@Reflected
 	public GuiCraftAmount( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
@@ -98,26 +100,31 @@ public class GuiCraftAmount extends AEBaseGui
 		final IDefinitions definitions = AEApi.instance().definitions();
 		final IParts parts = definitions.parts();
 
-		if( target instanceof WirelessTerminalGuiObject )
+		if( target instanceof WirelessCraftingTerminalGuiObject)
+		{
+			myIcon = definitions.items().wirelessCraftingTerminal().maybeStack( 1 ).orElse( myIcon );
+
+			this.originalGui = GuiBridge.GUI_WIRELESS_CRAFTING_TERM;
+			this.invSlot = ( (WirelessCraftingTerminalGuiObject) target ).getInventorySlot();
+		}
+		else if( target instanceof WirelessTerminalGuiObject )
 		{
 			myIcon = definitions.items().wirelessTerminal().maybeStack( 1 ).orElse( myIcon );
 
 			this.originalGui = GuiBridge.GUI_WIRELESS_TERM;
+			this.invSlot = ( (WirelessTerminalGuiObject) target ).getInventorySlot();
 		}
-
-		if( target instanceof PartTerminal )
+		else if( target instanceof PartTerminal )
 		{
 			myIcon = parts.terminal().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 			this.originalGui = GuiBridge.GUI_ME;
 		}
-
-		if( target instanceof PartCraftingTerminal )
+		else if( target instanceof PartCraftingTerminal )
 		{
 			myIcon = parts.craftingTerminal().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 			this.originalGui = GuiBridge.GUI_CRAFTING_TERMINAL;
 		}
-
-		if( target instanceof PartPatternTerminal )
+		else if( target instanceof PartPatternTerminal )
 		{
 			myIcon = parts.patternTerminal().maybeStack( 1 ).orElse(ItemStack.EMPTY);
 			this.originalGui = GuiBridge.GUI_PATTERN_TERMINAL;
@@ -224,12 +231,12 @@ public class GuiCraftAmount extends AEBaseGui
 
 			if( btn == this.originalGuiBtn )
 			{
-				NetworkHandler.instance().sendToServer( new PacketSwitchGuis( this.originalGui ) );
+				NetworkHandler.instance().sendToServer( new PacketSwitchGuis( this.originalGui, this.invSlot ) );
 			}
 
 			if( btn == this.next )
 			{
-				NetworkHandler.instance().sendToServer( new PacketCraftRequest( Integer.parseInt( this.amountToCraft.getText() ), isShiftKeyDown() ) );
+				NetworkHandler.instance().sendToServer( new PacketCraftRequest( Integer.parseInt( this.amountToCraft.getText() ), isShiftKeyDown(), this.invSlot ) );
 			}
 		}
 		catch( final NumberFormatException e )

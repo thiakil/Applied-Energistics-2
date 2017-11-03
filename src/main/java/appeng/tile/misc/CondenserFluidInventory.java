@@ -62,6 +62,7 @@ class CondenserFluidInventory implements IMEMonitor<IAEFluidStack>
 	}
 
 	@Override
+	@Deprecated
 	public IItemList<IAEFluidStack> getAvailableItems( final IItemList out )
 	{
 		return out;

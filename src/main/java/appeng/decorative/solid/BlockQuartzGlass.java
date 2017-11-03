@@ -35,6 +35,8 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 
 import appeng.block.AEBaseBlock;
 import appeng.helpers.AEGlassMaterial;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public class BlockQuartzGlass extends AEBaseBlock
@@ -91,6 +93,8 @@ public class BlockQuartzGlass extends AEBaseBlock
 	}
 
 	@Override
+	@Deprecated
+	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered( final IBlockState state, final IBlockAccess w, final BlockPos pos, final EnumFacing side )
 	{
 		BlockPos adjacentPos = pos.offset( side );
@@ -109,6 +113,7 @@ public class BlockQuartzGlass extends AEBaseBlock
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullCube( IBlockState state )
 	{
 		return false;

@@ -200,7 +200,7 @@ public final class Registration
 			} );
 		}
 
-		if (AEConfig.instance().isFeatureEnabled( AEFeature.WIRELESS_ACCESS_TERMINAL ) && AEConfig.instance().isFeatureEnabled( AEFeature.QUANTUM_NETWORK_BRIDGE )){
+		if (AEConfig.instance().isFeatureEnabled( AEFeature.INFINITE_WIRELESS_UPGRADE ) && AEConfig.instance().isFeatureEnabled( AEFeature.WIRELESS_ACCESS_TERMINAL ) && AEConfig.instance().isFeatureEnabled( AEFeature.QUANTUM_NETWORK_BRIDGE )){
 			registry.register( new WirelessTerminalUpgradeRecipe( definitions.items().wirelessTerminal() ).setRegistryName( AppEng.MOD_ID, "wireless_terminal_upgrade" ) );
 			registry.register( new WirelessTerminalUpgradeRecipe( definitions.items().wirelessCraftingTerminal() ).setRegistryName( AppEng.MOD_ID, "wireless_crafting_terminal_upgrade" ) );
 		}

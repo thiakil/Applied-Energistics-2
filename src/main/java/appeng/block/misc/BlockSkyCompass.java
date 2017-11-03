@@ -78,6 +78,7 @@ public class BlockSkyCompass extends AEBaseTileBlock implements ICustomCollision
 	}
 
 	@Override
+	@Deprecated
 	public void neighborChanged( IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
 		final TileSkyCompass sc = this.getTileEntity( world, pos );
@@ -177,12 +178,14 @@ public class BlockSkyCompass extends AEBaseTileBlock implements ICustomCollision
 	}
 
 	@Override
+	@Deprecated
 	public EnumBlockRenderType getRenderType( IBlockState state )
 	{
 		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullBlock( IBlockState state )
 	{
 		return false;

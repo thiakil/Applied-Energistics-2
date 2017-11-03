@@ -66,6 +66,7 @@ public class BlockSecurityStation extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
 	{
 		boolean powered = false;

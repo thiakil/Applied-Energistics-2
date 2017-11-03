@@ -59,6 +59,7 @@ public final class BlockVibrationChamber extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
 	{
 		TileVibrationChamber te = this.getTileEntity( world, pos );

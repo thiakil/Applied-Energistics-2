@@ -37,6 +37,7 @@ public class TileItemGen extends AEBaseTile implements IInventory
 
 	private static final Queue<ItemStack> POSSIBLE_ITEMS = new LinkedList<ItemStack>();
 
+	@SuppressWarnings("deprecation")
 	public TileItemGen()
 	{
 		if( POSSIBLE_ITEMS.isEmpty() )

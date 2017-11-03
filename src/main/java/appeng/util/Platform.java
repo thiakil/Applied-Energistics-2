@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.StringJoiner;
 import java.util.WeakHashMap;
 
 import javax.annotation.Nonnull;
@@ -39,12 +40,14 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import net.minecraft.item.ItemEnchantedBook;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -60,6 +63,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.server.management.PlayerChunkMapEntry;
@@ -498,6 +502,21 @@ public class Platform
 		}
 	}
 
+	public static void openGUI( @Nonnull final EntityPlayer p, @Nonnull final GuiBridge type, final int invSlot ){
+		if( isClient() )
+		{
+			return;
+		}
+
+		int x = (int) p.posX;
+		int y = (int) p.posY;
+		int z = (int) p.posZ;
+
+		if( type.getType().isItem() ) {
+			p.openGui( AppEng.instance(), GuiBridge.encodeModGui( type, (short)invSlot ), p.getEntityWorld(), x, y, z );
+		}
+	}
+
 	/*
 	 * returns true if the code is on the client.
 	 */
@@ -838,6 +857,32 @@ public class Platform
 		else
 		{
 			return "**Invalid Object";
+		}
+
+		if (itemStack.getItem() == Items.ENCHANTED_BOOK){
+			List<String> enchants = Lists.newLinkedList();
+			NBTTagList nbttaglist = ItemEnchantedBook.getEnchantments(itemStack);
+
+			if (nbttaglist != null)
+			{
+				for (int i = 0; i < nbttaglist.tagCount(); ++i)
+				{
+					int j = nbttaglist.getCompoundTagAt(i).getShort("id");
+					int k = nbttaglist.getCompoundTagAt(i).getShort("lvl");
+
+					Enchantment ench = Enchantment.getEnchantmentByID(j);
+					if ( ench != null)
+					{
+						enchants.add(ench.getTranslatedName(k));
+					}
+				}
+			}
+			if (enchants.size() > 0){
+				enchants.sort( String::compareToIgnoreCase );
+				StringJoiner sj = new StringJoiner(", ", itemStack.getDisplayName() + " (", ")");
+				enchants.forEach( sj::add );
+				return sj.toString();
+			}
 		}
 
 		try

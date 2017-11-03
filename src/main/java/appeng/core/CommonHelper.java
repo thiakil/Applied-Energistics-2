@@ -65,4 +65,6 @@ public abstract class CommonHelper
 
 	public abstract void missingCoreMod();
 
+	public abstract String translateFormatted(String langKey, Object... params);
+
 }

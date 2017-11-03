@@ -297,6 +297,7 @@ public class MEMonitorIInventory implements IMEMonitor<IAEItemStack>, ITickingMo
 	}
 
 	@Override
+	@Deprecated
 	public IItemList<IAEItemStack> getAvailableItems( final IItemList out )
 	{
 		for( final CachedItemStack is : this.memory.values() )

@@ -19,8 +19,7 @@
 package appeng.core.localization;
 
 
-import net.minecraft.util.text.translation.I18n;
-
+import appeng.core.AppEng;
 
 public enum GuiText
 {
@@ -217,7 +216,7 @@ public enum GuiText
 
 	public String getLocal()
 	{
-		return I18n.translateToLocal( this.getUnlocalized() );
+		return AppEng.proxy.translateFormatted( this.getUnlocalized() );
 	}
 
 	public String getUnlocalized()

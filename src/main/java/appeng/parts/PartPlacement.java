@@ -81,6 +81,7 @@ public class PartPlacement
 		TileEntity tile = world.getTileEntity( pos );
 
 		final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
+		@SuppressWarnings("deprecation")
 		final RayTraceResult mop = block.collisionRayTrace( world.getBlockState( pos ), world, pos, dir.getA(), dir.getB() );
 
 		if(!held.isEmpty() && Platform.isWrench(player, held, pos, hand, side, mop != null ? mop.hitVec : new Vec3d( 0,0,0 )) && player.isSneaking() )

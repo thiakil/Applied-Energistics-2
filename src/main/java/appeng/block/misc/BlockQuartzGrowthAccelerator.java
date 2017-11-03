@@ -57,6 +57,7 @@ public class BlockQuartzGrowthAccelerator extends AEBaseTileBlock implements IOr
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
 	{
 		TileQuartzGrowthAccelerator te = getTileEntity( world, pos );

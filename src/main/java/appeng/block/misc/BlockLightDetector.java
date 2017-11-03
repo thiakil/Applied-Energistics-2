@@ -74,6 +74,7 @@ public class BlockLightDetector extends AEBaseTileBlock implements IOrientableBl
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getStateFromMeta( final int meta )
 	{
 		EnumFacing facing = EnumFacing.values()[meta];
@@ -87,6 +88,7 @@ public class BlockLightDetector extends AEBaseTileBlock implements IOrientableBl
 	}
 
 	@Override
+	@Deprecated
 	public int getWeakPower( final IBlockState state, final IBlockAccess w, final BlockPos pos, final EnumFacing side )
 	{
 		if( w instanceof World && ( (TileLightDetector) this.getTileEntity( w, pos ) ).isReady() )
@@ -148,6 +150,7 @@ public class BlockLightDetector extends AEBaseTileBlock implements IOrientableBl
 	}
 	
 	@Override
+	@Deprecated
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
 		final EnumFacing up = this.getOrientable( world, pos ).getUp();
@@ -184,6 +187,7 @@ public class BlockLightDetector extends AEBaseTileBlock implements IOrientableBl
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullCube( IBlockState state )
 	{
 		return false;

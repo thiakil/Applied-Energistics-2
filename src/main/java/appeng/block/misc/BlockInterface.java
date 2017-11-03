@@ -60,6 +60,7 @@ public class BlockInterface extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
 	{
 		// Determine whether the interface is omni-directional or not

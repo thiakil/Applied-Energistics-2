@@ -24,9 +24,10 @@ public abstract class BlockSlabCommon extends BlockSlab
 
 	static final PropertyEnum<BlockSlabCommon.Variant> VARIANT = PropertyEnum.create( "variant", Variant.class );
 
+	@SuppressWarnings("deprecation")
 	private BlockSlabCommon( Block block )
 	{
-		super( block.getMaterial( block.getDefaultState() ) );
+		super( block.getDefaultState().getMaterial() );
 		this.setHardness( block.getBlockHardness( block.getDefaultState(), null, null ) );
 		this.setResistance( block.getExplosionResistance( null ) * 5.0F / 3.0F );
 
@@ -45,6 +46,8 @@ public abstract class BlockSlabCommon extends BlockSlab
 	/**
 	 * Convert the given metadata into a BlockState for this Block
 	 */
+	@Deprecated
+	@Override
 	public IBlockState getStateFromMeta( int meta )
 	{
 		IBlockState iblockstate = this.getDefaultState().withProperty( VARIANT, Variant.DEFAULT );
@@ -83,6 +86,8 @@ public abstract class BlockSlabCommon extends BlockSlab
 		return Item.getItemFromBlock( this );
 	}
 
+	@Deprecated
+	@Override
 	public ItemStack getItem( World worldIn, BlockPos pos, IBlockState state )
 	{
 		return new ItemStack( this, 1, 0 );

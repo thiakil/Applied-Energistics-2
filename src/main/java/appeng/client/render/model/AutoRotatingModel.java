@@ -136,6 +136,7 @@ public class AutoRotatingModel extends BaseBakedModel
 	}
 
 	@Override
+	@Deprecated
 	public ItemCameraTransforms getItemCameraTransforms()
 	{
 		return parent.getItemCameraTransforms();

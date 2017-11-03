@@ -84,6 +84,7 @@ public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICusto
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getActualState( IBlockState state, IBlockAccess worldIn, BlockPos pos )
 	{
 		TileQuantumBridge bridge = getTileEntity( worldIn, pos );
@@ -101,6 +102,7 @@ public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICusto
 	}
 
 	@Override
+	@Deprecated
 	public void neighborChanged( IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
 		final TileQuantumBridge bridge = this.getTileEntity( world, pos );
@@ -123,6 +125,7 @@ public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICusto
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullCube( IBlockState state )
 	{
 		return false;

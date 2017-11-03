@@ -100,6 +100,11 @@ public enum MaterialType
 	Cell64kPart( 38, "material_cell64k_part", EnumSet.of( AEFeature.STORAGE_CELLS ) ),
 	EmptyStorageCell( 39, "material_empty_storage_cell", EnumSet.of( AEFeature.STORAGE_CELLS ) ),
 
+	Cell256kPart(135, "material_cell256k_part", EnumSet.of( AEFeature.STORAGE_CELLS, AEFeature.BIG_STORAGE_CELLS )),
+	Cell1mPart(136, "material_cell1m_part", EnumSet.of( AEFeature.STORAGE_CELLS, AEFeature.BIG_STORAGE_CELLS )),
+	Cell4mPart(137, "material_cell4m_part", EnumSet.of( AEFeature.STORAGE_CELLS, AEFeature.BIG_STORAGE_CELLS )),
+	Cell16mPart(138, "material_cell16m_part", EnumSet.of( AEFeature.STORAGE_CELLS, AEFeature.BIG_STORAGE_CELLS )),
+
 	WoodenGear( 40, "material_wooden_gear", EnumSet.of( AEFeature.GRIND_STONE ), "gearWood" ),
 
 	Wireless( 41, "material_wireless", EnumSet.of( AEFeature.WIRELESS_ACCESS_TERMINAL ) ),
@@ -117,7 +122,7 @@ public enum MaterialType
 	BlankPattern( 52, "material_blank_pattern", EnumSet.of( AEFeature.PATTERNS ) ),
 	CardCrafting( 53, "material_card_crafting", EnumSet.of( AEFeature.ADVANCED_CARDS, AEFeature.CRAFTING_CPU ) ),
 
-	QuantumDragonEgg( 99, "quantum_dragon_egg", EnumSet.of( AEFeature.QUANTUM_NETWORK_BRIDGE, AEFeature.WIRELESS_ACCESS_TERMINAL )),
+	QuantumDragonEgg( 99, "quantum_dragon_egg", EnumSet.of( AEFeature.QUANTUM_NETWORK_BRIDGE, AEFeature.WIRELESS_ACCESS_TERMINAL, AEFeature.INFINITE_WIRELESS_UPGRADE )),
 	;
 
 	private final Set<AEFeature> features;

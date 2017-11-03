@@ -125,60 +125,20 @@ public final class EntityTinyTNTPrimed extends EntityTNTPrimed implements IEntit
 	}
 
 	// override :P
-	void explode()
+	public void explode()
 	{
-		this.world.playSound( null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, ( 1.0F + ( this.world.rand.nextFloat() - this.world.rand.nextFloat() ) * 0.2F ) * 32.9F );
-
 		if( this.isInWater() )
 		{
 			return;
 		}
 
-		for( final Object e : this.world.getEntitiesWithinAABBExcludingEntity( this, new AxisAlignedBB( this.posX - 1.5, this.posY - 1.5f, this.posZ - 1.5, this.posX + 1.5, this.posY + 1.5, this.posZ + 1.5 ) ) )
-		{
-			if( e instanceof Entity )
-			{
-				( (Entity) e ).attackEntityFrom( DamageSource.causeExplosionDamage( (Explosion) null ), 6 );
-			}
-		}
+		this.posY -= 0.25;
+		final Explosion explosion = new Explosion( this.world, this, this.posX, this.posY, this.posZ, 0.2f, false, AEConfig.instance().isFeatureEnabled( AEFeature.TINY_TNT_BLOCK_DAMAGE ) );
 
-		if( AEConfig.instance().isFeatureEnabled( AEFeature.TINY_TNT_BLOCK_DAMAGE ) )
-		{
-			this.posY -= 0.25;
-			final Explosion ex = new Explosion( this.world, this, this.posX, this.posY, this.posZ, 0.2f, false, false );
-
-			for( int x = (int) ( this.posX - 2 ); x <= this.posX + 2; x++ )
-			{
-				for( int y = (int) ( this.posY - 2 ); y <= this.posY + 2; y++ )
-				{
-					for( int z = (int) ( this.posZ - 2 ); z <= this.posZ + 2; z++ )
-					{
-						final BlockPos point = new BlockPos( x, y, z );
-						final IBlockState state = this.world.getBlockState( point );
-						final Block block = state.getBlock();
-						if( block != null && !block.isAir( state, this.world, point ) )
-						{
-							float strength = (float) ( 2.3f - ( ( ( x + 0.5f ) - this.posX ) * ( ( x + 0.5f ) - this.posX ) + ( ( y + 0.5f ) - this.posY ) * ( ( y + 0.5f ) - this.posY ) + ( ( z + 0.5f ) - this.posZ ) * ( ( z + 0.5f ) - this.posZ ) ) );
-
-							final float resistance = block.getExplosionResistance( this.world, point, this, ex );
-							strength -= ( resistance + 0.3F ) * 0.11f;
-
-							if( strength > 0.01 )
-							{
-								if( block.getMaterial( state ) != Material.AIR )
-								{
-									if( block.canDropFromExplosion( ex ) )
-									{
-										block.dropBlockAsItemWithChance( this.world, point, state, 1.0F / 1.0f, 0 );
-									}
-
-									block.onBlockExploded( this.world, point, ex );
-								}
-							}
-						}
-					}
-				}
-			}
+		//if cancelled, dont go boom. (returns true if cancelled)
+		if (!net.minecraftforge.event.ForgeEventFactory.onExplosionStart(this.world, explosion)) {
+			explosion.doExplosionA();
+			explosion.doExplosionB(true);
 		}
 
 		AppEng.proxy.sendToAllNearExcept( null, this.posX, this.posY, this.posZ, 64, this.world, new PacketMockExplosion( this.posX, this.posY, this.posZ ) );

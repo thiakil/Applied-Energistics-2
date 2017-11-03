@@ -18,7 +18,7 @@
 
 package appeng.core.localization;
 
-import net.minecraft.util.text.translation.I18n;
+import appeng.core.AppEng;
 
 public enum WailaText
 {
@@ -44,9 +44,9 @@ public enum WailaText
 		this.root = r;
 	}
 
-	public String getLocal()
+	public String getLocal(Object... params)
 	{
-		return I18n.translateToLocal( this.getUnlocalized() );
+		return AppEng.proxy.translateFormatted( this.getUnlocalized(), params );
 	}
 
 	public String getUnlocalized()

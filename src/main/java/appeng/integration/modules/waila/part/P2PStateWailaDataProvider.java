@@ -151,7 +151,7 @@ public final class P2PStateWailaDataProvider extends BasePartWailaDataProvider
 		}
 		else
 		{
-			return String.format( WailaText.P2PInputManyOutputs.getLocal(), outputs );
+			return WailaText.P2PInputManyOutputs.getLocal( outputs );
 		}
 	}
 

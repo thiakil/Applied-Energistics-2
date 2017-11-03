@@ -73,6 +73,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	 * Sets the "ODD" property of the block state according to the placement of the block.
 	 */
 	@Override
+	@Deprecated
 	public IBlockState getActualState( IBlockState state, IBlockAccess worldIn, BlockPos pos )
 	{
 		boolean oddPlacement = ((pos.getX() + pos.getY() + pos.getZ()) % 2) != 0;
@@ -88,6 +89,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getStateFromMeta( final int meta )
 	{
 		EnumFacing facing = EnumFacing.values()[meta];
@@ -161,6 +163,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	}
 
 	@Override
+	@Deprecated
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos)
 	{
 		final EnumFacing up = this.getOrientable( world, pos ).getUp();
@@ -209,6 +212,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullCube( IBlockState state )
 	{
 		return false;

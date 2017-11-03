@@ -112,6 +112,7 @@ public class NetworkMonitor<T extends IAEStack<T>> implements IMEMonitor<T>
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public IItemList<T> getAvailableItems( final IItemList out )
 	{
 		return this.getHandler().getAvailableItems( out );

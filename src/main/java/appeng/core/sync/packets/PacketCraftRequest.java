@@ -49,24 +49,28 @@ public class PacketCraftRequest extends AppEngPacket
 
 	private final long amount;
 	private final boolean heldShift;
+	private final int invSlot;
 
 	// automatic.
 	public PacketCraftRequest( final ByteBuf stream )
 	{
 		this.heldShift = stream.readBoolean();
 		this.amount = stream.readLong();
+		this.invSlot = stream.readInt();
 	}
 
-	public PacketCraftRequest( final int craftAmt, final boolean shift )
+	public PacketCraftRequest( final int craftAmt, final boolean shift, final int invSlot )
 	{
 		this.amount = craftAmt;
 		this.heldShift = shift;
+		this.invSlot = invSlot;
 
 		final ByteBuf data = Unpooled.buffer();
 
 		data.writeInt( this.getPacketID() );
 		data.writeBoolean( shift );
 		data.writeLong( this.amount );
+		data.writeInt( invSlot );
 
 		this.configureWrite( data );
 	}
@@ -105,7 +109,11 @@ public class PacketCraftRequest extends AppEngPacket
 					if( context != null )
 					{
 						final TileEntity te = context.getTile();
-						Platform.openGUI( player, te, cca.getOpenContext().getSide(), GuiBridge.GUI_CRAFTING_CONFIRM );
+						if (te != null || this.invSlot == -1) {
+							Platform.openGUI( player, te, cca.getOpenContext().getSide(), GuiBridge.GUI_CRAFTING_CONFIRM );
+						} else {
+							Platform.openGUI( player, GuiBridge.GUI_CRAFTING_CONFIRM, this.invSlot );
+						}
 
 						if( player.openContainer instanceof ContainerCraftConfirm )
 						{

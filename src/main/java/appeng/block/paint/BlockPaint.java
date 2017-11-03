@@ -100,6 +100,7 @@ public class BlockPaint extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public AxisAlignedBB getCollisionBoundingBox( IBlockState blockState, IBlockAccess worldIn, BlockPos pos )
 	{
 		return null;
@@ -112,6 +113,7 @@ public class BlockPaint extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public void neighborChanged( IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
 		final TilePaint tp = this.getTileEntity( world, pos );

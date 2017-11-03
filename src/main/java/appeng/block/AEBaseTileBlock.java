@@ -253,6 +253,7 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 	}
 
 	@Override
+	@Deprecated
 	public int getComparatorInputOverride( IBlockState state, final World w, final BlockPos pos )
 	{
 		final TileEntity te = this.getTileEntity( w, pos );
@@ -264,6 +265,7 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 	}
 
 	@Override
+	@Deprecated
 	public boolean eventReceived( final IBlockState state, final World worldIn, final BlockPos pos, final int eventID, final int eventParam )
 	{
 		super.eventReceived( state, worldIn, pos, eventID, eventParam );

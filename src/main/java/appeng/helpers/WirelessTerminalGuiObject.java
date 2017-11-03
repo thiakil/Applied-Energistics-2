@@ -151,6 +151,7 @@ public class WirelessTerminalGuiObject implements IPortableCell, IActionHost, II
 	}
 
 	@Override
+	@Deprecated
 	public IItemList<IAEItemStack> getAvailableItems( final IItemList out )
 	{
 		if( this.itemStorage != null )

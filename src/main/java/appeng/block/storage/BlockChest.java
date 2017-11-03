@@ -69,6 +69,7 @@ public class BlockChest extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getActualState( IBlockState state, IBlockAccess worldIn, BlockPos pos )
 	{
 		DriveSlotState slotState = DriveSlotState.EMPTY;

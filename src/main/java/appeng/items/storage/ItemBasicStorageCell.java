@@ -88,6 +88,22 @@ public final class ItemBasicStorageCell extends AEBaseItem implements IStorageCe
 				this.idleDrain = 2.0;
 				this.perType = 512;
 				break;
+			case Cell256kPart:
+				this.idleDrain = 2.5;
+				this.perType = 2048;
+				break;
+			case Cell1mPart:
+				this.idleDrain = 3.0;
+				this.perType = 8192;
+				break;
+			case Cell4mPart:
+				this.idleDrain = 2.0;
+				this.perType = 32768;
+				break;
+			case Cell16mPart:
+				this.idleDrain = 2.0;
+				this.perType = 131072;
+				break;
 			default:
 				this.idleDrain = 0.0;
 				this.perType = 8;

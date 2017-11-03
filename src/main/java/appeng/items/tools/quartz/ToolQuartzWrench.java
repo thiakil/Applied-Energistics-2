@@ -55,6 +55,7 @@ public class ToolQuartzWrench extends AEBaseItem implements IAEWrench, IToolWren
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public EnumActionResult onItemUseFirst( final EntityPlayer player, final World world, final BlockPos pos, final EnumFacing side, final float hitX, final float hitY, final float hitZ, final EnumHand hand )
 	{
 		final Block b = world.getBlockState( pos ).getBlock();

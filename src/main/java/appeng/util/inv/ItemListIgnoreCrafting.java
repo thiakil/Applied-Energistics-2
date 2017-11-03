@@ -38,6 +38,7 @@ public class ItemListIgnoreCrafting<T extends IAEStack> implements IItemList<T>
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void add( T option )
 	{
 		if( option != null && option.isCraftable() )

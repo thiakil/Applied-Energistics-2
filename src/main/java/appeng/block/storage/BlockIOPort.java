@@ -48,6 +48,7 @@ public class BlockIOPort extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public void neighborChanged( IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
 		final TileIOPort te = this.getTileEntity( world, pos );

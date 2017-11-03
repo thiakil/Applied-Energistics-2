@@ -98,18 +98,21 @@ public abstract class AEBaseBlock extends Block
 	}
 
 	@Override
+	@Deprecated
 	public final boolean isNormalCube( IBlockState state )
 	{
 		return this.isFullSize() && this.isOpaque();
 	}
 
 	@Override
+	@Deprecated
 	public AxisAlignedBB getBoundingBox( IBlockState state, IBlockAccess source, BlockPos pos )
 	{
 		return boundingBox;
 	}
 
 	@Override
+	@Deprecated
 	public void addCollisionBoxToList( IBlockState state, World w, BlockPos pos, AxisAlignedBB bb, List<AxisAlignedBB> out, @Nullable Entity e, boolean p_185477_7_ )
 	{
 		final ICustomCollision collisionHandler = this.getCustomCollision( w, pos );
@@ -135,6 +138,7 @@ public abstract class AEBaseBlock extends Block
 
 	@Override
 	@SideOnly( Side.CLIENT )
+	@Deprecated
 	public AxisAlignedBB getSelectedBoundingBox( IBlockState state, final World w, final BlockPos pos )
 	{
 		final ICustomCollision collisionHandler = this.getCustomCollision( w, pos );
@@ -220,12 +224,14 @@ public abstract class AEBaseBlock extends Block
 	}
 
 	@Override
+	@Deprecated
 	public final boolean isOpaqueCube( IBlockState state )
 	{
 		return this.isOpaque();
 	}
 
 	@Override
+	@Deprecated
 	public RayTraceResult collisionRayTrace( final IBlockState state, final World w, final BlockPos pos, final Vec3d a, final Vec3d b )
 	{
 		final ICustomCollision collisionHandler = this.getCustomCollision( w, pos );
@@ -273,15 +279,10 @@ public abstract class AEBaseBlock extends Block
 	}
 
 	@Override
+	@Deprecated
 	public boolean hasComparatorInputOverride( IBlockState state )
 	{
 		return this.isInventory();
-	}
-
-	@Override
-	public int getComparatorInputOverride( IBlockState state, final World worldIn, final BlockPos pos )
-	{
-		return 0;
 	}
 
 	@Override
@@ -502,6 +503,7 @@ public abstract class AEBaseBlock extends Block
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullCube( IBlockState state )
 	{
 		return isFullSize;

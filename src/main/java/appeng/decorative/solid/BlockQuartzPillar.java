@@ -50,6 +50,7 @@ public class BlockQuartzPillar extends AEBaseBlock implements IOrientableBlock
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getStateFromMeta( final int meta )
 	{
 		// Simply use the ordinal here

@@ -300,6 +300,7 @@ abstract class CraftingCubeBakedModel implements IBakedModel
 	}
 
 	@Override
+	@Deprecated
 	public ItemCameraTransforms getItemCameraTransforms()
 	{
 		return ItemCameraTransforms.DEFAULT;

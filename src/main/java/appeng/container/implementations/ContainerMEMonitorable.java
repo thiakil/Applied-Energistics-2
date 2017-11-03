@@ -63,6 +63,7 @@ import appeng.api.util.IConfigurableObject;
 import appeng.capabilities.Capabilities;
 import appeng.container.AEBaseContainer;
 import appeng.container.guisync.GuiSync;
+import appeng.container.interfaces.IInventorySlotAware;
 import appeng.container.slot.SlotBauble;
 import appeng.container.slot.SlotRestrictedInput;
 import appeng.core.AELog;
@@ -76,7 +77,7 @@ import appeng.util.IConfigManagerHost;
 import appeng.util.Platform;
 
 
-public class ContainerMEMonitorable extends AEBaseContainer implements IConfigManagerHost, IConfigurableObject, IMEMonitorHandlerReceiver<IAEItemStack>
+public class ContainerMEMonitorable extends AEBaseContainer implements IConfigManagerHost, IConfigurableObject, IMEMonitorHandlerReceiver<IAEItemStack>, IInventorySlotAware
 {
 
 	private final SlotRestrictedInput[] cellView = new SlotRestrictedInput[5];
@@ -91,6 +92,7 @@ public class ContainerMEMonitorable extends AEBaseContainer implements IConfigMa
 	private IConfigManagerHost gui;
 	private IConfigManager serverCM;
 	private IGridNode networkNode;
+	private int invSlot = -1;
 
 	public ContainerMEMonitorable( final InventoryPlayer ip, final ITerminalHost monitorable )
 	{
@@ -160,6 +162,10 @@ public class ContainerMEMonitorable extends AEBaseContainer implements IConfigMa
 				this.cellView[y].setAllowEdit( this.canAccessViewCells );
 				this.addSlotToContainer( this.cellView[y] );
 			}
+		}
+
+		if (monitorable instanceof IInventorySlotAware) {
+			this.invSlot = ( (IInventorySlotAware) monitorable ).getInventorySlot();
 		}
 
 		if( bindInventory )
@@ -456,4 +462,9 @@ public class ContainerMEMonitorable extends AEBaseContainer implements IConfigMa
 		this.gui = gui;
 	}
 
+	@Override
+	public int getInventorySlot()
+	{
+		return this.invSlot;
+	}
 }

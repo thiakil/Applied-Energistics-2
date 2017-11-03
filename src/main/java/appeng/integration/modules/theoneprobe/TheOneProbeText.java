@@ -19,9 +19,9 @@
 package appeng.integration.modules.theoneprobe;
 
 
-import java.util.Locale;
+import appeng.core.AppEng;
 
-import net.minecraft.util.text.translation.I18n;
+import java.util.Locale;
 
 
 public enum TheOneProbeText
@@ -53,9 +53,9 @@ public enum TheOneProbeText
 		this.root = "theoneprobe.appliedenergistics2";
 	}
 
-	public String getLocal()
+	public String getLocal(Object... params)
 	{
-		return I18n.translateToLocal( this.getUnlocalized() );
+		return AppEng.proxy.translateFormatted( this.getUnlocalized(), params );
 	}
 
 	public String getUnlocalized()

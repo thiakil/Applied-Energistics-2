@@ -105,6 +105,7 @@ public class BlockCableBus extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullCube( IBlockState state )
 	{
 		return false;
@@ -142,6 +143,7 @@ public class BlockCableBus extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public int getWeakPower( final IBlockState state, final IBlockAccess w, final BlockPos pos, final EnumFacing side )
 	{
 		return this.cb( w, pos ).isProvidingWeakPower( side.getOpposite() ); // TODO:
@@ -150,6 +152,7 @@ public class BlockCableBus extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public boolean canProvidePower( final IBlockState state )
 	{
 		return true;
@@ -162,6 +165,7 @@ public class BlockCableBus extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public int getStrongPower( final IBlockState state, final IBlockAccess w, final BlockPos pos, final EnumFacing side )
 	{
 		return this.cb( w, pos ).isProvidingStrongPower( side.getOpposite() ); // TODO:
@@ -332,6 +336,7 @@ public class BlockCableBus extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public void neighborChanged( IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
 		if( Platform.isServer() )

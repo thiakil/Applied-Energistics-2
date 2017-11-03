@@ -101,6 +101,7 @@ public class BlockCraftingUnit extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getStateFromMeta( final int meta )
 	{
 		return this.getDefaultState().withProperty( POWERED, ( meta & 1 ) == 1 ).withProperty( FORMED, ( meta & 2 ) == 2 );
@@ -115,6 +116,7 @@ public class BlockCraftingUnit extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public void neighborChanged( final IBlockState state, final World worldIn, final BlockPos pos, final Block blockIn, final BlockPos fromPos )
 	{
 		final TileCraftingTile cp = this.getTileEntity( worldIn, pos );

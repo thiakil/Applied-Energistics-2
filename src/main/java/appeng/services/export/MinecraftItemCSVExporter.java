@@ -31,6 +31,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import appeng.core.AppEng;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
@@ -44,7 +45,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import appeng.core.AELog;
@@ -79,7 +79,7 @@ final class MinecraftItemCSVExporter implements Exporter
 	 * phase when all items are determined)
 	 * @param mode mode in which the export should be operated. Resulting CSV will change depending on this.
 	 */
-	MinecraftItemCSVExporter( @Nonnull final File exportDirectory, @Nonnull final IForgeRegistry<Item> itemRegistry, @Nonnull final ExportMode mode )
+	MinecraftItemCSVExporter(@Nonnull final File exportDirectory, @Nonnull final IForgeRegistry<Item> itemRegistry, @Nonnull final ExportMode mode )
 	{
 		this.exportDirectory = Preconditions.checkNotNull( exportDirectory );
 		Preconditions.checkArgument( !exportDirectory.isFile() );
@@ -90,7 +90,7 @@ final class MinecraftItemCSVExporter implements Exporter
 	@Override
 	public void export()
 	{
-		final Iterable<Item> items = this.itemRegistry.getValues();
+		final Iterable<Item> items = this.itemRegistry;
 		final List<Item> itemList = Lists.newArrayList( items );
 
 		final List<String> lines = Lists.transform( itemList, new ItemRowExtractFunction( this.itemRegistry, this.mode ) );
@@ -191,7 +191,7 @@ final class MinecraftItemCSVExporter implements Exporter
 	private static final class ItemRowExtractFunction implements Function<Item, String>
 	{
 		/**
-		 * this extension is required to apply the {@link I18n}
+		 * this extension is required to apply the I18n
 		 */
 		private static final String LOCALIZATION_NAME_EXTENSION = ".name";
 		private static final String EXPORTING_NOTHING_MESSAGE = "Exporting nothing";
@@ -264,7 +264,7 @@ final class MinecraftItemCSVExporter implements Exporter
 
 			final List<String> joinedBlockAttributes = Lists.newArrayListWithCapacity( 5 );
 			final String unlocalizedItem = input.getUnlocalizedName();
-			final String localization = I18n.translateToLocal( unlocalizedItem + LOCALIZATION_NAME_EXTENSION );
+			final String localization = AppEng.proxy.translateFormatted( unlocalizedItem + LOCALIZATION_NAME_EXTENSION );
 
 			joinedBlockAttributes.add( itemName );
 			joinedBlockAttributes.add( localization );

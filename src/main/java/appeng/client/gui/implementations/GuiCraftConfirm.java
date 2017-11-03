@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import appeng.helpers.WirelessCraftingTerminalGuiObject;
 import com.google.common.base.Joiner;
 
 import org.lwjgl.input.Mouse;
@@ -73,6 +74,7 @@ public class GuiCraftConfirm extends AEBaseGui
 	private GuiButton start;
 	private GuiButton selectCPU;
 	private int tooltip = -1;
+	private int invSlot = -1;
 
 	public GuiCraftConfirm( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
 	{
@@ -85,22 +87,25 @@ public class GuiCraftConfirm extends AEBaseGui
 
 		this.ccc = (ContainerCraftConfirm) this.inventorySlots;
 
-		if( te instanceof WirelessTerminalGuiObject )
+		if( te instanceof WirelessCraftingTerminalGuiObject)
+		{
+			this.OriginalGui = GuiBridge.GUI_WIRELESS_CRAFTING_TERM;
+			this.invSlot = ( (WirelessCraftingTerminalGuiObject) te ).getInventorySlot();
+		}
+		else if( te instanceof WirelessTerminalGuiObject )
 		{
 			this.OriginalGui = GuiBridge.GUI_WIRELESS_TERM;
+			this.invSlot = ( (WirelessTerminalGuiObject) te ).getInventorySlot();
 		}
-
-		if( te instanceof PartTerminal )
+		else if( te instanceof PartTerminal )
 		{
 			this.OriginalGui = GuiBridge.GUI_ME;
 		}
-
-		if( te instanceof PartCraftingTerminal )
+		else if( te instanceof PartCraftingTerminal )
 		{
 			this.OriginalGui = GuiBridge.GUI_CRAFTING_TERMINAL;
 		}
-
-		if( te instanceof PartPatternTerminal )
+		else if( te instanceof PartPatternTerminal )
 		{
 			this.OriginalGui = GuiBridge.GUI_PATTERN_TERMINAL;
 		}
@@ -562,7 +567,7 @@ public class GuiCraftConfirm extends AEBaseGui
 
 		if( btn == this.cancel )
 		{
-			NetworkHandler.instance().sendToServer( new PacketSwitchGuis( this.OriginalGui ) );
+			NetworkHandler.instance().sendToServer( new PacketSwitchGuis( this.OriginalGui, this.invSlot ) );
 		}
 
 		if( btn == this.start )

@@ -70,6 +70,7 @@ public class BlockInscriber extends AEBaseTileBlock
 	}
 
 	@Override
+	@Deprecated
 	public EnumBlockRenderType getRenderType( IBlockState state )
 	{
 		return EnumBlockRenderType.MODEL;

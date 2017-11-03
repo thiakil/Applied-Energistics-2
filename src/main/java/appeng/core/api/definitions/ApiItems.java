@@ -19,6 +19,8 @@
 package appeng.core.api.definitions;
 
 
+import net.minecraftforge.fml.common.Loader;
+
 import appeng.api.definitions.IItemDefinition;
 import appeng.api.definitions.IItems;
 import appeng.api.util.AEColoredItemDefinition;
@@ -26,6 +28,7 @@ import appeng.bootstrap.FeatureFactory;
 import appeng.client.render.crafting.ItemEncodedPatternRendering;
 import appeng.core.CreativeTabFacade;
 import appeng.core.features.AEFeature;
+import appeng.core.features.ItemDefinition;
 import appeng.debug.ToolDebugCard;
 import appeng.debug.ToolEraser;
 import appeng.debug.ToolMeteoritePlacer;
@@ -96,6 +99,10 @@ public final class ApiItems implements IItems
 	private final IItemDefinition cell4k;
 	private final IItemDefinition cell16k;
 	private final IItemDefinition cell64k;
+	private final IItemDefinition cell256k;
+	private final IItemDefinition cell1m;
+	private final IItemDefinition cell4m;
+	private final IItemDefinition cell16m;
 
 	private final IItemDefinition spatialCell2;
 	private final IItemDefinition spatialCell16;
@@ -111,6 +118,8 @@ public final class ApiItems implements IItems
 	private final IItemDefinition paintBall;
 	private final AEColoredItemDefinition coloredPaintBall;
 	private final AEColoredItemDefinition coloredLumenPaintBall;
+
+	private final IItemDefinition toolbelt;
 
 	// unsupported dev tools
 	private final IItemDefinition toolEraser;
@@ -168,7 +177,7 @@ public final class ApiItems implements IItems
 				.dispenserBehavior( DispenserBlockTool::new )
 				.build();
 		this.wirelessTerminal = powerTools.item( "wireless_terminal", ToolWirelessTerminal::new ).addFeatures( AEFeature.WIRELESS_ACCESS_TERMINAL ).build();
-		this.wirelessCraftingTerminal = powerTools.item( "wireless_crafting_terminal", WirelessCraftingTerminal::new ).addFeatures( AEFeature.WIRELESS_ACCESS_TERMINAL ).build();
+		this.wirelessCraftingTerminal = powerTools.item( "wireless_crafting_terminal", WirelessCraftingTerminal::new ).addFeatures( AEFeature.WIRELESS_ACCESS_TERMINAL, AEFeature.WIRELESS_CRAFTING_TERMINAL ).build();
 		this.chargedStaff = powerTools.item( "charged_staff", ToolChargedStaff::new ).addFeatures( AEFeature.CHARGED_STAFF ).build();
 		this.massCannon = powerTools.item( "matter_cannon", ToolMatterCannon::new )
 				.addFeatures( AEFeature.MATTER_CANNON )
@@ -180,6 +189,12 @@ public final class ApiItems implements IItems
 				.dispenserBehavior( DispenserBlockTool::new )
 				.rendering( new ToolColorApplicatorRendering() )
 				.build();
+
+		if ( Loader.isModLoaded( "baubles" )){
+			this.toolbelt = powerTools.item( "toolbelt", ToolMEToolbelt::new ).build();
+		} else {
+			this.toolbelt = new ItemDefinition( "toolbelt", null );
+		}
 
 		this.biometricCard = registry.item( "biometric_card", ToolBiometricCard::new )
 				.rendering( new ToolBiometricCardRendering() )
@@ -198,6 +213,12 @@ public final class ApiItems implements IItems
 		this.cell4k = storageCells.item( "storage_cell_4k", () -> new ItemBasicStorageCell( MaterialType.Cell4kPart, 4 ) ).build();
 		this.cell16k = storageCells.item( "storage_cell_16k", () -> new ItemBasicStorageCell( MaterialType.Cell16kPart, 16 ) ).build();
 		this.cell64k = storageCells.item( "storage_cell_64k", () -> new ItemBasicStorageCell( MaterialType.Cell64kPart, 64 ) ).build();
+
+		FeatureFactory bigStorageCells = registry.features( AEFeature.STORAGE_CELLS, AEFeature.BIG_STORAGE_CELLS );
+		this.cell256k = bigStorageCells.item( "storage_cell_256k", () -> new ItemBasicStorageCell( MaterialType.Cell256kPart, 256 ) ).build();
+		this.cell1m = bigStorageCells.item( "storage_cell_1m", () -> new ItemBasicStorageCell( MaterialType.Cell1mPart, 1024 ) ).build();
+		this.cell4m = bigStorageCells.item( "storage_cell_4m", () -> new ItemBasicStorageCell( MaterialType.Cell4mPart, 4096 ) ).build();
+		this.cell16m = bigStorageCells.item( "storage_cell_16m", () -> new ItemBasicStorageCell( MaterialType.Cell16mPart, 16384 ) ).build();
 
 		FeatureFactory spatialCells = registry.features( AEFeature.SPATIAL_IO );
 		this.spatialCell2 = spatialCells.item( "spatial_storage_cell_2_cubed", () -> new ItemSpatialStorageCell( 2 ) ).build();
@@ -345,7 +366,7 @@ public final class ApiItems implements IItems
 	@Override
 	public IItemDefinition chargedStaff()
 	{
-		return this.memoryCard;
+		return this.chargedStaff;
 	}
 
 	@Override
@@ -406,6 +427,30 @@ public final class ApiItems implements IItems
 	public IItemDefinition cell64k()
 	{
 		return this.cell64k;
+	}
+
+	@Override
+	public IItemDefinition cell256k()
+	{
+		return this.cell256k;
+	}
+
+	@Override
+	public IItemDefinition cell1m()
+	{
+		return this.cell1m;
+	}
+
+	@Override
+	public IItemDefinition cell4m()
+	{
+		return this.cell4m;
+	}
+
+	@Override
+	public IItemDefinition cell16m()
+	{
+		return this.cell16m;
 	}
 
 	@Override

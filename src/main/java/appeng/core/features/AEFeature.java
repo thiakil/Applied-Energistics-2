@@ -66,6 +66,8 @@ public enum AEFeature
 	ENTROPY_MANIPULATOR( "EntropyManipulator", Constants.CATEGORY_TOOLS ),
 	MATTER_CANNON( "MatterCannon", Constants.CATEGORY_TOOLS ),
 	WIRELESS_ACCESS_TERMINAL( "WirelessAccessTerminal", Constants.CATEGORY_TOOLS ),
+	WIRELESS_CRAFTING_TERMINAL( "WirelessCraftingTerminal", Constants.CATEGORY_TOOLS ),
+	INFINITE_WIRELESS_UPGRADE( "InfiniteWirelessRangUpgrade", Constants.CATEGORY_TOOLS),
 	COLOR_APPLICATOR( "ColorApplicator", Constants.CATEGORY_TOOLS ),
 	METEORITE_COMPASS( "MeteoriteCompass", Constants.CATEGORY_TOOLS ),
 
@@ -96,6 +98,7 @@ public enum AEFeature
 	PORTABLE_CELL( "PortableCell", Constants.CATEGORY_PORTABLE_CELL ),
 
 	STORAGE_CELLS( "StorageCells", Constants.CATEGORY_STORAGE ),
+	BIG_STORAGE_CELLS( "BigStorageCells", Constants.CATEGORY_HIGHER_CAPACITY ),
 	ME_CHEST( "MEChest", Constants.CATEGORY_STORAGE ),
 	ME_DRIVE( "MEDrive", Constants.CATEGORY_STORAGE ),
 	IO_PORT( "IOPort", Constants.CATEGORY_STORAGE ),

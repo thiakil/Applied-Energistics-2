@@ -29,7 +29,8 @@ import java.util.List;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 /**
@@ -169,9 +170,10 @@ public enum AEColor
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public String toString()
 	{
-		return I18n.translateToLocal( this.unlocalizedName );
+		return net.minecraft.util.text.translation.I18n.translateToLocal( this.unlocalizedName );
 	}
 
 }

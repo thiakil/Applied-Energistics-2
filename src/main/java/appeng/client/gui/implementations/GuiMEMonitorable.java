@@ -49,6 +49,7 @@ import appeng.client.gui.widgets.MEGuiTextField;
 import appeng.client.me.InternalSlotME;
 import appeng.client.me.ItemRepo;
 import appeng.container.implementations.ContainerMEMonitorable;
+import appeng.container.interfaces.IInventorySlotAware;
 import appeng.container.slot.AppEngSlot;
 import appeng.container.slot.SlotCraftingMatrix;
 import appeng.container.slot.SlotFakeCraftingMatrix;
@@ -97,6 +98,7 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 	private GuiImgButton SortDirBox;
 	private GuiImgButton searchBoxSettings;
 	private GuiImgButton terminalStyleBox;
+	private int invSlot = -1;
 
 	public GuiMEMonitorable( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
 	{
@@ -147,6 +149,10 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		{
 			this.myName = GuiText.Terminal;
 		}
+
+		if (te instanceof IInventorySlotAware){
+			this.invSlot = ((IInventorySlotAware)te).getInventorySlot();
+		}
 	}
 
 	public void postUpdate( final List<IAEItemStack> list )
@@ -171,7 +177,7 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 	{
 		if( btn == this.craftingStatusBtn )
 		{
-			NetworkHandler.instance().sendToServer( new PacketSwitchGuis( GuiBridge.GUI_CRAFTING_STATUS ) );
+			NetworkHandler.instance().sendToServer( new PacketSwitchGuis( GuiBridge.GUI_CRAFTING_STATUS, invSlot ) );
 		}
 
 		if( btn instanceof GuiImgButton )
@@ -305,7 +311,7 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 		this.searchField.setTextColor( 0xFFFFFF );
 		this.searchField.setVisible( true );
 
-		if( this.viewCell || this instanceof GuiWirelessTerm )
+		if( this.viewCell || this instanceof GuiWirelessTerm || this instanceof GuiWirelessCraftingTerminal )
 		{
 			this.buttonList.add( this.craftingStatusBtn = new GuiTabButton( this.guiLeft + 170, this.guiTop - 4, 2 + 11 * 16, GuiText.CraftingStatus.getLocal(), this.itemRender ) );
 			this.craftingStatusBtn.setHideEdge( 13 );
