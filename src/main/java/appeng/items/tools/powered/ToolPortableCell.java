@@ -283,7 +283,7 @@ public class ToolPortableCell extends AEBasePoweredItem implements IStorageCell,
 			if (Capabilities.CAPABILITY_BAUBLES != null){
 				IBaublesItemHandler handler = ev.getEntityPlayer().getCapability( Capabilities.CAPABILITY_BAUBLES, null );
 				if (handler != null){
-					for (int slot : BaubleType.BELT.getValidSlots()){
+					for (int slot : BaubleType.AMULET.getValidSlots()){
 						if (handler.getStackInSlot( slot ).getItem() == this){
 							checkAddToCell( handler.getStackInSlot( slot ), isCollided, playerRejected, ev.getEntityPlayer() );
 						}
