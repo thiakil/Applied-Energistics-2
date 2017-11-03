@@ -541,6 +541,8 @@ item.appliedenergistics2.biometric_card.name=Biometric Card
 item.appliedenergistics2.debug_card.name=Dev.DebugCard
 item.appliedenergistics2.debug_replicator_card.name=Dev.ReplicatorCard
 
+item.appliedenergistics2.toolbelt.name=ME Toolbelt
+
 // Commands
 commands.ae2.usage=Commands provided by Applied Llamagistics 2 - use /ae2 list for a list, and /ae2 help _____ for help with a command.
 commands.ae2.permissions=You do not have adequate permissions to run this command.
