@@ -7,3 +7,4 @@ import=processing/mekanism.recipe
 import=processing/te.recipe
 import=processing/vanilla.recipe
 import=processing/exu2.recipe
+import=processing/aa.recipe

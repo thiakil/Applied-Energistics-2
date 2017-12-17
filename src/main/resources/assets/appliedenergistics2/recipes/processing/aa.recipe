@@ -1,0 +1,9 @@
+aacrusher= ae2:material.FluixCrystal -> ae2:material.FluixDust
+aacrusher= ae2:sky_stone_block:0 -> ae2:material.SkyDust
+aacrusher= mc:ender_pearl -> ae2:material.EnderDust
+aacrusher= ae2:material.CertusQuartzCrystalCharged -> ae2:material.CertusQuartzDust
+aacrusher= ae2:material.CertusQuartzCrystal -> ae2:material.CertusQuartzDust
+#aa has its own dust which should work
+#aacrusher= mc:quartz -> ae2:material.NetherQuartzDust
+aacrusher= ae2:quartz_ore -> 3 ae2:material.CertusQuartzCrystal
+aacrusher= ae2:charged_quartz_ore -> 3 ae2:material.CertusQuartzCrystalCharged

@@ -19,6 +19,7 @@
 package appeng.integration;
 
 
+import appeng.integration.modules.ActuallyAdditionsModule;
 import appeng.integration.modules.BuildcraftModule;
 import appeng.integration.modules.CofhHammerModule;
 import appeng.integration.modules.ExU2Module;
@@ -147,6 +148,14 @@ public enum IntegrationType
 		public IIntegrationModule createInstance()
 		{
 			return Integrations.setExU2( new ExU2Module() );
+		}
+	},
+
+	ACTUALLYADDITIONS( IntegrationSide.BOTH, "Actually Additions", "actuallyadditions"){
+		@Override
+		public IIntegrationModule createInstance()
+		{
+			return Integrations.setAA( new ActuallyAdditionsModule() );
 		}
 	}
 

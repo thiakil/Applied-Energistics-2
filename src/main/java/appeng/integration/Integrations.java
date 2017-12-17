@@ -19,6 +19,7 @@
 package appeng.integration;
 
 
+import appeng.integration.abstraction.IActuallyAdditions;
 import appeng.integration.abstraction.IBuildcraft;
 import appeng.integration.abstraction.ICofhHammer;
 import appeng.integration.abstraction.IExU2;
@@ -50,6 +51,8 @@ public final class Integrations
 	static IInvTweaks invTweaks = new IInvTweaks.Stub();
 
 	static IExU2 exu2 = new IExU2.Stub();
+
+	static IActuallyAdditions aa = new IActuallyAdditions.Stub();
 
 	private Integrations()
 	{
@@ -91,6 +94,8 @@ public final class Integrations
 	}
 
 	public static IExU2 exu2(){ return exu2; }
+
+	public static IActuallyAdditions aa() {return aa;}
 
 	static IIC2 setIc2( IIC2 ic2 )
 	{
@@ -137,6 +142,11 @@ public final class Integrations
 	static IExU2 setExU2( IExU2 exu2 ){
 		Integrations.exu2 = exu2;
 		return exu2;
+	}
+
+	static IActuallyAdditions setAA(IActuallyAdditions a){
+		Integrations.aa = a;
+		return a;
 	}
 
 }

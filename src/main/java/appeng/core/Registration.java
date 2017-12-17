@@ -93,6 +93,7 @@ import appeng.recipes.RecipeHandler;
 import appeng.recipes.game.DisassembleRecipe;
 import appeng.recipes.game.FacadeRecipe;
 import appeng.recipes.game.WirelessTerminalUpgradeRecipe;
+import appeng.recipes.handlers.AACrusher;
 import appeng.recipes.handlers.Crusher;
 import appeng.recipes.handlers.ExU2Crusher;
 import appeng.recipes.handlers.Grind;
@@ -283,6 +284,7 @@ public final class Registration
 		registry.addNewCraftHandler( "pulverizer", Pulverizer.class );
 		registry.addNewCraftHandler( "macerator", Macerator.class );
 		registry.addNewCraftHandler( "exu2crusher", ExU2Crusher.class );
+		registry.addNewCraftHandler( "aacrusher", AACrusher.class );
 
 		registry.addNewCraftHandler( "smelt", Smelt.class );
 		registry.addNewCraftHandler( "inscribe", Inscribe.class );

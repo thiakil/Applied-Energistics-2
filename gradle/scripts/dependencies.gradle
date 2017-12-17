@@ -71,6 +71,11 @@ repositories {
         name 'ExU2'
         artifactPattern "http://addons-origin.cursecdn.com/files/2510/405/[module]-[revision].[ext]"
     }
+    ivy {
+        name 'AA'
+        //https://addons-origin.cursecdn.com/files/2507/197/ActuallyAdditions-1.12.2-r125.jar
+        artifactPattern "http://addons-origin.cursecdn.com/files/2507/197/[module]-[revision].[ext]"
+    }
 }
 
 configurations {
@@ -97,6 +102,7 @@ dependencies {
 
     compileOnly "com.azanor.baubles:Baubles:${baubles_version}:api"
     compileOnly name: "extrautils2", version: "1.12-1.7.1",  ext: 'jar'
+    compileOnly name: "ActuallyAdditions", version: "1.12.2-r125", ext: 'jar'
 
     // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"
