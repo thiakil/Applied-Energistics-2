@@ -67,6 +67,10 @@ repositories {
         name "Thiakil"
         url = "https://maven.thiakil.com"
     }
+    ivy {
+        name 'ExU2'
+        artifactPattern "http://addons-origin.cursecdn.com/files/2510/405/[module]-[revision].[ext]"
+    }
 }
 
 configurations {
@@ -92,6 +96,7 @@ dependencies {
     deobfCompile "com.jaquadro.minecraft.storagedrawers:StorageDrawers:1.12-5.2.9:api"
 
     compileOnly "com.azanor.baubles:Baubles:${baubles_version}:api"
+    compileOnly name: "extrautils2", version: "1.12-1.7.1",  ext: 'jar'
 
     // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"

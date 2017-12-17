@@ -21,6 +21,7 @@ package appeng.integration;
 
 import appeng.integration.modules.BuildcraftModule;
 import appeng.integration.modules.CofhHammerModule;
+import appeng.integration.modules.ExU2Module;
 import appeng.integration.modules.Mekanism;
 import appeng.integration.modules.StorageDrawersModule;
 import appeng.integration.modules.chisel.ChiselIMC;
@@ -138,6 +139,14 @@ public enum IntegrationType
 		@Override
 		public IIntegrationModule createInstance() {
 			return new StorageDrawersModule();
+		}
+	},
+	
+	EXU2( IntegrationSide.BOTH, "Extra Utils 2", "extrautils2" ){
+		@Override
+		public IIntegrationModule createInstance()
+		{
+			return Integrations.setExU2( new ExU2Module() );
 		}
 	}
 

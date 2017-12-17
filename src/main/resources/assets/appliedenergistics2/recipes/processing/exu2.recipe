@@ -1,0 +1,8 @@
+exu2crusher= ae2:material.FluixCrystal -> ae2:material.FluixDust
+exu2crusher= ae2:sky_stone_block:0 -> ae2:material.SkyDust
+exu2crusher= mc:ender_pearl -> ae2:material.EnderDust
+exu2crusher= ae2:material.CertusQuartzCrystalCharged -> ae2:material.CertusQuartzDust
+exu2crusher= ae2:material.CertusQuartzCrystal -> ae2:material.CertusQuartzDust
+exu2crusher= mc:quartz -> ae2:material.NetherQuartzDust
+exu2crusher= ae2:quartz_ore -> 3 ae2:material.CertusQuartzCrystal
+exu2crusher= ae2:charged_quartz_ore -> 3 ae2:material.CertusQuartzCrystalCharged

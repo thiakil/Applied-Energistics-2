@@ -21,6 +21,7 @@ package appeng.integration;
 
 import appeng.integration.abstraction.IBuildcraft;
 import appeng.integration.abstraction.ICofhHammer;
+import appeng.integration.abstraction.IExU2;
 import appeng.integration.abstraction.IIC2;
 import appeng.integration.abstraction.IInvTweaks;
 import appeng.integration.abstraction.IJEI;
@@ -47,6 +48,8 @@ public final class Integrations
 	static IMekanism mekanism = new IMekanism.Stub();
 
 	static IInvTweaks invTweaks = new IInvTweaks.Stub();
+
+	static IExU2 exu2 = new IExU2.Stub();
 
 	private Integrations()
 	{
@@ -86,6 +89,8 @@ public final class Integrations
 	{
 		return invTweaks;
 	}
+
+	public static IExU2 exu2(){ return exu2; }
 
 	static IIC2 setIc2( IIC2 ic2 )
 	{
@@ -127,6 +132,11 @@ public final class Integrations
 	{
 		Integrations.invTweaks = invTweaks;
 		return invTweaks;
+	}
+
+	static IExU2 setExU2( IExU2 exu2 ){
+		Integrations.exu2 = exu2;
+		return exu2;
 	}
 
 }
