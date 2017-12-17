@@ -303,9 +303,10 @@ public class ToolPortableCell extends AEBasePoweredItem implements IStorageCell,
 			if (isCollided.isEmpty()){
 				ev.setCanceled( true );
 				ev.setResult( Event.Result.DENY );
-				//ev.getItem().setDead();
 				ev.getItem().setInfinitePickupDelay();
 				ev.getEntityPlayer().onItemPickup(ev.getItem(), originalCount);
+				ev.getItem().setDead();
+				ev.getItem().setItem( ItemStack.EMPTY );
 			}
 		}
 	}
