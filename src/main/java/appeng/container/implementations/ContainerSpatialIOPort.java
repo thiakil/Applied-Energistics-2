@@ -29,13 +29,14 @@ import appeng.api.util.AEPartLocation;
 import appeng.api.util.DimensionalCoord;
 import appeng.container.AEBaseContainer;
 import appeng.container.guisync.GuiSync;
+import appeng.container.interfaces.IProgressProvider;
 import appeng.container.slot.SlotOutput;
 import appeng.container.slot.SlotRestrictedInput;
 import appeng.tile.spatial.TileSpatialIOPort;
 import appeng.util.Platform;
 
 
-public class ContainerSpatialIOPort extends AEBaseContainer
+public class ContainerSpatialIOPort extends AEBaseContainer implements IProgressProvider
 {
 
 	@GuiSync( 0 )
@@ -152,5 +153,17 @@ public class ContainerSpatialIOPort extends AEBaseContainer
 	private void setEfficency( final long eff )
 	{
 		this.eff = eff;
+	}
+
+	@Override
+	public int getCurrentProgress()
+	{
+		return (int)((double)getCurrentPower() / getMaxPower() * 100);
+	}
+
+	@Override
+	public int getMaxProgress()
+	{
+		return 100;
 	}
 }

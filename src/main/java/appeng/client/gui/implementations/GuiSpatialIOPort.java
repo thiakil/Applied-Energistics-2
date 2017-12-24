@@ -29,6 +29,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import appeng.api.config.Settings;
 import appeng.client.gui.AEBaseGui;
 import appeng.client.gui.widgets.GuiImgButton;
+import appeng.client.gui.widgets.GuiProgressBar;
 import appeng.container.implementations.ContainerSpatialIOPort;
 import appeng.core.AEConfig;
 import appeng.core.localization.GuiText;
@@ -41,6 +42,7 @@ public class GuiSpatialIOPort extends AEBaseGui
 
 	private final ContainerSpatialIOPort container;
 	private GuiImgButton units;
+	private GuiProgressBar pb;
 
 	public GuiSpatialIOPort( final InventoryPlayer inventoryPlayer, final TileSpatialIOPort te )
 	{
@@ -70,15 +72,16 @@ public class GuiSpatialIOPort extends AEBaseGui
 
 		this.units = new GuiImgButton( this.guiLeft - 18, this.guiTop + 8, Settings.POWER_UNITS, AEConfig.instance().selectedPowerUnit() );
 		this.buttonList.add( this.units );
+
+		this.pb = new GuiProgressBar( this.container, "guis/spatialio.png", 166, 11, 180, 11, 2, 95, GuiProgressBar.Direction.VERTICAL );
+		this.buttonList.add( this.pb );
 	}
 
 	@Override
 	public void drawFG( final int offsetX, final int offsetY, final int mouseX, final int mouseY )
 	{
-		this.fontRenderer.drawString( GuiText.StoredPower.getLocal() + ": " + Platform.formatPowerLong( this.container.getCurrentPower(), false ), 13, 21, 4210752 );
-		this.fontRenderer.drawString( GuiText.MaxPower.getLocal() + ": " + Platform.formatPowerLong( this.container.getMaxPower(), false ), 13, 31, 4210752 );
-		this.fontRenderer.drawString( GuiText.RequiredPower.getLocal() + ": " + Platform.formatPowerLong( this.container.getRequiredPower(), false ), 13, 73, 4210752 );
-		this.fontRenderer.drawString( GuiText.Efficiency.getLocal() + ": " + ( ( (float) this.container.getEfficency() ) / 100 ) + '%', 13, 83, 4210752 );
+		this.fontRenderer.drawString( GuiText.RequiredPower.getLocal() + ": " + Platform.formatPowerLong( this.container.getRequiredPower(), false ), 13, 21, 4210752 );
+		this.fontRenderer.drawString( GuiText.Efficiency.getLocal() + ": " + ( ( (float) this.container.getEfficency() ) / 100 ) + '%', 13, 31, 4210752 );
 
 		this.fontRenderer.drawString( this.getGuiDisplayName( GuiText.SpatialIOPort.getLocal() ), 8, 6, 4210752 );
 		this.fontRenderer.drawString( GuiText.inventory.getLocal(), 8, this.ySize - 96, 4210752 );
@@ -86,12 +89,14 @@ public class GuiSpatialIOPort extends AEBaseGui
 		if( this.container.xSize != 0 && this.container.ySize != 0 && this.container.zSize != 0 )
 		{
 			final String text = GuiText.SCSSize.getLocal() + ": " + this.container.xSize + "x" + this.container.ySize + "x" + this.container.zSize;
-			this.fontRenderer.drawString( text, 13, 93, 4210752 );
+			this.fontRenderer.drawString( text, 13, 80, 4210752 );
 		}
 		else
 		{
-			this.fontRenderer.drawString( GuiText.SCSSize.getLocal() + ": " + GuiText.SCSSInvalid.getLocal(), 13, 93, 4210752 );
+			this.fontRenderer.drawString( GuiText.SCSSize.getLocal() + ": " + GuiText.SCSSInvalid.getLocal(), 13, 83, 4210752 );
 		}
+
+		this.pb.setFullMsg( Platform.formatPowerLong( this.container.getCurrentPower(), false ) + "/" + Platform.formatPowerLong( this.container.getMaxPower(), false ));
 
 	}
 
@@ -100,5 +105,8 @@ public class GuiSpatialIOPort extends AEBaseGui
 	{
 		this.bindTexture( "guis/spatialio.png" );
 		this.drawTexturedModalRect( offsetX, offsetY, 0, 0, this.xSize, this.ySize );
+
+		this.pb.x = 166 + this.guiLeft;
+		this.pb.y = 11 + this.guiTop;
 	}
 }
