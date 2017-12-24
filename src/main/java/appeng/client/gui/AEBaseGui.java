@@ -186,7 +186,8 @@ public abstract class AEBaseGui extends GuiContainer
 						final String msg = tooltip.getMessage();
 						if( msg != null )
 						{
-							this.drawTooltip( x + 11, y + 4, msg );
+							//this.drawTooltip( x + 11, y + 4, msg );
+							this.drawTooltip( mouseX, mouseY, msg );
 						}
 					}
 				}
