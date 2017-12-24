@@ -19,6 +19,7 @@
 package appeng.core.worlddata;
 
 
+import java.io.File;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -28,7 +29,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 import net.minecraft.network.NetworkManager;
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -92,6 +95,16 @@ final class DimensionData implements IWorldDimensionData, IOnWorldStartable, IOn
 		}
 
 		this.config.save();
+	}
+
+	public void onWorldStarted(){
+		File worldFolder = DimensionManager.getCurrentSaveRootDirectory();
+		for( final Integer storageCellDimID : this.storageCellDimensionIDs )
+		{
+			if ( ForgeChunkManager.savedWorldHasForcedChunkTickets( new File(worldFolder, DimensionManager.createProviderFor( storageCellDimID ).getSaveFolder()) )){
+				DimensionManager.initDimension( storageCellDimID );
+			}
+		}
 	}
 
 	@Override

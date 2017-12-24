@@ -57,10 +57,10 @@ public final class WorldData implements IWorldData
 	private static final String COMPASS_DIR_NAME = "compass";
 
 	@Nullable
-	private static IWorldData instance;
+	private static WorldData instance;
 
 	private final IWorldPlayerData playerData;
-	private final IWorldDimensionData dimensionData;
+	private final DimensionData dimensionData;
 	private final IWorldGridStorageData storageData;
 	private final IWorldCompassData compassData;
 	private final IWorldSpawnData spawnData;
@@ -135,6 +135,11 @@ public final class WorldData implements IWorldData
 
 		instance = newInstance;
 		newInstance.onServerStarting();
+	}
+
+	public static void onServerStarted(){
+		if (instance != null)
+			instance.dimensionData.onWorldStarted();
 	}
 
 	private void onServerStarting()

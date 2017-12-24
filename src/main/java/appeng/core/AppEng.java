@@ -245,6 +245,12 @@ public final class AppEng
 	}
 
 	@EventHandler
+	public void serverStarted( final FMLServerStartedEvent evt )
+	{
+		WorldData.onServerStarted();
+	}
+
+	@EventHandler
 	private void serverStopping( final FMLServerStoppingEvent event )
 	{
 		WorldData.instance().onServerStopping();
